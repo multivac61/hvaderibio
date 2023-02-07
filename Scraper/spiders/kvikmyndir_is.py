@@ -1,7 +1,5 @@
-from datetime import datetime, date
-from markdownify import markdownify as md
-from readability import Document
 import scrapy
+from datetime import datetime, date
 from urllib import parse
 
 
