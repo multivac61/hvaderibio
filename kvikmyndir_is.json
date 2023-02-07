@@ -1,6 +1,6 @@
 [
 {
-    "title": "Napóleonsskjölin ",
+    "title": "Napóleonsskjölin",
     "alt_title": "Operation Napoleon",
     "kvikmyndir_is_id": 14384,
     "release_year": 2023,
@@ -208,6 +208,36 @@
     ]
 },
 {
+    "title": "Operation Fortune: Ruse de guerre",
+    "alt_title": "",
+    "kvikmyndir_is_id": 13840,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/13840_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=13840",
+    "description": "MI6 fulltrúinn Orson Fortune og teymi hans ráða eina stærstu kvikmyndastjörnu í Hollywood til að hjálpa sér í háleynilegu verkefni, þegar sala á stórhættulegri nýrri vopnatækni ógnar öllum heiminum.",
+    "genres": [
+        "Spenna",
+        "Gaman",
+        "Spennutryllir"
+    ],
+    "duration_in_mins": 114,
+    "rating_urls": [
+        "http://imdb.com/title/tt7985704",
+        "https://www.rottentomatoes.com/m/operation_fortune_ruse_de_guerre"
+    ],
+    "language": "Enska",
+    "showtimes": [
+        {
+            "time": "2023-02-07T20:30:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/733599/",
+            "hall": "Salur A",
+            "tags": []
+        }
+    ]
+},
+{
     "title": "The Fabelmans",
     "alt_title": "",
     "kvikmyndir_is_id": 14200,
@@ -257,36 +287,6 @@
     ]
 },
 {
-    "title": "Operation Fortune: Ruse de guerre",
-    "alt_title": "",
-    "kvikmyndir_is_id": 13840,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/13840_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=13840",
-    "description": "MI6 fulltrúinn Orson Fortune og teymi hans ráða eina stærstu kvikmyndastjörnu í Hollywood til að hjálpa sér í háleynilegu verkefni, þegar sala á stórhættulegri nýrri vopnatækni ógnar öllum heiminum.",
-    "genres": [
-        "Spenna",
-        "Gaman",
-        "Spennutryllir"
-    ],
-    "duration_in_mins": 114,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/operation_fortune_ruse_de_guerre",
-        "http://imdb.com/title/tt7985704"
-    ],
-    "language": "Enska",
-    "showtimes": [
-        {
-            "time": "2023-02-07T20:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/733599/",
-            "hall": "Salur A",
-            "tags": []
-        }
-    ]
-},
-{
     "title": "Triangle of Sadness",
     "alt_title": "",
     "kvikmyndir_is_id": 14411,
@@ -330,8 +330,8 @@
     ],
     "duration_in_mins": 112,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/final_cut_2022",
-        "http://imdb.com/title/tt14317880"
+        "http://imdb.com/title/tt14317880",
+        "https://www.rottentomatoes.com/m/final_cut_2022"
     ],
     "language": "Franska",
     "showtimes": [
@@ -392,8 +392,8 @@
     ],
     "duration_in_mins": 112,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/one_fine_morning_2022",
-        "http://imdb.com/title/tt13482828"
+        "http://imdb.com/title/tt13482828",
+        "https://www.rottentomatoes.com/m/one_fine_morning_2022"
     ],
     "language": "Franska",
     "showtimes": [
@@ -402,6 +402,34 @@
             "cinema": "Bíó Paradís",
             "purchase_url": "https://tix.is/is/buyingflow/tickets/14725/",
             "hall": "Salur 2",
+            "tags": []
+        }
+    ]
+},
+{
+    "title": "Atomy",
+    "alt_title": "",
+    "kvikmyndir_is_id": 15925,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/screenshot_2023-01-01_170433-1672592686.jpg",
+    "content_rating_in_years": 0,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=15925",
+    "description": "Brandur er listamaður með lamaða fótleggi og handleggi. Hann gengur í gegnum sársaukafullar æfingar skipulagðar af mjög svo óhefðbundnum heilara. Meðferðin gæti gefið honum líkama sinn til baka.",
+    "genres": [
+        "Heimildarmynd",
+        "Íslensk mynd"
+    ],
+    "duration_in_mins": 92,
+    "rating_urls": [
+        "http://imdb.com/title/tt22457372"
+    ],
+    "language": "Íslenska",
+    "showtimes": [
+        {
+            "time": "2023-02-07T16:30:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tix.is/is/buyingflow/tickets/14768/",
+            "hall": "Salur 3",
             "tags": []
         }
     ]
@@ -437,34 +465,6 @@
     ]
 },
 {
-    "title": "Atomy",
-    "alt_title": "",
-    "kvikmyndir_is_id": 15925,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/screenshot_2023-01-01_170433-1672592686.jpg",
-    "content_rating_in_years": 0,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15925",
-    "description": "Brandur er listamaður með lamaða fótleggi og handleggi. Hann gengur í gegnum sársaukafullar æfingar skipulagðar af mjög svo óhefðbundnum heilara. Meðferðin gæti gefið honum líkama sinn til baka.",
-    "genres": [
-        "Heimildarmynd",
-        "Íslensk mynd"
-    ],
-    "duration_in_mins": 92,
-    "rating_urls": [
-        "http://imdb.com/title/tt22457372"
-    ],
-    "language": "Íslenska",
-    "showtimes": [
-        {
-            "time": "2023-02-07T16:30:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14768/",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ]
-},
-{
     "title": "Holy Spider",
     "alt_title": "",
     "kvikmyndir_is_id": 14993,
@@ -480,8 +480,8 @@
     ],
     "duration_in_mins": 116,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/holy_spider",
-        "http://imdb.com/title/tt18550140"
+        "http://imdb.com/title/tt18550140",
+        "https://www.rottentomatoes.com/m/holy_spider"
     ],
     "language": "Persneska",
     "showtimes": [
@@ -560,6 +560,44 @@
     ]
 },
 {
+    "title": "Shotgun Wedding",
+    "alt_title": "",
+    "kvikmyndir_is_id": 13977,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/13977_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=13977",
+    "description": "Glæpamenn trufla brúðkaup sem par ætlar að halda á draumaáfangastaðnum. Á sama tíma og þau þurfa að bjarga fjölskyldunni úr bráðri hættu enduruppgötva þau afhverju þau urðu upphaflega ástfangin.",
+    "genres": [
+        "Spenna",
+        "Gaman",
+        "Rómantík"
+    ],
+    "duration_in_mins": 100,
+    "rating_urls": [
+        "https://www.themoviedb.org/tv/758009",
+        "http://imdb.com/title/tt9686790",
+        "https://www.rottentomatoes.com/m/shotgun_wedding_2022"
+    ],
+    "language": "Enska",
+    "showtimes": [
+        {
+            "time": "2023-02-07T19:40:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=94770&visLang=1",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-02-07T22:00:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=94768&visLang=1",
+            "hall": "Salur 4",
+            "tags": []
+        }
+    ]
+},
+{
     "title": "Maybe I Do",
     "alt_title": "",
     "kvikmyndir_is_id": 15961,
@@ -597,44 +635,6 @@
     ]
 },
 {
-    "title": "Shotgun Wedding",
-    "alt_title": "",
-    "kvikmyndir_is_id": 13977,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/13977_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=13977",
-    "description": "Glæpamenn trufla brúðkaup sem par ætlar að halda á draumaáfangastaðnum. Á sama tíma og þau þurfa að bjarga fjölskyldunni úr bráðri hættu enduruppgötva þau afhverju þau urðu upphaflega ástfangin.",
-    "genres": [
-        "Spenna",
-        "Gaman",
-        "Rómantík"
-    ],
-    "duration_in_mins": 100,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/shotgun_wedding_2022",
-        "https://www.themoviedb.org/tv/758009",
-        "http://imdb.com/title/tt9686790"
-    ],
-    "language": "Enska",
-    "showtimes": [
-        {
-            "time": "2023-02-07T19:40:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=94770&visLang=1",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-02-07T22:00:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=94768&visLang=1",
-            "hall": "Salur 4",
-            "tags": []
-        }
-    ]
-},
-{
     "title": "M3GAN",
     "alt_title": "",
     "kvikmyndir_is_id": 14473,
@@ -650,8 +650,8 @@
     ],
     "duration_in_mins": 102,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/m3gan",
-        "http://imdb.com/title/tt8760708"
+        "http://imdb.com/title/tt8760708",
+        "https://www.rottentomatoes.com/m/m3gan"
     ],
     "language": "Enska",
     "showtimes": [
@@ -688,8 +688,8 @@
     ],
     "duration_in_mins": 192,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/avatar_the_way_of_water",
-        "http://imdb.com/title/tt1630029"
+        "http://imdb.com/title/tt1630029",
+        "https://www.rottentomatoes.com/m/avatar_the_way_of_water"
     ],
     "language": "Enska",
     "showtimes": [
@@ -762,6 +762,48 @@
     ]
 },
 {
+    "title": "The Whale",
+    "alt_title": "",
+    "kvikmyndir_is_id": 15018,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/15018_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=15018",
+    "description": "Feiminn enskukennari reynir að endurnýja kynnin við unglingsdóttur sína.",
+    "genres": [
+        "Drama"
+    ],
+    "duration_in_mins": 117,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/the_whale_2022",
+        "http://imdb.com/title/tt13833688"
+    ],
+    "language": "Enska",
+    "showtimes": [
+        {
+            "time": "2023-02-07T18:00:00",
+            "cinema": "Háskólabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=0000000003&txtSessionId=36693&visLang=1",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-02-07T20:30:00",
+            "cinema": "Háskólabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=0000000003&txtSessionId=36696&visLang=1",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-02-07T20:30:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/733597/",
+            "hall": "AXL",
+            "tags": []
+        }
+    ]
+},
+{
     "title": "Babylon",
     "alt_title": "",
     "kvikmyndir_is_id": 14371,
@@ -777,8 +819,8 @@
     ],
     "duration_in_mins": 189,
     "rating_urls": [
-        "http://imdb.com/title/tt10640346",
-        "https://www.rottentomatoes.com/m/babylon_2022"
+        "https://www.rottentomatoes.com/m/babylon_2022",
+        "http://imdb.com/title/tt10640346"
     ],
     "language": "Enska",
     "showtimes": [
@@ -804,48 +846,6 @@
             "tags": [
                 "3D"
             ]
-        }
-    ]
-},
-{
-    "title": "The Whale",
-    "alt_title": "",
-    "kvikmyndir_is_id": 15018,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/15018_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15018",
-    "description": "Feiminn enskukennari reynir að endurnýja kynnin við unglingsdóttur sína.",
-    "genres": [
-        "Drama"
-    ],
-    "duration_in_mins": 117,
-    "rating_urls": [
-        "http://imdb.com/title/tt13833688",
-        "https://www.rottentomatoes.com/m/the_whale_2022"
-    ],
-    "language": "Enska",
-    "showtimes": [
-        {
-            "time": "2023-02-07T18:00:00",
-            "cinema": "Háskólabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=0000000003&txtSessionId=36693&visLang=1",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-02-07T20:30:00",
-            "cinema": "Háskólabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=0000000003&txtSessionId=36696&visLang=1",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-02-07T20:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/733597/",
-            "hall": "AXL",
-            "tags": []
         }
     ]
 },
