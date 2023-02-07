@@ -1,18 +1,18 @@
 
 on:
   schedule:
-    - cron:  '*/5 * * * *' # Every hour. Ref https://crontab.guru/examples.html
+    - cron:  '*/5 * * * *' # Ref https://crontab.guru/examples.html
 name: Scrape Data
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
     - name: Build
       run: pip install -r requirements.txt
     - name: Scrape
       run: scrapy crawl kvikmyndir_is 
-    - uses: mikeal/publish-to-github-action@master
+    - uses: mikeal/publish-to-github-action@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub sets this for you
