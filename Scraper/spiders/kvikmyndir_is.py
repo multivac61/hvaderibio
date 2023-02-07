@@ -55,6 +55,7 @@ class kvikmyndir_is(scrapy.Spider):
             'release_year': int(response.css('span.year::text').get().strip()),
             'poster_url': response.css('div.poster').css('a::attr(href)').get().strip(),
             'content_rating_in_years': 16 if 'x16.png' in (icon := response.css('div.badge > img::attr(src)').get()) else 12 if 'x12.png' in icon else 0,
+            'content_rating_in_years': 0 if icon is None or 'xl.png' in (icon := response.css('div.badge > img::attr(src)').get()) else 12 if 'x12.png' in icon else 16,
             'scrape_url': response.url,
             'description': response.css('p.description::text').get().strip(),
             'genres': genres if (genres := response.css('div.genres').css('span::text').getall()) else [],
