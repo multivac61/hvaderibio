@@ -47,31 +47,8 @@ class kvikmyndir_is(scrapy.Spider):
             headers=self.headers,
         )
 
-    def parse_movie(self, response):
-        icon = response.css('div.badge > img::attr(src)').get() 
-        yield {
-            'title': response.css('h1::text').get().strip(),
-            'alt_title': alt_title.get().strip()[1:-1] if (alt_title := response.css('div.top_details').css('h4::text')) else '',
-            'kvikmyndir_is_id': int(parse_queries(response.url)['id']),
-            'release_year': int(response.css('span.year::text').get().strip()),
-            'poster_url': response.css('div.poster').css('a::attr(href)').get().strip(),
-            'content_rating_in_years': 0 if icon is None or 'xl.png' in icon else 12 if 'x12.png' in icon else 16,
-            'scrape_url': response.url,
-            'description': response.css('p.description::text').get().strip(),
-            'genres': genres if (genres := response.css('div.genres').css('span::text').getall()) else [],
-            'duration_in_mins': int(response.css('span.duration::text').get().replace('mín', '').replace('MÍN', '').strip()),
-            'rating_urls': set(response.css('div.movie-ratings > div.rating-box > a::attr(href)').getall()),
-            'language': response.css('div.combined_details > span:nth-child(2)::text').get().strip(),
-        } | response.meta['movie']
-    
-    def parse_trailer(sefl, response):
-        *_, youtube_id = parse.urlsplit(response.css('iframe::attr(src)').get().strip()).path.split('/')
-        yield {'trailer_url' : f'https://www.youtube.com/watch?v={youtube_id}'} | response.meta['movie']
-        
-
     def parse_showtimes(self, response):
         for movie in response.css('div.stimar'):
-            trailer_url = movie.css('div.poster').css('div.skodatrailer::attr(data-src)').get()
             parsed_movie = {
                 'showtimes': [
                     {
@@ -86,5 +63,27 @@ class kvikmyndir_is(scrapy.Spider):
                     if (time := showtime.css('a.rate::text').get().replace('.', ':').strip())
                 ],
             }
-            response.follow(trailer_url, self.parse_trailer, meta={'movie': parsed_movie})
             yield response.follow(movie.css('a.movie_title::attr(href)').get(), self.parse_movie, meta={'movie': parsed_movie})
+
+    def parse_movie(self, response):
+        icon = response.css('div.badge > img::attr(src)').get() 
+        id = parse_queries(response.url)['id']
+        parsed_movie = {
+            'title': response.css('h1::text').get().strip(),
+            'alt_title': alt_title.get().strip()[1:-1] if (alt_title := response.css('div.top_details').css('h4::text')) else '',
+            'kvikmyndir_is_id': int(id),
+            'release_year': int(response.css('span.year::text').get().strip()),
+            'poster_url': response.css('div.poster').css('a::attr(href)').get().strip(),
+            'content_rating_in_years': 0 if icon is None or 'xl.png' in icon else 12 if 'x12.png' in icon else 16,
+            'scrape_url': response.url,
+            'description': response.css('p.description::text').get().strip(),
+            'genres': genres if (genres := response.css('div.genres').css('span::text').getall()) else [],
+            'duration_in_mins': int(response.css('span.duration::text').get().replace('mín', '').replace('MÍN', '').strip()),
+            'rating_urls': set(response.css('div.movie-ratings > div.rating-box > a::attr(href)').getall()),
+            'language': response.css('div.combined_details > span:nth-child(2)::text').get().strip(),
+        } | response.meta['movie']
+        yield response.follow(f'https://kvikmyndir.is/trailer_view/?id={id}', self.parse_trailer, meta={'movie': parsed_movie})
+    
+    def parse_trailer(sefl, response):
+        *_, youtube_id = parse.urlsplit(response.css('iframe::attr(src)').get().strip()).path.split('/')
+        yield response.meta['movie'] | {'trailer_url' : f'https://www.youtube.com/watch?v={youtube_id}'}
