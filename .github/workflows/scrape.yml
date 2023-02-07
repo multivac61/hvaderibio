@@ -1,7 +1,8 @@
-
 on:
+  push:
+  pull_request:
   schedule:
-    - cron:  '*/5 * * * *' # Ref https://crontab.guru/examples.html
+    - cron:  '0 1 * * *' # Run every morning at 01:00. Ref https://crontab.guru/examples.html
 name: Scrape Data
 jobs:
   build:
