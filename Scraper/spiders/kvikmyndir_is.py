@@ -18,10 +18,10 @@ class kvikmyndir_is(scrapy.Spider):
 
     custom_settings = {
         'CONCURRENT_REQUESTS': 2,
-        # 'FEED_URI': f'scraped_data/{utc_iso8601()} - {name}.json',
-        'FEED_URI': 'kvikmyndir_is.json',
+        'FEED_URI': f'scraped_data/{utc_iso8601()} - {name}.json',
         'FEED_FORMAT': 'json',
         'FEED_EXPORT_ENCODING': 'utf-8',
+        'FEED_EXPORT_INDENT': 4,
     }
 
     headers = {
@@ -48,14 +48,14 @@ class kvikmyndir_is(scrapy.Spider):
         )
 
     def parse_movie(self, response):
+        icon = response.css('div.badge > img::attr(src)').get() 
         yield {
             'title': response.css('h1::text').get().strip(),
             'alt_title': alt_title.get().strip()[1:-1] if (alt_title := response.css('div.top_details').css('h4::text')) else '',
             'kvikmyndir_is_id': int(parse_queries(response.url)['id']),
             'release_year': int(response.css('span.year::text').get().strip()),
             'poster_url': response.css('div.poster').css('a::attr(href)').get().strip(),
-            'content_rating_in_years': 16 if 'x16.png' in (icon := response.css('div.badge > img::attr(src)').get()) else 12 if 'x12.png' in icon else 0,
-            'content_rating_in_years': 0 if icon is None or 'xl.png' in (icon := response.css('div.badge > img::attr(src)').get()) else 12 if 'x12.png' in icon else 16,
+            'content_rating_in_years': 0 if icon is None or 'xl.png' in icon else 12 if 'x12.png' in icon else 16,
             'scrape_url': response.url,
             'description': response.css('p.description::text').get().strip(),
             'genres': genres if (genres := response.css('div.genres').css('span::text').getall()) else [],
