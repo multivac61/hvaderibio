@@ -63,31 +63,33 @@
 		}))
 </script>
 
-<header class="container">
-	<hgroup>
-		<h1>Hvað er í bíó?</h1>
-		<h2>
-			Í dag, {new Date()
-				.toLocaleDateString('is-IS', {
-					weekday: 'long',
-					year: 'numeric',
-					month: 'long',
-					day: 'numeric'
-				})
-				.replace('dagur', 'daginn')}
-		</h2>
-	</hgroup>
-</header>
+<div class="container">
+	<header>
+		<hgroup>
+			<h1>Hvað er í bíó?</h1>
+			<h2>
+				Í dag, {new Date()
+					.toLocaleDateString('is-IS', {
+						weekday: 'long',
+						year: 'numeric',
+						month: 'long',
+						day: 'numeric'
+					})
+					.replace('dagur', 'daginn')}
+			</h2>
+		</hgroup>
+	</header>
+</div>
 
 <div class="container">
 	<div class="grid">
 		<div style="white-space : break-spaces;">
 			<label>
-				Frá {float_to_hh_mm(from)}
+				Frá: {float_to_hh_mm(from)}
 				<input bind:value={from} type="range" min="12" max="23.5" step="0.5" />
 			</label>
 			<label>
-				Til {float_to_hh_mm(to)}
+				Til: {float_to_hh_mm(to)}
 				<input bind:value={to} type="range" min="12" max="23.5" step="0.5" />
 			</label>
 		</div>
@@ -99,11 +101,7 @@
 							{#each cinemas as cinema}
 								<li>
 									<!-- prettier-ignore -->
-									{#if selected_cinemas.includes(cinema)}
-										<b><a href={'#'} on:click|preventDefault={() => toggle(cinema)}>{cinema}</a></b>
-									{:else}
-										<a href={'#'} on:click|preventDefault={() => toggle(cinema)}>{cinema}</a>
-									{/if}
+									<a style = {selected_cinemas.includes(cinema) ? undefined : "color: #606F79"}  href={'#'} on:click|preventDefault={() => toggle(cinema)}>{cinema}</a>
 								</li>
 							{/each}
 						</ul>
@@ -116,43 +114,42 @@
 </div>
 
 <main class="container">
-	{#if filtered_cinemas_showtimes.length > 0}
-		{#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description }}
-			<details>
-				<summary> {title} ({release_year}) </summary>
-				<div class="grid">
-					<div>
-						<img src={poster_url} alt={title} width="350px" />
-						<br />
-						<small>{genres.join(', ')}. <a href={trailer_url}>Sjá stiklu.</a></small>
-						<small></small>
-					</div>
-					<div>
-						<small>{description}</small>
-						<br>
-						<br>
-						{#each showtimes as [cinema, times]}
-							<div>
-								<b>{cinema}</b>
-								<br />
-								<div style="white-space : break-spaces;">
-									{#each times as { time, purchase_url }, i}
-										<!-- prettier-ignore -->
-										<small style='font-variant-numeric: tabular-nums;'>
-											<a href={purchase_url}>{new Date(time).toLocaleTimeString('is-IS', { timeStyle: 'short', hour12: false })}</a>
-										</small>
-									{/each}
-								</div>
-							</div>
-						{/each}
-					</div>
+	{#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description }}
+		<details>
+			<summary> {title} ({release_year}) </summary>
+			<div class="grid">
+				<div>
+					<img src={poster_url} alt={title} width="350px" />
+					<br />
+					<small>{genres.join(', ')}. <a href={trailer_url}>Sjá stiklu.</a></small>
+					<br />
+					<br />
 				</div>
-			</details>
-		{/each}
-	{:else}
+				<div>
+					<small>{description}</small>
+					<br />
+					<br />
+					{#each showtimes as [cinema, times]}
+						<div>
+							<abbr title={cinema}><small>{cinema}</small></abbr>
+							<div style="white-space : break-spaces;">
+								{#each times as { time, purchase_url }, i}
+									<!-- prettier-ignore -->
+									<small style='font-variant-numeric: tabular-nums;'>
+											<a href={purchase_url}>{new Date(time).toLocaleTimeString('is-IS', { timeStyle: 'short', hour12: false })}&nbsp;</a>
+									</small>
+								{/each}
+							</div>
+						</div>
+					{/each}
+				</div>
+			</div>
+		</details>
+	{/each}
+	{#if filtered_cinemas_showtimes.length == 0}
 		<!-- prettier-ignore -->
 		<p>
-			Hmm. Engin mynd uppfyllir skilyrðin. <a href={'#'} on:click|preventDefault={() => { [from, to] = [12, 23.5]; selected_cinemas = all_cinemas }}>Prófaðu að víkka þau.</a >
+			Engin mynd uppfyllir skilyrðin. <a href={'#'} on:click|preventDefault={() => { [from, to] = [12, 23.5]; selected_cinemas = all_cinemas }}>Prófaðu að víkka þau.</a >
 		</p>
 	{/if}
 </main>
