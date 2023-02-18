@@ -1,22 +1,36 @@
 <script>
-	import Moment from 'moment'
-	import 'moment/dist/locale/is'
-	import { extendMoment } from 'moment-range'
-	import { groupBy } from 'lodash'
+	const groupBy = (/** @type {any[]} */ list, /** @type {string} */ key) =>
+		list.reduce((hash, obj) => ({ ...hash, [obj[key]]: (hash[obj[key]] || []).concat(obj) }), {})
 
-	const moment = extendMoment(Moment)
+	const float_to_hh_mm = (/** @type {number} */ time) => {
+		return `${Math.floor(time)}:${(time % 1) * 60}`.replace(':0', ':00')
+	}
 
+	const to_float = (
+		/** @type {string | number | Date} */ date,
+		/** @type {number} */ to,
+		/** @type {number} */ from
+	) => {
+		const [hours, minutes] = new Date(date)
+			.toLocaleTimeString('en', { timeStyle: 'short', hour12: false })
+			.split(':')
+		return parseFloat(hours) + parseFloat(minutes) / 60
+	}
+	$: console.log(
+		new Date().toLocaleDateString(['is-IS', 'de-DE'], {
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		})
+	)
 	/**
 	 * @type {{ movies: import('./+page').RootObject[]; }}
 	 */
 	export let data
 
-	const default_state = () => [14.5, 23.5]
-	let [from, to] = default_state()
-
-	const parse = (/** @type {number} */ time) =>
-		moment().set({ hour: Math.floor(time), minute: (time % 1) * 60, second: 0, millisecond: 0 })
-	$: range = moment.range(parse(from), parse(to))
+	let [from, to] = [14.5, 23.5]
+	const in_range = (/** @type {number} */ x) => from <= x && x <= to
 
 	$: all_cinemas = [
 		...new Set(
@@ -24,7 +38,7 @@
 		)
 	]
 	$: selected_cinemas = all_cinemas
-	$: two_halves_cinemas = [
+	$: cinemas_in_two_cols = [
 		all_cinemas.slice(0, Math.ceil(all_cinemas.length / 2)),
 		all_cinemas.slice(Math.ceil(all_cinemas.length / 2))
 	]
@@ -38,21 +52,17 @@
 	$: filtered_cinemas_showtimes = data.movies
 		.sort((a, b) => b.showtimes.length - a.showtimes.length)
 		.filter((movie) =>
-			movie.showtimes
-				.map((showtime) => showtime.cinema)
-				.some((cinema) => selected_cinemas.includes(cinema))
+			movie.showtimes.some((showtime) => selected_cinemas.includes(showtime.cinema))
 		)
 		.filter((movie) =>
-			movie.showtimes
-				.map((showtime) => moment(showtime.time))
-				.some((showtime) => range.contains(showtime))
+			movie.showtimes.some((showtime) => in_range(to_float(showtime.time), to, from))
 		)
 		.map((movie) => ({
 			...movie,
 			showtimes: Object.entries(
 				groupBy(
 					movie.showtimes
-						.filter((showtime) => range.contains(moment(showtime.time)))
+						.filter((showtime) => in_range(to_float(showtime.time), to, from))
 						.filter((showtime) => selected_cinemas.includes(showtime.cinema)),
 					'cinema'
 				)
@@ -63,7 +73,14 @@
 <header class="container">
 	<hgroup>
 		<h1>Hvað er í bíó?</h1>
-		<h2>Í dag, {moment().locale('is').format('D. MMMM Y')}</h2>
+		<h2>
+			Í dag, {new Date().toLocaleDateString('is-IS', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
+			}).replace('dagur', 'daginn')}
+		</h2>
 	</hgroup>
 </header>
 
@@ -71,17 +88,17 @@
 	<div class="grid">
 		<div>
 			<label>
-				Frá {parse(from).format('HH:mm')}
+				Frá {float_to_hh_mm(from)}
 				<input bind:value={from} type="range" min="14.5" max="23.5" step="0.5" />
 			</label>
 			<label>
-				Til {parse(to).format('HH:mm')}
+				Til {float_to_hh_mm(to)}
 				<input bind:value={to} type="range" min="14.5" max="23.5" step="0.5" />
 			</label>
 		</div>
 		<div>
 			<div class="grid">
-				{#each two_halves_cinemas as cinemas}
+				{#each cinemas_in_two_cols as cinemas}
 					<div>
 						<ul>
 							{#each cinemas as cinema}
@@ -124,7 +141,10 @@
 								<br />
 								<div style="white-space : break-spaces;">
 									{#each times as { time, purchase_url }, i}
-										<small><a href={purchase_url}>{moment(time).format('HH:mm')}</a> </small>
+										<!-- prettier-ignore -->
+										<small>
+											<a href={purchase_url}>{new Date(time).toLocaleTimeString('is-IS', { timeStyle: 'short', hour12: false })}</a>
+										</small>
 									{/each}
 								</div>
 							</div>
@@ -136,7 +156,7 @@
 	{:else}
 		<!-- prettier-ignore -->
 		<p>
-			Hmm. Engin mynd uppfyllir skilyrðin. <a href={'#'} on:click|preventDefault={() => { [from, to] = default_state(); selected_cinemas = all_cinemas }}>Prófaðu að víkka þau.</a >
+			Hmm. Engin mynd uppfyllir skilyrðin. <a href={'#'} on:click|preventDefault={() => { [from, to] = [14.5, 23.5]; selected_cinemas = all_cinemas }}>Prófaðu að víkka þau.</a >
 		</p>
 	{/if}
 </main>
