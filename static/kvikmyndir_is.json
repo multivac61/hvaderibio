@@ -15,8 +15,8 @@
     ],
     "duration_in_mins": 125,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/ant_man_and_the_wasp_quantumania",
-        "http://imdb.com/title/tt10954600"
+        "http://imdb.com/title/tt10954600",
+        "https://www.rottentomatoes.com/m/ant_man_and_the_wasp_quantumania"
     ],
     "language": "Enska",
     "showtimes": [
@@ -266,33 +266,35 @@
     "trailer_url": "https://www.youtube.com/watch?v=ZlNFpri-Y40"
 },
 {
-    "title": "Women Talking",
+    "title": "Speak No Evil",
     "alt_title": "",
-    "kvikmyndir_is_id": 16023,
+    "kvikmyndir_is_id": 15933,
     "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/1652481_500-1675893928.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16023",
-    "description": "Í mörg ár hafa \"djöflar\" endurtekið komið inn í hið einangraða Mennonite samfélag og ráðist á konur, til að refsa þeim fyrir syndir þeirra. Núna, þegar konurnar hafa komist að því að þeim var í raun byrluð ólyfjan og menn úr þeirra eigin hópi réðust á þær, þá ákveða þær að snúast til varnar bæði fyrir sig og dætur sínar. Á meðan mennirnir...",
+    "poster_url": "https://kvikmyndir.is/images/poster/15933_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=15933",
+    "description": "Hvað gerist þegar dönsk fjölskylda ákveður að taka óvæntu tilboði? Heimboði til heimalands vingjarnlegs fjölskyldufólks sem þau hitta í sumarfríi?",
     "genres": [
-        "Drama"
+        "Drama",
+        "Hrollvekja",
+        "Spennutryllir"
     ],
-    "duration_in_mins": 104,
+    "duration_in_mins": 97,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/women_talking",
-        "http://imdb.com/title/tt13669038"
+        "http://imdb.com/title/tt14253846",
+        "https://www.rottentomatoes.com/m/speak_no_evil_2022"
     ],
     "language": "Enska",
     "showtimes": [
         {
-            "time": "2023-02-18T18:50:00",
+            "time": "2023-02-18T22:05:00",
             "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14881/",
-            "hall": "Salur 3",
+            "purchase_url": "https://tix.is/is/buyingflow/tickets/14719/",
+            "hall": "Salur 1",
             "tags": []
         }
     ],
-    "trailer_url": "https://www.youtube.com/watch?v=pD0mFhMqDCE"
+    "trailer_url": "https://www.youtube.com/watch?v=eAEw-8d1HsE"
 },
 {
     "title": "Stígvélaði Kötturinn 2: Hinsta óskin",
@@ -310,8 +312,8 @@
     ],
     "duration_in_mins": 100,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/puss_in_boots_the_last_wish",
-        "http://imdb.com/title/tt3915174"
+        "http://imdb.com/title/tt3915174",
+        "https://www.rottentomatoes.com/m/puss_in_boots_the_last_wish"
     ],
     "language": "Enska",
     "showtimes": [
@@ -441,35 +443,6 @@
     "trailer_url": "https://www.youtube.com/watch?v=xgZLXyqbYOc"
 },
 {
-    "title": "The Fabelmans",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14200,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/14200_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14200",
-    "description": "Hálf ævisöguleg mynd sem byggist á uppvexti Steven Spielberg í Arizona á eftirstríðsárunum, þegar hann var á aldrinum sjö til átján ára gamall. Hinn ungi Sammy Fabelman kemst að ógnvænlegu fjölskylduleyndarmáli og skoðar hvernig kvikmyndirnar geta hjálpað okkur að sjá sannleikann um hvort annað og okkur sjálf.",
-    "genres": [
-        "Drama"
-    ],
-    "duration_in_mins": 151,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/the_fabelmans",
-        "http://imdb.com/title/tt14208870"
-    ],
-    "language": "Enska",
-    "showtimes": [
-        {
-            "time": "2023-02-18T14:30:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14902/",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=D1G2iLSzOe8"
-},
-{
     "title": "Avatar: The Way of Water",
     "alt_title": "Avatar 2",
     "kvikmyndir_is_id": 9656,
@@ -484,8 +457,8 @@
     ],
     "duration_in_mins": 192,
     "rating_urls": [
-        "http://imdb.com/title/tt1630029",
-        "https://www.rottentomatoes.com/m/avatar_the_way_of_water"
+        "https://www.rottentomatoes.com/m/avatar_the_way_of_water",
+        "http://imdb.com/title/tt1630029"
     ],
     "language": "Enska",
     "showtimes": [
@@ -498,6 +471,126 @@
         }
     ],
     "trailer_url": "https://www.youtube.com/watch?v=d9MyW72ELq0"
+},
+{
+    "title": "Final Cut",
+    "alt_title": "Coupez!",
+    "kvikmyndir_is_id": 15931,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/15931_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=15931",
+    "description": "Stórkostleg gamanmynd þar sem hópur kvikmyndagerðarmanna lendir í kröppum dansi í tökum á lítilli uppvakningamynd, þar sem hlutinir flækjast þegar alvöru uppvakningar fara trufla framleiðsluna!",
+    "genres": [
+        "Gaman",
+        "Hrollvekja"
+    ],
+    "duration_in_mins": 112,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/final_cut_2022",
+        "http://imdb.com/title/tt14317880"
+    ],
+    "language": "Franska",
+    "showtimes": [
+        {
+            "time": "2023-02-18T16:30:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tix.is/is/buyingflow/tickets/14722/",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=eJQbfOakFqQ"
+},
+{
+    "title": "The Banshees of Inisherin",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14385,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/14385_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14385",
+    "description": "Tveir aldavinir, Padraic og Colm, lenda í ógöngum þegar annar þeirra ákveður að slíta vinskapnum, sem hefur miklar og sláandi afleiðingar í för með sér fyrir þá báða.",
+    "genres": [
+        "Gaman",
+        "Drama"
+    ],
+    "duration_in_mins": 114,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/the_banshees_of_inisherin",
+        "http://imdb.com/title/tt11813216"
+    ],
+    "language": "Enska",
+    "showtimes": [
+        {
+            "time": "2023-02-18T19:50:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tix.is/is/buyingflow/tickets/14720/",
+            "hall": "Salur 1",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uRu3zLOJN2c"
+},
+{
+    "title": "Holy Spider",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14993,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/14993_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14993",
+    "description": "Rannsóknarblaðakona fléttast inn í vef raðmorðingja í heilögu borginni Mashhad í Íran, þar sem vændiskonur eru fórnarlömb hrottafenginna árása. Hrollvekjandi saga sem fær hárin til að rísa, byggð á sönnum atburðum.",
+    "genres": [
+        "Drama",
+        "Spennutryllir",
+        "Glæpa"
+    ],
+    "duration_in_mins": 116,
+    "rating_urls": [
+        "http://imdb.com/title/tt18550140",
+        "https://www.rottentomatoes.com/m/holy_spider"
+    ],
+    "language": "Persneska",
+    "showtimes": [
+        {
+            "time": "2023-02-18T21:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tix.is/is/buyingflow/tickets/14814/",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=27wZZ6O1IBc"
+},
+{
+    "title": "Women Talking",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16023,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/1652481_500-1675893928.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16023",
+    "description": "Í mörg ár hafa \"djöflar\" endurtekið komið inn í hið einangraða Mennonite samfélag og ráðist á konur, til að refsa þeim fyrir syndir þeirra. Núna, þegar konurnar hafa komist að því að þeim var í raun byrluð ólyfjan og menn úr þeirra eigin hópi réðust á þær, þá ákveða þær að snúast til varnar bæði fyrir sig og dætur sínar. Á meðan mennirnir...",
+    "genres": [
+        "Drama"
+    ],
+    "duration_in_mins": 104,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/women_talking",
+        "http://imdb.com/title/tt13669038"
+    ],
+    "language": "Enska",
+    "showtimes": [
+        {
+            "time": "2023-02-18T18:50:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tix.is/is/buyingflow/tickets/14881/",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=pD0mFhMqDCE"
 },
 {
     "title": "Babylon",
@@ -531,65 +624,6 @@
     "trailer_url": "https://www.youtube.com/watch?v=LwIZTjMSjyI"
 },
 {
-    "title": "Triangle of Sadness",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14411,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/1620508_500-1670761773.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14411",
-    "description": "Við fylgjumst með hinum ofurríku, þegar ungt par á uppleið í módel bransanum fær tækifæri til að dvelja á skemmtiferðaskipi þar sem dýr föt, yfirgengilegir málsverðir og stéttaskipting ræður ríkjum. En þegar skipið strandar og skipverjar flýja upp á eyju, þá breytist allt …",
-    "genres": [
-        "Gaman",
-        "Drama"
-    ],
-    "duration_in_mins": 147,
-    "rating_urls": [
-        "http://imdb.com/title/tt7322224",
-        "https://www.rottentomatoes.com/m/triangle_of_sadness"
-    ],
-    "language": "Enska",
-    "showtimes": [
-        {
-            "time": "2023-02-18T17:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14145/",
-            "hall": "Salur 1",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=a9YxSJiOzKg"
-},
-{
-    "title": "Aftersun",
-    "alt_title": "",
-    "kvikmyndir_is_id": 15934,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/15934_500.jpg",
-    "content_rating_in_years": 0,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15934",
-    "description": "Myndin fjallar um Sophie og ferðalag sem hún fór í með föður sínum fyrir tuttugu árum síðan, þar sem minningar og tilfinningar spila aðalhlutverkið í sambandi þeirra feðgina.",
-    "genres": [
-        "Drama"
-    ],
-    "duration_in_mins": 102,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/aftersun",
-        "http://imdb.com/title/tt19770238"
-    ],
-    "language": "Enska",
-    "showtimes": [
-        {
-            "time": "2023-02-18T14:30:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14706/",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=vXKcWRu8K_U"
-},
-{
     "title": "Operation Fortune: Ruse de guerre",
     "alt_title": "",
     "kvikmyndir_is_id": 13840,
@@ -619,66 +653,6 @@
         }
     ],
     "trailer_url": "https://www.youtube.com/watch?v=W8Sqk1GcqxY"
-},
-{
-    "title": "The Whale",
-    "alt_title": "",
-    "kvikmyndir_is_id": 15018,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/15018_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15018",
-    "description": "Feiminn enskukennari sem jafnframt er offitusjúklingur reynir að endurnýja kynnin við unglingsdóttur sína.",
-    "genres": [
-        "Drama"
-    ],
-    "duration_in_mins": 117,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/the_whale_2022",
-        "http://imdb.com/title/tt13833688"
-    ],
-    "language": "Enska",
-    "showtimes": [
-        {
-            "time": "2023-02-18T18:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/735698/",
-            "hall": "Salur A",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=D30r0CwtIKc"
-},
-{
-    "title": "Speak No Evil",
-    "alt_title": "",
-    "kvikmyndir_is_id": 15933,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/15933_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15933",
-    "description": "Hvað gerist þegar dönsk fjölskylda ákveður að taka óvæntu tilboði? Heimboði til heimalands vingjarnlegs fjölskyldufólks sem þau hitta í sumarfríi?",
-    "genres": [
-        "Drama",
-        "Hrollvekja",
-        "Spennutryllir"
-    ],
-    "duration_in_mins": 97,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/speak_no_evil_2022",
-        "http://imdb.com/title/tt14253846"
-    ],
-    "language": "Enska",
-    "showtimes": [
-        {
-            "time": "2023-02-18T22:05:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14719/",
-            "hall": "Salur 1",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=eAEw-8d1HsE"
 },
 {
     "title": "Plane",
@@ -711,95 +685,63 @@
     "trailer_url": "https://www.youtube.com/watch?v=M25zXBIUVr0"
 },
 {
-    "title": "The Banshees of Inisherin",
+    "title": "The Whale",
     "alt_title": "",
-    "kvikmyndir_is_id": 14385,
+    "kvikmyndir_is_id": 15018,
     "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/14385_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14385",
-    "description": "Tveir aldavinir, Padraic og Colm, lenda í ógöngum þegar annar þeirra ákveður að slíta vinskapnum, sem hefur miklar og sláandi afleiðingar í för með sér fyrir þá báða.",
+    "poster_url": "https://kvikmyndir.is/images/poster/15018_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=15018",
+    "description": "Feiminn enskukennari sem jafnframt er offitusjúklingur reynir að endurnýja kynnin við unglingsdóttur sína.",
     "genres": [
-        "Gaman",
         "Drama"
     ],
-    "duration_in_mins": 114,
+    "duration_in_mins": 117,
     "rating_urls": [
-        "http://imdb.com/title/tt11813216",
-        "https://www.rottentomatoes.com/m/the_banshees_of_inisherin"
+        "https://www.rottentomatoes.com/m/the_whale_2022",
+        "http://imdb.com/title/tt13833688"
     ],
     "language": "Enska",
     "showtimes": [
         {
-            "time": "2023-02-18T19:50:00",
+            "time": "2023-02-18T18:30:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/735698/",
+            "hall": "Salur A",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=D30r0CwtIKc"
+},
+{
+    "title": "Triangle of Sadness",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14411,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/1620508_500-1670761773.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14411",
+    "description": "Við fylgjumst með hinum ofurríku, þegar ungt par á uppleið í módel bransanum fær tækifæri til að dvelja á skemmtiferðaskipi þar sem dýr föt, yfirgengilegir málsverðir og stéttaskipting ræður ríkjum. En þegar skipið strandar og skipverjar flýja upp á eyju, þá breytist allt …",
+    "genres": [
+        "Gaman",
+        "Drama"
+    ],
+    "duration_in_mins": 147,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/triangle_of_sadness",
+        "http://imdb.com/title/tt7322224"
+    ],
+    "language": "Enska",
+    "showtimes": [
+        {
+            "time": "2023-02-18T17:00:00",
             "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14720/",
+            "purchase_url": "https://tix.is/is/buyingflow/tickets/14145/",
             "hall": "Salur 1",
             "tags": []
         }
     ],
-    "trailer_url": "https://www.youtube.com/watch?v=uRu3zLOJN2c"
-},
-{
-    "title": "Final Cut",
-    "alt_title": "Coupez!",
-    "kvikmyndir_is_id": 15931,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/15931_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15931",
-    "description": "Stórkostleg gamanmynd þar sem hópur kvikmyndagerðarmanna lendir í kröppum dansi í tökum á lítilli uppvakningamynd, þar sem hlutinir flækjast þegar alvöru uppvakningar fara trufla framleiðsluna!",
-    "genres": [
-        "Gaman",
-        "Hrollvekja"
-    ],
-    "duration_in_mins": 112,
-    "rating_urls": [
-        "http://imdb.com/title/tt14317880",
-        "https://www.rottentomatoes.com/m/final_cut_2022"
-    ],
-    "language": "Franska",
-    "showtimes": [
-        {
-            "time": "2023-02-18T16:30:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14722/",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=eJQbfOakFqQ"
-},
-{
-    "title": "Holy Spider",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14993,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/14993_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14993",
-    "description": "Rannsóknarblaðakona fléttast inn í vef raðmorðingja í heilögu borginni Mashhad í Íran, þar sem vændiskonur eru fórnarlömb hrottafenginna árása. Hrollvekjandi saga sem fær hárin til að rísa, byggð á sönnum atburðum.",
-    "genres": [
-        "Drama",
-        "Spennutryllir",
-        "Glæpa"
-    ],
-    "duration_in_mins": 116,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/holy_spider",
-        "http://imdb.com/title/tt18550140"
-    ],
-    "language": "Persneska",
-    "showtimes": [
-        {
-            "time": "2023-02-18T21:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14814/",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=27wZZ6O1IBc"
+    "trailer_url": "https://www.youtube.com/watch?v=a9YxSJiOzKg"
 },
 {
     "title": "Skrýtinn heimur",
@@ -817,8 +759,8 @@
     ],
     "duration_in_mins": 102,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/strange_world",
-        "http://imdb.com/title/tt10298840"
+        "http://imdb.com/title/tt10298840",
+        "https://www.rottentomatoes.com/m/strange_world"
     ],
     "language": "Enska",
     "showtimes": [
@@ -844,47 +786,6 @@
     "trailer_url": "https://www.youtube.com/watch?v=e8xqeNd0AOA"
 },
 {
-    "title": "Lói - Þú flýgur aldrei einn",
-    "alt_title": "Ploey - You Never Fly Alone",
-    "kvikmyndir_is_id": 8501,
-    "release_year": 2017,
-    "poster_url": "https://kvikmyndir.is/images/poster/lói-1513023288.jpg",
-    "content_rating_in_years": 0,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=8501",
-    "description": "Þegar hinir farfuglarnir fljúga suður á bóginn kemst Lói ekki með því hann er ekki orðinn fleygur. Það liggur því fyrir hjá\nhonum að lifa veturinn af upp á eigin spýtur, ekki bara kuldann og harðbýlið heldur verður hann einnig að gæta þess að\nlenda ekki í klóm og kjafti þeirra sem vilja gæða sér á honum, þar á meðal gráðugs refs og fálkans...",
-    "genres": [
-        "Teiknað",
-        "Íslensk mynd"
-    ],
-    "duration_in_mins": 85,
-    "rating_urls": [
-        "https://www.themoviedb.org/tv/192353",
-        "http://imdb.com/title/tt2766104"
-    ],
-    "language": "Íslenska",
-    "showtimes": [
-        {
-            "time": "2023-02-18T11:00:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/352943/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-02-18T13:00:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/352942/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=QfasHLx4xno"
-},
-{
     "title": "Knock at the Cabin",
     "alt_title": "",
     "kvikmyndir_is_id": 14381,
@@ -900,8 +801,8 @@
     ],
     "duration_in_mins": 100,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/knock_at_the_cabin",
-        "http://imdb.com/title/tt15679400"
+        "http://imdb.com/title/tt15679400",
+        "https://www.rottentomatoes.com/m/knock_at_the_cabin"
     ],
     "language": "Enska",
     "showtimes": [
@@ -928,6 +829,47 @@
         }
     ],
     "trailer_url": "https://www.youtube.com/watch?v=0wiBHEACNHs"
+},
+{
+    "title": "Lói - Þú flýgur aldrei einn",
+    "alt_title": "Ploey - You Never Fly Alone",
+    "kvikmyndir_is_id": 8501,
+    "release_year": 2017,
+    "poster_url": "https://kvikmyndir.is/images/poster/lói-1513023288.jpg",
+    "content_rating_in_years": 0,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=8501",
+    "description": "Þegar hinir farfuglarnir fljúga suður á bóginn kemst Lói ekki með því hann er ekki orðinn fleygur. Það liggur því fyrir hjá\nhonum að lifa veturinn af upp á eigin spýtur, ekki bara kuldann og harðbýlið heldur verður hann einnig að gæta þess að\nlenda ekki í klóm og kjafti þeirra sem vilja gæða sér á honum, þar á meðal gráðugs refs og fálkans...",
+    "genres": [
+        "Teiknað",
+        "Íslensk mynd"
+    ],
+    "duration_in_mins": 85,
+    "rating_urls": [
+        "http://imdb.com/title/tt2766104",
+        "https://www.themoviedb.org/tv/192353"
+    ],
+    "language": "Íslenska",
+    "showtimes": [
+        {
+            "time": "2023-02-18T11:00:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/352943/",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-02-18T13:00:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/352942/",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=QfasHLx4xno"
 },
 {
     "title": "100% Úlfur",
@@ -988,78 +930,6 @@
         }
     ],
     "trailer_url": "https://www.youtube.com/watch?v=ivZJjCMqSSM"
-},
-{
-    "title": "Magic Mike's Last Dance",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14477,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/14477_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14477",
-    "description": "Magic Mike fer aftur á svið eftir langt hlé, eftir að hafa verið svikinn í viðskiptum. Hann endar uppi staurblankur og þarf að vinna fyrir sér sem barþjónn í Flórída. Hann fer nú til London til að taka þátt í allra síðustu sýningunni, eftir að hafa fengið tilboð sem hann gat ekki hafnað. Nú þegar mikið er undir, og Mike kemst að því hvað býr að...",
-    "genres": [
-        "Gaman",
-        "Drama"
-    ],
-    "duration_in_mins": 112,
-    "rating_urls": [
-        "http://imdb.com/title/tt16280138",
-        "https://www.rottentomatoes.com/m/magic_mikes_last_dance"
-    ],
-    "language": "Enska",
-    "showtimes": [
-        {
-            "time": "2023-02-18T17:30:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/353038/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-02-18T20:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/353036/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-02-18T22:30:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/353037/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-02-18T20:00:00",
-            "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/353135/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-02-18T20:00:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/352926/",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-02-18T21:15:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/353048/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-02-18T22:10:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/353162/",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=pBIGdw-BRxw"
 },
 {
     "title": "Kardemommubærinn",
@@ -1138,6 +1008,78 @@
     "trailer_url": "https://www.youtube.com/watch?v=BC9DbebfDPs"
 },
 {
+    "title": "Magic Mike's Last Dance",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14477,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/14477_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14477",
+    "description": "Magic Mike fer aftur á svið eftir langt hlé, eftir að hafa verið svikinn í viðskiptum. Hann endar uppi staurblankur og þarf að vinna fyrir sér sem barþjónn í Flórída. Hann fer nú til London til að taka þátt í allra síðustu sýningunni, eftir að hafa fengið tilboð sem hann gat ekki hafnað. Nú þegar mikið er undir, og Mike kemst að því hvað býr að...",
+    "genres": [
+        "Gaman",
+        "Drama"
+    ],
+    "duration_in_mins": 112,
+    "rating_urls": [
+        "http://imdb.com/title/tt16280138",
+        "https://www.rottentomatoes.com/m/magic_mikes_last_dance"
+    ],
+    "language": "Enska",
+    "showtimes": [
+        {
+            "time": "2023-02-18T17:30:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/353038/",
+            "hall": "Salur B",
+            "tags": []
+        },
+        {
+            "time": "2023-02-18T20:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/353036/",
+            "hall": "Salur B",
+            "tags": []
+        },
+        {
+            "time": "2023-02-18T22:30:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/353037/",
+            "hall": "Salur B",
+            "tags": []
+        },
+        {
+            "time": "2023-02-18T20:00:00",
+            "cinema": "Sambíóin Akureyri",
+            "purchase_url": "http://www.sambio.is/websales/show/353135/",
+            "hall": "Salur B",
+            "tags": []
+        },
+        {
+            "time": "2023-02-18T20:00:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/352926/",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-02-18T21:15:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/353048/",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-02-18T22:10:00",
+            "cinema": "Sambíóin Keflavík",
+            "purchase_url": "http://www.sambio.is/websales/show/353162/",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=pBIGdw-BRxw"
+},
+{
     "title": "A Man Called Otto",
     "alt_title": "",
     "kvikmyndir_is_id": 14044,
@@ -1152,8 +1094,8 @@
     ],
     "duration_in_mins": 126,
     "rating_urls": [
-        "http://imdb.com/title/tt7405458",
-        "https://www.rottentomatoes.com/m/a_man_called_otto"
+        "https://www.rottentomatoes.com/m/a_man_called_otto",
+        "http://imdb.com/title/tt7405458"
     ],
     "language": "Enska",
     "showtimes": [
@@ -1229,13 +1171,6 @@
     ],
     "language": "Íslenska",
     "showtimes": [
-        {
-            "time": "2023-02-18T14:30:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tix.is/is/buyingflow/tickets/14802/",
-            "hall": "Salur 1",
-            "tags": []
-        },
         {
             "time": "2023-02-18T16:00:00",
             "cinema": "Sambíóin Kringlunni",
