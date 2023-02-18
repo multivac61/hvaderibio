@@ -63,8 +63,8 @@
 		}))
 </script>
 
-<div class="container">
-	<header>
+<header>
+	<div class="container">
 		<hgroup>
 			<h1>Hvað er í bíó?</h1>
 			<h2>
@@ -78,10 +78,9 @@
 					.replace('dagur', 'daginn')}
 			</h2>
 		</hgroup>
-	</header>
-</div>
-
-<div class="container">
+	</div>
+</header>
+<main class="container">
 	<div class="grid">
 		<div style="white-space : break-spaces;">
 			<label>
@@ -111,9 +110,6 @@
 			<br />
 		</div>
 	</div>
-</div>
-
-<main class="container">
 	{#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description }}
 		<details>
 			<summary> {title} ({release_year}) </summary>
@@ -153,3 +149,16 @@
 		</p>
 	{/if}
 </main>
+
+<div class="container">
+	<!-- prettier-ignore  -->
+	<footer>
+		<small>
+			Hvað er í bíó? var verkefni unnið af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>.  Núverandi útgáfa var uppfærð og unnin af <a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
+		</small>
+		<br>
+		<small>
+			Hugbúnaðurinn er opinn og frjálslega notanlegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a > þar sem vel er tekið á móti aðstoð og betrumbótum.
+		</small>
+	</footer>
+</div>

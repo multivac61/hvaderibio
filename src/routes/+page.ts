@@ -35,3 +35,5 @@ export const load = (async ({ fetch, params }) => {
 		movies: fetchMovies()
 	}
 }) satisfies PageLoad
+
+export const prerender = true
