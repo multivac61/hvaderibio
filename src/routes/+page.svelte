@@ -25,12 +25,12 @@
 	 */
 	export let data
 
-	$: all_cinemas = [
+	const all_cinemas = [
 		...new Set(
 			data.movies.flatMap((movie) => movie.showtimes.flatMap((showtime) => showtime.cinema))
 		)
 	]
-	$: selected_cinemas = all_cinemas
+	let selected_cinemas = all_cinemas
 	$: cinemas_in_two_cols = [
 		all_cinemas.slice(0, Math.ceil(all_cinemas.length / 2)),
 		all_cinemas.slice(Math.ceil(all_cinemas.length / 2))
@@ -42,26 +42,23 @@
 			: [...selected_cinemas, cinema]
 	}
 
+	//  prettier-ignore
 	$: filtered_cinemas_showtimes = data.movies
 		.sort((a, b) => b.showtimes.length - a.showtimes.length)
 		.filter((movie) =>
-			movie.showtimes.some((showtime) => selected_cinemas.includes(showtime.cinema))
-		)
-		.filter((movie) =>
-			movie.showtimes.some((showtime) => in_range(to_float(showtime.time), from, to))
+			movie.showtimes.some(
+				(showtime) => selected_cinemas.includes(showtime.cinema) && in_range(to_float(showtime.time), from, to)
+			)
 		)
 		.map((movie) => ({
 			...movie,
 			showtimes: Object.entries(
 				groupBy(
-					movie.showtimes
-						.filter((showtime) => in_range(to_float(showtime.time), from, to))
-						.filter((showtime) => selected_cinemas.includes(showtime.cinema)),
+					movie.showtimes.filter((showtime) => selected_cinemas.includes(showtime.cinema) && in_range(to_float(showtime.time), from, to)),
 					'cinema'
 				)
 			)
 		}))
-	let visible = true
 </script>
 
 <header>
@@ -127,7 +124,7 @@
 					<br />
 					<br />
 					{#each showtimes as [cinema, times]}
-						<div >
+						<div>
 							<abbr title={cinema}><small>{cinema}</small></abbr>
 							<div style="white-space : break-spaces;">
 								{#each times as { time, purchase_url }, i}
@@ -146,20 +143,22 @@
 	{#if filtered_cinemas_showtimes.length == 0}
 		<!-- prettier-ignore -->
 		<p>
-			Engin mynd uppfyllir skilyrðin. <a href={'#'} on:click|preventDefault={() => { [from, to] = [12, 23.5]; selected_cinemas = all_cinemas }}>Prófaðu að víkka þau.</a >
+			Engin mynd uppfyllir skilyrðin. <a href={'#'} on:click|preventDefault={() => { [from, to] = [12, 23.5]; selected_cinemas = all_cinemas }}>Prófaðu að víkka þau.</a>
 		</p>
 	{/if}
-</main>
-
-<div class="container">
-	<!-- prettier-ignore  -->
-	<footer>
+	<br />
+	<div class="container">
+		<!-- prettier-ignore  -->
+		<footer>
 		<small>
-			Hvað er í bíó? var verkefni unnið af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>.  Núverandi útgáfa var uppfærð og unnin af <a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
+			Upprunarlega „Hvað er í bíó?“ var unnið af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>. Núverandi útgáfa var uppfærð og unnin af <a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
 		</small>
 		<br>
 		<small>
-			Hugbúnaðurinn er opinn og frjálslega notanlegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a > þar sem vel er tekið á móti aðstoð og betrumbótum.
+			Hugbúnaðurinn er á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem vel er tekið á móti athugasemdum, aðstoð og framlögum.
 		</small>
 	</footer>
-</div>
+	</div>
+	<br />
+	<br />
+</main>
