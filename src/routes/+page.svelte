@@ -1,4 +1,6 @@
 <script>
+	import { fade } from 'svelte/transition'
+
 	const groupBy = (/** @type {any[]} */ list, /** @type {string} */ key) =>
 		list.reduce((hash, obj) => ({ ...hash, [obj[key]]: (hash[obj[key]] || []).concat(obj) }), {})
 
@@ -61,10 +63,20 @@
 				)
 			)
 		}))
+	let visible = true
 </script>
 
 <header>
 	<div class="container">
+		<label>
+			<input type="checkbox" bind:checked={visible} />
+			visible
+		</label>
+
+		{#if visible}
+			<p transition:fade>Fades in and out</p>
+		{/if}
+
 		<hgroup>
 			<h1>Hvað er í bíó?</h1>
 			<h2>
@@ -126,12 +138,12 @@
 					<br />
 					<br />
 					{#each showtimes as [cinema, times]}
-						<div>
+						<div transition:fade={{ delay: 0, duration: 300 }}>
 							<abbr title={cinema}><small>{cinema}</small></abbr>
 							<div style="white-space : break-spaces;">
 								{#each times as { time, purchase_url }, i}
 									<!-- prettier-ignore -->
-									<small style='font-variant-numeric: tabular-nums;'>
+									<small style='font-variant-numeric: tabular-nums;' transition:fade="{{delay: 250, duration: 300}}">
 											<a href={purchase_url}>{new Date(time).toLocaleTimeString('is-IS', { timeStyle: 'short', hour12: false })}&nbsp;</a>
 									</small>
 								{/each}
