@@ -8,7 +8,6 @@ specifiers:
   '@types/cookie': ^0.5.1
   '@typescript-eslint/eslint-plugin': ^5.52.0
   '@typescript-eslint/parser': ^5.52.0
-  '@vercel/analytics': ^0.1.10
   autoprefixer: ^10.4.13
   eslint: ^8.34.0
   eslint-config-prettier: ^8.6.0
@@ -24,7 +23,6 @@ specifiers:
 
 dependencies:
   '@picocss/pico': 1.5.7
-  '@vercel/analytics': 0.1.10
 
 devDependencies:
   '@neoconfetti/svelte': 1.0.0
@@ -543,12 +541,6 @@ packages:
       '@typescript-eslint/types': 5.52.0
       eslint-visitor-keys: 3.3.0
     dev: true
-
-  /@vercel/analytics/0.1.10:
-    resolution: {integrity: sha512-jjJ8GzcPnQp0cMxpfYoUycMRBtDiaIeyVjZPiEPe99Dj1PdjMzAFYEASiV/hpNsXHkpcNYCveDFh6jnmh0YSDQ==}
-    peerDependencies:
-      react: ^16.8||^17||^18
-    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.8.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
