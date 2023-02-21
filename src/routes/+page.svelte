@@ -1,29 +1,26 @@
-<script>
-	const groupBy = (/** @type {any[]} */ list, /** @type {string} */ key) =>
+<script lang="ts">
+	import type { RootObject } from './+page'
+
+	const groupBy = (list: any[], key: string) =>
 		list.reduce((hash, obj) => ({ ...hash, [obj[key]]: (hash[obj[key]] || []).concat(obj) }), {})
 
-	const in_range = (
-		/** @type {number} */ x,
-		/** @type {number} */ from,
-		/** @type {number} */ to
-	) => from <= x && x <= to
+	const in_range = (x: number, from: number, to: number) => from <= x && x <= to
 
-	const float_to_hh_mm = (/** @type {number} */ time) => {
+	const float_to_hh_mm = (time: number) => {
 		return `${Math.floor(time)}:${(time % 1) * 60}`.replace(':0', ':00')
 	}
 
 	let [from, to] = [12, 23.5]
 
-	const to_float = (/** @type {string | number | Date} */ date) => {
+	const to_float = (date: string) => {
 		const [hours, minutes] = new Date(date)
 			.toLocaleTimeString('en', { timeStyle: 'short', hour12: false })
 			.split(':')
 		return parseFloat(hours) + parseFloat(minutes) / 60
 	}
-	/**
-	 * @type {{ movies: import('./+page').RootObject[]; }}
-	 */
-	export let data
+
+	import type { PageData } from './$types'
+	export let data: PageData
 
 	const all_cinemas = [
 		...new Set(
@@ -36,25 +33,29 @@
 		all_cinemas.slice(Math.ceil(all_cinemas.length / 2))
 	]
 
-	const toggle = (/** @type {string} */ cinema) => {
+	const toggle = (cinema: string) => {
 		selected_cinemas = selected_cinemas.includes(cinema)
 			? selected_cinemas.filter((c) => c !== cinema)
 			: [...selected_cinemas, cinema]
 	}
 
-	//  prettier-ignore
 	$: filtered_cinemas_showtimes = data.movies
 		.sort((a, b) => b.showtimes.length - a.showtimes.length)
 		.filter((movie) =>
 			movie.showtimes.some(
-				(showtime) => selected_cinemas.includes(showtime.cinema) && in_range(to_float(showtime.time), from, to)
+				(showtime) =>
+					selected_cinemas.includes(showtime.cinema) && in_range(to_float(showtime.time), from, to)
 			)
 		)
 		.map((movie) => ({
 			...movie,
 			showtimes: Object.entries(
 				groupBy(
-					movie.showtimes.filter((showtime) => selected_cinemas.includes(showtime.cinema) && in_range(to_float(showtime.time), from, to)),
+					movie.showtimes.filter(
+						(showtime) =>
+							selected_cinemas.includes(showtime.cinema) &&
+							in_range(to_float(showtime.time), from, to)
+					),
 					'cinema'
 				)
 			)
@@ -87,7 +88,7 @@
 			</label>
 			<label>
 				Til: {float_to_hh_mm(to)}
-				<input bind:value={to} type="range" min="12" max="23.5" step="0.5" />
+				<input bind:value={to} type="range" min="12" max="23.5" />
 			</label>
 		</div>
 		<div>
@@ -153,12 +154,9 @@
 		<small>
 			Upprunarlega „Hvað er í bíó?“ var unnið af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>. Núverandi útgáfa var uppfærð og unnin af <a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
 		</small>
-		<br>
 		<small>
-			Hugbúnaðurinn er á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem vel er tekið á móti athugasemdum, aðstoð og framlögum.
+			Gögn eru fengin af <a href="https://kvikmyndir.is">kvikmyndir.is</a> en hugbúnaðurinn er aðgengilegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem vel er tekið á móti athugasemdum, aðstoð og framlögum. <a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun!</a>
 		</small>
 	</footer>
 	</div>
-	<br />
-	<br />
 </main>

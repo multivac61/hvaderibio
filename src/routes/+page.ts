@@ -1,7 +1,7 @@
 import type { PageLoad } from './$types'
 
-export interface Showtime {
-	time: Date
+interface Showtime {
+	time: string
 	cinema: string
 	purchase_url: string
 	hall: string
@@ -25,7 +25,7 @@ export interface RootObject {
 	trailer_url: string
 }
 
-export const load = (async ({ fetch, params }) => {
+export const load = (async ({ fetch }) => {
 	const fetchMovies = async () => {
 		const response = await fetch('kvikmyndir_is.json')
 		return (await response.json()) as RootObject[]
