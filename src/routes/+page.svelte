@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { float_to_hh_mm, groupBy, in_range, to_float } from '../lib/util'
+	import { float_to_hh_mm, groupBy, in_range, to_float } from '$lib/util'
 
 	import type { PageData } from './$types'
 	export let data: PageData
