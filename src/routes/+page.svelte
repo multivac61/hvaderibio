@@ -5,7 +5,7 @@
 	export let data: PageData
 
 	const today = `Í dag, ${new Date()
-		.toLocaleDateString('is-IS', {
+		.toLocaleString('is-is', {
 			weekday: 'long',
 			year: 'numeric',
 			month: 'long',
@@ -60,18 +60,23 @@
 		</div>
 	</header>
 	<div class="grid">
-		<div style="white-space : break-spaces;">
-			<!-- prettier-ignore -->
-			<div>
-				<label for="from">
-					<small> Frá {float_to_hh_mm(from)} </small>
-					<input bind:value={from} type=range min=12 max=23.5 step=0.25 id=from name=from />
-				</label>
-				<label for="to">
-					<small> Til {float_to_hh_mm(to)} </small>
-					<input bind:value={to} type=range min=12 max=23.5 step=0.25 id=to name=to />
-				</label>
-			</div>
+		<div>
+			<label for="from">
+				<small> Frá {float_to_hh_mm(from)} </small>
+				<input
+					bind:value={from}
+					type="range"
+					min="12"
+					max="23.5"
+					step="0.25"
+					id="from"
+					name="from"
+				/>
+			</label>
+			<label for="to">
+				<small> Til {float_to_hh_mm(to)} </small>
+				<input bind:value={to} type="range" min="12" max="23.5" step="0.25" id="to" name="to" />
+			</label>
 		</div>
 		<div>
 			<div class="grid">
@@ -106,7 +111,7 @@
 			<summary> {title} ({release_year}) </summary>
 			<div class="grid">
 				<div>
-					<img src={poster_url} alt={title} width="350px" />
+					<img src={poster_url} alt={title} width="350px" height="auto" />
 					<br />
 					<small>{genres.join(', ')}. <a href={trailer_url}>Sjá stiklu.</a></small>
 					<br />
