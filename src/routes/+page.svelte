@@ -19,7 +19,7 @@
 		...new Set(
 			data.movies?.flatMap((movie) => movie.showtimes.flatMap((showtime) => showtime.cinema))
 		)
-	]
+	].sort()
 	$: cinemas_in_two_cols = [
 		all_cinemas.slice(0, Math.ceil(all_cinemas.length / 2)),
 		all_cinemas.slice(Math.ceil(all_cinemas.length / 2))
@@ -64,12 +64,12 @@
 			<!-- prettier-ignore -->
 			<div>
 				<label for="from">
-					Frá {float_to_hh_mm(from)}
-					<input bind:value={from} type="range" min="12" max="23.5" step="0.25" id="from" name="from"/>
+					<small> Frá {float_to_hh_mm(from)} </small>
+					<input bind:value={from} type=range min=12 max=23.5 step=0.25 id=from name=from />
 				</label>
 				<label for="to">
-					Til {float_to_hh_mm(to)}
-					<input bind:value={to} type="range" min="12" max="23.5" step="0.25" id="to" name="to"/>
+					<small> Til {float_to_hh_mm(to)} </small>
+					<input bind:value={to} type=range min=12 max=23.5 step=0.25 id=to name=to />
 				</label>
 			</div>
 		</div>
@@ -82,7 +82,7 @@
 								<li style="list-style-type: none;">
 									<small>
 										<!-- prettier-ignore -->
-										<input type="checkbox" bind:group={selected_cinemas} value={cinema} id={cinema} name={cinema} />
+										<input type=checkbox bind:group={selected_cinemas} value={cinema} id={cinema} name={cinema} />
 										<label for={cinema}>{cinema}</label>
 									</small>
 								</li>
@@ -92,9 +92,13 @@
 				{/each}
 			</div>
 			<!-- prettier-ignore -->
-			<small>
-				<a href="/" style="text-align: center;" on:click={() => { selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : [] }}>{selected_cinemas.length === 0 ? 'Velja öll' : 'Afvelja'} kvikmyndahús</a>
-			</small>
+			<ul>
+				<li style="list-style-type: none;">
+					<small>
+						<a href="# " target="_blank" style="text-align: center;" on:click|preventDefault={() => { selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : [] }}>{selected_cinemas.length === 0 ? 'Velja öll' : 'Afvelja'} kvikmyndahús</a>
+					</small>
+				</li>
+			</ul>
 		</div>
 	</div>
 	{#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description }}
