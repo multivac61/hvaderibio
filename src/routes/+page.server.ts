@@ -1,6 +1,8 @@
-import type { PageLoad } from './$types'
+import type { PageServerLoad } from './$types'
 import { error } from '@sveltejs/kit'
 import { z } from 'zod'
+
+export const prerender = true
 
 const kvikmyndir_schema = z.array(
 	z
@@ -39,14 +41,22 @@ export const load = (async ({ fetch }) => {
 
 		const parsed = kvikmyndir_schema.safeParse(await response.json())
 		if (parsed.success) {
-			return { movies: parsed.data }
+			return parsed.data
 		}
 
 		console.error(parsed.error)
 		throw error(500, 'Unable to parse JSON')
 	}
 
-	return fetchMovies()
-}) satisfies PageLoad
-
-export const prerender = true
+	return {
+		movies: await fetchMovies(),
+		today: `Í dag, ${new Date()
+			.toLocaleString('is-IS', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
+			})
+			.replace('dagur', 'daginn')}.`
+	}
+}) satisfies PageServerLoad

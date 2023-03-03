@@ -4,15 +4,6 @@
 	import type { PageData } from './$types'
 	export let data: PageData
 
-	const today = `Í dag, ${new Date()
-		.toLocaleString('is-is', {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		})
-		.replace('dagur', 'daginn')}`
-
 	let [from, to] = [12, 23.5]
 
 	const all_cinemas = [
@@ -20,6 +11,7 @@
 			data.movies?.flatMap((movie) => movie.showtimes.flatMap((showtime) => showtime.cinema))
 		)
 	].sort()
+
 	$: cinemas_in_two_cols = [
 		all_cinemas.slice(0, Math.ceil(all_cinemas.length / 2)),
 		all_cinemas.slice(Math.ceil(all_cinemas.length / 2))
@@ -50,28 +42,19 @@
 		}))
 </script>
 
-<main class="container">
-	<header>
-		<div class="container">
-			<hgroup>
-				<h1>Hvað er í bíó?</h1>
-				<h2>{today}</h2>
-			</hgroup>
-		</div>
-	</header>
+<header>
+	<div class="container">
+		<hgroup>
+			<h1>Hvað er í bíó?</h1>
+			<h2>{data.today}</h2>
+		</hgroup>
+	</div>
 	<div class="grid">
 		<div>
 			<label for="from">
 				<small> Frá {float_to_hh_mm(from)} </small>
-				<input
-					bind:value={from}
-					type="range"
-					min="12"
-					max="23.5"
-					step="0.25"
-					id="from"
-					name="from"
-				/>
+				<!-- prettier-ignore -->
+				<input bind:value={from} type="range" min="12" max="23.5" step="0.25" id="from" name="from" />
 			</label>
 			<label for="to">
 				<small> Til {float_to_hh_mm(to)} </small>
@@ -96,64 +79,63 @@
 					</div>
 				{/each}
 			</div>
-			<!-- prettier-ignore -->
 			<ul>
 				<li style="list-style-type: none;">
 					<small>
-						<a href="# " target="_blank" style="text-align: center;" on:click|preventDefault={() => { selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : [] }}>{selected_cinemas.length === 0 ? 'Velja öll' : 'Afvelja'} kvikmyndahús</a>
+						<!-- prettier-ignore -->
+						<a href="# " target="_blank" style="text-align: center; a:visited: a:link" on:click|preventDefault={() => { selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : [] }}>{selected_cinemas.length === 0 ? 'Velja öll' : 'Afvelja'} kvikmyndahús</a>
 					</small>
 				</li>
 			</ul>
 		</div>
 	</div>
-	{#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description }}
-		<details>
-			<summary> {title} ({release_year}) </summary>
-			<div class="grid">
-				<div>
-					<img src={poster_url} alt={title} width="350px" height="auto" />
-					<br />
-					<small>{genres.join(', ')}. <a href={trailer_url}>Sjá stiklu.</a></small>
-					<br />
-					<br />
-				</div>
-				<div>
-					<small>{description}</small>
-					<br />
-					<br />
-					{#each showtimes as [cinema, times]}
-						<div>
-							<abbr title={cinema}><small>{cinema}</small></abbr>
-							<div style="white-space : break-spaces;">
-								{#each times as { time, purchase_url }, i}
-									<!-- prettier-ignore -->
-									<small style='font-variant-numeric: tabular-nums;'>
-											<a href={purchase_url}>{new Date(time).toLocaleTimeString('is-IS', { timeStyle: 'short', hour12: false })}</a>&nbsp;&nbsp;
-									</small>
-								{/each}
-							</div>
-						</div>
-					{/each}
-				</div>
+</header>
+{#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description }}
+	<details>
+		<summary> {title} ({release_year}) </summary>
+		<div class="grid">
+			<div>
+				<img src={poster_url} alt={title} width="350px" height="auto" />
+				<br />
+				<small>{genres.join(', ')}. <a href={trailer_url}>Sjá stiklu.</a></small>
+				<br /> <br />
 			</div>
-		</details>
-	{/each}
-	{#if filtered_cinemas_showtimes.length == 0}
-		<!-- prettier-ignore -->
-		<p>
-			Engin mynd uppfyllir skilyrðin. <a href={'#'} on:click|preventDefault={() => { [from, to] = [12, 23.5]; selected_cinemas = all_cinemas }}>Prófaðu að víkka þau.</a>
-		</p>
-	{/if}
-	<br />
-	<div class="container">
-		<!-- prettier-ignore  -->
-		<footer>
+			<div>
+				<small>{description}</small>
+				<br />
+				<br />
+				{#each showtimes as [cinema, times]}
+					<div>
+						<abbr title={cinema}><small>{cinema}</small></abbr>
+						<div style="white-space : break-spaces;">
+							{#each times as { time, purchase_url }, i}
+								<!-- prettier-ignore -->
+								<small style='font-variant-numeric: tabular-nums;'>
+									<a href={purchase_url}>{new Date(time).toLocaleTimeString('is-IS', { timeStyle: 'short', hour12: false })}</a>&nbsp;&nbsp;
+								</small>
+							{/each}
+						</div>
+					</div>
+				{/each}
+			</div>
+		</div>
+	</details>
+{/each}
+{#if filtered_cinemas_showtimes.length == 0}
+	<!-- prettier-ignore -->
+	<p>
+		Engin mynd uppfyllir skilyrðin. <a href={'#'} on:click|preventDefault={() => { [from, to] = [12, 23.5]; selected_cinemas = all_cinemas }}>Prófaðu að víkka þau.</a>
+	</p>
+{/if}
+<br />
+<div class="container">
+	<!-- prettier-ignore  -->
+	<footer>
 		<small>
-			Upprunarlega „Hvað er í bíó?“ var unnið af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>. Núverandi útgáfa var uppfærð og unnin af <a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
+			„Hvað er í bíó?“ upprunarlega unnin af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>. Núverandi útgáfa útfærð af <a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
 		</small>
 		<small>
-			Gögn eru fengin af <a href="https://kvikmyndir.is">kvikmyndir.is</a> en hugbúnaðurinn er aðgengilegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem vel er tekið á móti athugasemdum, aðstoð og framlögum. <a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun!</a>
+			Gögn eru fengin af <a href="https://kvikmyndir.is">kvikmyndir.is</a>. Hugbúnaður er aðgengilegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem vel er tekið á móti athugasemdum og aðstoð. <a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun!</a>
 		</small>
 	</footer>
-	</div>
-</main>
+</div>
