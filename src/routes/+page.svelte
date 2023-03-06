@@ -63,10 +63,10 @@
 		</div>
 		<div>
 			<div class="grid">
-				{#each cinemas_in_two_cols as cinemas, i}
+				{#each cinemas_in_two_cols as cinemas (cinemas)}
 					<div>
 						<ul>
-							{#each cinemas as cinema}
+							{#each cinemas as cinema (cinema)}
 								<li style="list-style-type: none;">
 									<small>
 										<!-- prettier-ignore -->
@@ -90,7 +90,7 @@
 		</div>
 	</div>
 </header>
-{#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description }}
+{#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description } (title)}
 	<details>
 		<summary> {title} ({release_year}) </summary>
 		<div class="grid">
@@ -108,7 +108,7 @@
 					<div>
 						<abbr title={cinema}><small>{cinema}</small></abbr>
 						<div style="white-space : break-spaces;">
-							{#each times as { time, purchase_url }, i}
+							{#each times as { time, purchase_url } (purchase_url)}
 								<!-- prettier-ignore -->
 								<small style='font-variant-numeric: tabular-nums;'>
 									<a href={purchase_url}>{new Date(time).toLocaleTimeString('is-IS', { timeStyle: 'short', hour12: false })}</a>&nbsp;&nbsp;
