@@ -1,12 +1,21 @@
-export function groupBy(list: any[], key: string) {
-	return list.reduce((hash, obj) => ({ ...hash, [obj[key]]: (hash[obj[key]] || []).concat(obj) }), {})
+export function group_by<T extends object>(list: T[], key: keyof T): Record<string | number | symbol, T[]> {
+	return list.reduce(
+		(hash: Record<string | number | symbol, T[]>, obj: T) => {
+			const group_key = obj[key] as keyof T;
+			return {
+				...hash,
+				[group_key]: (hash[group_key] || []).concat(obj)
+			}
+		},
+		{}
+	)
 }
 
 export function in_range(x: number, from: number, to: number) {
 	return from <= x && x <= to
 }
 
-export function float_to_hh_mm(time: number) {
+export function to_hhmm(time: number) {
 	return `${Math.floor(time)}:${(time % 1) * 60}`.replace(':0', ':00')
 }
 

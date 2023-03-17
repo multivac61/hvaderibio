@@ -33,9 +33,7 @@ const kvikmyndir_schema = z.array(
 		.strict()
 )
 
-export type Kvikmyndir = z.infer<typeof kvikmyndir_schema>
-
-export const load = (async ({ fetch }) => {
+export const load = async ({ fetch }) => {
 	const fetchMovies = async () => {
 		const response = await fetch('kvikmyndir_is.json')
 
@@ -59,4 +57,4 @@ export const load = (async ({ fetch }) => {
 			})
 			.replace('dagur', 'daginn')}.`
 	}
-}) satisfies PageServerLoad
+}

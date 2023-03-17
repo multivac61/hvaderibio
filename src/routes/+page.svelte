@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { float_to_hh_mm, groupBy, in_range, to_float } from '$lib/util'
+	import { to_hhmm, to_float, in_range, group_by } from '$lib/util'
 
-	import type { PageData } from './$types'
-	export let data: PageData
+	export let data
 
 	let [from, to] = [12, 23.5]
 
 	const all_cinemas = [
 		...new Set(
-			data.movies?.flatMap((movie) => movie.showtimes.flatMap((showtime) => showtime.cinema))
+			data.movies.flatMap((movie) => movie.showtimes.flatMap((showtime) => showtime.cinema))
 		)
 	].sort()
 
@@ -17,7 +16,7 @@
 		all_cinemas.slice(Math.ceil(all_cinemas.length / 2))
 	]
 
-	let selected_cinemas: string[] = all_cinemas
+	let selected_cinemas = all_cinemas
 
 	$: filtered_cinemas_showtimes = data.movies
 		.sort((a, b) => b.showtimes.length - a.showtimes.length)
@@ -30,7 +29,7 @@
 		.map((movie) => ({
 			...movie,
 			showtimes: Object.entries(
-				groupBy(
+				group_by(
 					movie.showtimes.filter(
 						(showtime) =>
 							selected_cinemas.includes(showtime.cinema) &&
@@ -50,14 +49,14 @@
 		</hgroup>
 	</div>
 	<div class="grid">
-		<div>
+		<div style="font-variant-numeric: tabular-nums;">
 			<label for="from">
-				<small> Frá {float_to_hh_mm(from)} </small>
+				<small> Frá {to_hhmm(from)} </small>
 				<!-- prettier-ignore -->
 				<input bind:value={from} type="range" min="12" max="23.5" step="0.25" id="from" name="from" />
 			</label>
 			<label for="to">
-				<small> Til {float_to_hh_mm(to)} </small>
+				<small> Til {to_hhmm(to)} </small>
 				<input bind:value={to} type="range" min="12" max="23.5" step="0.25" id="to" name="to" />
 			</label>
 		</div>
@@ -83,7 +82,7 @@
 				<li style="list-style-type: none;">
 					<small>
 						<!-- prettier-ignore -->
-						<a href="# " target="_blank" style="text-align: center; a:visited: a:link" on:click|preventDefault={() => { selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : [] }}>{selected_cinemas.length === 0 ? 'Velja öll' : 'Afvelja'} kvikmyndahús</a>
+						<a href="# " target="_blank" style="text-align: center; a:visited: a:link" on:click|preventDefault={() => { selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : [] }}>{selected_cinemas.length === 0 ? 'Velja' : 'Afvelja'} öll kvikmyndahús</a>
 					</small>
 				</li>
 			</ul>
@@ -92,19 +91,23 @@
 </header>
 {#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description } (title)}
 	<details>
-		<summary> {title} ({release_year}) </summary>
+		<summary> {title} </summary>
 		<div class="grid">
 			<div>
-				<img src={poster_url} alt={title} width="350px" height="520px"/>
-				<br />
-				<small>{genres.join(', ')}. <a href={trailer_url}>Sjá stiklu.</a></small>
-				<br /> <br />
+				<a href={trailer_url} target="_blank">
+					<img
+						src={poster_url}
+						title="Horfa á stiku {title} ({release_year}). {genres.join(', ')}"
+						alt="Poster for movie"
+						width="400px"
+						height="600px"
+					/>
+				</a>
 			</div>
 			<div>
 				<small>{description}</small>
-				<br />
-				<br />
-				{#each showtimes as [cinema, times]}
+				<br /> <br />
+				{#each showtimes as [cinema, times] (cinema)}
 					<div>
 						<abbr title={cinema}><small>{cinema}</small></abbr>
 						<div style="white-space : break-spaces;">
