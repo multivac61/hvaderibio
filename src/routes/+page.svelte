@@ -95,7 +95,7 @@
 		<summary> {title} ({release_year}) </summary>
 		<div class="grid">
 			<div>
-				<img src={poster_url} alt={title} width="350px" height="auto" />
+				<img src={poster_url} alt={title} width="350px" height="auto" loading="lazy"/>
 				<br />
 				<small>{genres.join(', ')}. <a href={trailer_url}>Sjá stiklu.</a></small>
 				<br /> <br />
