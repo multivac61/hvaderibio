@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { to_hhmm, to_float, in_range, group_by } from '$lib/util'
+	import { group_by, in_range, to_float, to_hhmm } from '$lib/util'
 
 	export let data
 

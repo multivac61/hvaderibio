@@ -1,4 +1,3 @@
-import type { PageServerLoad } from './$types'
 import { error } from '@sveltejs/kit'
 import { z } from 'zod'
 
@@ -33,7 +32,7 @@ const kvikmyndir_schema = z.array(
 		.strict()
 )
 
-export const load = async ({ fetch }) => {
+export async function load({ fetch }) {
 	const fetchMovies = async () => {
 		const response = await fetch('kvikmyndir_is.json')
 
