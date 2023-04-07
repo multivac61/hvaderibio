@@ -64,6 +64,6 @@ CFLAGS="-I$(brew --prefix xz)/include" LDFLAGS="-L$(brew --prefix xz)/lib" pyenv
 Spinna upp web
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
