@@ -54,9 +54,9 @@
 		</div>
 		<h1 class="text-3xl sm:text-5xl z-20 relative">
 			<div class="z-0 blur-3xl bg-slate-50/10 absolute -inset-10" />
-			<span class="font-black drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] -tracking-[0.03em] uppercase"
-				>Hvað er í bíó?</span
-			>
+			<span class="font-black drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] -tracking-[0.03em] uppercase">
+				Hvað er í <span class="text-yellow-500">bíó?</span>
+			</span>
 		</h1>
 		<h2
 			class="text-slate-200 font-bold drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] z-20 md:text-xl md:mt-4"
@@ -109,19 +109,19 @@
 		Engin mynd uppfyllir skilyrðin. <button on:click={reset}>Prófaðu að víkka þau.</button>
 	</p>
 {/if}
-<br />
-<div class="container">
-	<footer>
-		<small>
+
+<div class="my-8">
+	<footer class="[&_a]:underline text-slate-400 [&_a]:text-slate-300">
+		<p>
 			„Hvað er í bíó?“ upprunarlega unnin af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>.
 			Núverandi útgáfa útfærð af
 			<a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
-		</small>
-		<small>
+		</p>
+		<p>
 			Gögn eru fengin af <a href="https://kvikmyndir.is">kvikmyndir.is</a>. Hugbúnaður er
 			aðgengilegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem vel er
 			tekið á móti athugasemdum og aðstoð.
 			<a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun!</a>
-		</small>
+		</p>
 	</footer>
 </div>

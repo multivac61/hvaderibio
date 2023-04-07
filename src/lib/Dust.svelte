@@ -72,7 +72,7 @@
 			for (let i = 0; i < 80; i++) {
 				const x = Math.random() * width
 				const y = Math.random() * height
-				const size = Math.random() * 0.5 + 1
+				const size = Math.random() * 1.5 + 0.5
 				particlesArray.push(new Particle(x, y, size))
 			}
 		}
