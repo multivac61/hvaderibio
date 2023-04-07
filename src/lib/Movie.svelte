@@ -16,18 +16,19 @@
 		on:click={() => {
 			selected = !selected
 		}}
+		class={selected ? 'shrink-0 sm:w-80' : ''}
 	>
 		<img
 			src={movie.poster_url}
 			title={movie.title}
 			alt={movie.title}
-			class={`object-cover rounded-xl shadow-2xl sm:max-w-[min(100%,360px)] ${
-				selected ? 'max-w-[calc(50%-4px)] mx-auto max-h-[220px] sm:max-h-none' : ''
+			class={`object-cover rounded-xl shadow-2xl aspect-[2/3] sm:w-[min(100%,360px)] ${
+				selected ? 'max-w-[calc(50%-4px)] sm:max-w-none' : ''
 			}`}
 		/>
 	</button>
 	{#if selected}
-		<div>
+		<div class="grow">
 			<div class="font-bold mb-2 text-lg md:text-2xl">{movie.title}</div>
 			<div class="text-sm mb-4">
 				{movie.description} —

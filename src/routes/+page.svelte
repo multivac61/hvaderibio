@@ -45,14 +45,24 @@
 	}
 </script>
 
-<header>
-	<div class="my-4 sm:my-24 flex flex-col items-start md:items-center">
-		<div class="inset-y-0 left-1/2 z-10 -ml-[320px] absolute pointer-events-none"><Dust /></div>
-		<h1 class="font-extrabold text-3xl sm:text-5xl z-20 relative uppercase">
+<header class="my-4">
+	<div class="py-8 sm:py-24 flex flex-col items-start md:items-center">
+		<div
+			class="inset-y-0 w-full left-1/2 z-10 -ml-[320px] absolute pointer-events-none overflow-hidden"
+		>
+			<Dust />
+		</div>
+		<h1 class="text-3xl sm:text-5xl z-20 relative">
 			<div class="z-0 blur-3xl bg-slate-50/10 absolute -inset-10" />
-			<span class="drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">Hvað er í bíó?</span>
+			<span class="font-black drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] -tracking-[0.03em] uppercase"
+				>Hvað er í bíó?</span
+			>
 		</h1>
-		<h2 class="text-slate-200 z-20 md:text-xl md:mt-4">{data.today}</h2>
+		<h2
+			class="text-slate-200 font-bold drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] z-20 md:text-xl md:mt-4"
+		>
+			{data.today}
+		</h2>
 	</div>
 	<div class="grid sm:grid-cols-2 gap-8">
 		<div class="mb-4">
