@@ -45,10 +45,10 @@
 	}
 </script>
 
-<header class="my-4">
+<header class="my-4 relative">
 	<div class="py-8 sm:py-24 flex flex-col items-start md:items-center">
 		<div
-			class="inset-y-0 w-full left-1/2 z-10 -ml-[320px] absolute pointer-events-none overflow-hidden"
+			class="w-full inset-y-0 left-1/2 z-10 -ml-[320px] absolute pointer-events-none overflow-hidden"
 		>
 			<Dust />
 		</div>
