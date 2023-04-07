@@ -10,7 +10,7 @@
 <div
 	class={`${
 		selected ? 'col-span-full' : ''
-	} flex flex-col sm:flex-row gap-4 md:gap-8 md:pb-8 items-start`}
+	} flex flex-col sm:flex-row sm:items-start gap-4 md:gap-8 md:pb-8`}
 >
 	<button
 		on:click={() => {
@@ -21,8 +21,8 @@
 			src={movie.poster_url}
 			title={movie.title}
 			alt={movie.title}
-			class={`rounded-xl shadow-2xl sm:max-w-[min(100%,360px)] ${
-				selected ? 'max-w-[calc(50%-4px)]' : ''
+			class={`object-cover rounded-xl shadow-2xl sm:max-w-[min(100%,360px)] ${
+				selected ? 'max-w-[calc(50%-4px)] mx-auto max-h-[220px] sm:max-h-none' : ''
 			}`}
 		/>
 	</button>
@@ -37,10 +37,10 @@
 				{#each showtimes as [cinema, times] (cinema)}
 					<div>
 						<div class="mb-2 font-bold">{cinema}</div>
-						<div class="inline-flex gap-3">
+						<div class="inline-flex flex-wrap gap-3">
 							{#each times as { time, purchase_url } (purchase_url)}
 								<a
-									class="tabular-nums px-2.5 py-1 rounded-md border border-slate-500 bg-slate-900"
+									class="tabular-nums px-2.5 py-1 rounded bg-slate-800 text-white shadow"
 									href={purchase_url}
 								>
 									{new Date(time).toLocaleTimeString('is-IS', {

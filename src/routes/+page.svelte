@@ -56,9 +56,9 @@
 	</div>
 	<div class="grid sm:grid-cols-2 gap-8">
 		<div class="mb-4">
-			<ul class="grid grid-cols-2 gap-x-3 gap-y-1">
+			<ul class="grid grid-cols-2 gap-x-4 gap-y-2">
 				{#each all_cinemas as cinema}
-					<li class="flex items-center gap-2 truncate">
+					<li class="flex items-center gap-2">
 						<input
 							type="checkbox"
 							bind:group={selected_cinemas}
@@ -66,7 +66,7 @@
 							id={cinema}
 							name={cinema}
 						/>
-						<label for={cinema}>{cinema}</label>
+						<label for={cinema} class="min-w-0 truncate">{cinema}</label>
 					</li>
 				{/each}
 				<li class="col-span-full">
