@@ -1,7 +1,11 @@
 <script lang="ts">
-	import { group_by, in_range, to_float, to_hhmm } from '$lib/util'
+	import Dust from '$lib/Dust.svelte'
+	import Movie from '$lib/Movie.svelte'
+	import Range from '$lib/Range.svelte'
+	import { group_by, in_range, to_float } from '$lib/util'
+	import type { PageServerData } from './$types'
 
-	export let data
+	export let data: PageServerData
 
 	let [from, to] = [12, 23.5]
 
@@ -10,11 +14,6 @@
 			data.movies.flatMap((movie) => movie.showtimes.flatMap((showtime) => showtime.cinema))
 		)
 	].sort()
-
-	$: cinemas_in_two_cols = [
-		all_cinemas.slice(0, Math.ceil(all_cinemas.length / 2)),
-		all_cinemas.slice(Math.ceil(all_cinemas.length / 2))
-	]
 
 	let selected_cinemas = all_cinemas
 
@@ -39,106 +38,80 @@
 				)
 			)
 		}))
+
+	function reset() {
+		;[from, to] = [12, 23.5]
+		selected_cinemas = all_cinemas
+	}
 </script>
 
 <header>
-	<div class="container">
-		<hgroup>
-			<h1>Hvað er í bíó?</h1>
-			<h2>{data.today}</h2>
-		</hgroup>
+	<div class="my-4 sm:my-24 flex flex-col items-start md:items-center">
+		<div class="inset-y-0 left-1/2 z-10 -ml-[320px] absolute pointer-events-none"><Dust /></div>
+		<h1 class="font-extrabold text-3xl sm:text-5xl z-20 relative uppercase">
+			<div class="z-0 blur-3xl bg-slate-50/10 absolute -inset-10" />
+			<span class="drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">Hvað er í bíó?</span>
+		</h1>
+		<h2 class="text-slate-200 z-20 md:text-xl md:mt-4">{data.today}</h2>
 	</div>
-	<div class="grid">
-		<div style="font-variant-numeric: tabular-nums;">
-			<label for="from">
-				<small> Frá {to_hhmm(from)} </small>
-				<!-- prettier-ignore -->
-				<input bind:value={from} type="range" min="12" max="23.5" step="0.25" id="from" name="from" />
-			</label>
-			<label for="to">
-				<small> Til {to_hhmm(to)} </small>
-				<input bind:value={to} type="range" min="12" max="23.5" step="0.25" id="to" name="to" />
-			</label>
-		</div>
-		<div>
-			<div class="grid">
-				{#each cinemas_in_two_cols as cinemas (cinemas)}
-					<div>
-						<ul>
-							{#each cinemas as cinema (cinema)}
-								<li style="list-style-type: none;">
-									<small>
-										<!-- prettier-ignore -->
-										<input type=checkbox bind:group={selected_cinemas} value={cinema} id={cinema} name={cinema} />
-										<label for={cinema}>{cinema}</label>
-									</small>
-								</li>
-							{/each}
-						</ul>
-					</div>
+	<div class="grid sm:grid-cols-2 gap-8">
+		<div class="mb-4">
+			<ul class="grid grid-cols-2 gap-x-3 gap-y-1">
+				{#each all_cinemas as cinema}
+					<li class="flex items-center gap-2 truncate">
+						<input
+							type="checkbox"
+							bind:group={selected_cinemas}
+							value={cinema}
+							id={cinema}
+							name={cinema}
+						/>
+						<label for={cinema}>{cinema}</label>
+					</li>
 				{/each}
-			</div>
-			<ul>
-				<li style="list-style-type: none;">
-					<small>
-						<!-- prettier-ignore -->
-						<a href="# " target="_blank" style="text-align: center; a:visited: a:link" on:click|preventDefault={() => { selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : [] }}>{selected_cinemas.length === 0 ? 'Velja' : 'Afvelja'} öll kvikmyndahús</a>
-					</small>
+				<li class="col-span-full">
+					<button
+						class="rounded-md text-left underline"
+						on:click={() => {
+							selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : []
+						}}
+					>
+						{selected_cinemas.length === 0 ? 'Velja' : 'Afvelja'} öll kvikmyndahús</button
+					>
 				</li>
 			</ul>
 		</div>
+		<div class="space-y-4 tabular-nums">
+			<Range label="Frá" name="from" bind:value={from} />
+			<Range label="Til" name="to" bind:value={to} />
+		</div>
 	</div>
 </header>
-{#each filtered_cinemas_showtimes as { title, poster_url, trailer_url, release_year, genres, showtimes, description } (title)}
-	<details>
-		<summary> {title} </summary>
-		<div class="grid">
-			<div>
-				<a href={trailer_url} target="_blank">
-					<img
-						src={poster_url}
-						title="Horfa á stiku {title} ({release_year}). {genres.join(', ')}"
-						alt="Poster for movie"
-						width="400px"
-						height="600px"
-					/>
-				</a>
-			</div>
-			<div>
-				<small>{description}</small>
-				<br /> <br />
-				{#each showtimes as [cinema, times] (cinema)}
-					<div>
-						<abbr title={cinema}><small>{cinema}</small></abbr>
-						<div style="white-space : break-spaces;">
-							{#each times as { time, purchase_url } (purchase_url)}
-								<!-- prettier-ignore -->
-								<small style='font-variant-numeric: tabular-nums;'>
-									<a href={purchase_url}>{new Date(time).toLocaleTimeString('is-IS', { timeStyle: 'short', hour12: false })}</a>&nbsp;&nbsp;
-								</small>
-							{/each}
-						</div>
-					</div>
-				{/each}
-			</div>
-		</div>
-	</details>
-{/each}
+<div
+	class="my-8 md:md-24 grid gap-x-2 gap-y-4 grid-cols-[repeat(auto-fill,minmax(min(10rem,100%),1fr))] z-50"
+>
+	{#each filtered_cinemas_showtimes as movie}
+		<Movie {movie} showtimes={movie.showtimes} />
+	{/each}
+</div>
 {#if filtered_cinemas_showtimes.length == 0}
-	<!-- prettier-ignore -->
 	<p>
-		Engin mynd uppfyllir skilyrðin. <a href={'#'} on:click|preventDefault={() => { [from, to] = [12, 23.5]; selected_cinemas = all_cinemas }}>Prófaðu að víkka þau.</a>
+		Engin mynd uppfyllir skilyrðin. <button on:click={reset}>Prófaðu að víkka þau.</button>
 	</p>
 {/if}
 <br />
 <div class="container">
-	<!-- prettier-ignore  -->
 	<footer>
 		<small>
-			„Hvað er í bíó?“ upprunarlega unnin af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>. Núverandi útgáfa útfærð af <a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
+			„Hvað er í bíó?“ upprunarlega unnin af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>.
+			Núverandi útgáfa útfærð af
+			<a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
 		</small>
 		<small>
-			Gögn eru fengin af <a href="https://kvikmyndir.is">kvikmyndir.is</a>. Hugbúnaður er aðgengilegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem vel er tekið á móti athugasemdum og aðstoð. <a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun!</a>
+			Gögn eru fengin af <a href="https://kvikmyndir.is">kvikmyndir.is</a>. Hugbúnaður er
+			aðgengilegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem vel er
+			tekið á móti athugasemdum og aðstoð.
+			<a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun!</a>
 		</small>
 	</footer>
 </div>
