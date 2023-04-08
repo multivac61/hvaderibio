@@ -69,7 +69,7 @@
 		const particlesArray: Particle[] = []
 
 		function createParticles() {
-			for (let i = 0; i < 80; i++) {
+			for (let i = 0; i < 480; i++) {
 				const x = Math.random() * width
 				const y = Math.random() * height
 				const size = Math.random() * 1.5 + 0.5
@@ -88,8 +88,20 @@
 		createParticles()
 		animateParticles()
 	}
+	export let width = 640
+	export let height = 640
 </script>
 
-<Canvas width={640} height={320}>
-	<Layer {render} />
-</Canvas>
+<div class="background" style="width: {width}px; height: {height}px; z-index: -100;">
+	<Canvas width={width} height={height} style="z-index: -2;">
+		<Layer {render}/>
+	</Canvas>
+</div>
+
+<style>
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+</style>

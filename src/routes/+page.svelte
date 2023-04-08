@@ -1,11 +1,9 @@
 <script lang="ts">
 	import Dust from '$lib/Dust.svelte'
 	import Movie from '$lib/Movie.svelte'
-	import Range from '$lib/Range.svelte'
 	import { group_by, in_range, to_float } from '$lib/util'
-	import type { PageServerData } from './$types'
 
-	export let data: PageServerData
+	export let data
 
 	let [from, to] = [12, 23.5]
 
@@ -43,30 +41,30 @@
 		;[from, to] = [12, 23.5]
 		selected_cinemas = all_cinemas
 	}
+	let width: number
+	let height: number
 </script>
+
+<svelte:window bind:outerWidth={width} bind:outerHeight={height} />
 
 <header class="my-4 relative">
 	<div class="py-8 sm:py-24 flex flex-col items-start md:items-center">
-		<div
-			class="w-full inset-y-0 left-1/2 z-10 -ml-[320px] absolute pointer-events-none overflow-hidden"
-		>
-			<Dust />
+		<div class="w-full absolute pointer-events-none overflow-hidden">
+			<Dust {width} {height} />
 		</div>
-		<h1 class="text-3xl sm:text-5xl z-20 relative">
+		<h1 class="text-2xl sm:text-5xl z-20 relative">
 			<div class="z-0 blur-3xl bg-slate-50/10 absolute -inset-10" />
 			<span class="font-black drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] -tracking-[0.03em] uppercase">
-				Hvað er í <span class="text-yellow-500">bíó?</span>
+				Hvað er í <span class="text-yellow-500">bíó</span>?
 			</span>
 		</h1>
-		<h2
-			class="text-slate-200 font-bold drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] z-20 md:text-xl md:mt-4"
-		>
+		<h2 class="z-20 md:text-l md:mt-4 text-gray-300">
 			{data.today}
 		</h2>
 	</div>
-	<div class="grid sm:grid-cols-2 gap-8">
+	<div class="grid sm:grid-cols-1 gap-8">
 		<div class="mb-4">
-			<ul class="grid grid-cols-2 gap-x-4 gap-y-2">
+			<ul class="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2">
 				{#each all_cinemas as cinema}
 					<li class="flex items-center gap-2">
 						<input
@@ -76,31 +74,27 @@
 							id={cinema}
 							name={cinema}
 						/>
-						<label for={cinema} class="min-w-0 truncate">{cinema}</label>
+						<label for={cinema} class="min-w-0 truncate text-gray-300">{cinema}</label>
 					</li>
 				{/each}
-				<li class="col-span-full">
+				<li class="flex items-center gap-2 text-gray-300">
 					<button
 						class="rounded-md text-left underline"
 						on:click={() => {
 							selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : []
 						}}
 					>
-						{selected_cinemas.length === 0 ? 'Velja' : 'Afvelja'} öll kvikmyndahús</button
+						{selected_cinemas.length === 0 ? 'Velja' : 'Afvelja'} allt</button
 					>
 				</li>
 			</ul>
 		</div>
-		<div class="space-y-4 tabular-nums">
-			<Range label="Frá" name="from" bind:value={from} />
-			<Range label="Til" name="to" bind:value={to} />
-		</div>
 	</div>
 </header>
 <div
-	class="my-8 md:md-24 grid gap-x-2 gap-y-4 grid-cols-[repeat(auto-fill,minmax(min(10rem,100%),1fr))] z-50"
+	class="my-8 md:md-30 grid gap-x-6 gap-y-6 grid-cols-[repeat(auto-fill,minmax(min(18rem,100%),2fr))] z-50"
 >
-	{#each filtered_cinemas_showtimes as movie}
+	{#each filtered_cinemas_showtimes as movie (movie.title)}
 		<Movie {movie} showtimes={movie.showtimes} />
 	{/each}
 </div>

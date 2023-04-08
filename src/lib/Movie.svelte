@@ -2,7 +2,7 @@
 	import type { Movie } from '$lib/schemas'
 
 	export let movie: Pick<Movie, 'poster_url' | 'title' | 'description' | 'trailer_url'>
-	export let showtimes: [Movie['showtimes'][0]['cinema'], Movie['showtimes']][]
+	export let showtimes: [string, Movie['showtimes']][]
 
 	let selected = false
 </script>
@@ -10,7 +10,7 @@
 <div
 	class={`${
 		selected ? 'col-span-full' : ''
-	} flex flex-col sm:flex-row sm:items-start gap-4 md:gap-8 md:pb-8`}
+	} flex flex-col sm:flex-row sm:items-start gap-4 md:gap-8 z-50`}
 >
 	<button
 		on:click={() => {
