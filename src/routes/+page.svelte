@@ -75,8 +75,7 @@
 			<Dust {width} {height} />
 		</div>
 		<h1 class="text-2xl sm:text-5xl z-20 relative">
-			<div class="z-0 blur-3xl bg-slate-50/10 absolute -inset-10" />
-			<span class="font-black drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] -tracking-[0.03em] uppercase">
+			<span class="font-black -tracking-[0.03em] uppercase">
 				Hvað er í <span class="text-yellow-500">bíó</span>?
 			</span>
 		</h1>
