@@ -84,8 +84,8 @@
 			{data.today}
 		</h2>
 	</div>
-	<div class="mb-4 hidden sm:block md:mx-auto md:max-w-lg">
-		<div class="inline-flex flex-wrap gap-2 md:justify-center">
+	<div class="mb-4 hidden sm:block md:mx-auto md:max-w-xl">
+		<div class="inline-flex flex-wrap gap-0.5 md:justify-center">
 			{#each [...group_choices, ...all_choices] as [label, cinemas]}
 				<CinemaTab
 					{label}
@@ -116,7 +116,7 @@
 				group_choice === event.currentTarget.value ? cinemas : []
 			)
 		}}
-		class="mx-auto mt-2 block rounded-lg border-0 py-1.5 pl-3 pr-10 bg-white bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
+		class="mx-auto mt-2 block rounded-lg border-0 py-1.5 pl-3 pr-10 bg-black bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
 	>
 		{#each [...group_choices, ...all_choices] as [label, cinemas]}
 			<option value={label} selected={label === selected_choice}>{label}</option>
