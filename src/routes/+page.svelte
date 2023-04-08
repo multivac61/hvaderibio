@@ -69,7 +69,7 @@
 
 <svelte:window bind:outerWidth={width} bind:outerHeight={height} />
 
-<header class="my-4 sm:my-20 relative">
+<header class="my-4 sm:my-8 relative">
 	<div class="py-8 flex flex-col items-start md:items-center">
 		<div class="w-full absolute pointer-events-none overflow-hidden">
 			<Dust {width} {height} />
@@ -84,7 +84,7 @@
 			{data.today}
 		</h2>
 	</div>
-	<div class="mb-4 hidden sm:block mx-auto max-w-lg">
+	<div class="mb-4 hidden sm:block md:mx-auto md:max-w-lg">
 		<div class="inline-flex flex-wrap gap-2 md:justify-center">
 			{#each [...group_choices, ...all_choices] as [label, cinemas]}
 				<CinemaTab
