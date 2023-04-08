@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CinemaTab from '$lib/CinemaTab.svelte'
 	import Dust from '$lib/Dust.svelte'
 	import Movie from '$lib/Movie.svelte'
 	import { group_by, in_range, to_float } from '$lib/util'
@@ -43,12 +44,33 @@
 	}
 	let width: number
 	let height: number
+
+	let capital_region_cinemas = all_cinemas.filter((name) =>
+		[
+			'Bíó Paradís',
+			'Háskólabíó',
+			'Laugarásbíó',
+			'Sambíóin Egilshöll',
+			'Sambíóin Kringlunni',
+			'Sambíóin Álfabakka',
+			'Smárabíó'
+		].includes(name)
+	)
+
+	let all_choices = all_cinemas.map((name) => [name, [name]] as const)
+
+	let group_choices = [
+		['Öll kvikmyndahús', all_cinemas],
+		['Höfuðborgarsvæðið', capital_region_cinemas]
+	] as const
+
+	let selected_choice: string = group_choices[0][0]
 </script>
 
 <svelte:window bind:outerWidth={width} bind:outerHeight={height} />
 
-<header class="my-4 relative">
-	<div class="py-8 sm:py-24 flex flex-col items-start md:items-center">
+<header class="my-4 sm:my-20 relative">
+	<div class="py-8 flex flex-col items-start md:items-center">
 		<div class="w-full absolute pointer-events-none overflow-hidden">
 			<Dust {width} {height} />
 		</div>
@@ -62,42 +84,46 @@
 			{data.today}
 		</h2>
 	</div>
-	<div class="grid sm:grid-cols-1 gap-8">
-		<div class="mb-4">
-			<ul class="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2">
-				{#each all_cinemas as cinema}
-					<li class="flex items-center gap-2">
-						<input
-							type="checkbox"
-							bind:group={selected_cinemas}
-							value={cinema}
-							id={cinema}
-							name={cinema}
-						/>
-						<label for={cinema} class="min-w-0 truncate text-gray-300">{cinema}</label>
-					</li>
-				{/each}
-				<li class="flex items-center gap-2 text-gray-300">
-					<button
-						class="rounded-md text-left underline"
-						on:click={() => {
-							selected_cinemas = selected_cinemas.length === 0 ? all_cinemas : []
-						}}
-					>
-						{selected_cinemas.length === 0 ? 'Velja' : 'Afvelja'} allt</button
-					>
-				</li>
-			</ul>
+	<div class="mb-4 hidden sm:block mx-auto max-w-lg">
+		<div class="inline-flex flex-wrap gap-2 md:justify-center">
+			{#each [...group_choices, ...all_choices] as [label, cinemas]}
+				<CinemaTab
+					{label}
+					is_selected={label === selected_choice}
+					on_click={() => {
+						selected_choice = label
+						selected_cinemas = Array.from(cinemas)
+					}}
+				/>
+			{/each}
 		</div>
 	</div>
 </header>
+
 <div
-	class="my-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(18rem,100%),2fr))] z-50"
+	class="my-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] z-40"
 >
 	{#each filtered_cinemas_showtimes as movie (movie.title)}
 		<Movie {movie} showtimes={movie.showtimes} />
 	{/each}
 </div>
+
+<div class="fixed w-full px-8 sm:hidden bottom-4 z-50">
+	<select
+		on:change={(event) => {
+			selected_choice = event.currentTarget.value
+			selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_choice, cinemas]) =>
+				group_choice === event.currentTarget.value ? cinemas : []
+			)
+		}}
+		class="mx-auto mt-2 block rounded-lg border-0 py-1.5 pl-3 pr-10 bg-white bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
+	>
+		{#each [...group_choices, ...all_choices] as [label, cinemas]}
+			<option value={label} selected={label === selected_choice}>{label}</option>
+		{/each}
+	</select>
+</div>
+
 {#if filtered_cinemas_showtimes.length == 0}
 	<p>
 		Engin mynd uppfyllir skilyrðin. <button on:click={reset}>Prófaðu að víkka þau.</button>
