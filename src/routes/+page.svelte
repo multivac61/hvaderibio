@@ -92,7 +92,7 @@
 	</div>
 </header>
 <div
-	class="my-8 md:md-30 grid gap-x-6 gap-y-6 grid-cols-[repeat(auto-fill,minmax(min(18rem,100%),2fr))] z-50"
+	class="my-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(18rem,100%),2fr))] z-50"
 >
 	{#each filtered_cinemas_showtimes as movie (movie.title)}
 		<Movie {movie} showtimes={movie.showtimes} />

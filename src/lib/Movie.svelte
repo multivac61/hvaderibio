@@ -23,7 +23,7 @@
 			title={movie.title}
 			alt={movie.title}
 			class={`object-cover rounded-xl shadow-2xl aspect-[2/3] sm:w-[min(100%,360px)] ${
-				selected ? 'max-w-[calc(50%-4px)] sm:max-w-none' : ''
+				selected ? '' : ''
 			}`}
 		/>
 	</button>
