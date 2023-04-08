@@ -70,7 +70,7 @@
 <svelte:window bind:outerWidth={width} bind:outerHeight={height} />
 
 <header class="my-4 sm:my-8 relative">
-	<div class="py-8 flex flex-col items-start md:items-center">
+	<div class="sm:py-8 flex flex-col items-start md:items-center">
 		<div class="w-full absolute pointer-events-none overflow-hidden">
 			<Dust {width} {height} />
 		</div>
@@ -108,7 +108,7 @@
 	{/each}
 </div>
 
-<div class="fixed w-full px-8 sm:hidden bottom-4 z-50">
+<div class="fixed w-full inset-x-0 sm:hidden bottom-8 z-50">
 	<select
 		on:change={(event) => {
 			selected_choice = event.currentTarget.value
@@ -130,7 +130,7 @@
 	</p>
 {/if}
 
-<div class="my-8">
+<div class="mt-8 mb-20">
 	<footer class="[&_a]:underline text-slate-400 [&_a]:text-slate-300">
 		<p>
 			„Hvað er í bíó?“ upprunarlega unnin af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>.
