@@ -88,20 +88,20 @@
 		createParticles()
 		animateParticles()
 	}
-	export let width = 640
-	export let height = 640
+	export let width: number = 640
+	export let height: number = 640
 </script>
 
 <div class="background" style="width: {width}px; height: {height}px; z-index: -100;">
-	<Canvas width={width} height={height} style="z-index: -2;">
-		<Layer {render}/>
+	<Canvas {width} {height} style="z-index: -2;">
+		<Layer {render} />
 	</Canvas>
 </div>
 
 <style>
-  .background {
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
+	.background {
+		position: fixed;
+		top: 0;
+		left: 0;
+	}
 </style>

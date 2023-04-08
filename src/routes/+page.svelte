@@ -2,11 +2,21 @@
 	import CinemaTab from '$lib/CinemaTab.svelte'
 	import Dust from '$lib/Dust.svelte'
 	import Movie from '$lib/Movie.svelte'
+	import Showtimes from '$lib/Showtimes.svelte'
 	import { group_by, in_range, to_float } from '$lib/util'
+	import {
+		Dialog,
+		DialogDescription,
+		DialogOverlay,
+		DialogTitle
+	} from '@rgossiaux/svelte-headlessui'
+	import { fade } from 'svelte/transition'
 
 	export let data
 
 	let [from, to] = [12, 23.5]
+
+	let movie: (typeof filtered_cinemas_showtimes)[0] | null = null
 
 	const all_cinemas = [
 		...new Set(
@@ -102,25 +112,14 @@
 <div
 	class="my-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] z-40"
 >
-	{#each filtered_cinemas_showtimes as movie (movie.title)}
-		<Movie {movie} showtimes={movie.showtimes} />
+	{#each filtered_cinemas_showtimes as _movie (_movie.title)}
+		<Movie
+			movie={_movie}
+			on_click={() => {
+				movie = _movie
+			}}
+		/>
 	{/each}
-</div>
-
-<div class="fixed w-full inset-x-0 sm:hidden bottom-8 z-50">
-	<select
-		on:change={(event) => {
-			selected_choice = event.currentTarget.value
-			selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_choice, cinemas]) =>
-				group_choice === event.currentTarget.value ? cinemas : []
-			)
-		}}
-		class="mx-auto mt-2 block rounded-lg border-0 py-1.5 pl-3 pr-10 bg-black bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
-	>
-		{#each [...group_choices, ...all_choices] as [label, cinemas]}
-			<option value={label} selected={label === selected_choice}>{label}</option>
-		{/each}
-	</select>
 </div>
 
 {#if filtered_cinemas_showtimes.length == 0}
@@ -130,7 +129,7 @@
 {/if}
 
 <div class="mt-8 mb-20">
-	<footer class="[&_a]:underline text-slate-400 [&_a]:text-slate-300">
+	<footer class="[&_a]:underline text-neutral-400 [&_a]:text-neutral-300">
 		<p>
 			„Hvað er í bíó?“ upprunarlega unnin af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>.
 			Núverandi útgáfa útfærð af
@@ -143,4 +142,48 @@
 			<a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun!</a>
 		</p>
 	</footer>
+
+	{#if movie}
+		<div transition:fade>
+			<Dialog
+				open={Boolean(movie)}
+				on:close={() => (movie = null)}
+				class="fixed inset-0 z-50 isolate"
+			>
+				<DialogOverlay class="fixed inset-0 bg-black/40" />
+
+				<div
+					class="rounded-xl bg-neutral-950 max-h-[calc(100vh-80px)] absolute bottom-4 inset-x-4 p-4 overflow-y-auto pb-20 z-10 border border-neutral-600"
+				>
+					<DialogTitle class="font-bold mb-2 text-lg md:text-2xl">{movie.title}</DialogTitle>
+					<DialogDescription class="text-sm mb-4">
+						{movie.description} —
+						<a class="underline" href={movie.trailer_url} target="_blank"> Trailer. </a>
+					</DialogDescription>
+					<Showtimes showtimes={movie.showtimes} />
+				</div>
+				<div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/50 z-20" />
+				<button
+					class="inset-x-8 rounded-md bg-neutral-800 text-white py-2 font-medium absolute bottom-8 z-30 border border-neutral-600 shadow-xl"
+					on:click={() => (movie = null)}>Loka</button
+				>
+			</Dialog>
+		</div>
+	{:else}
+		<div class="fixed w-full inset-x-0 sm:hidden bottom-8 z-50">
+			<select
+				on:change={(event) => {
+					selected_choice = event.currentTarget.value
+					selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_choice, cinemas]) =>
+						group_choice === event.currentTarget.value ? cinemas : []
+					)
+				}}
+				class="mx-auto mt-2 block rounded-lg border-0 py-1.5 pl-3 pr-10 bg-black bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
+			>
+				{#each [...group_choices, ...all_choices] as [label, cinemas]}
+					<option value={label} selected={label === selected_choice}>{label}</option>
+				{/each}
+			</select>
+		</div>
+	{/if}
 </div>
