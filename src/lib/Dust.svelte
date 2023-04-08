@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { Canvas, Layer, type Render } from 'svelte-canvas'
 
+	let frameLimit: number = 60 // Limit to 60 frames per second
+	let lastRenderTime: number = 0
+
 	let render: Render
 	$: render = ({ context, width, height }) => {
 		class Particle {
@@ -82,7 +85,7 @@
 			for (let i = 0; i < particlesArray.length; i++) {
 				particlesArray[i].update()
 			}
-			requestAnimationFrame(animateParticles)
+			window.requestAnimationFrame(animateParticles)
 		}
 
 		createParticles()
