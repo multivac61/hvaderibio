@@ -148,25 +148,31 @@
 			<Dialog
 				open={Boolean(movie)}
 				on:close={() => (movie = null)}
-				class="fixed inset-0 z-50 isolate"
+				class="fixed inset-0 z-50 isolate sm:flex sm:justify-center sm:items-center"
 			>
-				<DialogOverlay class="fixed inset-0 bg-black/40" />
+				<DialogOverlay class="fixed inset-0 bg-black/60" />
 
 				<div
-					class="rounded-xl bg-neutral-950 max-h-[calc(100vh-80px)] absolute bottom-4 inset-x-4 p-4 overflow-y-auto pb-20 z-10 border border-neutral-600"
+					class="relative rounded-2xl overflow-hidden bg-neutral-950 h-[calc(100dvh-32px)] sm:h-[calc(100dvh-120px)] sm:w-[min(100vw,640px)] m-4 z-10 border border-neutral-600 shadow-xl"
 				>
-					<DialogTitle class="font-bold mb-2 text-lg md:text-2xl">{movie.title}</DialogTitle>
-					<DialogDescription class="text-sm mb-4">
-						{movie.description} —
-						<a class="underline" href={movie.trailer_url} target="_blank"> Trailer. </a>
-					</DialogDescription>
-					<Showtimes showtimes={movie.showtimes} />
+					<div class="absolute inset-0 overflow-y-auto p-4 sm:p-8 pb-20 sm:pb-24 z-20">
+						<DialogTitle class="font-bold mb-2 text-lg md:text-2xl">{movie.title}</DialogTitle>
+						<DialogDescription class="text-sm mb-4">
+							{movie.description} —
+							<a class="underline" href={movie.trailer_url} target="_blank"> Trailer. </a>
+						</DialogDescription>
+						<Showtimes showtimes={movie.showtimes} />
+					</div>
+					<div class="absolute bottom-0 inset-x-0 z-30 px-4">
+						<div
+							class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black z-40 pointer-events-none"
+						/>
+						<button
+							class="absolute bottom-4 inset-x-4 sm:bottom-8 sm:inset-x-8 z-50 rounded-md bg-neutral-800 text-white py-2 font-medium border border-neutral-600 shadow-xl"
+							on:click={() => (movie = null)}>Loka</button
+						>
+					</div>
 				</div>
-				<div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/50 z-20" />
-				<button
-					class="inset-x-8 rounded-md bg-neutral-800 text-white py-2 font-medium absolute bottom-8 z-30 border border-neutral-600 shadow-xl"
-					on:click={() => (movie = null)}>Loka</button
-				>
 			</Dialog>
 		</div>
 	{:else}
