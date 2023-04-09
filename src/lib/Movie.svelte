@@ -1,8 +1,7 @@
 <script lang="ts">
-	import type { Movie, Showtimes } from '$lib/schemas'
+	import type { Movie } from '$lib/schemas'
 
 	export let movie: Pick<Movie, 'poster_url' | 'title' | 'description' | 'trailer_url'>
-	export let showtimes: [string, Showtimes][]
 
 	let selected = false
 </script>

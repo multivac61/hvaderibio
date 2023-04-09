@@ -27,6 +27,6 @@ const movie = z
 	})
 	.strict()
 
-export const kvikmyndir_schema = z.array(movie)
+export const movies_schema = z.array(movie)
 
 export type Movie = z.infer<typeof movie>

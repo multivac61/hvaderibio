@@ -1,4 +1,4 @@
-import { kvikmyndir_schema } from '$lib/schemas.js'
+import { movies_schema } from '$lib/schemas.js'
 import { error } from '@sveltejs/kit'
 
 export const prerender = true
@@ -7,7 +7,7 @@ export async function load({ fetch }) {
 	const fetchMovies = async () => {
 		const response = await fetch('kvikmyndir_is.json')
 
-		const parsed = kvikmyndir_schema.safeParse(await response.json())
+		const parsed = movies_schema.safeParse(await response.json())
 		if (parsed.success) {
 			return parsed.data
 		}
