@@ -75,6 +75,7 @@
 	] as const
 
 	let selected_choice: string = group_choices[0][0]
+	let about_us = false
 </script>
 
 <svelte:window bind:outerWidth={width} bind:outerHeight={height} />
@@ -129,20 +130,6 @@
 {/if}
 
 <div class="mt-8 mb-20">
-	<footer class="[&_a]:underline text-neutral-400 [&_a]:text-neutral-300">
-		<p>
-			„Hvað er í bíó?“ upprunarlega unnin af <a href="https://hugihlynsson.com">Huga Hlynssyni</a>.
-			Núverandi útgáfa útfærð af
-			<a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a>.
-		</p>
-		<p>
-			Gögn eru fengin af <a href="https://kvikmyndir.is">kvikmyndir.is</a>. Hugbúnaður er
-			aðgengilegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem vel er
-			tekið á móti athugasemdum og aðstoð.
-			<a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun!</a>
-		</p>
-	</footer>
-
 	{#if movie}
 		<div transition:fade>
 			<Dialog
@@ -158,7 +145,7 @@
 					<div class="absolute inset-0 overflow-y-auto p-4 sm:p-8 pb-20 sm:pb-24 z-20">
 						<DialogTitle class="font-bold mb-2 text-lg md:text-2xl">{movie.title}</DialogTitle>
 						<DialogDescription class="text-sm mb-4">
-							<p class="mb-4">{movie.description}</p>
+							<p class="mb-4 text-neutral-300">{movie.description}</p>
 							<a
 								class="py-1 underline mb-4 space-y-4 hover:text-white shadow-neutral-200 px-2.5 rounded bg-neutral-900 hover:bg-neutral-800"
 								href={movie.trailer_url}
@@ -179,15 +166,17 @@
 						</DialogDescription>
 						<Showtimes showtimes={movie.showtimes} />
 					</div>
-					<div class="absolute bottom-0 inset-x-0 z-30 px-4">
-						<div
-							class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black z-40 pointer-events-none"
-						/>
-						<button
-							class="absolute bottom-4 inset-x-4 sm:bottom-8 sm:inset-x-8 z-50 rounded-md bg-neutral-800 text-white py-2 font-medium border border-neutral-600 shadow-xl"
-							on:click={() => (movie = null)}>Loka</button
-						>
-					</div>
+					<button
+						class="absolute bottom-2 right-2 sm:bottom-8 sm:right-8 z-50 rounded bg-neutral-800 text-neutral-300 p-1 font-medium shadow-xl hover:bg-neutral-700"
+						on:click={() => (movie = null)}
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+							<path
+								d="M18.3 5.71a.996.996 0 00-1.41 0L12 10.59 7.11 5.7A.996.996 0 105.7 7.11L10.59 12 5.7 16.89a.996.996 0 101.41 1.41L12 13.41l4.89 4.89a.996.996 0 101.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+								fill="currentColor"
+							/>
+						</svg>
+					</button>
 				</div>
 			</Dialog>
 		</div>
@@ -200,12 +189,71 @@
 						group_choice === event.currentTarget.value ? cinemas : []
 					)
 				}}
-				class="mx-auto mt-2 block rounded-lg border-0 py-1.5 pl-3 pr-10 bg-black bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
+				class="mx-auto mt-2 block rounded- border-0 py-1.5 pl-3 pr-10 bg-black bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
 			>
 				{#each [...group_choices, ...all_choices] as [label, cinemas]}
 					<option value={label} selected={label === selected_choice}>{label}</option>
 				{/each}
 			</select>
+		</div>
+	{/if}
+
+	<div class="flex items-center justify-center">
+		<button
+			class="py-1 underline mb-4 space-y-4 hover:text-white shadow-neutral-200 px-2.5 rounded bg-neutral-900 hover:bg-neutral-800 text-center justify-center"
+			on:click={() => (about_us = !about_us)}
+		>
+			<span class="inline-flex items-center">
+				🍿 <span class="ml-2">Um okkur </span>
+			</span>
+		</button>
+	</div>
+	{#if about_us}
+		<div transition:fade>
+			<Dialog
+				open={about_us}
+				on:close={() => (about_us = false)}
+				class="fixed inset-0 z-50 isolate sm:flex sm:justify-center sm:items-center"
+			>
+				<DialogOverlay class="fixed inset-0 bg-black/60" />
+
+				<div
+					class="relative rounded-2xl overflow-hidden bg-neutral-950 h-[calc(100dvh-32px)] sm:h-[calc(100dvh-120px)] sm:w-[min(100vw,640px)] m-4 z-10 border border-neutral-600 shadow-xl"
+				>
+					<div class="absolute inset-0 overflow-y-auto p-4 sm:p-8 pb-20 sm:pb-24 z-20">
+						<DialogTitle class="font-bold mb-2 text-lg md:text-2xl">Um okkur</DialogTitle>
+						<DialogDescription class="text-sm mb-4 [&_a]:underline text-neutral-300">
+							<p class="mb-4" />
+							<p>
+								Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
+									href="https://hugihlynsson.com">Huga Hlynssyni</a
+								>. Núverandi útgáfa útfærð af
+								<a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a> og
+								<a href="https://twitter.com/jokul">Jökli Sólberg</a>.
+							</p>
+							<br>
+							<p>
+								Gögn eru fengin af <a href="https://kvikmyndir.is">kvikmyndir.is</a>. Hugbúnaður er
+								aðgengilegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem
+								vel er tekið á móti athugasemdum og aðstoð.
+							</p>
+							<br>
+								<a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun</a>
+						</DialogDescription>
+					</div>
+					<button
+						class="absolute bottom-2 right-2 sm:bottom-8 sm:right-8 z-50 rounded bg-neutral-800 text-neutral-300 p-1 font-medium shadow-xl hover:bg-neutral-700"
+						on:click={() => (movie = null)}
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+							<path
+								d="M18.3 5.71a.996.996 0 00-1.41 0L12 10.59 7.11 5.7A.996.996 0 105.7 7.11L10.59 12 5.7 16.89a.996.996 0 101.41 1.41L12 13.41l4.89 4.89a.996.996 0 101.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+								fill="currentColor"
+							/>
+						</svg>
+					</button>
+				</div>
+			</Dialog>
 		</div>
 	{/if}
 </div>
