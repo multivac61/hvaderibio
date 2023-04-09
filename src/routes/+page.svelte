@@ -10,11 +10,17 @@
 		DialogOverlay,
 		DialogTitle
 	} from '@rgossiaux/svelte-headlessui'
+	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 
 	export let data
 
 	let [from, to] = [12, 23.5]
+
+	onMount(() => {
+		// Filter showtimes again on the client
+		from = Math.min(21, new Date().getHours() - 1)
+	})
 
 	let movie: (typeof filtered_cinemas_showtimes)[0] | null = null
 
@@ -49,7 +55,7 @@
 		}))
 
 	function reset() {
-		;[from, to] = [12, 23.5]
+		;[from, to] = [0, 23.5]
 		selected_cinemas = all_cinemas
 	}
 	let width: number
@@ -225,18 +231,30 @@
 						<DialogDescription class="text-sm mb-4 [&_a]:underline text-neutral-300 ">
 							<p class="mb-4" />
 							<p>
-								Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a class="hover:text-neutral-100" href="https://hugihlynsson.com">Huga Hlynssyni</a >. Núverandi útgáfa útfærð af
-								<a class="hover:text-neutral-100" href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a> og
-								<a class="hover:text-neutral-100" href="https://twitter.com/jokull">Jökli Sólberg</a>.
+								Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
+									class="hover:text-neutral-100"
+									href="https://hugihlynsson.com">Huga Hlynssyni</a
+								>. Núverandi útgáfa útfærð af
+								<a class="hover:text-neutral-100" href="https://twitter.com/olafurbogason"
+									>Ólafi Bjarka Bogasyni</a
+								>
+								og
+								<a class="hover:text-neutral-100" href="https://twitter.com/jokull">Jökli Sólberg</a
+								>.
 							</p>
-							<br>
+							<br />
 							<p>
-								Gögn eru fengin af <a class="hover:text-neutral-100" href="https://kvikmyndir.is">kvikmyndir.is</a>. Hugbúnaður er
-								aðgengilegur á <a class="hover:text-neutral-100" href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem
-								vel er tekið á móti athugasemdum og aðstoð.
+								Gögn eru fengin af <a class="hover:text-neutral-100" href="https://kvikmyndir.is"
+									>kvikmyndir.is</a
+								>. Hugbúnaður er aðgengilegur á
+								<a class="hover:text-neutral-100" href="https://github.com/multivac61/hvaderibio"
+									>GitHub</a
+								> þar sem vel er tekið á móti athugasemdum og aðstoð.
 							</p>
-							<br>
-								<a class="hover:text-neutral-100" href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun</a>.
+							<br />
+							<a class="hover:text-neutral-100" href="https://www.youtube.com/watch?v=v-u2NMzaduE"
+								>Góða skemmtun</a
+							>.
 						</DialogDescription>
 					</div>
 					<button
