@@ -227,7 +227,7 @@
 							<p>
 								Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a class="hover:text-neutral-100" href="https://hugihlynsson.com">Huga Hlynssyni</a >. Núverandi útgáfa útfærð af
 								<a class="hover:text-neutral-100" href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a> og
-								<a class="hover:text-neutral-100" href="https://twitter.com/jokul">Jökli Sólberg</a>.
+								<a class="hover:text-neutral-100" href="https://twitter.com/jokull">Jökli Sólberg</a>.
 							</p>
 							<br>
 							<p>
