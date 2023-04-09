@@ -212,7 +212,7 @@
 		<div transition:fade>
 			<Dialog
 				open={about_us}
-				on:close={() => (about_us = false)}
+				on:click={() => (about_us = false)}
 				class="fixed inset-0 z-50 isolate sm:flex sm:justify-center sm:items-center"
 			>
 				<DialogOverlay class="fixed inset-0 bg-black/60" />
@@ -222,23 +222,21 @@
 				>
 					<div class="absolute inset-0 overflow-y-auto p-4 sm:p-8 pb-20 sm:pb-24 z-20">
 						<DialogTitle class="font-bold mb-2 text-lg md:text-2xl">Um okkur</DialogTitle>
-						<DialogDescription class="text-sm mb-4 [&_a]:underline text-neutral-300">
+						<DialogDescription class="text-sm mb-4 [&_a]:underline text-neutral-300 ">
 							<p class="mb-4" />
 							<p>
-								Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
-									href="https://hugihlynsson.com">Huga Hlynssyni</a
-								>. Núverandi útgáfa útfærð af
-								<a href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a> og
-								<a href="https://twitter.com/jokul">Jökli Sólberg</a>.
+								Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a class="hover:text-neutral-100" href="https://hugihlynsson.com">Huga Hlynssyni</a >. Núverandi útgáfa útfærð af
+								<a class="hover:text-neutral-100" href="https://twitter.com/olafurbogason">Ólafi Bjarka Bogasyni</a> og
+								<a class="hover:text-neutral-100" href="https://twitter.com/jokul">Jökli Sólberg</a>.
 							</p>
 							<br>
 							<p>
-								Gögn eru fengin af <a href="https://kvikmyndir.is">kvikmyndir.is</a>. Hugbúnaður er
-								aðgengilegur á <a href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem
+								Gögn eru fengin af <a class="hover:text-neutral-100" href="https://kvikmyndir.is">kvikmyndir.is</a>. Hugbúnaður er
+								aðgengilegur á <a class="hover:text-neutral-100" href="https://github.com/multivac61/hvaderibio">GitHub</a> þar sem
 								vel er tekið á móti athugasemdum og aðstoð.
 							</p>
 							<br>
-								<a href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun</a>
+								<a class="hover:text-neutral-100" href="https://www.youtube.com/watch?v=v-u2NMzaduE">Góða skemmtun</a>.
 						</DialogDescription>
 					</div>
 					<button
