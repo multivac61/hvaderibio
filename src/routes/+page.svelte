@@ -158,8 +158,24 @@
 					<div class="absolute inset-0 overflow-y-auto p-4 sm:p-8 pb-20 sm:pb-24 z-20">
 						<DialogTitle class="font-bold mb-2 text-lg md:text-2xl">{movie.title}</DialogTitle>
 						<DialogDescription class="text-sm mb-4">
-							{movie.description} —
-							<a class="underline" href={movie.trailer_url} target="_blank"> Trailer. </a>
+							<p class="mb-4">{movie.description}</p>
+							<a
+								class="py-1 underline mb-4 space-y-4 hover:text-white shadow-neutral-200 px-2.5 rounded bg-neutral-900 hover:bg-neutral-800"
+								href={movie.trailer_url}
+							>
+								<span class="inline-flex items-center">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 24 24"
+										width="12"
+										height="12"
+										class="fill-current"
+									>
+										<path d="M3 22V2L21 12L3 22Z" />
+									</svg>
+									<span class="ml-2">Horfa á stiklu</span>
+								</span>
+							</a>
 						</DialogDescription>
 						<Showtimes showtimes={movie.showtimes} />
 					</div>
