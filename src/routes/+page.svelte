@@ -147,7 +147,7 @@
 						<DialogDescription class="text-sm mb-4">
 							<p class="mb-4 text-neutral-300">{movie.description}</p>
 							<a
-								class="py-1 underline mb-4 space-y-4 hover:text-white shadow-neutral-200 px-2.5 rounded bg-neutral-900 hover:bg-neutral-800"
+								class="py-1 underline mb-4 space-y-4 hover:text-white shadow-neutral-200 px-2.5 rounded-lg bg-neutral-900 hover:bg-neutral-800"
 								href={movie.trailer_url}
 							>
 								<span class="inline-flex items-center">
@@ -167,7 +167,7 @@
 						<Showtimes showtimes={movie.showtimes} />
 					</div>
 					<button
-						class="absolute bottom-2 right-2 sm:bottom-8 sm:right-8 z-50 rounded bg-neutral-800 text-neutral-300 p-1 font-medium shadow-xl hover:bg-neutral-700"
+						class="absolute bottom-2 right-2 sm:bottom-8 sm:right-8 z-50 rounded-lg bg-neutral-800 text-neutral-300 p-1 font-medium shadow-xl hover:bg-neutral-700"
 						on:click={() => (movie = null)}
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
@@ -189,7 +189,7 @@
 						group_choice === event.currentTarget.value ? cinemas : []
 					)
 				}}
-				class="mx-auto mt-2 block rounded- border-0 py-1.5 pl-3 pr-10 bg-black bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
+				class="mx-auto mt-2 block rounded-lg border-0 py-1.5 pl-3 pr-10 bg-black bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
 			>
 				{#each [...group_choices, ...all_choices] as [label, cinemas]}
 					<option value={label} selected={label === selected_choice}>{label}</option>
@@ -200,7 +200,7 @@
 
 	<div class="flex items-center justify-center">
 		<button
-			class="py-1 underline mb-4 space-y-4 hover:text-white shadow-neutral-200 px-2.5 rounded bg-neutral-900 hover:bg-neutral-800 text-center justify-center"
+			class="py-1 underline mb-4 space-y-4 hover:text-white shadow-neutral-200 px-2.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-center justify-center"
 			on:click={() => (about_us = !about_us)}
 		>
 			<span class="inline-flex items-center">
@@ -242,7 +242,7 @@
 						</DialogDescription>
 					</div>
 					<button
-						class="absolute bottom-2 right-2 sm:bottom-8 sm:right-8 z-50 rounded bg-neutral-800 text-neutral-300 p-1 font-medium shadow-xl hover:bg-neutral-700"
+						class="absolute bottom-2 right-2 sm:bottom-8 sm:right-8 z-50 rounded-lg bg-neutral-800 text-neutral-300 p-1 font-medium shadow-xl hover:bg-neutral-700"
 						on:click={() => (movie = null)}
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
