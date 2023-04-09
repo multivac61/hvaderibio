@@ -102,9 +102,10 @@
 </div>
 
 <style>
-	.background {
-		position: fixed;
-		top: 0;
-		left: 0;
-	}
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+	filter: blur(0.5px);
+  }
 </style>
