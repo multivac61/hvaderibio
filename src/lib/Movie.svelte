@@ -10,6 +10,6 @@
 		src={movie.poster_url}
 		title={movie.title}
 		alt={movie.title}
-		class="object-cover rounded-lg shadow-2xl aspect-[2/3] sm:w-[min(100%,360px)] hover:scale-105 hover:z-50 transition-all"
+		class="object-cover rounded-md shadow-2xl aspect-[2/3] sm:w-[min(100%,360px)] hover:scale-105 hover:z-50 transition-all"
 	/>
 </button>
