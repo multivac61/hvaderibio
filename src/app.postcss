@@ -1,0 +1,23 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	font-family: 'Inter', sans-serif;
+}
+@supports (font-variation-settings: normal) {
+	:root {
+		font-family: 'Inter var', sans-serif;
+	}
+}
+
+html,
+body {
+	height: 100%;
+}
+
+input::-webkit-search-cancel-button,
+input::-webkit-search-decoration {
+	-webkit-appearance: none;
+}
