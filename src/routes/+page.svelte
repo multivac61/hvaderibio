@@ -132,7 +132,7 @@
 >
 	<p class="mb-4 text-neutral-300">{movie?.description}</p>
 	<a
-		class="underline mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+		class="mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
 		href={movie?.trailer_url}
 	>
 		<span class="inline-flex items-center">
@@ -194,7 +194,7 @@
 			þar sem vel er tekið á móti athugasemdum og aðstoð.
 		</p>
 	<a
-		class="underline mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+		class="mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
 		href="https://www.youtube.com/watch?v=v-u2NMzaduE"
 	>
 		<span class="inline-flex items-center">
