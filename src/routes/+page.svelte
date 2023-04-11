@@ -1,6 +1,5 @@
 <script lang="ts">
 	import CinemaTab from '$lib/CinemaTab.svelte'
-	import Dust from '$lib/Dust.svelte'
 	import Movie from '$lib/Movie.svelte'
 	import Showtimes from '$lib/Showtimes.svelte'
 	import Modal from '$lib/Modal.svelte'
@@ -77,9 +76,6 @@
 
 <header class="my-4 sm:my-8 relative">
 	<div class="sm:py-4 flex flex-col items-start md:items-center">
-		<div class="w-full absolute pointer-events-none overflow-hidden">
-			<!-- <Dust {width} {height} /> -->
-		</div>
 		<h1 class="text-5xl z-20 relative">
 			<button
 				on:click={() => (about_us = !about_us)}
