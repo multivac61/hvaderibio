@@ -132,7 +132,7 @@
 >
 	<p class="mb-4 text-neutral-300">{movie?.description}</p>
 	<a
-		class="mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+		class="my-6 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
 		href={movie?.trailer_url}
 	>
 		<span class="inline-flex items-center">
@@ -148,7 +148,7 @@
 			<span class="ml-2 text-sm">Horfa á stiklu</span>
 		</span>
 	</a>
-	<h2 class="mt-8 mb-2 text-base text-neutral-200 md:text-base">{data.today}</h2>
+	<h2 class="pt-8 mb-2 text-base text-neutral-200 md:text-base">{data.today}</h2>
 	<Showtimes showtimes={movie?.showtimes} />
 </Modal>
 
