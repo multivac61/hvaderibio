@@ -80,7 +80,7 @@
 		<div class="w-full absolute pointer-events-none overflow-hidden">
 			<!-- <Dust {width} {height} /> -->
 		</div>
-		<h1 class="text-2xl sm:text-5xl z-20 relative">
+		<h1 class="text-5xl z-20 relative">
 			<button
 				on:click={() => (about_us = !about_us)}
 				class="font-black -tracking-[0.03em] uppercase hover:text-yellow-500"
