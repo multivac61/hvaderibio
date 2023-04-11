@@ -13,7 +13,6 @@
 	},
 	"devDependencies": {
 		"@neoconfetti/svelte": "^1.0.0",
-		"@rgossiaux/svelte-headlessui": "^1.0.2",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-static": "^2.0.1",
 		"@sveltejs/kit": "^1.15.2",
@@ -38,7 +37,9 @@
 		"typescript": "^5.0.2",
 		"vite": "^4.2.1",
 		"vitest": "^0.29.7",
-		"zod": "^3.21.4"
+		"zod": "^3.21.4", 
+		"svelte-headlessui": "^0.0.15",
+		"svelte-transition": "^0.0.7"
 	},
 	"type": "module"
 }

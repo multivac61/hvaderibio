@@ -4,9 +4,6 @@ devDependencies:
   '@neoconfetti/svelte':
     specifier: ^1.0.0
     version: 1.0.0
-  '@rgossiaux/svelte-headlessui':
-    specifier: ^1.0.2
-    version: 1.0.2(svelte@3.58.0)
   '@sveltejs/adapter-auto':
     specifier: ^2.0.0
     version: 2.0.0(@sveltejs/kit@1.15.2)
@@ -61,9 +58,15 @@ devDependencies:
   svelte-check:
     specifier: ^3.2.0
     version: 3.2.0(postcss-load-config@4.0.1)(postcss@8.4.21)(svelte@3.58.0)
+  svelte-headlessui:
+    specifier: ^0.0.15
+    version: 0.0.15
   svelte-preprocess:
     specifier: ^5.0.3
     version: 5.0.3(postcss-load-config@4.0.1)(postcss@8.4.21)(svelte@3.58.0)(typescript@5.0.2)
+  svelte-transition:
+    specifier: ^0.0.7
+    version: 0.0.7
   tailwindcss:
     specifier: ^3.3.1
     version: 3.3.1(postcss@8.4.21)
@@ -75,7 +78,7 @@ devDependencies:
     version: 5.0.2
   vite:
     specifier: ^4.2.1
-    version: 4.2.1
+    version: 4.2.1(@types/node@18.14.0)
   vitest:
     specifier: ^0.29.7
     version: 0.29.7
@@ -385,14 +388,6 @@ packages:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
 
-  /@rgossiaux/svelte-headlessui@1.0.2(svelte@3.58.0):
-    resolution: {integrity: sha512-sauopYTSivhzXe1kAvgawkhyYJcQlK8Li3p0d2OtcCIVprOzdbard5lbqWB4xHDv83zAobt2mR08oizO2poHLQ==}
-    peerDependencies:
-      svelte: ^3.44.0
-    dependencies:
-      svelte: 3.58.0
-    dev: true
-
   /@sveltejs/adapter-auto@2.0.0(@sveltejs/kit@1.15.2):
     resolution: {integrity: sha512-b+gkHFZgD771kgV3aO4avHFd7y1zhmMYy9i6xOK7m/rwmwaRO8gnF5zBc0Rgca80B2PMU1bKNxyBTHA14OzUAQ==}
     peerDependencies:
@@ -433,7 +428,7 @@ packages:
       svelte: 3.58.0
       tiny-glob: 0.2.9
       undici: 5.20.0
-      vite: 4.2.1
+      vite: 4.2.1(@types/node@18.14.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -451,7 +446,7 @@ packages:
       magic-string: 0.27.0
       svelte: 3.58.0
       svelte-hmr: 0.15.1(svelte@3.58.0)
-      vite: 4.2.1
+      vite: 4.2.1(@types/node@18.14.0)
       vitefu: 0.2.4(vite@4.2.1)
     transitivePeerDependencies:
       - supports-color
@@ -2113,6 +2108,12 @@ packages:
       - sugarss
     dev: true
 
+  /svelte-headlessui@0.0.15:
+    resolution: {integrity: sha512-yIRD2Wg8pqUOq7cbSgu4RKQ2FXf8vM2ORD3a8/d9rSxDWlBr8Ojt58VpFgdn9Fy0zUeI9By3qFRUaL+wD+Jf4A==}
+    dependencies:
+      svelte-transition: 0.0.7
+    dev: true
+
   /svelte-hmr@0.15.1(svelte@3.58.0):
     resolution: {integrity: sha512-BiKB4RZ8YSwRKCNVdNxK/GfY+r4Kjgp9jCLEy0DuqAKfmQtpL38cQK3afdpjw4sqSs4PLi3jIPJIFp259NkZtA==}
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
@@ -2218,6 +2219,10 @@ packages:
       strip-indent: 3.0.0
       svelte: 3.58.0
       typescript: 5.0.3
+    dev: true
+
+  /svelte-transition@0.0.7:
+    resolution: {integrity: sha512-YMbl+eIkzeYKBz6E/I8KI8RMezhqB38t2B/Mx8BotmtiN+5wnKath7CWDc+8U9zKGJ/iUYHmx4MwQjIzo05nVg==}
     dev: true
 
   /svelte@3.58.0:
@@ -2414,39 +2419,6 @@ packages:
       - terser
     dev: true
 
-  /vite@4.2.1:
-    resolution: {integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': '>= 14'
-      less: '*'
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      esbuild: 0.17.12
-      postcss: 8.4.21
-      resolve: 1.22.1
-      rollup: 3.19.1
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
   /vite@4.2.1(@types/node@18.14.0):
     resolution: {integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -2489,7 +2461,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.2.1
+      vite: 4.2.1(@types/node@18.14.0)
     dev: true
 
   /vitest@0.29.7:
