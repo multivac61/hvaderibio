@@ -125,9 +125,8 @@
 {/if}
 
 <Modal
-	open={Boolean(movie)}
-	on:click={() => (movie = null)}
-	on:close={() => (movie = null)}
+	is_open={Boolean(movie)}
+	data={movie}
 	title={movie?.title}
 >
 	<p class="mb-4 text-neutral-300">{movie?.description}</p>
@@ -169,9 +168,7 @@
 </div>
 
 <Modal
-	open={about_us}
-	on:click={() => (about_us = false)}
-	on:close={() => (about_us = false)}
+	is_open={about_us}
 	title="Um okkur"
 >
 	<div class="[&_a]:underline">
