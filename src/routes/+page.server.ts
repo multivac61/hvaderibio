@@ -25,6 +25,6 @@ export async function load({ fetch }) {
 				month: 'long',
 				day: 'numeric'
 			})
-			.replace('dagur', 'daginn')}.`
+			.replace('dagur', 'daginn')}`
 	}
 }
