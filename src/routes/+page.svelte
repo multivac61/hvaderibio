@@ -2,7 +2,7 @@
 	import CinemaTab from '$lib/CinemaTab.svelte'
 	import Movie from '$lib/Movie.svelte'
 	import Showtimes from '$lib/Showtimes.svelte'
-	// import Modal from '$lib/Modal.svelte'
+	import { browser } from '$app/environment'
 	import { group_by, in_range, to_float } from '$lib/util'
 
 	export let data
@@ -41,11 +41,6 @@
 			)
 		}))
 
-	function reset() {
-		;[from, to] = [Math.min(new Date().getHours(), 22), 24]
-		selected_cinemas = all_cinemas
-	}
-
 	let capital_region_cinemas = all_cinemas.filter((name) =>
 		[
 			'Bíó Paradís',
@@ -72,11 +67,13 @@
 
 	let movie_dialog = createDialog({ label: 'Movie dialog' })
 	let about_dialog = createDialog({ label: 'Um okkur' })
+
+	$: if (browser) document.body.classList.toggle('noscroll', $movie_dialog.expanded || $about_dialog.expanded);
 </script>
 
-<!-- <div
+<div
 	class="absolute inset-0 w-full min-h-screen bg-gradient-to-br from-neutral-900 to-black -z-30"
-/> -->
+/>
 
 <header class="my-4 sm:my-8 relative">
 	<div class="sm:py-4 flex flex-col items-start md:items-center">
@@ -106,7 +103,8 @@
 </header>
 
 <div
-	class={`${$movie_dialog.expanded ? "overflow-hidden" : ""} "mb-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] z-40"}`}
+	class="mb-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] z-40"
+	class:scroll-lock={$movie_dialog.expanded}
 >
 	{#each filtered_cinemas_showtimes as _movie (_movie.title)}
 		<Movie
@@ -132,7 +130,7 @@
 	</Transition>
 
 	<div
-		class="fixed overflow-hidden inset-0 z-50 isolate sm:flex sm:justify-center sm:items-center backdrop-blur-sm"
+		class="fixed inset-0 z-50 isolate sm:flex sm:justify-center sm:items-center backdrop-blur-sm"
 	>
 		<Transition
 			enter="ease-out duration-300"
@@ -143,7 +141,7 @@
 			leaveTo="opacity-0 scale-95"
 		>
 			<div
-				class="relative rounded-2xl bg-neutral-950 h-[calc(100dvh-32px)] sm:h-[calc(100dvh-480px)] sm:w-[min(100vw,640px)] m-4 border border-neutral-600 shadow-xl"
+				class="relative rounded-2xl bg-neutral-950 h-[calc(100dvh-32px)] sm:h-[calc(100dvh-240px)] sm:w-[min(100vw,860px)] m-4 border border-neutral-600 shadow-xl"
 			>
 				<div
 					class="absolute overflow-y-auto inset-0 p-4 sm:p-8 pb-20 sm:pb-24"
@@ -174,7 +172,7 @@
 					</div>
 				</div>
 				<button
-					class="absolute w-auto bottom-0 inset-x-4 sm:bottom-8 sm:inset-x-8 z-50 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+					class="absolute w-auto bottom-4 inset-x-4 sm:bottom-8 sm:inset-x-8 z-50 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
 					on:click>Loka</button
 				>
 			</div>
