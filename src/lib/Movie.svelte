@@ -2,10 +2,9 @@
 	import type { Movie } from '$lib/schemas'
 
 	export let movie: Pick<Movie, 'poster_url' | 'title' | 'description' | 'trailer_url'>
-	export let on_click: () => void
 </script>
 
-<button on:click={on_click}>
+<button on:click>
 	<img
 		src={movie.poster_url}
 		title={movie.title}
