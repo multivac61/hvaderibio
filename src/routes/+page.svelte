@@ -4,6 +4,10 @@
 	import Showtimes from '$lib/Showtimes.svelte'
 	import { browser } from '$app/environment'
 	import { group_by, in_range, to_float } from '$lib/util'
+	import { createDialog } from 'svelte-headlessui'
+	import Transition from 'svelte-transition'
+	import Dust from '$lib/Dust.svelte'
+	import { onMount } from 'svelte'
 
 	export let data
 
@@ -66,10 +70,6 @@
 	] as const
 
 	let selected_choice: string = group_choices[0][0]
-
-	import { createDialog } from 'svelte-headlessui'
-	import Transition from 'svelte-transition'
-	import Dust from '$lib/Dust.svelte'
 
 	let movie_dialog = createDialog({ label: 'Movie dialog' })
 	let about_dialog = createDialog({ label: 'Um okkur' })
