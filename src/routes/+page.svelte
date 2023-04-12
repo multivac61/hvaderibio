@@ -69,7 +69,10 @@
 	let movie_dialog = createDialog({ label: 'Movie dialog' })
 	let about_dialog = createDialog({ label: 'Um okkur' })
 
-	$: if (browser) document.body.classList.toggle('noscroll', $movie_dialog.expanded || $about_dialog.expanded);
+	$: if (browser) {
+		document.body.classList.toggle('noscroll', $movie_dialog.expanded || $about_dialog.expanded);
+		document.documentElement.classList.toggle('noscroll', $movie_dialog.expanded || $about_dialog.expanded);
+	}
 
 	let width: number
 	let height: number
