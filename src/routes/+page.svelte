@@ -147,11 +147,11 @@
 					class="absolute overflow-y-auto inset-0 p-4 sm:p-8 pb-20 sm:pb-24"
 					use:movie_dialog.modal
 				>
-					<h3 class="font-bold mb-2 text-lg md:text-2xl">{movie?.title}</h3>
+					<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
 					<div class="mt-2 text-sm mb-4 text-neutral-300">
-						<p class="mb-4 text-neutral-300">{movie?.description}</p>
+						<p class="mb-4 text-neutral-400">{movie?.description}</p>
 						<a
-							class="my-6 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+							class="my-8 space-y-4 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
 							href={movie?.trailer_url}
 						>
 							<span class="inline-flex items-center">
@@ -167,7 +167,7 @@
 								<span class="ml-2 text-sm">Horfa á stiklu</span>
 							</span>
 						</a>
-						<h2 class="pt-8 mb-2 text-base text-neutral-200 md:text-base">{data.today}</h2>
+						<h2 class="pt-8 mb-2 text-base text-neutral-300 md:text-base">{data.today}</h2>
 						{#if movie?.showtimes} <Showtimes showtimes={movie?.showtimes} /> {/if}
 					</div>
 				</div>
