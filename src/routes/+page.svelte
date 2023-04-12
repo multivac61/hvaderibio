@@ -64,19 +64,28 @@
 
 	import { createDialog } from 'svelte-headlessui'
 	import Transition from 'svelte-transition'
+	import Dust from '$lib/Dust.svelte'
 
 	let movie_dialog = createDialog({ label: 'Movie dialog' })
 	let about_dialog = createDialog({ label: 'Um okkur' })
 
 	$: if (browser) document.body.classList.toggle('noscroll', $movie_dialog.expanded || $about_dialog.expanded);
+
+	let width: number
+	let height: number
 </script>
 
-<div
+<!-- <div
 	class="absolute inset-0 w-full min-h-screen bg-gradient-to-br from-neutral-900 to-black -z-30"
-/>
+/> -->
+
+<svelte:window bind:outerWidth={width} bind:outerHeight={height} />
 
 <header class="my-4 sm:my-8 relative">
 	<div class="sm:py-4 flex flex-col items-start md:items-center">
+		<div class="w-full absolute pointer-events-none overflow-hidden">
+			<Dust {width} {height} />
+		</div>
 		<h1 class="text-5xl z-20 relative">
 			<button
 				on:click={about_dialog.open}

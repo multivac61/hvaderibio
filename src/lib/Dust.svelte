@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { Canvas, Layer, type Render } from 'svelte-canvas'
 
-	let frameLimit: number = 60 // Limit to 60 frames per second
-	let lastRenderTime: number = 0
-
 	let render: Render
 	$: render = ({ context, width, height }) => {
 		class Particle {
@@ -72,7 +69,7 @@
 		const particlesArray: Particle[] = []
 
 		function createParticles() {
-			for (let i = 0; i < 480; i++) {
+			for (let i = 0; i < number_of_particles; i++) {
 				const x = Math.random() * width
 				const y = Math.random() * height
 				const size = Math.random() * 1.5 + 0.5
@@ -82,9 +79,7 @@
 
 		function animateParticles() {
 			context.clearRect(0, 0, width, height)
-			for (let i = 0; i < particlesArray.length; i++) {
-				particlesArray[i].update()
-			}
+			particlesArray.map((particle) => particle.update())
 			window.requestAnimationFrame(animateParticles)
 		}
 
@@ -93,6 +88,7 @@
 	}
 	export let width: number = 640
 	export let height: number = 640
+	export let number_of_particles: number = 480
 </script>
 
 <div class="background" style="width: {width}px; height: {height}px; z-index: -100;">
@@ -102,10 +98,10 @@
 </div>
 
 <style>
-  .background {
-    position: fixed;
-    top: 0;
-    left: 0;
-	filter: blur(0.5px);
-  }
+	.background {
+		position: fixed;
+		top: 0;
+		left: 0;
+		filter: blur(0.5px);
+	}
 </style>
