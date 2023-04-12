@@ -9,6 +9,11 @@
 
 	let [from, to] = [Math.min(new Date().getHours(), 22), 24]
 
+	onMount(() => {
+		// Filter showtimes again on the client
+		from = Math.min(21, new Date().getHours() - 1)
+	})
+
 	let movie: (typeof filtered_cinemas_showtimes)[0] | null = null
 
 	const all_cinemas = [
@@ -273,6 +278,7 @@
 								<span class="ml-2 text-sm">Góða skemmtun</span>
 							</span>
 						</a>
+
 					</div>
 				</div>
 				<button
