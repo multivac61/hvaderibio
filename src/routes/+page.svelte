@@ -86,10 +86,10 @@
 		<div class="w-full absolute pointer-events-none overflow-hidden">
 			<Dust {width} {height} />
 		</div>
-		<h1 class="text-5xl z-20 relative">
+		<h1>
 			<button
 				on:click={about_dialog.open}
-				class="font-black -tracking-[0.03em] uppercase hover:text-yellow-500"
+				class="font-black text-4xl sm:text-6xl uppercase hover:text-yellow-500"
 			>
 				Hvað er í <span class="text-yellow-500">bíó</span>?
 			</button>
