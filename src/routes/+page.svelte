@@ -79,7 +79,7 @@
 
 	$: if (browser && scrollTarget) {
 		if ($about_dialog.expanded || $movie_dialog.expanded) {
-			disableBodyScroll(scrollTarget)
+			disableBodyScroll(scrollTarget, {allowTouchMove: el => el.classList.contains('should-scroll')})
 		} else {
 			enableBodyScroll(scrollTarget)
 		}
@@ -129,7 +129,6 @@
 
 <div
 	class="mb-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] z-40"
-	class:scroll-lock={$movie_dialog.expanded}
 >
 	{#each filtered_cinemas_showtimes as _movie (_movie.title)}
 		<Movie
@@ -142,7 +141,7 @@
 	{/each}
 </div>
 
-<div bind:this={scrollTarget}>
+<div bind:this={scrollTarget} class="should-scroll">
 	<Transition show={$movie_dialog.expanded}>
 		<Transition
 			enter="ease-out duration-300"
