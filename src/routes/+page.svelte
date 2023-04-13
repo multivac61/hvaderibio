@@ -148,7 +148,7 @@
 	</Transition>
 
 	<div
-		class="fixed inset-0 z-50 isolate sm:flex sm:justify-center sm:items-center backdrop-blur-sm"
+		class="fixed inset-0 z-50 isolate backdrop-blur-sm flex justify-center items-end sm:items-center"
 	>
 		<Transition
 			enter="ease-out duration-300"
@@ -159,35 +159,31 @@
 			leaveTo="opacity-0 scale-95"
 		>
 			<div
-				class="relative rounded-2xl bg-neutral-950 h-[calc(100dvh-32px)] sm:h-[calc(100dvh-240px)] sm:w-[min(100vw,860px)] m-4 border border-neutral-600 shadow-xl overflow-hidden"
+				class="relative rounded-2xl bg-neutral-950 screen-height sm:w-[min(100vw,860px)] m-4 border border-neutral-600 shadow-xl overflow-hidden overflow-y-auto inset-0 p-4 sm:p-8 pb-20 sm:pb-24"
+				use:movie_dialog.modal
 			>
-				<div
-					class="absolute overflow-y-auto inset-0 p-4 sm:p-8 pb-20 sm:pb-24"
-					use:movie_dialog.modal
-				>
-					<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
-					<div class="mt-2 text-sm mb-4 text-neutral-300">
-						<p class="mb-4 text-neutral-400">{movie?.description}</p>
-						<a
-							class="my-8 space-y-4 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-							href={movie?.trailer_url}
-						>
-							<span class="inline-flex items-center">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 24 24"
-									width="12"
-									height="12"
-									class="fill-current"
-								>
-									<path d="M3 22V2L21 12L3 22Z" />
-								</svg>
-								<span class="ml-2 text-sm">Horfa á stiklu</span>
-							</span>
-						</a>
-						<h2 class="pt-8 mb-2 text-base text-neutral-300 md:text-base">{data.today}</h2>
-						{#if movie?.showtimes} <Showtimes showtimes={movie?.showtimes} /> {/if}
-					</div>
+				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
+				<div class="mt-2 text-sm mb-4 text-neutral-300">
+					<p class="mb-4 text-neutral-400">{movie?.description}</p>
+					<a
+						class="my-8 space-y-4 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+						href={movie?.trailer_url}
+					>
+						<span class="inline-flex items-center">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								width="12"
+								height="12"
+								class="fill-current"
+							>
+								<path d="M3 22V2L21 12L3 22Z" />
+							</svg>
+							<span class="ml-2 text-sm">Horfa á stiklu</span>
+						</span>
+					</a>
+					<h2 class="pt-8 mb-2 text-base text-neutral-300 md:text-base">{data.today}</h2>
+					{#if movie?.showtimes} <Showtimes showtimes={movie?.showtimes} /> {/if}
 				</div>
 
 				<div

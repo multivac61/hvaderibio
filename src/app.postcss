@@ -21,3 +21,15 @@ input::-webkit-search-cancel-button,
 input::-webkit-search-decoration {
 	-webkit-appearance: none;
 }
+
+.screen-height {
+	height: minmax(auto, calc(100vh - 32px));
+	height: minmax(auto, calc(100dvh - 32px));
+}
+
+@media (min-width: 640px) {
+	.screen-height {
+		height: minmax(auto, calc(100vh - 240px));
+		height: minmax(auto, calc(100dvh - 240px));
+	}
+}
