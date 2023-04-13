@@ -8,7 +8,7 @@
 	import { onMount } from 'svelte'
 	import { createDialog } from 'svelte-headlessui'
 	import Transition from 'svelte-transition'
-	import { enableBodyScroll, disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
+	import { lock, unlock } from 'tua-body-scroll-lock'
 
 	export let data
 
@@ -79,21 +79,9 @@
 
 	$: if (browser && scrollTarget) {
 		if ($movie_dialog.expanded) {
-			disableBodyScroll(scrollTarget, {
-				reserveScrollBarGap: true,
-				allowTouchMove: (el: HTMLElement) => {
-					while (el && el !== document.body as HTMLElement) {
-						if (el.getAttribute('body-scroll-lock-ignore') !== null) {
-							return true
-						}
-
-						el = el.parentElement!
-					}
-					return false
-				}
-			})
+			lock(scrollTarget)
 		} else {
-			enableBodyScroll(scrollTarget)
+			unlock(scrollTarget)
 		}
 	}
 
