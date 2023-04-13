@@ -78,8 +78,9 @@
 	let scrollTarget: HTMLElement
 
 	$: if (browser && scrollTarget) {
-		if ($about_dialog.expanded || $movie_dialog.expanded) {
+		if ($movie_dialog.expanded) {
 			disableBodyScroll(scrollTarget, {
+				reserveScrollBarGap: true,
 				allowTouchMove: (el: HTMLElement) => {
 					while (el && el !== document.body as HTMLElement) {
 						if (el.getAttribute('body-scroll-lock-ignore') !== null) {
@@ -94,8 +95,6 @@
 		} else {
 			enableBodyScroll(scrollTarget)
 		}
-	} else {
-		clearAllBodyScrollLocks()
 	}
 
 	let width: number
