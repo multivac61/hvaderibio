@@ -159,40 +159,42 @@
 			leaveTo="opacity-0 scale-95"
 		>
 			<div
-				class="relative rounded-2xl bg-neutral-950 screen-height sm:w-[min(100vw,860px)] m-4 border border-neutral-600 shadow-xl overflow-hidden overflow-y-auto inset-0 p-4 sm:p-8 pb-20 sm:pb-24"
-				use:movie_dialog.modal
+				class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8"
 			>
-				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
-				<div class="mt-2 text-sm mb-4 text-neutral-300">
-					<p class="mb-4 text-neutral-400">{movie?.description}</p>
-					<a
-						class="my-8 space-y-4 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-						href={movie?.trailer_url}
-					>
-						<span class="inline-flex items-center">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								width="12"
-								height="12"
-								class="fill-current"
-							>
-								<path d="M3 22V2L21 12L3 22Z" />
-							</svg>
-							<span class="ml-2 text-sm">Horfa á stiklu</span>
-						</span>
-					</a>
-					<h2 class="pt-8 mb-2 text-base text-neutral-300 md:text-base">{data.today}</h2>
-					{#if movie?.showtimes} <Showtimes showtimes={movie?.showtimes} /> {/if}
+				<div class="" use:movie_dialog.modal>
+					<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
+					<div class="mt-2 text-sm mb-4 text-neutral-300">
+						<p class="mb-4 text-neutral-400">{movie?.description}</p>
+						<a
+							class="my-8 space-y-4 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+							href={movie?.trailer_url}
+						>
+							<span class="inline-flex items-center">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+									width="12"
+									height="12"
+									class="fill-current"
+								>
+									<path d="M3 22V2L21 12L3 22Z" />
+								</svg>
+								<span class="ml-2 text-sm">Horfa á stiklu</span>
+							</span>
+						</a>
+						<h2 class="pt-8 mb-2 text-base text-neutral-300 md:text-base">{data.today}</h2>
+						{#if movie?.showtimes} <Showtimes showtimes={movie?.showtimes} /> {/if}
+					</div>
 				</div>
-
-				<div
-					class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black z-40 pointer-events-none"
-				/>
-				<button
-					class="absolute w-auto bottom-4 inset-x-4 sm:bottom-8 sm:inset-x-8 z-50 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-					on:click>Loka</button
-				>
+				<div class="sticky inset-0 bottom-0 rounded-b-xl z-40 isolate h-20">
+					<div
+						class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
+					/>
+					<button
+						class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+						on:click>Loka</button
+					>
+				</div>
 			</div>
 		</Transition>
 	</div>
