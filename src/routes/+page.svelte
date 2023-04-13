@@ -69,7 +69,7 @@
 		['Höfuðborgarsvæðið', capital_region_cinemas]
 	] as const
 
-	let selected_choice: string = group_choices[0][0]
+	let selected_choice: string = group_choices[1][0]
 
 	let movie_dialog = createDialog({ label: 'Movie dialog' })
 	let about_dialog = createDialog({ label: 'Um okkur' })
