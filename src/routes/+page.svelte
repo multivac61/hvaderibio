@@ -79,7 +79,18 @@
 
 	$: if (browser && scrollTarget) {
 		if ($about_dialog.expanded || $movie_dialog.expanded) {
-			disableBodyScroll(scrollTarget, {allowTouchMove: el => el.classList.contains('should-scroll')})
+			disableBodyScroll(scrollTarget, {
+				allowTouchMove: (el: HTMLElement) => {
+					while (el && el !== document.body as HTMLElement) {
+						if (el.getAttribute('body-scroll-lock-ignore') !== null) {
+							return true
+						}
+
+						el = el.parentElement!
+					}
+					return false
+				}
+			})
 		} else {
 			enableBodyScroll(scrollTarget)
 		}
@@ -141,7 +152,7 @@
 	{/each}
 </div>
 
-<div bind:this={scrollTarget} class="should-scroll">
+<div bind:this={scrollTarget} class="should-scroll" body-scroll-lock-ignore>
 	<Transition show={$movie_dialog.expanded}>
 		<Transition
 			enter="ease-out duration-300"
