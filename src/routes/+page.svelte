@@ -77,7 +77,7 @@
 
 	let scrollTarget: HTMLElement
 
-	$: if (browser && scrollTarget) {
+	$: if (browser) {
 		if ($movie_dialog.expanded) {
 			lock(scrollTarget)
 		} else {
@@ -139,7 +139,7 @@
 	{/each}
 </div>
 
-<div bind:this={scrollTarget} class="should-scroll" body-scroll-lock-ignore>
+<div>
 	<Transition show={$movie_dialog.expanded}>
 		<Transition
 			enter="ease-out duration-300"
@@ -164,7 +164,7 @@
 				leaveTo="opacity-0 scale-95"
 			>
 				<div
-					class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8"
+					class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8"  bind:this={scrollTarget}
 				>
 					<div class="" use:movie_dialog.modal>
 						<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
