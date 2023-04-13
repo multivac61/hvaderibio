@@ -8,6 +8,7 @@
 	import { onMount } from 'svelte'
 	import { createDialog } from 'svelte-headlessui'
 	import Transition from 'svelte-transition'
+	import { enableBodyScroll, disableBodyScroll } from 'body-scroll-lock'
 
 	export let data
 
@@ -75,10 +76,15 @@
 	let about_dialog = createDialog({ label: 'Um okkur' })
 
 	$: if (browser)
-		document.documentElement.classList.toggle(
-			'noscroll',
-			$movie_dialog.expanded || $about_dialog.expanded
-		)
+		// document.documentElement.classList.toggle(
+		// 	'noscroll',
+		// 	$movie_dialog.expanded || $about_dialog.expanded
+		// )
+			if ($about_dialog.expanded || $movie_dialog.expanded) {
+				enableBodyScroll(document.querySelector('.modal')!)
+			} else {
+				disableBodyScroll(document.querySelector('.modal')!)
+			}
 
 	let width: number
 	let height: number
@@ -148,7 +154,7 @@
 	</Transition>
 
 	<div
-		class="fixed inset-0 z-50 isolate backdrop-blur-sm flex justify-center items-end sm:items-center"
+		class="modal fixed inset-0 z-50 isolate backdrop-blur-sm flex justify-center items-end sm:items-center"
 	>
 		<Transition
 			enter="ease-out duration-300"
@@ -229,7 +235,7 @@
 	</Transition>
 
 	<div
-		class="fixed overflow-hidden inset-0 z-50 isolate sm:flex sm:justify-center sm:items-center backdrop-blur-sm"
+		class="modal fixed overflow-hidden inset-0 z-50 isolate sm:flex sm:justify-center sm:items-center backdrop-blur-sm"
 	>
 		<Transition
 			enter="ease-out duration-300"
