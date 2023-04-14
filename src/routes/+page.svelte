@@ -76,7 +76,7 @@
 	let movie_dialog_scroll: HTMLElement
 	let about_dialog_scroll: HTMLElement
 	$: if (browser) {
-		if ($movie_dialog.expanded) {
+		if ($movie_dialog.expanded || $about_dialog.expanded) {
 			lock([movie_dialog_scroll, about_dialog_scroll])
 		} else {
 			unlock([movie_dialog_scroll, about_dialog_scroll])
@@ -96,7 +96,7 @@
 		</div>
 		<h1>
 			<button
-				on:click={about_dialog.open}
+				on:click|preventDefault={about_dialog.open} on:touchstart={about_dialog.open}
 				class="font-black text-4xl sm:text-6xl uppercase hover:text-yellow-500"
 			>
 				Hvað er í <span class="text-yellow-500">bíó</span>?
@@ -172,7 +172,7 @@
 				/>
 				<button
 					class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-					on:click|preventDefault={movie_dialog.close} on:click|preventDefault={movie_dialog.close}>Loka</button
+					on:click|preventDefault={movie_dialog.close} on:touchstart|preventDefault={movie_dialog.close}>Loka</button
 				>
 			</div>
 		</div>
@@ -249,7 +249,7 @@
 				/>
 				<button
 					class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-					on:click|preventDefault={about_dialog.close} on:click|preventDefault={about_dialog.close}>Loka</button
+					on:click|preventDefault={about_dialog.close} on:touchstart={about_dialog.close}>Loka</button
 				>
 			</div>
 		</div>
