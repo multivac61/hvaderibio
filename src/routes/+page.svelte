@@ -8,6 +8,7 @@
 	import { onMount } from 'svelte'
 	import { createDialog } from 'svelte-headlessui'
 	import Transition from 'svelte-transition'
+	import { lock, unlock } from 'tua-body-scroll-lock'
 
 	export let data
 
@@ -73,11 +74,15 @@
 	let movie_dialog = createDialog({ label: 'Movie dialog' })
 	let about_dialog = createDialog({ label: 'Um okkur' })
 
-	$: if (browser)
-		document.documentElement.classList.toggle(
-			'noscroll',
-			$movie_dialog.expanded || $about_dialog.expanded
-		)
+	let scrollTarget: HTMLElement
+
+	$: if (browser) {
+		if ($movie_dialog.expanded) {
+			lock(scrollTarget)
+		} else {
+			unlock(scrollTarget)
+		}
+	}
 
 	let width: number
 	let height: number
@@ -118,7 +123,6 @@
 
 <div
 	class="mb-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] z-40"
-	class:scroll-lock={$movie_dialog.expanded}
 >
 	{#each filtered_cinemas_showtimes as _movie (_movie.title)}
 		<Movie
