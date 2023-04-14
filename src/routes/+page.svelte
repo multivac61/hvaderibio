@@ -7,7 +7,6 @@
 	import { group_by, in_range, to_float } from '$lib/util'
 	import { onMount } from 'svelte'
 	import { createDialog } from 'svelte-headlessui'
-	import Transition from 'svelte-transition'
 	import { lock, unlock } from 'tua-body-scroll-lock'
 
 	export let data
@@ -68,18 +67,19 @@
 		['Höfuðborgarsvæðið', capital_region_cinemas]
 	] as const
 
-	let selected_choice = group_choices[1][0]
+	let selected_choice: string = group_choices[1][0]
 	let selected_cinemas = capital_region_cinemas
 
 	let movie_dialog = createDialog({ label: 'Movie dialog' })
 	let about_dialog = createDialog({ label: 'Um okkur' })
 
-	let scrollTarget: HTMLElement
+	let movie_dialog_scroll: HTMLElement
+	let about_dialog_scroll: HTMLElement
 	$: if (browser) {
 		if ($movie_dialog.expanded) {
-			lock(scrollTarget)
+			lock([movie_dialog_scroll, about_dialog_scroll])
 		} else {
-			unlock(scrollTarget)
+			unlock([movie_dialog_scroll, about_dialog_scroll])
 		}
 	}
 
@@ -133,22 +133,13 @@
 	{/each}
 </div>
 
-<Transition show={$movie_dialog.expanded}>
-	<Transition
-		enter="ease-out duration-300"
-		enterFrom="opacity-0"
-		enterTo="opacity-100"
-		leave="ease-in duration-200"
-		leaveFrom="opacity-100"
-		leaveTo="opacity-0"
+{#if $movie_dialog.expanded}
+	<div
+		class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center transition-opacity"
 	>
-		<div class="fixed inset-0 bg-black bg-opacity-25" />
-	</Transition>
-
-	<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
 		<div
 			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
-			bind:this={scrollTarget}
+			bind:this={movie_dialog_scroll}
 		>
 			<div use:movie_dialog.modal>
 				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
@@ -186,7 +177,7 @@
 			</div>
 		</div>
 	</div>
-</Transition>
+{/if}
 
 <div class="fixed w-full inset-x-0 sm:hidden bottom-8 z-40">
 	<select
@@ -204,21 +195,11 @@
 	</select>
 </div>
 
-<Transition show={$about_dialog.expanded}>
-	<Transition
-		enter="ease-out duration-300"
-		enterFrom="opacity-0"
-		enterTo="opacity-100"
-		leave="ease-in duration-200"
-		leaveFrom="opacity-100"
-		leaveTo="opacity-0"
-	>
-		<div class="fixed inset-0 bg-black bg-opacity-25" />
-	</Transition>
+{#if $about_dialog.expanded}
 	<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
 		<div
-			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
-			bind:this={scrollTarget}
+			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8"
+			bind:this={about_dialog_scroll}
 		>
 			<div use:about_dialog.modal>
 				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">Um okkur 🍿</h3>
@@ -273,4 +254,4 @@
 			</div>
 		</div>
 	</div>
-</Transition>
+{/if}
