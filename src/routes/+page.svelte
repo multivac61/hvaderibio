@@ -26,8 +26,6 @@
 		)
 	].sort()
 
-	let selected_cinemas = all_cinemas
-
 	$: filtered_cinemas_showtimes = data.movies
 		.sort((a, b) => b.showtimes.length - a.showtimes.length)
 		.filter((movie) =>
@@ -69,7 +67,8 @@
 		['Höfuðborgarsvæðið', capital_region_cinemas]
 	] as const
 
-	let selected_choice: string = group_choices[1][0]
+	let selected_choice = group_choices[1][0]
+	let selected_cinemas = capital_region_cinemas
 
 	let movie_dialog = createDialog({ label: 'Movie dialog' })
 	let about_dialog = createDialog({ label: 'Um okkur' })
@@ -82,11 +81,8 @@
 
 	let width: number
 	let height: number
+	let scrollTarget: HTMLElement
 </script>
-
-<!-- <div
-	class="absolute inset-0 w-full min-h-screen bg-gradient-to-br from-neutral-900 to-black -z-30"
-/> -->
 
 <svelte:window bind:outerWidth={width} bind:outerHeight={height} />
 
@@ -147,56 +143,46 @@
 		<div class="fixed inset-0 bg-black bg-opacity-25" />
 	</Transition>
 
-	<div
-		class="fixed inset-0 z-50 isolate backdrop-blur-sm flex justify-center items-end sm:items-center"
-	>
-		<Transition
-			enter="ease-out duration-300"
-			enterFrom="opacity-0 scale-95"
-			enterTo="opacity-100 scale-100"
-			leave="ease-in duration-200"
-			leaveFrom="opacity-100 scale-100"
-			leaveTo="opacity-0 scale-95"
+	<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
+		<div
+			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
+			bind:this={scrollTarget}
 		>
-			<div
-				class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8"
-			>
-				<div class="" use:movie_dialog.modal>
-					<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
-					<div class="mt-2 text-sm mb-4 text-neutral-300">
-						<p class="mb-4 text-neutral-400">{movie?.description}</p>
-						<a
-							class="my-8 space-y-4 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-							href={movie?.trailer_url}
-						>
-							<span class="inline-flex items-center">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 24 24"
-									width="12"
-									height="12"
-									class="fill-current"
-								>
-									<path d="M3 22V2L21 12L3 22Z" />
-								</svg>
-								<span class="ml-2 text-sm">Horfa á stiklu</span>
-							</span>
-						</a>
-						<h2 class="pt-8 mb-2 text-base text-neutral-300 md:text-base">{data.today}</h2>
-						{#if movie?.showtimes} <Showtimes showtimes={movie?.showtimes} /> {/if}
-					</div>
-				</div>
-				<div class="sticky inset-0 bottom-0 rounded-b-xl z-40 isolate h-20">
-					<div
-						class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
-					/>
-					<button
-						class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-						on:click>Loka</button
+			<div use:movie_dialog.modal>
+				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
+				<div class="mt-2 text-sm mb-4 text-neutral-300">
+					<p class="mb-4 text-neutral-400">{movie?.description}</p>
+					<a
+						class="my-8 space-y-4 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+						href={movie?.trailer_url}
 					>
+						<span class="inline-flex items-center">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								width="12"
+								height="12"
+								class="fill-current"
+							>
+								<path d="M3 22V2L21 12L3 22Z" />
+							</svg>
+							<span class="ml-2 text-sm">Horfa á stiklu</span>
+						</span>
+					</a>
+					<h2 class="pt-8 mb-2 text-base text-neutral-300 md:text-base">{data.today}</h2>
+					{#if movie?.showtimes} <Showtimes showtimes={movie?.showtimes} /> {/if}
 				</div>
 			</div>
-		</Transition>
+			<div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
+				<div
+					class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
+				/>
+				<button
+					class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+					on:click>Loka</button
+				>
+			</div>
+		</div>
 	</div>
 </Transition>
 
@@ -227,70 +213,62 @@
 	>
 		<div class="fixed inset-0 bg-black bg-opacity-25" />
 	</Transition>
-
-	<div
-		class="fixed overflow-hidden inset-0 z-50 isolate sm:flex sm:justify-center sm:items-center backdrop-blur-sm"
-	>
-		<Transition
-			enter="ease-out duration-300"
-			enterFrom="opacity-0 scale-95"
-			enterTo="opacity-100 scale-100"
-			leave="ease-in duration-200"
-			leaveFrom="opacity-100 scale-100"
-			leaveTo="opacity-0 scale-95"
+	<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
+		<div
+			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
+			bind:this={scrollTarget}
 		>
-			<div
-				class="relative rounded-2xl bg-neutral-950 h-[calc(100dvh-32px)] sm:h-[calc(100dvh-480px)] sm:w-[min(100vw,640px)] m-4 border border-neutral-600 shadow-xl"
-			>
-				<div
-					class="absolute overflow-y-auto inset-0 p-4 sm:p-8 pb-20 sm:pb-24 text-neutral-200"
-					use:about_dialog.modal
-				>
-					<div class="[&_a]:underline">
-						<p class="pb-8">
-							Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
-								class="hover:text-neutral-100"
-								href="https://hugihlynsson.com">Huga Hlynssyni</a
-							>. Núverandi útgáfa útfærð af
-							<a class="hover:text-neutral-100" href="https://twitter.com/olafurbogason"
-								>Ólafi Bjarka Bogasyni</a
-							>
-							og
-							<a class="hover:text-neutral-100" href="https://twitter.com/jokull">Jökli Sólberg</a>.
-						</p>
-						<p class="pb-10">
-							Gögn eru fengin af <a class="hover:text-neutral-100" href="https://kvikmyndir.is"
-								>kvikmyndir.is</a
-							>. Hugbúnaður er aðgengilegur á
-							<a class="hover:text-neutral-100" href="https://github.com/multivac61/hvaderibio"
-								>GitHub</a
-							>
-							þar sem vel er tekið á móti athugasemdum og aðstoð.
-						</p>
-						<a
-							class="mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-							href="https://www.youtube.com/watch?v=v-u2NMzaduE"
+			<div use:about_dialog.modal>
+				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">Um okkur 🍿</h3>
+				<div class="[&_a]:underline">
+					<p class="pb-8">
+						Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
+							class="hover:text-neutral-100"
+							href="https://hugihlynsson.com">Huga Hlynssyni</a
+						>. Núverandi útgáfa útfærð af
+						<a class="hover:text-neutral-100" href="https://twitter.com/olafurbogason"
+							>Ólafi Bjarka Bogasyni</a
 						>
-							<span class="inline-flex items-center">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 24 24"
-									width="12"
-									height="12"
-									class="fill-current"
-								>
-									<path d="M3 22V2L21 12L3 22Z" />
-								</svg>
-								<span class="ml-2 text-sm">Góða skemmtun</span>
-							</span>
-						</a>
-					</div>
+						og
+						<a class="hover:text-neutral-100" href="https://twitter.com/jokull">Jökli Sólberg</a>.
+					</p>
+					<p class="pb-10">
+						Gögn eru fengin af <a class="hover:text-neutral-100" href="https://kvikmyndir.is"
+							>kvikmyndir.is</a
+						>. Hugbúnaður er aðgengilegur á
+						<a class="hover:text-neutral-100" href="https://github.com/multivac61/hvaderibio"
+							>GitHub</a
+						>
+						þar sem vel er tekið á móti athugasemdum og aðstoð.
+					</p>
+					<a
+						class="mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+						href="https://www.youtube.com/watch?v=v-u2NMzaduE"
+					>
+						<span class="inline-flex items-center">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								width="12"
+								height="12"
+								class="fill-current"
+							>
+								<path d="M3 22V2L21 12L3 22Z" />
+							</svg>
+							<span class="ml-2 text-sm">Góða skemmtun</span>
+						</span>
+					</a>
 				</div>
+			</div>
+			<div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
+				<div
+					class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
+				/>
 				<button
-					class="absolute w-auto bottom-0 inset-x-4 sm:bottom-8 sm:inset-x-8 z-50 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+					class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
 					on:click>Loka</button
 				>
 			</div>
-		</Transition>
+		</div>
 	</div>
 </Transition>
