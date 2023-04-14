@@ -27,7 +27,6 @@
 		)
 	].sort()
 
-	let selected_cinemas = all_cinemas
 
 	$: filtered_cinemas_showtimes = data.movies
 		.sort((a, b) => b.showtimes.length - a.showtimes.length)
@@ -71,6 +70,7 @@
 	] as const
 
 	let selected_choice: string = group_choices[1][0]
+	let selected_cinemas = capital_region_cinemas
 
 	let movie_dialog = createDialog({ label: 'Movie dialog' })
 	let about_dialog = createDialog({ label: 'Um okkur' })
