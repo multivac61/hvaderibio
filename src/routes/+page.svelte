@@ -75,7 +75,6 @@
 	let about_dialog = createDialog({ label: 'Um okkur' })
 
 	let scrollTarget: HTMLElement
-
 	$: if (browser) {
 		if ($movie_dialog.expanded) {
 			lock(scrollTarget)
@@ -86,7 +85,6 @@
 
 	let width: number
 	let height: number
-	let scrollTarget: HTMLElement
 </script>
 
 <svelte:window bind:outerWidth={width} bind:outerHeight={height} />
