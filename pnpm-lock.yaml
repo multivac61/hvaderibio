@@ -78,6 +78,9 @@ devDependencies:
   tslib:
     specifier: ^2.5.0
     version: 2.5.0
+  tua-body-scroll-lock:
+    specifier: ^1.2.1
+    version: 1.2.1
   typescript:
     specifier: ^5.0.2
     version: 5.0.2
@@ -2345,6 +2348,10 @@ packages:
     dependencies:
       tslib: 1.14.1
       typescript: 5.0.2
+    dev: true
+
+  /tua-body-scroll-lock@1.2.1:
+    resolution: {integrity: sha512-DuGbQxIBSbz7/aAwh0oMThOwCwDdYzsU8nF5XQPAvoeOBWp/qhjrZfOtc84gj6CQLZu5L1+TgMNX6fW3OuafHA==}
     dev: true
 
   /type-check@0.4.0:

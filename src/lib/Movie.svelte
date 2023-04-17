@@ -4,7 +4,7 @@
 	export let movie: Pick<Movie, 'poster_url' | 'title' | 'description' | 'trailer_url'>
 </script>
 
-<button on:click>
+<button on:click|preventDefault>
 	<img
 		src={movie.poster_url}
 		title={movie.title}
