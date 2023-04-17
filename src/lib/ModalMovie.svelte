@@ -1,38 +1,20 @@
 <script lang="ts">
 	import Showtimes from '$lib/Showtimes.svelte'
-	import type { IMDbMovie, Movie } from '$lib/schemas'
-	import ky from 'ky'
-	import { onMount } from 'svelte'
+	import type { Movie } from '$lib/schemas'
 
 	export let today: string
-	export let movie: Omit<Movie, 'showtimes'> & {
-		showtimes: [string, Movie['showtimes']][]
-	}
+	export let movie: Omit<Movie, 'showtimes'> & { showtimes: [string, Movie['showtimes']][] }
 
-	let imdb: null | { link: string; rating: number } = null
-
-	onMount(() => {
-		const imdbLink = movie.rating_urls.find((link) => link.includes('imdb.com'))
-		if (imdbLink) {
-			const imdbId = new URL(imdbLink).pathname.split('/').at(-1)
-			if (imdbId) {
-				ky.get(`https://imdb-api.projects.thetuhin.com/title/${imdbId}`)
-					.json<IMDbMovie>()
-					.then((response) => {
-						imdb = { link: imdbLink, rating: response.rating.star }
-					})
-			}
-		}
-	})
+	$: ({description, trailer_url, title, showtimes, imdb} = movie)
 </script>
 
-<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie.title}</h3>
+<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{title}</h3>
 <div class="mt-2 text-sm mb-4 text-neutral-300">
-	<p class="mb-4 text-neutral-400">{movie.description}</p>
-	<div class="inline-flex gap-4 items-center">
+	<p class="mb-4 text-neutral-400">{description}</p>
+	<div class="inline-flex group gap-4 items-center">
 		<a
-			href={movie.trailer_url}
-			class="relative py-1 px-3 border border-[red] text-[red] text-sm font-medium rounded-md flex gap-2 items-center"
+			href={trailer_url}
+			class="relative py-1 px-3 border border-[red] text-[red] text-sm font-medium rounded-md flex gap-2 items-center hover:border-red-400 hover:text-red-400"
 		>
 			<span
 				class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"
@@ -48,18 +30,20 @@
 			</svg>
 			Horfa á stiklu
 		</a>
-		{#if imdb !== null}
-			<a
-				href={imdb.link}
-				class="relative py-1 px-3 border border-[#f6c700] text-[#f6c700] text-sm font-medium rounded-md"
-			>
-				<span
-					class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"
-				/>
-				IMDb · {imdb.rating}</a
-			>
+		{#if imdb}
+			<div class="group">
+				<a
+					href={imdb.link}
+					class="relative py-1 px-3 border border-[#f6c700] text-[#f6c700] text-sm font-medium rounded-md hover:border-yellow-200 hover:text-yellow-200"
+				>
+					<span
+						class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"
+					/>
+					IMDb · {imdb.star}</a
+				>
+			</div>
 		{/if}
 	</div>
 	<h2 class="my-6 text-neutral-400 text-sm">{today}</h2>
-	<Showtimes showtimes={movie.showtimes} />
+	<Showtimes showtimes={showtimes} />
 </div>

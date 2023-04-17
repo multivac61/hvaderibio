@@ -23,7 +23,11 @@ const movie = z
 				tags: z.array(z.string())
 			})
 		),
-		trailer_url: z.string()
+		trailer_url: z.string(),
+		imdb: z.object({
+			link: z.string(),
+			star: z.number()
+		}).optional()
 	})
 	.strict()
 
