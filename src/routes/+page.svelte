@@ -2,8 +2,8 @@
 	import { browser } from '$app/environment'
 	import CinemaTab from '$lib/CinemaTab.svelte'
 	import Dust from '$lib/Dust.svelte'
+	import ModalMovie from '$lib/ModalMovie.svelte'
 	import Movie from '$lib/Movie.svelte'
-	import Showtimes from '$lib/Showtimes.svelte'
 	import { group_by, in_range, to_float } from '$lib/util'
 	import { onMount } from 'svelte'
 	import { createDialog } from 'svelte-headlessui'
@@ -144,47 +144,28 @@
 		class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center transition-opacity"
 	>
 		<div
-			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
+			class="relative rounded-2xl bg-neutral-950 m-6 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
 			bind:this={movie_dialog_scroll}
 		>
 			<div use:movie_dialog.modal>
-				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{movie?.title}</h3>
-				<div class="mt-2 text-sm mb-4 text-neutral-300">
-					<p class="mb-4 text-neutral-400">{movie?.description}</p>
-					<a
-						class="my-8 space-y-4 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-						href={movie?.trailer_url}
-					>
-						<span class="inline-flex items-center">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								width="12"
-								height="12"
-								class="fill-current"
-							>
-								<path d="M3 22V2L21 12L3 22Z" />
-							</svg>
-							<span class="ml-2 text-sm">Horfa á stiklu</span>
-						</span>
-					</a>
-					<h2 class="pt-8 mb-2 text-base text-neutral-300 md:text-base">{data.today}</h2>
-					{#if movie?.showtimes} <Showtimes showtimes={movie?.showtimes} /> {/if}
-				</div>
-			</div>
-			<div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
-				<div
-					class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
-				/>
-				<button
-					class="absolute group w-auto bottom-4 inset-x-4 sm:bottom-8 sm:inset-x-8 z-50 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900"
-					on:click
-				>
-					<span
-						class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"
+				{#if movie}
+					<ModalMovie {movie} today={data.today} />
+				{/if}
+				<div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
+					<div
+						class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
 					/>
-					Loka
-				</button>
+					<button
+						class="absolute group w-auto bottom-0 inset-x-0 sm:bottom-4 sm:inset-x-0 z-50 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900"
+						on:click|preventDefault={movie_dialog.close}
+						on:touchstart|preventDefault={movie_dialog.close}
+					>
+						<span
+							class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"
+						/>
+						Loka
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -200,7 +181,7 @@
 		}}
 		class="mx-auto mt-2 block rounded-md border-0 py-1.5 pl-3 pr-10 bg-black bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6"
 	>
-		{#each [...group_choices, ...all_choices] as [label, cinemas]}
+		{#each [...group_choices, ...all_choices] as [label]}
 			<option value={label} selected={label === selected_choice}>{label}</option>
 		{/each}
 	</select>

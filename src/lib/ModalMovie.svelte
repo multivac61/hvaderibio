@@ -30,17 +30,6 @@
 <div class="mt-2 text-sm mb-4 text-neutral-300">
 	<p class="mb-4 text-neutral-400">{movie.description}</p>
 	<div class="inline-flex gap-4 items-center">
-		{#if imdb !== null}
-			<a
-				href={imdb.link}
-				class="relative py-1 px-3 border border-[#f6c700] text-[#f6c700] text-sm font-medium rounded-md"
-			>
-				<span
-					class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"
-				/>
-				IMDb · {imdb.rating}</a
-			>
-		{/if}
 		<a
 			href={movie.trailer_url}
 			class="relative py-1 px-3 border border-[red] text-[red] text-sm font-medium rounded-md flex gap-2 items-center"
@@ -59,6 +48,17 @@
 			</svg>
 			Horfa á stiklu
 		</a>
+		{#if imdb !== null}
+			<a
+				href={imdb.link}
+				class="relative py-1 px-3 border border-[#f6c700] text-[#f6c700] text-sm font-medium rounded-md"
+			>
+				<span
+					class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"
+				/>
+				IMDb · {imdb.rating}</a
+			>
+		{/if}
 	</div>
 	<h2 class="my-6 text-neutral-400 text-sm">{today}</h2>
 	<Showtimes showtimes={movie.showtimes} />
