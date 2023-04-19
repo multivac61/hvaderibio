@@ -17,6 +17,7 @@ export async function load({ fetch }) {
 		console.error(parsed.error)
 		throw error(500, 'Unable to parse JSON')
 	}
+
 	return {
 		movies: await fetchMovies().then(async (movies) => {
 			return Promise.all(
@@ -27,19 +28,18 @@ export async function load({ fetch }) {
 						if (imdbId) {
 							const imdb_api_link = `https://imdb-api.projects.thetuhin.com/title/${imdbId}`
 							try {
-							return {
-								...movie,
-								imdb: {
-									star: await ky
-										.get(imdb_api_link)
-										.json<IMDbMovie>()
-										.then((response) => response.rating.star),
-									link: imdbLink
+								return {
+									...movie,
+									imdb: {
+										star: await ky
+											.get(imdb_api_link)
+											.json<IMDbMovie>()
+											.then((response) => response.rating.star),
+										link: imdbLink
+									}
 								}
-							}
-							}
-							catch (e) {
-								console.error(imdbLink, imdbId, imdb_api_link,  e)
+							} catch (e) {
+								console.error(imdbLink, imdbId, imdb_api_link, e)
 							}
 						}
 					}
