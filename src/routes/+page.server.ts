@@ -20,12 +20,6 @@ async function ensureDirectoryExists(dirPath: string) {
 	}
 }
 
-async function main() {
-	// Your code to download and save the poster
-}
-
-main()
-
 export async function load({ fetch }) {
 	const fetchMovies = async () => {
 		const response = await fetch('kvikmyndir_is.json')
@@ -51,7 +45,7 @@ export async function load({ fetch }) {
 					width: 274,
 					height: 411,
 					fit: sharp.fit.cover,
-					position: sharp.strategy.attention
+					position: sharp.strategy.attention	
 				})
 				.toBuffer()
 			const fileName = path.join(
@@ -60,6 +54,7 @@ export async function load({ fetch }) {
 				`${path.basename(url, path.extname(url))}.webp`
 			)
 			await fs.writeFile(fileName, webpBuffer)
+			// return fileName
 			return path.join('posters', `${path.basename(url, path.extname(url))}.webp`)
 		} catch (e) {
 			console.error(e)
