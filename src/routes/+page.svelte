@@ -153,16 +153,14 @@
 				{/if}
 				<div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
 					<div
-						class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
-					/>
+						class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"></div>
 					<button
 						class="absolute group w-auto bottom-0 inset-x-0 sm:bottom-4 sm:inset-x-0 z-50 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900"
 						on:click|preventDefault={movie_dialog.close}
 						on:touchstart|preventDefault={movie_dialog.close}
 					>
 						<span
-							class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"
-						/>
+							class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"></span>
 						Loka
 					</button>
 				</div>
@@ -236,9 +234,7 @@
 				</div>
 			</div>
 			<div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
-				<div
-					class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
-				/>
+				<div class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"></div>
 				<button
 					class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
 					on:click|preventDefault={about_dialog.close}
