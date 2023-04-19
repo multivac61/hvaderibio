@@ -12,7 +12,14 @@ const config = {
 		})
 	],
 
-	kit: { adapter: adapter() }
+	kit: {
+		prerender: {
+			handleHttpError: () => {
+				return
+			}
+		},
+		adapter: adapter()
+	}
 }
 
 export default config
