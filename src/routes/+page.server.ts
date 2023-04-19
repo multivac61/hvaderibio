@@ -25,15 +25,21 @@ export async function load({ fetch }) {
 					if (imdbLink) {
 						const imdbId = new URL(imdbLink).pathname.split('/').at(-1)
 						if (imdbId) {
+							const imdb_api_link = `https://imdb-api.projects.thetuhin.com/title/${imdbId}`
+							try {
 							return {
 								...movie,
 								imdb: {
 									star: await ky
-										.get(`https://imdb-api.projects.thetuhin.com/title/${imdbId}`)
+										.get(imdb_api_link)
 										.json<IMDbMovie>()
 										.then((response) => response.rating.star),
 									link: imdbLink
 								}
+							}
+							}
+							catch (e) {
+								console.error(imdbLink, imdbId, imdb_api_link,  e)
 							}
 						}
 					}
