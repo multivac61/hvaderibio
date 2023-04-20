@@ -14,7 +14,7 @@
 	let [from, to] = [Math.min(new Date().getHours(), 22), 24]
 
 	onMount(() => {
-		// Filter showtimes again on the client
+		// Filter showtime again on the client
 		from = Math.min(21, new Date().getHours() - 1)
 	})
 
@@ -79,12 +79,20 @@
 			$movie_dialog.expanded || $about_dialog.expanded
 		)
 	let movie_dialog_scroll: HTMLElement
-	let about_dialog_scroll: HTMLElement
-	$: if (browser) {
-		if ($movie_dialog.expanded || $about_dialog.expanded) {
-			lock([movie_dialog_scroll, about_dialog_scroll])
+	$: if (browser && movie_dialog_scroll) {
+		if ($movie_dialog.expanded) {
+			lock(movie_dialog_scroll)
 		} else {
-			unlock([movie_dialog_scroll, about_dialog_scroll])
+			unlock(movie_dialog_scroll)
+		}
+	}
+
+	let about_dialog_scroll: HTMLElement
+	$: if (browser && about_dialog_scroll) {
+		if ($about_dialog.expanded) {
+			lock(about_dialog_scroll)
+		} else {
+			unlock(about_dialog_scroll)
 		}
 	}
 
