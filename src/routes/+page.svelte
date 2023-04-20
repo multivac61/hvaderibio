@@ -110,7 +110,7 @@
 		<h1>
 			<button
 				on:click|preventDefault={about_dialog.open}
-				on:touchstart={about_dialog.open}
+				on:touchstart|preventDefault={about_dialog.open}
 				class="font-black text-4xl sm:text-6xl uppercase hover:text-yellow-500"
 			>
 				Hvað er í <span class="text-yellow-500">bíó</span>?
@@ -153,6 +153,7 @@
 	>
 		<div
 			class="relative rounded-2xl bg-neutral-950 m-6 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
+			bind:this={movie_dialog_scroll}
 		>
 			<div use:movie_dialog.modal>
 				{#if movie}
@@ -196,6 +197,7 @@
 	<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
 		<div
 			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8"
+			bind:this={about_dialog_scroll}
 		>
 			<div use:about_dialog.modal>
 				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">Um okkur 🍿</h3>
@@ -244,7 +246,7 @@
 				<button
 					class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
 					on:click|preventDefault={about_dialog.close}
-					on:touchstart={about_dialog.close}>Loka</button
+					on:touchstart|preventDefault={about_dialog.close}>Loka</button
 				>
 			</div>
 		</div>
