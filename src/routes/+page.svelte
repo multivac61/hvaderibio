@@ -153,7 +153,6 @@
 	>
 		<div
 			class="relative rounded-2xl bg-neutral-950 m-6 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
-			bind:this={movie_dialog_scroll}
 		>
 			<div use:movie_dialog.modal>
 				{#if movie}
@@ -197,7 +196,6 @@
 	<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
 		<div
 			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,860px)] overflow-y-auto p-4 sm:p-8"
-			bind:this={about_dialog_scroll}
 		>
 			<div use:about_dialog.modal>
 				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">Um okkur 🍿</h3>
