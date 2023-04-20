@@ -3,10 +3,11 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
-import scrapy
+from scrapy import Field
+from scrapy import Item
 
 
-class ScraperItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
+class ScraperItem(Item):
+    image_urls = Field()
+    images = Field()
     pass

@@ -24,10 +24,21 @@ const movie = z
 			})
 		),
 		trailer_url: z.string(),
-		imdb: z.object({
-			link: z.string(),
-			star: z.number()
-		}).optional()
+		image_urls: z.array(z.string()),
+		images: z.array(
+			z.object({
+				url: z.string(),
+				path: z.string(),
+				checksum: z.string(),
+				status: z.string()
+			})
+		),
+		imdb: z
+			.object({
+				link: z.string(),
+				star: z.number()
+			})
+			.optional()
 	})
 	.strict()
 
