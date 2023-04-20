@@ -81,9 +81,11 @@ class kvikmyndir_is(scrapy.Spider):
             'duration_in_mins': int(response.css('span.duration::text').get().replace('mín', '').replace('MÍN', '').strip()),
             'rating_urls': set(response.css('div.movie-ratings > div.rating-box > a::attr(href)').getall()),
             'language': response.css('div.combined_details > span:nth-child(2)::text').get().strip(),
-        } | response.meta['movie']
+            'image_urls': [response.css('div.poster').css('a::attr(href)').get().strip()],
+                       } | response.meta['movie']
+
         yield response.follow(f'https://kvikmyndir.is/trailer_view/?id={id}', self.parse_trailer, meta={'movie': parsed_movie})
     
     def parse_trailer(sefl, response):
         *_, youtube_id = parse.urlsplit(response.css('iframe::attr(src)').get().strip()).path.split('/')
-        yield response.meta['movie'] | {'trailer_url' : f'https://www.youtube.com/watch?v={youtube_id}'}
+        yield response.meta['movie'] | {'trailer_url': f'https://www.youtube.com/watch?v={youtube_id}'}

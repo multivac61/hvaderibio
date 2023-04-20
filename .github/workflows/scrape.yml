@@ -11,7 +11,9 @@ jobs:
     - name: Build
       run: pip install -r requirements.txt
     - name: Scrape
-      run: scrapy crawl kvikmyndir_is -O static/kvikmyndir_is.json
+      run: |
+        rm -rf static
+        scrapy crawl kvikmyndir_is -O static/kvikmyndir_is.json
     - uses: mikeal/publish-to-github-action@master
       env:
         BRANCH_NAME: 'main' #optional defaults to master
