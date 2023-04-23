@@ -10,7 +10,7 @@
     "test": "vitest",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
-    "gh-pages": "pnpm run build && pnpx gh-pages -d build"
+    "gh-pages": "vite build && npx gh-pages -d build"
   },
   "devDependencies": {
     "@neoconfetti/svelte": "^1.0.0",
