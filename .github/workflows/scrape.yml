@@ -1,9 +1,5 @@
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   schedule:
     - cron:  '0 1 * * *' # Run every morning at 01:00. Ref https://crontab.guru/examples.html
 name: Scrape Data
