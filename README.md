@@ -67,3 +67,4 @@ Spinna upp web
 pnpm install
 pnpm run dev
 ```
+
