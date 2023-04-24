@@ -10,7 +10,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v3
 
     - name: Build
       run: pip install -r requirements.txt
@@ -23,4 +23,4 @@ jobs:
     - uses: mikeal/publish-to-github-action@master
       env:
         BRANCH_NAME: 'main' #optional defaults to master
-        GITHUB_TOKEN: ${{ secrets.GH_PAT }} # GitHub sets this for you
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub sets this for you
