@@ -5,7 +5,7 @@ on:
   pull_request:
   workflow_dispatch:
   schedule:
-    - cron:  '0 2 * * *' # Run every morning at 01:00. Ref https://crontab.guru/examples.html
+    - cron:  '0 2 * * *' # Run every morning at 02:00. Ref https://crontab.guru/examples.html
 name: Deploy
 permissions:
   contents: write
