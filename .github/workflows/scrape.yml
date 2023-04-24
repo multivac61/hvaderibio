@@ -23,5 +23,5 @@ jobs:
         BRANCH_NAME: 'main' #optional defaults to master
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub sets this for you
 
-    - name: Build
-      uses: ./.github/workflows/deploy.yml
+    - name: Build and Deploy to GitHub Pages
+      uses: ./.github/actions/deploy
