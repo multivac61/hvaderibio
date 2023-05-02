@@ -201,7 +201,7 @@
 {#if $about_dialog.expanded}
 	<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
 		<div
-			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[maw(100vw,640px)] overflow-y-auto p-4 sm:p-8"
+			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,640px)] overflow-y-auto p-4 sm:p-8"
 			bind:this={about_dialog_scroll}
 		>
 			<div use:about_dialog.modal>
