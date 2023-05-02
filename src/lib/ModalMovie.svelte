@@ -5,7 +5,7 @@
 	export let today: string
 	export let movie: Omit<Movie, 'showtimes'> & { showtimes: [string, Movie['showtimes']][] }
 
-	$: ({description, trailer_url, title, showtimes, imdb} = movie)
+	$: ({ description, trailer_url, title, showtimes, imdb } = movie)
 </script>
 
 <h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{title}</h3>
@@ -16,7 +16,7 @@
 			target="_blank"
 			rel="noopener noreferrer"
 			href={trailer_url}
-			class="relative py-1 px-3 border border-gray-200 text-gray-200 text-sm font-medium rounded-md flex gap-2 items-center hover:border-gray-300 hover:text-gray-300"
+			class="relative py-1 px-3 border border-gray-300 text-gray-300 text-sm font-medium rounded-md flex gap-2 items-center hover:border-gray-400 hover:text-gray-400"
 		>
 			<span
 				class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"
