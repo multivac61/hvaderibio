@@ -210,25 +210,43 @@
 					<p class="pb-8">
 						Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
 							class="hover:text-neutral-100"
+							target="_blank"
+							rel="noopener noreferrer"
 							href="https://hugihlynsson.com">Huga Hlynssyni</a
 						>. Núverandi útgáfa útfærð af
-						<a class="hover:text-neutral-100" href="https://twitter.com/olafurbogason"
-							>Ólafi Bjarka Bogasyni</a
+						<a
+							class="hover:text-neutral-100"
+							href="https://twitter.com/olafurbogason"
+							target="_blank"
+							rel="noopener noreferrer">Ólafi Bjarka Bogasyni</a
 						>
 						og
-						<a class="hover:text-neutral-100" href="https://twitter.com/jokull">Jökli Sólberg</a>.
+						<a
+							class="hover:text-neutral-100"
+							target="_blank"
+							rel="noopener noreferrer"
+							href="https://twitter.com/jokull">Jökli Sólberg</a
+						>.
 					</p>
 					<p class="pb-10">
-						Gögn eru fengin af <a class="hover:text-neutral-100" href="https://kvikmyndir.is"
-							>kvikmyndir.is</a
+						Gögn eru fengin af <a
+							class="hover:text-neutral-100"
+							target="_blank"
+							rel="noopener noreferrer"
+							href="https://kvikmyndir.is">kvikmyndir.is</a
 						>. Hugbúnaður er aðgengilegur á
-						<a class="hover:text-neutral-100" href="https://github.com/multivac61/hvaderibio"
-							>GitHub</a
+						<a
+							class="hover:text-neutral-100"
+							href="https://github.com/multivac61/hvaderibio"
+							target="_blank"
+							rel="noopener noreferrer">GitHub</a
 						>
 						þar sem vel er tekið á móti athugasemdum og aðstoð.
 					</p>
 					<a
 						class="mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+						target="_blank"
+						rel="noopener noreferrer"
 						href="https://www.youtube.com/watch?v=v-u2NMzaduE"
 					>
 						<span class="inline-flex items-center">

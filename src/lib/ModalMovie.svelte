@@ -11,10 +11,12 @@
 <h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{title}</h3>
 <div class="mt-2 text-sm mb-4 text-neutral-300">
 	<p class="mb-4 text-neutral-400">{description}</p>
-	<div class="inline-flex group gap-4 items-center">
+	<div class="flex group gap-4 items-center">
 		<a
+			target="_blank"
+			rel="noopener noreferrer"
 			href={trailer_url}
-			class="relative py-1 px-3 border border-[red] text-[red] text-sm font-medium rounded-md flex gap-2 items-center hover:border-red-400 hover:text-red-400"
+			class="relative py-1 px-3 border border-gray-200 text-gray-200 text-sm font-medium rounded-md flex gap-2 items-center hover:border-gray-300 hover:text-gray-300"
 		>
 			<span
 				class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"
@@ -28,12 +30,14 @@
 			>
 				<path d="M3 22V2L21 12L3 22Z" />
 			</svg>
-			Horfa á stiklu
+			Stikla
 		</a>
 		{#if imdb}
 			<div class="group">
 				<a
 					href={imdb.link}
+					target="_blank"
+					rel="noopener noreferrer"
 					class="relative py-1 px-3 border border-[#f6c700] text-[#f6c700] text-sm font-medium rounded-md hover:border-yellow-200 hover:text-yellow-200"
 				>
 					<span
@@ -45,5 +49,5 @@
 		{/if}
 	</div>
 	<h2 class="my-6 text-neutral-400 text-sm">{today}</h2>
-	<Showtimes showtimes={showtimes} />
+	<Showtimes {showtimes} />
 </div>
