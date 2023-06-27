@@ -39,5 +39,6 @@
 		"zod": "^3.21.4",
 		"@melt-ui/svelte": "latest"
 	},
-	"type": "module"
+	"type": "module",
+	"packageManager": "pnpm@8.3.1"
 }
