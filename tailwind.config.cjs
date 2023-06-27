@@ -13,7 +13,6 @@ const config = {
 	},
 
 	plugins: [
-		require('@tailwindcss/forms'),
 		plugin(function ({ addVariant }) {
 			addVariant('slider-thumb', [
 				'&::-webkit-slider-thumb',
