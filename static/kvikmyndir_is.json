@@ -52,33 +52,6 @@
         },
         {
             "time": "2023-07-09T13:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/361559/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-09T15:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/361545/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-09T17:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/361546/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-09T13:00:00",
             "cinema": "Sambíóin Akureyri",
             "purchase_url": "http://www.sambio.is/websales/show/362008/",
             "hall": "Salur 2",
@@ -109,6 +82,33 @@
             "cinema": "Sambíóin Egilshöll",
             "purchase_url": "http://www.sambio.is/websales/show/362010/",
             "hall": "Salur 4",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-09T13:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/361559/",
+            "hall": "Salur A",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-09T15:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/361545/",
+            "hall": "Salur A",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-09T17:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/361546/",
+            "hall": "Salur A",
             "tags": [
                 "ÍSL TAL"
             ]
@@ -182,7 +182,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
             "path": "full/6c311204eb14a6556d33b55b479d35b044a9912b.jpg",
-            "checksum": "d41384833f55a78d6fe6c5a5591352b1",
+            "checksum": "c40db0db309dc66b3c5b0a6a78bbe16c",
             "status": "downloaded"
         }
     ]
@@ -402,298 +402,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/1684983_500-1684746754.jpg",
             "path": "full/4ba72971d167f45616699ae672be849a5dc1d7f8.jpg",
-            "checksum": "12ef0eef91b990af6886705140239869",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Speak No Evil",
-    "alt_title": "",
-    "kvikmyndir_is_id": 15933,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/15933_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15933",
-    "description": "Hvað gerist þegar dönsk fjölskylda ákveður að taka óvæntu tilboði? Heimboði til heimalands vingjarnlegs fjölskyldufólks sem þau hitta í sumarfríi?",
-    "genres": [
-        "Drama",
-        "Hrollvekja",
-        "Spennutryllir"
-    ],
-    "duration_in_mins": 97,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/speak_no_evil_2022",
-        "http://imdb.com/title/tt14253846"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/15933_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-09T21:40:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/2830",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=eAEw-8d1HsE",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/15933_500.jpg",
-            "path": "full/a1999aa6bb8b58b068d75aaab6c6ffaa861b3ec1.jpg",
-            "checksum": "7060bfd8809623817960488d069b6b2d",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "X",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14222,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/14222_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14222",
-    "description": "Flugbeitt hrollvekja sem farið hefur sigurför um heiminn og hlotið mikið lof áhorfenda og gagnrýnenda. 'X' er óður til sígildra hryllingsmynda og segir frá hópi ungra kvikmyndagerðarmanna sem vinnur að gerð klámmyndar úti á landi í Texas árið 1979. Framleiðslan mætir hins vegar óvæntum hindrunum þegar gestgjafi þeirra stendur þá að verki. Þá lendir...",
-    "genres": [
-        "Hrollvekja",
-        "Spennutryllir",
-        "Ráðgáta"
-    ],
-    "duration_in_mins": 105,
-    "rating_urls": [
-        "http://imdb.com/title/tt13560574",
-        "https://www.themoviedb.org/tv/760104",
-        "https://www.rottentomatoes.com/m/x_2022"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/14222_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-09T21:10:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/2838",
-            "hall": "Salur 1",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=Awg3cWuHfoc",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/14222_500.jpg",
-            "path": "full/c8c0a34e8f18eb510946456af859ffb311f1e263.jpg",
-            "checksum": "84fa23aa045074e8110b38c5e104f5ae",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "The Boogeyman",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16060,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16060_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16060",
-    "description": "Lester Billings ræðir við geðlækni um morð á þremur ungum börnum hans. Fyrstu tvö börnin létust á dulafullan hátt, en dánarorsök var mismunandi þó þau hafi bæði dáið inni í herbergjum sínum. Það eina sem var líkt með morðunum er að börnin öskruðu \"Vondi kall! \" eða Boogeyman! áður en þau voru skilin eftir í herbergjunum. Þá var skáphurðin...",
-    "genres": [
-        "Hrollvekja",
-        "Spennutryllir",
-        "Ráðgáta"
-    ],
-    "duration_in_mins": 98,
-    "rating_urls": [
-        "http://imdb.com/title/tt3427252",
-        "https://www.rottentomatoes.com/m/the_boogeyman"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16060_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-09T22:20:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/361292/",
-            "hall": "Salur B",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=QsudEHsuvIg",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16060_500.jpg",
-            "path": "full/d509c213dd459055820a019e177619bbb04bd3c7.jpg",
-            "checksum": "1f34c95339facd96e5377affd0a610de",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "The Eight Mountains",
-    "alt_title": "Le otto montagne",
-    "kvikmyndir_is_id": 14503,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/14503_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14503",
-    "description": "Undurfalleg saga um vináttu tveggja manna þar sem kvikmyndatakan leikur við öll skilninvarvit í víðfemri náttúru",
-    "genres": [
-        "Drama"
-    ],
-    "duration_in_mins": 147,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/the_eight_mountains",
-        "http://imdb.com/title/tt14641542"
-    ],
-    "language": "Ítalska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/14503_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-09T16:50:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/2829",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=cVzlBDwUEbI",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/14503_500.jpg",
-            "path": "full/896df1882f03e3ef39fae0b1803adc33896031a8.jpg",
-            "checksum": "2e2467a674c721ec27d608542b61da7c",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Book Club 2: The Next Chapter",
-    "alt_title": "Book Club: The Next Chapter",
-    "kvikmyndir_is_id": 15979,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/15979_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15979",
-    "description": "Við fylgjumst með vinkonunum fjórum sem fara með bókaklúbbinn sinn til Ítalíu og skemmta sér betur en nokkru sinni fyrr. Þegar hlutir fara úr skorðum og leyndarmál koma í ljós breytist áhyggjulausa fríið í ógleymanlegt ferðalag þvert yfir landið.",
-    "genres": [
-        "Gaman"
-    ],
-    "duration_in_mins": 107,
-    "rating_urls": [
-        "http://imdb.com/title/tt20768712",
-        "https://www.rottentomatoes.com/m/book_club_the_next_chapter"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/15979_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-09T19:00:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/361238/",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=U8aHKAeRJRQ",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/15979_500.jpg",
-            "path": "full/ba95768a8cea80307b22dd6c8a7c48944884941e.jpg",
-            "checksum": "1f583d6ad489e0f2799cfcd3d3353369",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "The Super Mario Bros. Movie",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14164,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/qnbaxbiqlnothrvva6ma2b5ggv6-1675934529.jpg",
-    "content_rating_in_years": 0,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14164",
-    "description": "Píparinn Mario frá Brooklyn ferðast í gegnum Svepparíkið með prinsessunni Peach og mannlega sveppinum Toad í leit að bróður Mario, Luigi. Markmiðið er að bjarga heiminum frá hinu hrikalega eldspúandi skrímsli Bowser.",
-    "genres": [
-        "Gaman",
-        "Ævintýri",
-        "Teiknað"
-    ],
-    "duration_in_mins": 92,
-    "rating_urls": [
-        "http://imdb.com/title/tt6718170",
-        "https://www.rottentomatoes.com/m/the_super_mario_bros_movie"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/qnbaxbiqlnothrvva6ma2b5ggv6-1675934529.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-09T13:45:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/766304/",
-            "hall": "Salur B",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=KydqdKKyGEk",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/qnbaxbiqlnothrvva6ma2b5ggv6-1675934529.jpg",
-            "path": "full/c008f6411f49edef8c93a4c00d7bf9ed70bf0599.jpg",
-            "checksum": "0d3460aa25c32c399bec666aab1f78b5",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "God's Country",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16291,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/16291_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16291",
-    "description": "Við fylgjumst með háskólaprófessor í óbyggðum Montana. Einn daginn rekst hún á tvo veiðimenn í óleyfi á landareign hennar sem eru svo sannarlega ekki á förum ….",
-    "genres": [
-        "Spennutryllir"
-    ],
-    "duration_in_mins": 102,
-    "rating_urls": [
-        "http://imdb.com/title/tt11818818",
-        "https://www.rottentomatoes.com/m/gods_country_2022"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16291_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-09T19:40:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/2828",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=0g-fjsluqN4",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16291_500.jpg",
-            "path": "full/0078190d802b47cd6c5f041031b850665a6e625c.jpg",
-            "checksum": "b8ef53c76f9c05fca9e0a45fde389d64",
+            "checksum": "f160f114068d15c137683adbe2fd9cb1",
             "status": "downloaded"
         }
     ]
@@ -734,7 +443,258 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16292_500.jpg",
             "path": "full/91e59c395deb119d4dc453a98461f3e18189d8a7.jpg",
-            "checksum": "58388e0dc1d9f6172c058a3b587385b3",
+            "checksum": "943c7943e05260b91cd9eb626aea5158",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "God's Country",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16291,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/16291_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16291",
+    "description": "Við fylgjumst með háskólaprófessor í óbyggðum Montana. Einn daginn rekst hún á tvo veiðimenn í óleyfi á landareign hennar sem eru svo sannarlega ekki á förum ….",
+    "genres": [
+        "Spennutryllir"
+    ],
+    "duration_in_mins": 102,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/gods_country_2022",
+        "http://imdb.com/title/tt11818818"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16291_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-09T19:40:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/2828",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=0g-fjsluqN4",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16291_500.jpg",
+            "path": "full/0078190d802b47cd6c5f041031b850665a6e625c.jpg",
+            "checksum": "647eae297bfeaf2acdeb3269797b8979",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "X",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14222,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/14222_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14222",
+    "description": "Flugbeitt hrollvekja sem farið hefur sigurför um heiminn og hlotið mikið lof áhorfenda og gagnrýnenda. 'X' er óður til sígildra hryllingsmynda og segir frá hópi ungra kvikmyndagerðarmanna sem vinnur að gerð klámmyndar úti á landi í Texas árið 1979. Framleiðslan mætir hins vegar óvæntum hindrunum þegar gestgjafi þeirra stendur þá að verki. Þá lendir...",
+    "genres": [
+        "Hrollvekja",
+        "Spennutryllir",
+        "Ráðgáta"
+    ],
+    "duration_in_mins": 105,
+    "rating_urls": [
+        "https://www.themoviedb.org/tv/760104",
+        "http://imdb.com/title/tt13560574",
+        "https://www.rottentomatoes.com/m/x_2022"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/14222_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-09T21:10:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/2838",
+            "hall": "Salur 1",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=Awg3cWuHfoc",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/14222_500.jpg",
+            "path": "full/c8c0a34e8f18eb510946456af859ffb311f1e263.jpg",
+            "checksum": "b0f586ccc110d374c5a0e071fe11510c",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Speak No Evil",
+    "alt_title": "",
+    "kvikmyndir_is_id": 15933,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/15933_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=15933",
+    "description": "Hvað gerist þegar dönsk fjölskylda ákveður að taka óvæntu tilboði? Heimboði til heimalands vingjarnlegs fjölskyldufólks sem þau hitta í sumarfríi?",
+    "genres": [
+        "Drama",
+        "Hrollvekja",
+        "Spennutryllir"
+    ],
+    "duration_in_mins": 97,
+    "rating_urls": [
+        "http://imdb.com/title/tt14253846",
+        "https://www.rottentomatoes.com/m/speak_no_evil_2022"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/15933_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-09T21:40:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/2830",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=eAEw-8d1HsE",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/15933_500.jpg",
+            "path": "full/a1999aa6bb8b58b068d75aaab6c6ffaa861b3ec1.jpg",
+            "checksum": "1351fc3cef7e54493c8fd3303f521df1",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "The Super Mario Bros. Movie",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14164,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/qnbaxbiqlnothrvva6ma2b5ggv6-1675934529.jpg",
+    "content_rating_in_years": 0,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14164",
+    "description": "Píparinn Mario frá Brooklyn ferðast í gegnum Svepparíkið með prinsessunni Peach og mannlega sveppinum Toad í leit að bróður Mario, Luigi. Markmiðið er að bjarga heiminum frá hinu hrikalega eldspúandi skrímsli Bowser.",
+    "genres": [
+        "Gaman",
+        "Ævintýri",
+        "Teiknað"
+    ],
+    "duration_in_mins": 92,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/the_super_mario_bros_movie",
+        "http://imdb.com/title/tt6718170"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/qnbaxbiqlnothrvva6ma2b5ggv6-1675934529.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-09T13:45:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/766304/",
+            "hall": "Salur B",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=KydqdKKyGEk",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/qnbaxbiqlnothrvva6ma2b5ggv6-1675934529.jpg",
+            "path": "full/c008f6411f49edef8c93a4c00d7bf9ed70bf0599.jpg",
+            "checksum": "0d3460aa25c32c399bec666aab1f78b5",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "The Eight Mountains",
+    "alt_title": "Le otto montagne",
+    "kvikmyndir_is_id": 14503,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/14503_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14503",
+    "description": "Undurfalleg saga um vináttu tveggja manna þar sem kvikmyndatakan leikur við öll skilninvarvit í víðfemri náttúru",
+    "genres": [
+        "Drama"
+    ],
+    "duration_in_mins": 147,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/the_eight_mountains",
+        "http://imdb.com/title/tt14641542"
+    ],
+    "language": "Ítalska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/14503_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-09T16:50:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/2829",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=cVzlBDwUEbI",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/14503_500.jpg",
+            "path": "full/896df1882f03e3ef39fae0b1803adc33896031a8.jpg",
+            "checksum": "a6ae70adaeb6223c52a5a91132dab46c",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "The Boogeyman",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16060,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16060_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16060",
+    "description": "Lester Billings ræðir við geðlækni um morð á þremur ungum börnum hans. Fyrstu tvö börnin létust á dulafullan hátt, en dánarorsök var mismunandi þó þau hafi bæði dáið inni í herbergjum sínum. Það eina sem var líkt með morðunum er að börnin öskruðu \"Vondi kall! \" eða Boogeyman! áður en þau voru skilin eftir í herbergjunum. Þá var skáphurðin...",
+    "genres": [
+        "Hrollvekja",
+        "Spennutryllir",
+        "Ráðgáta"
+    ],
+    "duration_in_mins": 98,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/the_boogeyman",
+        "http://imdb.com/title/tt3427252"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16060_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-09T22:20:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/361292/",
+            "hall": "Salur B",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=QsudEHsuvIg",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16060_500.jpg",
+            "path": "full/d509c213dd459055820a019e177619bbb04bd3c7.jpg",
+            "checksum": "072b0209c01d582cc79fa70ea8bd7b52",
             "status": "downloaded"
         }
     ]
@@ -755,8 +715,8 @@
     ],
     "duration_in_mins": 117,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/transformers_rise_of_the_beasts",
-        "http://imdb.com/title/tt5090568"
+        "http://imdb.com/title/tt5090568",
+        "https://www.rottentomatoes.com/m/transformers_rise_of_the_beasts"
     ],
     "language": "Enska",
     "image_urls": [
@@ -783,7 +743,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/1688889_500-1685872259.jpg",
             "path": "full/1506778d9fc0cdc0b7c629aed525232a04d18f50.jpg",
-            "checksum": "bf159be9b12eede7efefe582f028bd07",
+            "checksum": "c82aa4b02d7e989b0c4af298f1abbb63",
             "status": "downloaded"
         }
     ]
@@ -838,7 +798,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16181_500.jpg",
             "path": "full/dd04bc9817a943500cfb5f4bc845b19404e00941.jpg",
-            "checksum": "dad7ce7f1245d0dc681309858c9ec614",
+            "checksum": "b61f4b885dbbf8cd2826f40e0050e5d5",
             "status": "downloaded"
         }
     ]
@@ -900,83 +860,47 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
             "path": "full/fe02bf23b5af26c4378cf315842a398e5eb1ddc0.jpg",
-            "checksum": "ec0c249bc78edf6917fbb845a8ade32a",
+            "checksum": "cea3ab25675e749453219a403b63c09f",
             "status": "downloaded"
         }
     ]
 },
 {
-    "title": "The Flash",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14489,
+    "title": "Book Club 2: The Next Chapter",
+    "alt_title": "Book Club: The Next Chapter",
+    "kvikmyndir_is_id": 15979,
     "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/14489_500.jpg",
+    "poster_url": "https://kvikmyndir.is/images/poster/15979_500.jpg",
     "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14489",
-    "description": "Ofurhetjan Barry Allen, eða The Flash, notar ofurhraða sinn til að breyta fortíðinni. En þegar tilraun hans til að bjarga fjölskyldunni breytir óvart framtíðinni um leið, festist Barry í veruleika þar sem erkióvinurinn General Zod er snúinn aftur. Zod hótar algjörri gereyðingu og engar ofurhetjur eru til staðar til að bjarga málunum.",
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=15979",
+    "description": "Við fylgjumst með vinkonunum fjórum sem fara með bókaklúbbinn sinn til Ítalíu og skemmta sér betur en nokkru sinni fyrr. Þegar hlutir fara úr skorðum og leyndarmál koma í ljós breytist áhyggjulausa fríið í ógleymanlegt ferðalag þvert yfir landið.",
     "genres": [
-        "Spenna",
-        "Ævintýri"
+        "Gaman"
     ],
-    "duration_in_mins": 144,
+    "duration_in_mins": 107,
     "rating_urls": [
-        "http://imdb.com/title/tt0439572",
-        "https://www.rottentomatoes.com/m/the_flash_2022"
+        "http://imdb.com/title/tt20768712",
+        "https://www.rottentomatoes.com/m/book_club_the_next_chapter"
     ],
     "language": "Enska",
     "image_urls": [
-        "https://kvikmyndir.is/images/poster/14489_500.jpg"
+        "https://kvikmyndir.is/images/poster/15979_500.jpg"
     ],
     "showtimes": [
         {
-            "time": "2023-07-09T13:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/361336/",
-            "hall": "Lúxus VIP",
-            "tags": []
-        },
-        {
-            "time": "2023-07-09T16:45:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/361325/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-07-09T22:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/361326/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-07-09T20:00:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/361982/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-07-09T22:00:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/361983/",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-07-09T21:00:00",
-            "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/361981/",
+            "time": "2023-07-09T19:00:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/361238/",
             "hall": "Salur 2",
             "tags": []
         }
     ],
-    "trailer_url": "https://www.youtube.com/watch?v=drQWopZDEEY",
+    "trailer_url": "https://www.youtube.com/watch?v=U8aHKAeRJRQ",
     "images": [
         {
-            "url": "https://kvikmyndir.is/images/poster/14489_500.jpg",
-            "path": "full/ab90d5b32483fe191af7d8a60e97f10610631e8d.jpg",
-            "checksum": "295fa108ee3fbf48fde2899bfff4077d",
+            "url": "https://kvikmyndir.is/images/poster/15979_500.jpg",
+            "path": "full/ba95768a8cea80307b22dd6c8a7c48944884941e.jpg",
+            "checksum": "77dbafe559f03baeef6242268356f45d",
             "status": "downloaded"
         }
     ]
@@ -1039,7 +963,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16330_500.jpg",
             "path": "full/d127b561175478bba25258f318a4685fff94ed95.jpg",
-            "checksum": "d2c0c12fba02f71642731d8e666b3935",
+            "checksum": "c3de5002c5eaaeaffe1eaf576377d494",
             "status": "downloaded"
         }
     ]
@@ -1124,7 +1048,83 @@
         {
             "url": "https://kvikmyndir.is/images/poster/13420_500.jpg",
             "path": "full/e28f59afd4ad5969cd029e6033b266f9e5dff8a0.jpg",
-            "checksum": "dbc155347144231dc401994253296173",
+            "checksum": "9b3c9e1eaa6dd583461c2940dd2d2386",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "The Flash",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14489,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/14489_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14489",
+    "description": "Ofurhetjan Barry Allen, eða The Flash, notar ofurhraða sinn til að breyta fortíðinni. En þegar tilraun hans til að bjarga fjölskyldunni breytir óvart framtíðinni um leið, festist Barry í veruleika þar sem erkióvinurinn General Zod er snúinn aftur. Zod hótar algjörri gereyðingu og engar ofurhetjur eru til staðar til að bjarga málunum.",
+    "genres": [
+        "Spenna",
+        "Ævintýri"
+    ],
+    "duration_in_mins": 144,
+    "rating_urls": [
+        "http://imdb.com/title/tt0439572",
+        "https://www.rottentomatoes.com/m/the_flash_2022"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/14489_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-09T13:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/361336/",
+            "hall": "Lúxus VIP",
+            "tags": []
+        },
+        {
+            "time": "2023-07-09T16:45:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/361325/",
+            "hall": "Salur 3",
+            "tags": []
+        },
+        {
+            "time": "2023-07-09T22:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/361326/",
+            "hall": "Salur 3",
+            "tags": []
+        },
+        {
+            "time": "2023-07-09T20:00:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/361982/",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-07-09T22:00:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/361983/",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-07-09T21:00:00",
+            "cinema": "Sambíóin Akureyri",
+            "purchase_url": "http://www.sambio.is/websales/show/361981/",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=drQWopZDEEY",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/14489_500.jpg",
+            "path": "full/ab90d5b32483fe191af7d8a60e97f10610631e8d.jpg",
+            "checksum": "295fa108ee3fbf48fde2899bfff4077d",
             "status": "downloaded"
         }
     ]
@@ -1216,7 +1216,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/1688612_500-1684919471.jpg",
             "path": "full/8d19765a6aad094bf8dde65c7d67871fdd6e7006.jpg",
-            "checksum": "f4d63584b74d5ff170e8396dd3f06302",
+            "checksum": "65110f04b78545decdc2a54dea9cc4cb",
             "status": "downloaded"
         }
     ]
@@ -1259,6 +1259,13 @@
         },
         {
             "time": "2023-07-09T19:40:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/362004/",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-07-09T19:40:00",
             "cinema": "Sambíóin Álfabakka",
             "purchase_url": "http://www.sambio.is/websales/show/361505/",
             "hall": "Salur 2",
@@ -1269,13 +1276,6 @@
             "cinema": "Sambíóin Álfabakka",
             "purchase_url": "http://www.sambio.is/websales/show/361506/",
             "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-07-09T19:40:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/362004/",
-            "hall": "Salur 4",
             "tags": []
         },
         {
@@ -1305,7 +1305,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16101_500.jpg",
             "path": "full/761c35575814931bad764fa12c9625b133ae398a.jpg",
-            "checksum": "fb27b69f5b3e65043db96b5d11a6303e",
+            "checksum": "5b1815db664c4373cb427ba788e3ee73",
             "status": "downloaded"
         }
     ]
@@ -1337,18 +1337,18 @@
         {
             "time": "2023-07-09T12:10:00",
             "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/361585/",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-07-09T12:10:00",
+            "cinema": "Sambíóin Kringlunni",
             "purchase_url": "http://www.sambio.is/websales/show/361406/",
             "hall": "Salur 1",
             "tags": [
                 "ÍSL TAL"
             ]
-        },
-        {
-            "time": "2023-07-09T12:10:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/361585/",
-            "hall": "Salur 2",
-            "tags": []
         },
         {
             "time": "2023-07-09T14:30:00",
@@ -1413,24 +1413,6 @@
         },
         {
             "time": "2023-07-09T13:00:00",
-            "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/361987/",
-            "hall": "Salur 1",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-09T15:30:00",
-            "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/361990/",
-            "hall": "Salur 1",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-09T13:00:00",
             "cinema": "Sambíóin Egilshöll",
             "purchase_url": "http://www.sambio.is/websales/show/361991/",
             "hall": "Salur 2",
@@ -1452,6 +1434,24 @@
             "cinema": "Sambíóin Egilshöll",
             "purchase_url": "http://www.sambio.is/websales/show/361988/",
             "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-09T13:00:00",
+            "cinema": "Sambíóin Akureyri",
+            "purchase_url": "http://www.sambio.is/websales/show/361987/",
+            "hall": "Salur 1",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-09T15:30:00",
+            "cinema": "Sambíóin Akureyri",
+            "purchase_url": "http://www.sambio.is/websales/show/361990/",
+            "hall": "Salur 1",
             "tags": [
                 "ÍSL TAL"
             ]
@@ -1498,7 +1498,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/15016_500.jpg",
             "path": "full/e98cfe7e6bb338dfc6feafd14ce3a8a1204ff3df.jpg",
-            "checksum": "d2201ca759150d52be9223b60129b1b2",
+            "checksum": "a9d9b32f13d4da2a41df1ec40cabad76",
             "status": "downloaded"
         }
     ]
