@@ -15,8 +15,8 @@
     ],
     "duration_in_mins": 103,
     "rating_urls": [
-        "http://imdb.com/title/tt15789038",
-        "https://www.rottentomatoes.com/m/elemental_2023"
+        "https://www.rottentomatoes.com/m/elemental_2023",
+        "http://imdb.com/title/tt15789038"
     ],
     "language": "Enska",
     "image_urls": [
@@ -362,42 +362,127 @@
     ]
 },
 {
-    "title": "Asteroid City",
+    "title": "Dry Ground Burning",
     "alt_title": "",
-    "kvikmyndir_is_id": 16090,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16090",
-    "description": "Myndin gerist í skálduðum bandarískum eyðimerkurbæ árið 1955. Dagskrá stjörnuskoðunarráðstefnu unglinga fær óvænta truflun af heimssögulegum atburðum.",
+    "kvikmyndir_is_id": 16309,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/16309_500.jpg",
+    "content_rating_in_years": 0,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16309",
+    "description": "Árið 2013 hóf brasilíska herlögreglan átak gegn eiturlyfjasölu í borginni Ceilândia og handtók sextán karlmenn í kjölfarið. Hér eru mörk á milli raunveruleika og uppspuna óljós í þessari hörkuspennandi kvikmynd um kvenkyns gengi í Brasilíu.",
     "genres": [
-        "Gaman",
-        "Rómantík"
+        "Drama",
+        "Glæpa",
+        "Vísindaskáldskapur"
     ],
-    "duration_in_mins": 104,
+    "duration_in_mins": 153,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/asteroid_city",
-        "http://imdb.com/title/tt14230388"
+        "http://imdb.com/title/tt17550726",
+        "https://www.rottentomatoes.com/m/dry_ground_burning"
     ],
-    "language": "Enska",
+    "language": "Portúgalska",
     "image_urls": [
-        "https://kvikmyndir.is/images/poster/16090_500.jpg"
+        "https://kvikmyndir.is/images/poster/16309_500.jpg"
     ],
     "showtimes": [
         {
-            "time": "2023-07-14T18:50:00",
+            "time": "2023-07-14T16:00:00",
             "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/2876",
+            "purchase_url": "https://tickets.bioparadis.is/#book/2880",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=-BTut2h2omM",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16309_500.jpg",
+            "path": "full/5de9ec56e42997868c0c3195b83a24a55a862052.jpg",
+            "checksum": "ddb5e6033c0a3bb8095220cd8a060d33",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Dirty Dancing",
+    "alt_title": "",
+    "kvikmyndir_is_id": 673,
+    "release_year": 1987,
+    "poster_url": "https://kvikmyndir.is/images/poster/dirty-1559942632.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=673",
+    "description": "Sagan gerist á sjöunda áratug síðustu aldar. Frances \"Baby\" Houseman, sæt pabbastelpa, fer með fjölskyldu sinni til sumardvalarstaðar við New York  Catskill fjöll. Baby hefur alist upp við góð efni og allir búast við að hún fari í framhaldsskóla, og geri allt sem búist er við af góðum stelpum. \nÖllum að óvörum heillast Baby af danskennara í sumarfríinu,...",
+    "genres": [
+        "Rómantík",
+        "Drama"
+    ],
+    "duration_in_mins": 100,
+    "rating_urls": [
+        "http://imdb.com/title/tt0092890",
+        "https://www.rottentomatoes.com/m/dirty_dancing",
+        "https://www.themoviedb.org/tv/88"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/dirty-1559942632.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-14T21:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/1933",
             "hall": "Salur 2",
             "tags": []
         }
     ],
-    "trailer_url": "https://www.youtube.com/watch?v=9FXCSXuGTF4",
+    "trailer_url": "https://www.youtube.com/watch?v=wcra0-0Gu4U",
     "images": [
         {
-            "url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
-            "path": "full/fe02bf23b5af26c4378cf315842a398e5eb1ddc0.jpg",
-            "checksum": "cea3ab25675e749453219a403b63c09f",
+            "url": "https://kvikmyndir.is/images/poster/dirty-1559942632.jpg",
+            "path": "full/6bb88893eb44e5b1939a9ec5723399292e3060ba.jpg",
+            "checksum": "c6c93f5dde91e193415836b6e2253883",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "The Boogeyman",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16060,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16060_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16060",
+    "description": "Lester Billings ræðir við geðlækni um morð á þremur ungum börnum hans. Fyrstu tvö börnin létust á dulafullan hátt, en dánarorsök var mismunandi þó þau hafi bæði dáið inni í herbergjum sínum. Það eina sem var líkt með morðunum er að börnin öskruðu \"Vondi kall! \" eða Boogeyman! áður en þau voru skilin eftir í herbergjunum. Þá var skáphurðin...",
+    "genres": [
+        "Hrollvekja",
+        "Spennutryllir",
+        "Ráðgáta"
+    ],
+    "duration_in_mins": 98,
+    "rating_urls": [
+        "http://imdb.com/title/tt3427252",
+        "https://www.rottentomatoes.com/m/the_boogeyman"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16060_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-14T22:20:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/362096/",
+            "hall": "Salur B",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=QsudEHsuvIg",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16060_500.jpg",
+            "path": "full/d509c213dd459055820a019e177619bbb04bd3c7.jpg",
+            "checksum": "072b0209c01d582cc79fa70ea8bd7b52",
             "status": "downloaded"
         }
     ]
@@ -457,8 +542,8 @@
     ],
     "duration_in_mins": 102,
     "rating_urls": [
-        "http://imdb.com/title/tt18925334",
-        "https://www.rottentomatoes.com/m/pearl_2022"
+        "https://www.rottentomatoes.com/m/pearl_2022",
+        "http://imdb.com/title/tt18925334"
     ],
     "language": "Enska",
     "image_urls": [
@@ -479,132 +564,6 @@
             "url": "https://kvikmyndir.is/images/poster/14386_500.jpg",
             "path": "full/6f8eefd538a1c8e6d028d0c006abf927a15e4511.jpg",
             "checksum": "da8331aeff5478d5d430e19e8a7088d0",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Dry Ground Burning",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16309,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/16309_500.jpg",
-    "content_rating_in_years": 0,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16309",
-    "description": "Árið 2013 hóf brasilíska herlögreglan átak gegn eiturlyfjasölu í borginni Ceilândia og handtók sextán karlmenn í kjölfarið. Hér eru mörk á milli raunveruleika og uppspuna óljós í þessari hörkuspennandi kvikmynd um kvenkyns gengi í Brasilíu.",
-    "genres": [
-        "Drama",
-        "Glæpa",
-        "Vísindaskáldskapur"
-    ],
-    "duration_in_mins": 153,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/dry_ground_burning",
-        "http://imdb.com/title/tt17550726"
-    ],
-    "language": "Portúgalska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16309_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-14T16:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/2880",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=-BTut2h2omM",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16309_500.jpg",
-            "path": "full/5de9ec56e42997868c0c3195b83a24a55a862052.jpg",
-            "checksum": "ddb5e6033c0a3bb8095220cd8a060d33",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Dirty Dancing",
-    "alt_title": "",
-    "kvikmyndir_is_id": 673,
-    "release_year": 1987,
-    "poster_url": "https://kvikmyndir.is/images/poster/dirty-1559942632.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=673",
-    "description": "Sagan gerist á sjöunda áratug síðustu aldar. Frances \"Baby\" Houseman, sæt pabbastelpa, fer með fjölskyldu sinni til sumardvalarstaðar við New York  Catskill fjöll. Baby hefur alist upp við góð efni og allir búast við að hún fari í framhaldsskóla, og geri allt sem búist er við af góðum stelpum. \nÖllum að óvörum heillast Baby af danskennara í sumarfríinu,...",
-    "genres": [
-        "Rómantík",
-        "Drama"
-    ],
-    "duration_in_mins": 100,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/dirty_dancing",
-        "http://imdb.com/title/tt0092890",
-        "https://www.themoviedb.org/tv/88"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/dirty-1559942632.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-14T21:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/1933",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=wcra0-0Gu4U",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/dirty-1559942632.jpg",
-            "path": "full/6bb88893eb44e5b1939a9ec5723399292e3060ba.jpg",
-            "checksum": "c6c93f5dde91e193415836b6e2253883",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "The Boogeyman",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16060,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16060_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16060",
-    "description": "Lester Billings ræðir við geðlækni um morð á þremur ungum börnum hans. Fyrstu tvö börnin létust á dulafullan hátt, en dánarorsök var mismunandi þó þau hafi bæði dáið inni í herbergjum sínum. Það eina sem var líkt með morðunum er að börnin öskruðu \"Vondi kall! \" eða Boogeyman! áður en þau voru skilin eftir í herbergjunum. Þá var skáphurðin...",
-    "genres": [
-        "Hrollvekja",
-        "Spennutryllir",
-        "Ráðgáta"
-    ],
-    "duration_in_mins": 98,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/the_boogeyman",
-        "http://imdb.com/title/tt3427252"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16060_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-14T22:20:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/362096/",
-            "hall": "Salur B",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=QsudEHsuvIg",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16060_500.jpg",
-            "path": "full/d509c213dd459055820a019e177619bbb04bd3c7.jpg",
-            "checksum": "072b0209c01d582cc79fa70ea8bd7b52",
             "status": "downloaded"
         }
     ]
@@ -710,49 +669,42 @@
     ]
 },
 {
-    "title": "The Little Mermaid",
+    "title": "Asteroid City",
     "alt_title": "",
-    "kvikmyndir_is_id": 16181,
+    "kvikmyndir_is_id": 16090,
     "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16181_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16181",
-    "description": "Unga og ævintýragjarna hafmeyjan Ariel gerir samning við nornina Ursulu um skipti á fagurri söngrödd sinni fyrir mennska fótleggi svo hún geti kannað heiminn ofansjávar og stigið í vænginn við prinsinn Eric.",
+    "poster_url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16090",
+    "description": "Myndin gerist í skálduðum bandarískum eyðimerkurbæ árið 1955. Dagskrá stjörnuskoðunarráðstefnu unglinga fær óvænta truflun af heimssögulegum atburðum.",
     "genres": [
-        "Ævintýri",
-        "Fjölskylda"
+        "Gaman",
+        "Rómantík"
     ],
-    "duration_in_mins": 135,
+    "duration_in_mins": 104,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/the_little_mermaid_2023",
-        "http://imdb.com/title/tt5971474"
+        "https://www.rottentomatoes.com/m/asteroid_city",
+        "http://imdb.com/title/tt14230388"
     ],
     "language": "Enska",
     "image_urls": [
-        "https://kvikmyndir.is/images/poster/16181_500.jpg"
+        "https://kvikmyndir.is/images/poster/16090_500.jpg"
     ],
     "showtimes": [
         {
-            "time": "2023-07-14T14:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/362084/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-07-14T18:40:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/362278/",
+            "time": "2023-07-14T18:50:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/2876",
             "hall": "Salur 2",
             "tags": []
         }
     ],
-    "trailer_url": "https://www.youtube.com/watch?v=kpGo2_d3oYE",
+    "trailer_url": "https://www.youtube.com/watch?v=9FXCSXuGTF4",
     "images": [
         {
-            "url": "https://kvikmyndir.is/images/poster/16181_500.jpg",
-            "path": "full/dd04bc9817a943500cfb5f4bc845b19404e00941.jpg",
-            "checksum": "b61f4b885dbbf8cd2826f40e0050e5d5",
+            "url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
+            "path": "full/fe02bf23b5af26c4378cf315842a398e5eb1ddc0.jpg",
+            "checksum": "cea3ab25675e749453219a403b63c09f",
             "status": "downloaded"
         }
     ]
@@ -772,8 +724,8 @@
     ],
     "duration_in_mins": 144,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/the_flash_2022",
-        "http://imdb.com/title/tt0439572"
+        "http://imdb.com/title/tt0439572",
+        "https://www.rottentomatoes.com/m/the_flash_2022"
     ],
     "language": "Enska",
     "image_urls": [
@@ -877,6 +829,170 @@
             "url": "https://kvikmyndir.is/images/poster/1687812292688_ho00001632-1688653234.jpeg",
             "path": "full/b559b0186c9b364170efac8230d9917a644eca66.jpg",
             "checksum": "1dbf6b4b90d0f14dc7197f19342ca7b3",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "The Little Mermaid",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16181,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16181_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16181",
+    "description": "Unga og ævintýragjarna hafmeyjan Ariel gerir samning við nornina Ursulu um skipti á fagurri söngrödd sinni fyrir mennska fótleggi svo hún geti kannað heiminn ofansjávar og stigið í vænginn við prinsinn Eric.",
+    "genres": [
+        "Ævintýri",
+        "Fjölskylda"
+    ],
+    "duration_in_mins": 135,
+    "rating_urls": [
+        "http://imdb.com/title/tt5971474",
+        "https://www.rottentomatoes.com/m/the_little_mermaid_2023"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16181_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-14T14:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/362084/",
+            "hall": "Salur 3",
+            "tags": []
+        },
+        {
+            "time": "2023-07-14T18:40:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/362278/",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=kpGo2_d3oYE",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16181_500.jpg",
+            "path": "full/dd04bc9817a943500cfb5f4bc845b19404e00941.jpg",
+            "checksum": "b61f4b885dbbf8cd2826f40e0050e5d5",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Ruby Gillman, Teenage Kraken",
+    "alt_title": "Ruby Gillman: Táningssæskrímslið",
+    "kvikmyndir_is_id": 16100,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16100",
+    "description": "Hin sextán ára gamla Ruby Gillman kemst að því að hún tilheyrir goðsagnakenndri neðansjávar konungsfjölskyldu risasjóskrímsla. Örlög hennar breytast við þetta og verða meiri og stærri en hún gat nokkurn tímann gert sér í hugarlund.",
+    "genres": [
+        "Spenna",
+        "Ævintýri",
+        "Teiknað"
+    ],
+    "duration_in_mins": 90,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/ruby_gillman_teenage_kraken",
+        "http://imdb.com/title/tt27155038"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16100_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-07-14T12:20:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/362402/",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-14T14:20:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/362401/",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-14T13:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/362189/",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-14T15:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/362191/",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-14T17:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/362190/",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-14T15:30:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/767111/",
+            "hall": "Salur A",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-14T15:00:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=100138&visLang=1",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-14T17:10:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=100140&visLang=1",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-07-14T17:00:00",
+            "cinema": "Sambíóin Keflavík",
+            "purchase_url": "http://www.sambio.is/websales/show/362948/",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=iAMKwDsfUeU",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
+            "path": "full/6c311204eb14a6556d33b55b479d35b044a9912b.jpg",
+            "checksum": "c40db0db309dc66b3c5b0a6a78bbe16c",
             "status": "downloaded"
         }
     ]
@@ -1072,20 +1188,6 @@
         },
         {
             "time": "2023-07-14T17:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/767109/",
-            "hall": "Salur A",
-            "tags": []
-        },
-        {
-            "time": "2023-07-14T20:40:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/767110/",
-            "hall": "Salur A",
-            "tags": []
-        },
-        {
-            "time": "2023-07-14T17:30:00",
             "cinema": "Sambíóin Akureyri",
             "purchase_url": "http://www.sambio.is/websales/show/363128/",
             "hall": "Salur 2",
@@ -1096,6 +1198,20 @@
             "cinema": "Sambíóin Akureyri",
             "purchase_url": "http://www.sambio.is/websales/show/363127/",
             "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-07-14T17:30:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/767109/",
+            "hall": "Salur A",
+            "tags": []
+        },
+        {
+            "time": "2023-07-14T20:40:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/767110/",
+            "hall": "Salur A",
             "tags": []
         },
         {
@@ -1112,122 +1228,6 @@
             "url": "https://kvikmyndir.is/images/poster/1684983_500-1684746754.jpg",
             "path": "full/4ba72971d167f45616699ae672be849a5dc1d7f8.jpg",
             "checksum": "f160f114068d15c137683adbe2fd9cb1",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Ruby Gillman, Teenage Kraken",
-    "alt_title": "Ruby Gillman: Táningssæskrímslið",
-    "kvikmyndir_is_id": 16100,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16100",
-    "description": "Hin sextán ára gamla Ruby Gillman kemst að því að hún tilheyrir goðsagnakenndri neðansjávar konungsfjölskyldu risasjóskrímsla. Örlög hennar breytast við þetta og verða meiri og stærri en hún gat nokkurn tímann gert sér í hugarlund.",
-    "genres": [
-        "Spenna",
-        "Ævintýri",
-        "Teiknað"
-    ],
-    "duration_in_mins": 90,
-    "rating_urls": [
-        "http://imdb.com/title/tt27155038",
-        "https://www.rottentomatoes.com/m/ruby_gillman_teenage_kraken"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16100_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-07-14T12:20:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/362402/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-14T14:20:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/362401/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-14T13:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/362189/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-14T15:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/362191/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-14T17:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/362190/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-14T15:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/767111/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-14T15:00:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=100138&visLang=1",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-14T17:10:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=100140&visLang=1",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-07-14T17:00:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/362948/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=iAMKwDsfUeU",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
-            "path": "full/6c311204eb14a6556d33b55b479d35b044a9912b.jpg",
-            "checksum": "c40db0db309dc66b3c5b0a6a78bbe16c",
             "status": "downloaded"
         }
     ]
