@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { Canvas, Layer, type Render } from 'svelte-canvas'
 
-	let render: Render
-	$: render = ({ context, width, height }) => {
+	const render: Render = ({ context, width, height }) => {
 		class Particle {
 			x: number
 			y: number
@@ -86,22 +85,14 @@
 		createParticles()
 		animateParticles()
 	}
-	export let width: number = 640
-	export let height: number = 640
-	export let number_of_particles: number = 480
+
+	export let width = 640
+	export let height = 640
+	export let number_of_particles = 480
 </script>
 
-<div class="background" style="width: {width}px; height: {height}px; z-index: -100;">
-	<Canvas {width} {height} style="z-index: -2;">
+<div class="fixed top-0 left-0 blur-[0.5px] w-[{width}px] h-[{height}px] -z-50">
+	<Canvas {width} {height}>
 		<Layer {render} />
 	</Canvas>
 </div>
-
-<style>
-	.background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		filter: blur(0.5px);
-	}
-</style>
