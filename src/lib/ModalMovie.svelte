@@ -1,15 +1,17 @@
 <script lang="ts">
 	import Showtimes from '$lib/Showtimes.svelte'
-	import type { Movie } from '$lib/schemas'
+	import { type Movie, type Showtime } from '$lib/schemas'
 
 	export let today: string
-	export let movie: Omit<Movie, 'showtimes'> & { showtimes: [string, Movie['showtimes']][] }
+	export let selected_movie: Omit<Movie, 'showtimes'> & { showtimes: [string, Showtime[]] }
 
-	$: ({ description, trailer_url, title, showtimes, imdb } = movie)
+	$: ({ description, trailer_url, title, showtimes, imdb } = selected_movie)
+	export let movie_title
+	export let movie_description
 </script>
 
-<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">{title}</h3>
-<div class="mt-2 text-sm mb-4 text-neutral-300">
+<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200" melt={$movie_title}>{title}</h3>
+<div class="mt-2 text-sm mb-4 text-neutral-300" melt={$movie_description}>
 	<p class="mb-4 text-neutral-400">{description}</p>
 	<div class="flex group gap-4 items-center">
 		<a

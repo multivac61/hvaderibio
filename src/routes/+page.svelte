@@ -1,13 +1,24 @@
 <script lang="ts">
-	import { browser } from '$app/environment'
+	import '../app.postcss'
+
 	import CinemaTab from '$lib/CinemaTab.svelte'
 	import Dust from '$lib/Dust.svelte'
 	import ModalMovie from '$lib/ModalMovie.svelte'
-	import Movie from '$lib/Movie.svelte'
-	import { group_by, in_range, to_float } from '$lib/util'
+	import { group_by, in_range, to_float, flyAndScale } from '$lib/util'
 	import { onMount } from 'svelte'
-	import { createDialog } from 'svelte-headlessui'
-	import { lock, unlock } from 'tua-body-scroll-lock'
+
+	import { createDialog } from '@melt-ui/svelte'
+	const { trigger, portal, overlay, content, title, description, close, open } = createDialog()
+	const {
+		trigger: movie_trigger,
+		portal: movie_portal,
+		overlay: movie_overlay,
+		content: movie_content,
+		title: movie_title,
+		description: movie_description,
+		close: movie_close,
+		open: movie_open
+	} = createDialog()
 
 	export let data
 
@@ -18,7 +29,7 @@
 		from = Math.min(21, new Date().getHours() - 1)
 	})
 
-	let movie: (typeof filtered_cinemas_showtimes)[0] | null = null
+	let selected_movie: (typeof filtered_cinemas_showtimes)[0] | undefined
 
 	const all_cinemas = [
 		...new Set(
@@ -48,7 +59,7 @@
 			)
 		}))
 
-	let capital_region_cinemas = all_cinemas.filter((name) =>
+	const capital_region_cinemas = all_cinemas.filter((name) =>
 		[
 			'Bíó Paradís',
 			'Háskólabíó',
@@ -60,41 +71,15 @@
 		].includes(name)
 	)
 
-	let all_choices = all_cinemas.map((name) => [name, [name]] as const)
+	const all_choices = all_cinemas.map((name) => [name, [name]] as const)
 
-	let group_choices = [
+	const group_choices = [
 		['Öll kvikmyndahús', all_cinemas],
 		['Höfuðborgarsvæðið', capital_region_cinemas]
 	] as const
 
 	let selected_choice: string = group_choices[1][0]
 	let selected_cinemas = capital_region_cinemas
-
-	let movie_dialog = createDialog({ label: 'Movie dialog' })
-	let about_dialog = createDialog({ label: 'Um okkur' })
-
-	$: if (browser)
-		document.documentElement.classList.toggle(
-			'noscroll',
-			$movie_dialog.expanded || $about_dialog.expanded
-		)
-	let movie_dialog_scroll: HTMLElement
-	$: if (browser && movie_dialog_scroll) {
-		if ($movie_dialog.expanded) {
-			lock(movie_dialog_scroll)
-		} else {
-			unlock(movie_dialog_scroll)
-		}
-	}
-
-	let about_dialog_scroll: HTMLElement
-	$: if (browser && about_dialog_scroll) {
-		if ($about_dialog.expanded) {
-			lock(about_dialog_scroll)
-		} else {
-			unlock(about_dialog_scroll)
-		}
-	}
 
 	let width: number
 	let height: number
@@ -109,8 +94,7 @@
 		</div>
 		<h1>
 			<button
-				on:click|preventDefault={about_dialog.open}
-				on:touchstart|preventDefault={about_dialog.open}
+				melt={$trigger}
 				class="font-black text-4xl sm:text-6xl uppercase hover:text-yellow-500"
 			>
 				Hvað er í <span
@@ -139,37 +123,41 @@
 <div
 	class="mb-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] z-40"
 >
-	{#each filtered_cinemas_showtimes as _movie (_movie.title)}
-		<Movie
-			movie={_movie}
+	{#each filtered_cinemas_showtimes as movie (movie.title)}
+		<button
 			on:click={() => {
-				movie = _movie
-				movie_dialog.open()
+				selected_movie = movie
 			}}
-		/>
+			melt={$movie_trigger}
+		>
+			<img
+				src={`posters/${movie.images[0].path}`}
+				title={movie.title}
+				alt={movie.title}
+				class="object-fill aspect-[2/3] rounded-lg shadow-2xl sm:w-[min(100%,360px)] sm:hover:scale-105 sm:hover:z-50 sm:transition-all"
+			/>
+		</button>
 	{/each}
 </div>
 
-{#if $movie_dialog.expanded}
+{#if $movie_open && selected_movie}
 	<div
 		class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center transition-opacity"
+		use:movie_portal
 	>
 		<div
 			class="relative rounded-2xl bg-neutral-950 m-6 shadow-xl screen-height w-[min(100vw,640px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
-			bind:this={movie_dialog_scroll}
+			melt={$movie_overlay}
 		>
-			<div use:movie_dialog.modal>
-				{#if movie}
-					<ModalMovie {movie} today={data.today} />
-				{/if}
+			<div melt={$movie_content}>
+				<ModalMovie {selected_movie} today={data.today} {movie_title} {movie_description} />
 				<div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
 					<div
 						class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
 					/>
 					<button
 						class="absolute group w-auto bottom-0 inset-x-0 sm:bottom-4 sm:inset-x-0 z-50 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900"
-						on:click|preventDefault={movie_dialog.close}
-						on:touchstart|preventDefault={movie_dialog.close}
+						melt={$movie_close}
 					>
 						<span
 							class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"
@@ -198,82 +186,92 @@
 	</select>
 </div>
 
-{#if $about_dialog.expanded}
-	<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
-		<div
-			class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,640px)] overflow-y-auto p-4 sm:p-8"
-			bind:this={about_dialog_scroll}
-		>
-			<div use:about_dialog.modal>
-				<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200">Um okkur 🍿</h3>
-				<div class="[&_a]:underline mt-2 text-sm mb-4 text-neutral-400">
-					<p class="pb-4">
-						Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
-							class="hover:text-neutral-100"
-							target="_blank"
-							rel="noopener noreferrer"
-							href="https://hugihlynsson.com">Huga Hlynssyni</a
-						>. Núverandi útgáfa útfærð af
-						<a
-							class="hover:text-neutral-100"
-							href="https://twitter.com/olafurbogason"
-							target="_blank"
-							rel="noopener noreferrer">Ólafi Bjarka Bogasyni</a
-						>
-						og
-						<a
-							class="hover:text-neutral-100"
-							target="_blank"
-							rel="noopener noreferrer"
-							href="https://twitter.com/jokull">Jökli Sólberg</a
-						>.
-					</p>
-					<p class="pb-10">
-						Gögn eru fengin af <a
-							class="hover:text-neutral-100"
-							target="_blank"
-							rel="noopener noreferrer"
-							href="https://kvikmyndir.is">kvikmyndir.is</a
-						>. Hugbúnaður er aðgengilegur á
-						<a
-							class="hover:text-neutral-100"
-							href="https://github.com/multivac61/hvaderibio"
-							target="_blank"
-							rel="noopener noreferrer">GitHub</a
-						>
-						þar sem vel er tekið á móti athugasemdum og aðstoð.
-					</p>
-					<a
-						class="mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-						target="_blank"
-						rel="noopener noreferrer"
-						href="https://www.youtube.com/watch?v=v-u2NMzaduE"
-					>
-						<span class="inline-flex items-center">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								width="12"
-								height="12"
-								class="fill-current"
+<div use:portal>
+	{#if $open}
+		<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
+			<div
+				class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,640px)] overflow-y-auto p-4 sm:p-8"
+				melt={$overlay}
+				transition:flyAndScale={{
+					duration: 150,
+					y: 8,
+					start: 0.96
+				}}
+			>
+				<div melt={$content}>
+					<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200" melt={$title}>
+						Um okkur 🍿
+					</h3>
+					<div class="[&_a]:underline mt-2 text-sm mb-4 text-neutral-400" melt={$description}>
+						<p class="pb-4">
+							Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
+								class="hover:text-neutral-100"
+								target="_blank"
+								rel="noopener noreferrer"
+								href="https://hugihlynsson.com">Huga Hlynssyni</a
+							>. Núverandi útgáfa útfærð af
+							<a
+								class="hover:text-neutral-100"
+								href="https://twitter.com/olafurbogason"
+								target="_blank"
+								rel="noopener noreferrer">Ólafi Bjarka Bogasyni</a
 							>
-								<path d="M3 22V2L21 12L3 22Z" />
-							</svg>
-							<span class="ml-2 text-sm">Góða skemmtun</span>
-						</span>
-					</a>
+							og
+							<a
+								class="hover:text-neutral-100"
+								target="_blank"
+								rel="noopener noreferrer"
+								href="https://twitter.com/jokull">Jökli Sólberg</a
+							>.
+						</p>
+						<p class="pb-10">
+							Gögn eru fengin af <a
+								class="hover:text-neutral-100"
+								target="_blank"
+								rel="noopener noreferrer"
+								href="https://kvikmyndir.is">kvikmyndir.is</a
+							>. Hugbúnaður er aðgengilegur á
+							<a
+								class="hover:text-neutral-100"
+								href="https://github.com/multivac61/hvaderibio"
+								target="_blank"
+								rel="noopener noreferrer">GitHub</a
+							>
+							þar sem vel er tekið á móti athugasemdum og aðstoð.
+						</p>
+						<a
+							class="mb-4 space-y-4 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+							target="_blank"
+							rel="noopener noreferrer"
+							href="https://www.youtube.com/watch?v=v-u2NMzaduE"
+						>
+							<span class="inline-flex items-center">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+									width="12"
+									height="12"
+									class="fill-current"
+								>
+									<path d="M3 22V2L21 12L3 22Z" />
+								</svg>
+								<span class="ml-2 text-sm">Góða skemmtun</span>
+							</span>
+						</a>
+					</div>
+				</div>
+				<div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
+					<div
+						class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
+					/>
+					<button
+						class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
+						melt={$close}
+						on:click|preventDefault={$close}
+						on:touchstart|preventDefault={$close}>Loka</button
+					>
 				</div>
 			</div>
-			<div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
-				<div
-					class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none"
-				/>
-				<button
-					class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-					on:click|preventDefault={about_dialog.close}
-					on:touchstart|preventDefault={about_dialog.close}>Loka</button
-				>
-			</div>
 		</div>
-	</div>
-{/if}
+	{/if}
+</div>

@@ -1,8 +1,8 @@
 on:
   workflow_dispatch:
   schedule:
-    - cron:  '0 1 * * *' # Run every morning at 01:00. Ref https://crontab.guru/examples.html
-    - cron:  '0 10 * * *' # Run every morning at 10:00. Ref https://crontab.guru/examples.html
+    - cron: "0 1 * * *" # Run every morning at 01:00. Ref https://crontab.guru/examples.html
+    - cron: "0 10 * * *" # Run every morning at 10:00. Ref https://crontab.guru/examples.html
 name: Scrape Data
 permissions:
   contents: write
@@ -11,17 +11,17 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Build
-      run: pip install -r requirements.txt
+      - name: Build
+        run: pip install -r requirements.txt
 
-    - name: Scrape
-      run: |
-        rm -rf static/posters static/kvikmyndir_is.json
-        scrapy crawl kvikmyndir_is -O static/kvikmyndir_is.json
+      - name: Scrape
+        run: |
+          rm -rf static/posters static/kvikmyndir_is.json
+          scrapy crawl kvikmyndir_is -O static/kvikmyndir_is.json
 
-    - uses: mikeal/publish-to-github-action@master
-      env:
-        BRANCH_NAME: 'main' #optional defaults to master
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub sets this for you
+      - uses: mikeal/publish-to-github-action@master
+        env:
+          BRANCH_NAME: "main" #optional defaults to master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub sets this for you

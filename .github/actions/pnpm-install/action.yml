@@ -4,11 +4,11 @@
 #   - bench: https://gist.github.com/belgattitude/0ecd26155b47e7be1be6163ecfbb0f0b     #
 ########################################################################################
 
-name: 'Monorepo install (pnpm)'
-description: 'Run pnpm install'
+name: "Monorepo install (pnpm)"
+description: "Run pnpm install"
 
 runs:
-  using: 'composite'
+  using: "composite"
 
   steps:
     - uses: pnpm/action-setup@v2.2.4
@@ -48,4 +48,4 @@ runs:
       run: pnpm install --frozen-lockfile --prefer-offline
       env:
         # Other environment variables
-        HUSKY: '0' # By default do not run HUSKY install
+        HUSKY: "0" # By default do not run HUSKY install
