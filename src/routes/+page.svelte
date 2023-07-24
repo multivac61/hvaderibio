@@ -8,7 +8,16 @@
 	import { onMount } from 'svelte'
 
 	import { createDialog } from '@melt-ui/svelte'
-	const { trigger, portal, overlay, content, title, description, close, open } = createDialog()
+	const {
+		trigger: about_trigger,
+		portal: about_portal,
+		overlay: about_overlay,
+		content: about_content,
+		title: about_title,
+		description: about_description,
+		close: about_close,
+		open: about_open
+	} = createDialog()
 	const {
 		trigger: movie_trigger,
 		portal: movie_portal,
@@ -94,7 +103,7 @@
 		</div>
 		<h1>
 			<button
-				melt={$trigger}
+				melt={$about_trigger}
 				class="font-black text-4xl sm:text-6xl uppercase hover:text-yellow-500"
 			>
 				Hvað er í <span
@@ -148,6 +157,11 @@
 		<div
 			class="relative rounded-2xl bg-neutral-950 m-6 shadow-xl screen-height w-[min(100vw,640px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
 			melt={$movie_overlay}
+			transition:flyAndScale={{
+				duration: 150,
+				y: 8,
+				start: 0.96
+			}}
 		>
 			<div melt={$movie_content}>
 				<ModalMovie {selected_movie} today={data.today} {movie_title} {movie_description} />
@@ -186,23 +200,23 @@
 	</select>
 </div>
 
-<div use:portal>
-	{#if $open}
+<div use:about_portal>
+	{#if $about_open}
 		<div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
 			<div
 				class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,640px)] overflow-y-auto p-4 sm:p-8"
-				melt={$overlay}
+				melt={$about_overlay}
 				transition:flyAndScale={{
 					duration: 150,
 					y: 8,
 					start: 0.96
 				}}
 			>
-				<div melt={$content}>
-					<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200" melt={$title}>
+				<div melt={$about_content}>
+					<h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200" melt={$about_title}>
 						Um okkur 🍿
 					</h3>
-					<div class="[&_a]:underline mt-2 text-sm mb-4 text-neutral-400" melt={$description}>
+					<div class="[&_a]:underline mt-2 text-sm mb-4 text-neutral-400" melt={$about_description}>
 						<p class="pb-4">
 							Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
 								class="hover:text-neutral-100"
@@ -266,9 +280,7 @@
 					/>
 					<button
 						class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-						melt={$close}
-						on:click|preventDefault={$close}
-						on:touchstart|preventDefault={$close}>Loka</button
+						melt={$about_close}>Loka</button
 					>
 				</div>
 			</div>
