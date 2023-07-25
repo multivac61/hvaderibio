@@ -14,17 +14,7 @@
   <div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center transition-opacity" use:portal>
     <div
       class="relative rounded-2xl bg-neutral-950 m-6 shadow-xl screen-height w-[min(100vw,640px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
-      melt={$overlay}
-      in:flyAndScale={{
-        duration: 150,
-        y: 0,
-        start: 0.96,
-      }}
-      out:flyAndScale={{
-        duration: 150,
-        y: 0,
-        start: 0.96,
-      }}>
+      melt={$overlay}>
       <div melt={$content}>
         <h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200" melt={$title}>{selected_movie.title}</h3>
         <div class="mt-2 text-sm mb-4 text-neutral-300" melt={$description}>
