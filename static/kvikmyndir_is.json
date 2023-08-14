@@ -15,8 +15,8 @@
     ],
     "duration_in_mins": 135,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/gran_turismo_based_on_a_true_story",
-        "http://imdb.com/title/tt4495098"
+        "http://imdb.com/title/tt4495098",
+        "https://www.rottentomatoes.com/m/gran_turismo_based_on_a_true_story"
     ],
     "language": "Enska",
     "image_urls": [
@@ -124,47 +124,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/1708178_500-1691587575.jpg",
             "path": "full/b169dcc27cca1d0c506ae956c576e3d408605fb2.jpg",
-            "checksum": "e7122d5afacb6e8e000e740b2763f086",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Fædre og mødre",
-    "alt_title": "Feður og mæður",
-    "kvikmyndir_is_id": 16166,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/16166_500.jpg",
-    "content_rating_in_years": 0,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16166",
-    "description": "Hér er fjallað um hjónin Piv og Ulrik sem þurfa að feta sig í gegnum stigveldi, samkeppni og duldar áætlanir í nýja skóla dóttur sinnar, meðal annars í vinsælli útilegu skólans.",
-    "genres": [
-        "Gaman",
-        "Drama"
-    ],
-    "duration_in_mins": 97,
-    "rating_urls": [
-        "http://imdb.com/title/tt15964414"
-    ],
-    "language": "Danska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16166_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-14T19:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3178",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=rfII6uPjUUA",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16166_500.jpg",
-            "path": "full/c960ca9e737fe3144f8574d30215f10147d516f5.jpg",
-            "checksum": "39e3a919a082aacc875550284e5ff75e",
+            "checksum": "21332aed7690639abbe1aca88cb2e4f5",
             "status": "downloaded"
         }
     ]
@@ -280,18 +240,18 @@
         {
             "time": "2023-08-14T17:40:00",
             "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/364206/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-08-14T17:40:00",
-            "cinema": "Sambíóin Álfabakka",
             "purchase_url": "http://www.sambio.is/websales/show/364170/",
             "hall": "Salur 1",
             "tags": [
                 "ÍSL TAL"
             ]
+        },
+        {
+            "time": "2023-08-14T17:40:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/364206/",
+            "hall": "Salur 2",
+            "tags": []
         },
         {
             "time": "2023-08-14T20:00:00",
@@ -449,7 +409,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16099_500.jpg",
             "path": "full/6a01b068935107ab283d3dd319528cdce106d357.jpg",
-            "checksum": "30e43cca923d6d5a692c1847d9d29c06",
+            "checksum": "ef1aa6e11f349055ba0686324de3c7df",
             "status": "downloaded"
         }
     ]
@@ -511,8 +471,8 @@
     ],
     "duration_in_mins": 131,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/sound_of_freedom",
-        "http://imdb.com/title/tt7599146"
+        "http://imdb.com/title/tt7599146",
+        "https://www.rottentomatoes.com/m/sound_of_freedom"
     ],
     "language": "Enska",
     "image_urls": [
@@ -532,7 +492,48 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16351_500.jpg",
             "path": "full/59fca1faec469a41c79efe73e6c80302af906707.jpg",
-            "checksum": "6d4f1058b27d86b2153340d663f755cd",
+            "checksum": "706e44911dcc0082b26d60658124823d",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Asteroid City",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16090,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16090",
+    "description": "Myndin gerist í skálduðum bandarískum eyðimerkurbæ árið 1955. Dagskrá stjörnuskoðunarráðstefnu unglinga fær óvænta truflun af heimssögulegum atburðum.",
+    "genres": [
+        "Gaman",
+        "Rómantík"
+    ],
+    "duration_in_mins": 104,
+    "rating_urls": [
+        "http://imdb.com/title/tt14230388",
+        "https://www.rottentomatoes.com/m/asteroid_city"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16090_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-14T16:45:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3163",
+            "hall": "Salur 1",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=9FXCSXuGTF4",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
+            "path": "full/fe02bf23b5af26c4378cf315842a398e5eb1ddc0.jpg",
+            "checksum": "cea3ab25675e749453219a403b63c09f",
             "status": "downloaded"
         }
     ]
@@ -579,47 +580,6 @@
     ]
 },
 {
-    "title": "Asteroid City",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16090,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16090",
-    "description": "Myndin gerist í skálduðum bandarískum eyðimerkurbæ árið 1955. Dagskrá stjörnuskoðunarráðstefnu unglinga fær óvænta truflun af heimssögulegum atburðum.",
-    "genres": [
-        "Gaman",
-        "Rómantík"
-    ],
-    "duration_in_mins": 104,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/asteroid_city",
-        "http://imdb.com/title/tt14230388"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16090_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-14T16:45:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3163",
-            "hall": "Salur 1",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=9FXCSXuGTF4",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
-            "path": "full/fe02bf23b5af26c4378cf315842a398e5eb1ddc0.jpg",
-            "checksum": "ec0c249bc78edf6917fbb845a8ade32a",
-            "status": "downloaded"
-        }
-    ]
-},
-{
     "title": "You Won't Be Alone",
     "alt_title": "",
     "kvikmyndir_is_id": 16307,
@@ -635,8 +595,8 @@
     ],
     "duration_in_mins": 108,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/you_wont_be_alone",
-        "http://imdb.com/title/tt8296030"
+        "http://imdb.com/title/tt8296030",
+        "https://www.rottentomatoes.com/m/you_wont_be_alone"
     ],
     "language": "Enska",
     "image_urls": [
@@ -656,7 +616,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16307_500.jpg",
             "path": "full/2bf6929b318547ba68d3280782a988b94d7565b6.jpg",
-            "checksum": "c0b02e601de8302ef59cd14ed87e2e48",
+            "checksum": "64ea730056213714c54ff22227c11e34",
             "status": "downloaded"
         }
     ]
@@ -715,8 +675,8 @@
     ],
     "duration_in_mins": 105,
     "rating_urls": [
-        "http://imdb.com/title/tt16378298",
-        "https://www.rottentomatoes.com/m/meet_me_in_the_bathroom"
+        "https://www.rottentomatoes.com/m/meet_me_in_the_bathroom",
+        "http://imdb.com/title/tt16378298"
     ],
     "language": "Enska",
     "image_urls": [
@@ -737,6 +697,156 @@
             "url": "https://kvikmyndir.is/images/poster/16338_500.jpg",
             "path": "full/4c126497b9f8e3ca741f30381270b7badd71e4be.jpg",
             "checksum": "2b8192b404b367d93380498d1ccd0fe5",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Fædre og mødre",
+    "alt_title": "Feður og mæður",
+    "kvikmyndir_is_id": 16166,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/16166_500.jpg",
+    "content_rating_in_years": 0,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16166",
+    "description": "Hér er fjallað um hjónin Piv og Ulrik sem þurfa að feta sig í gegnum stigveldi, samkeppni og duldar áætlanir í nýja skóla dóttur sinnar, meðal annars í vinsælli útilegu skólans.",
+    "genres": [
+        "Gaman",
+        "Drama"
+    ],
+    "duration_in_mins": 97,
+    "rating_urls": [
+        "http://imdb.com/title/tt15964414"
+    ],
+    "language": "Danska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16166_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-14T19:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3178",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=rfII6uPjUUA",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16166_500.jpg",
+            "path": "full/c960ca9e737fe3144f8574d30215f10147d516f5.jpg",
+            "checksum": "72dd0a04c7d607f25288de5e382d96c4",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Indiana Jones and the Dial of Destiny",
+    "alt_title": "",
+    "kvikmyndir_is_id": 15017,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/1684983_500-1684746754.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=15017",
+    "description": "Indinana Jones nálgast eftirlaunaaldur og reynir að passa inn í heim sem virðist vera orðinn honum framandi. En þegar gamall óvinur birtist þá þarf hetjan okkar að taka fram svipuna og hattinn til að koma í veg fyrir að fornir og kraftmiklir helgigripir lendi í röngum höndum.",
+    "genres": [
+        "Spenna",
+        "Ævintýri"
+    ],
+    "duration_in_mins": 154,
+    "rating_urls": [
+        "http://imdb.com/title/tt1462764",
+        "https://www.rottentomatoes.com/m/indiana_jones_5"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/1684983_500-1684746754.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-14T15:00:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/364394/",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-08-14T18:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/364120/",
+            "hall": "Salur B",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ZfVYgWYaHmE",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/1684983_500-1684746754.jpg",
+            "path": "full/4ba72971d167f45616699ae672be849a5dc1d7f8.jpg",
+            "checksum": "f160f114068d15c137683adbe2fd9cb1",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Ruby Gillman, Teenage Kraken",
+    "alt_title": "Ruby Gillman: Táningssæskrímslið",
+    "kvikmyndir_is_id": 16100,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16100",
+    "description": "Hin sextán ára gamla Ruby Gillman kemst að því að hún tilheyrir goðsagnakenndri neðansjávar konungsfjölskyldu risasjóskrímsla. Örlög hennar breytast við þetta og verða meiri og stærri en hún gat nokkurn tímann gert sér í hugarlund.",
+    "genres": [
+        "Spenna",
+        "Ævintýri",
+        "Teiknað"
+    ],
+    "duration_in_mins": 90,
+    "rating_urls": [
+        "http://imdb.com/title/tt27155038",
+        "https://www.rottentomatoes.com/m/ruby_gillman_teenage_kraken"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16100_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-14T12:00:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/364230/",
+            "hall": "Salur 3",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-08-14T13:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/364041/",
+            "hall": "Salur A",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-08-14T15:50:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/770632/",
+            "hall": "Salur B",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=iAMKwDsfUeU",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
+            "path": "full/6c311204eb14a6556d33b55b479d35b044a9912b.jpg",
+            "checksum": "c40db0db309dc66b3c5b0a6a78bbe16c",
             "status": "downloaded"
         }
     ]
@@ -789,117 +899,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/15016_500.jpg",
             "path": "full/e98cfe7e6bb338dfc6feafd14ce3a8a1204ff3df.jpg",
-            "checksum": "d2201ca759150d52be9223b60129b1b2",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Indiana Jones and the Dial of Destiny",
-    "alt_title": "",
-    "kvikmyndir_is_id": 15017,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/1684983_500-1684746754.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15017",
-    "description": "Indinana Jones nálgast eftirlaunaaldur og reynir að passa inn í heim sem virðist vera orðinn honum framandi. En þegar gamall óvinur birtist þá þarf hetjan okkar að taka fram svipuna og hattinn til að koma í veg fyrir að fornir og kraftmiklir helgigripir lendi í röngum höndum.",
-    "genres": [
-        "Spenna",
-        "Ævintýri"
-    ],
-    "duration_in_mins": 154,
-    "rating_urls": [
-        "http://imdb.com/title/tt1462764",
-        "https://www.rottentomatoes.com/m/indiana_jones_5"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/1684983_500-1684746754.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-14T15:00:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/364394/",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-08-14T18:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/364120/",
-            "hall": "Salur B",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=ZfVYgWYaHmE",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/1684983_500-1684746754.jpg",
-            "path": "full/4ba72971d167f45616699ae672be849a5dc1d7f8.jpg",
-            "checksum": "12ef0eef91b990af6886705140239869",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Ruby Gillman, Teenage Kraken",
-    "alt_title": "Ruby Gillman: Táningssæskrímslið",
-    "kvikmyndir_is_id": 16100,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16100",
-    "description": "Hin sextán ára gamla Ruby Gillman kemst að því að hún tilheyrir goðsagnakenndri neðansjávar konungsfjölskyldu risasjóskrímsla. Örlög hennar breytast við þetta og verða meiri og stærri en hún gat nokkurn tímann gert sér í hugarlund.",
-    "genres": [
-        "Spenna",
-        "Ævintýri",
-        "Teiknað"
-    ],
-    "duration_in_mins": 90,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/ruby_gillman_teenage_kraken",
-        "http://imdb.com/title/tt27155038"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16100_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-14T12:00:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/364230/",
-            "hall": "Salur 3",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-08-14T13:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/364041/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-08-14T15:50:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/770632/",
-            "hall": "Salur B",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=iAMKwDsfUeU",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
-            "path": "full/6c311204eb14a6556d33b55b479d35b044a9912b.jpg",
-            "checksum": "d41384833f55a78d6fe6c5a5591352b1",
+            "checksum": "a9d9b32f13d4da2a41df1ec40cabad76",
             "status": "downloaded"
         }
     ]
@@ -962,70 +962,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/13420_500.jpg",
             "path": "full/e28f59afd4ad5969cd029e6033b266f9e5dff8a0.jpg",
-            "checksum": "dbc155347144231dc401994253296173",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Haunted Mansion",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16245,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16245",
-    "description": "Einstæð móðir að nafni Gabbie ræður leiðsögumann, miðil, prest og sagnfræðing til að hjálpa sér að særa illa anda út úr húsi sem hún er nýbúin að kaupa sér.",
-    "genres": [
-        "Gaman",
-        "Drama",
-        "Fjölskylda"
-    ],
-    "duration_in_mins": 123,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/haunted_mansion_2023",
-        "http://imdb.com/title/tt1695843"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-14T14:00:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101225&visLang=1",
-            "hall": "Salur 5",
-            "tags": []
-        },
-        {
-            "time": "2023-08-14T19:30:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101236&visLang=1",
-            "hall": "Salur 5",
-            "tags": []
-        },
-        {
-            "time": "2023-08-14T15:20:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/364068/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-08-14T17:30:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/363285/",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=AjLKTz81bj8",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg",
-            "path": "full/046157701cfe0e7799c7d7aa96ce1c00cfa812db.jpg",
-            "checksum": "cf20d9aea88dd8172c538c771408fee1",
+            "checksum": "9b3c9e1eaa6dd583461c2940dd2d2386",
             "status": "downloaded"
         }
     ]
@@ -1087,7 +1024,70 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16361_500.jpg",
             "path": "full/c778c4a084d78004b7ed6bbbb870cfeb32e2e664.jpg",
-            "checksum": "febcd6cf17d9eac6c0f32a3278d93663",
+            "checksum": "94114c1cbdae7d47d6dc8031db42d79e",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Haunted Mansion",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16245,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16245",
+    "description": "Einstæð móðir að nafni Gabbie ræður leiðsögumann, miðil, prest og sagnfræðing til að hjálpa sér að særa illa anda út úr húsi sem hún er nýbúin að kaupa sér.",
+    "genres": [
+        "Gaman",
+        "Drama",
+        "Fjölskylda"
+    ],
+    "duration_in_mins": 123,
+    "rating_urls": [
+        "http://imdb.com/title/tt1695843",
+        "https://www.rottentomatoes.com/m/haunted_mansion_2023"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-14T14:00:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101225&visLang=1",
+            "hall": "Salur 5",
+            "tags": []
+        },
+        {
+            "time": "2023-08-14T19:30:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101236&visLang=1",
+            "hall": "Salur 5",
+            "tags": []
+        },
+        {
+            "time": "2023-08-14T15:20:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/364068/",
+            "hall": "Salur B",
+            "tags": []
+        },
+        {
+            "time": "2023-08-14T17:30:00",
+            "cinema": "Sambíóin Keflavík",
+            "purchase_url": "http://www.sambio.is/websales/show/363285/",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=AjLKTz81bj8",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg",
+            "path": "full/046157701cfe0e7799c7d7aa96ce1c00cfa812db.jpg",
+            "checksum": "f65dae79b530f223bac2a763ac732bc6",
             "status": "downloaded"
         }
     ]
@@ -1108,8 +1108,8 @@
     ],
     "duration_in_mins": 180,
     "rating_urls": [
-        "http://imdb.com/title/tt15398776",
-        "https://www.rottentomatoes.com/m/oppenheimer_2023"
+        "https://www.rottentomatoes.com/m/oppenheimer_2023",
+        "http://imdb.com/title/tt15398776"
     ],
     "language": "Enska",
     "image_urls": [
@@ -1178,7 +1178,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg",
             "path": "full/abe9135f83065e8170e5ed1aad4dd0eca9ca91b5.jpg",
-            "checksum": "8bf6e975ac1653b57bb8a029715310c8",
+            "checksum": "c339088c1da8b817d73f6005c1699509",
             "status": "downloaded"
         }
     ]
@@ -1276,7 +1276,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16277_500.jpg",
             "path": "full/af966025d6912860e0433d26a896cf5998540a5e.jpg",
-            "checksum": "44f5a2df35f4575d581409940a5df27b",
+            "checksum": "bfbc389d231c5da8ffc7f9ebb775a136",
             "status": "downloaded"
         }
     ]
@@ -1454,7 +1454,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/15054_500.jpg",
             "path": "full/84f8b73c4fbdd5c1b46d613bade1e980c760e509.jpg",
-            "checksum": "e6eced93149ac16a9d5a1064e23478ad",
+            "checksum": "d8e23e40b01f01f4775eedcf90ec89b6",
             "status": "downloaded"
         }
     ]
