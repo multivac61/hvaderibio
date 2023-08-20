@@ -181,7 +181,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/15054_500.jpg",
             "path": "full/84f8b73c4fbdd5c1b46d613bade1e980c760e509.jpg",
-            "checksum": "e6eced93149ac16a9d5a1064e23478ad",
+            "checksum": "d8e23e40b01f01f4775eedcf90ec89b6",
             "status": "downloaded"
         }
     ]
@@ -202,8 +202,8 @@
     ],
     "duration_in_mins": 127,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/blue_beetle",
-        "http://imdb.com/title/tt9362930"
+        "http://imdb.com/title/tt9362930",
+        "https://www.rottentomatoes.com/m/blue_beetle"
     ],
     "language": "Enska",
     "image_urls": [
@@ -227,15 +227,15 @@
         {
             "time": "2023-08-20T21:20:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/364689/",
-            "hall": "Salur 2",
+            "purchase_url": "http://www.sambio.is/websales/show/364721/",
+            "hall": "Ásberg",
             "tags": []
         },
         {
             "time": "2023-08-20T21:20:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/364721/",
-            "hall": "Ásberg",
+            "purchase_url": "http://www.sambio.is/websales/show/364689/",
+            "hall": "Salur 2",
             "tags": []
         },
         {
@@ -273,27 +273,6 @@
             "cinema": "Smárabíó",
             "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101301&visLang=1",
             "hall": "MAX",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T14:00:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771476/",
-            "hall": "Salur A",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T17:00:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771477/",
-            "hall": "Salur A",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T20:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771478/",
-            "hall": "Salur A",
             "tags": []
         },
         {
@@ -367,6 +346,27 @@
             "tags": []
         },
         {
+            "time": "2023-08-20T14:00:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771476/",
+            "hall": "Salur A",
+            "tags": []
+        },
+        {
+            "time": "2023-08-20T17:00:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771477/",
+            "hall": "Salur A",
+            "tags": []
+        },
+        {
+            "time": "2023-08-20T20:30:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771478/",
+            "hall": "Salur A",
+            "tags": []
+        },
+        {
             "time": "2023-08-20T15:20:00",
             "cinema": "Sambíóin Akureyri",
             "purchase_url": "http://www.sambio.is/websales/show/364940/",
@@ -393,7 +393,130 @@
         {
             "url": "https://kvikmyndir.is/images/poster/1708071_500-1691933464.jpg",
             "path": "full/e72f604d846f8b0b6052115e533f6907a644335d.jpg",
-            "checksum": "fc5265c713bab3f1be442b7748c1c8ab",
+            "checksum": "b2ae818052b1a03a44614b58371259b6",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Asteroid City",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16090,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16090",
+    "description": "Myndin gerist í skálduðum bandarískum eyðimerkurbæ árið 1955. Dagskrá stjörnuskoðunarráðstefnu unglinga fær óvænta truflun af heimssögulegum atburðum.",
+    "genres": [
+        "Gaman",
+        "Rómantík"
+    ],
+    "duration_in_mins": 104,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/asteroid_city",
+        "http://imdb.com/title/tt14230388"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16090_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-20T19:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3225",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=9FXCSXuGTF4",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
+            "path": "full/fe02bf23b5af26c4378cf315842a398e5eb1ddc0.jpg",
+            "checksum": "ec0c249bc78edf6917fbb845a8ade32a",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "You Won't Be Alone",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16307,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/16307_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16307",
+    "description": "Í einangruðu fjallaþorpi í Makedóníu á 19. öld er ungri stúlku rænt af fornum anda og breytt í norn.",
+    "genres": [
+        "Drama",
+        "Hrollvekja",
+        "Ævintýri"
+    ],
+    "duration_in_mins": 108,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/you_wont_be_alone",
+        "http://imdb.com/title/tt8296030"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16307_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-20T21:10:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3226",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=6-G39n2sCVU",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16307_500.jpg",
+            "path": "full/2bf6929b318547ba68d3280782a988b94d7565b6.jpg",
+            "checksum": "64ea730056213714c54ff22227c11e34",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Kysset",
+    "alt_title": "Kossinn",
+    "kvikmyndir_is_id": 16161,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/16161_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16161",
+    "description": "Myndin fylgir Antoni sem hefur það helsta markmið að klára þjálfun sína í riddaraliðinu. Á meðan á þjálfuninni stendur skipar hann sveitinni sinni að hjálpa auðmanni úr klípu og hittir í kjölfarið Edith dóttur hans sem lenti í slysi.",
+    "genres": [
+        "Rómantík",
+        "Drama"
+    ],
+    "duration_in_mins": 116,
+    "rating_urls": [
+        "http://imdb.com/title/tt15822942"
+    ],
+    "language": "Danska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16161_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-20T16:45:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3224",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=gkTdXrPWJsg",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16161_500.jpg",
+            "path": "full/ad54988aa5fe44ed40c0cdf1c6386cc70194207f.jpg",
+            "checksum": "f44a4aaf7224470846a37e6d2828df92",
             "status": "downloaded"
         }
     ]
@@ -455,8 +578,8 @@
     ],
     "duration_in_mins": 154,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/indiana_jones_5",
-        "http://imdb.com/title/tt1462764"
+        "http://imdb.com/title/tt1462764",
+        "https://www.rottentomatoes.com/m/indiana_jones_5"
     ],
     "language": "Enska",
     "image_urls": [
@@ -477,6 +600,47 @@
             "url": "https://kvikmyndir.is/images/poster/1684983_500-1684746754.jpg",
             "path": "full/4ba72971d167f45616699ae672be849a5dc1d7f8.jpg",
             "checksum": "12ef0eef91b990af6886705140239869",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Triangle of Sadness",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14411,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/1620508_500-1670761773.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14411",
+    "description": "Við fylgjumst með hinum ofurríku, þegar ungt par á uppleið í módel bransanum fær tækifæri til að dvelja á skemmtiferðaskipi þar sem dýr föt, yfirgengilegir málsverðir og stéttaskipting ræður ríkjum. En þegar skipið strandar og skipverjar flýja upp á eyju, þá breytist allt …",
+    "genres": [
+        "Gaman",
+        "Drama"
+    ],
+    "duration_in_mins": 147,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/triangle_of_sadness",
+        "http://imdb.com/title/tt7322224"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/1620508_500-1670761773.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-20T20:15:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3229",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=a9YxSJiOzKg",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/1620508_500-1670761773.jpg",
+            "path": "full/0bb7101abab42a57ea1a5d791f14a43711b74843.jpg",
+            "checksum": "d65844bbf265913cf9eb38825b7e76aa",
             "status": "downloaded"
         }
     ]
@@ -518,7 +682,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg",
             "path": "full/046157701cfe0e7799c7d7aa96ce1c00cfa812db.jpg",
-            "checksum": "cf20d9aea88dd8172c538c771408fee1",
+            "checksum": "f65dae79b530f223bac2a763ac732bc6",
             "status": "downloaded"
         }
     ]
@@ -557,89 +721,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16308_500.jpg",
             "path": "full/240e982b4f31ba1c28395e048cccb9bbee6f61a2.jpg",
-            "checksum": "f16a1693b2748865eebbd114f2e39402",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Triangle of Sadness",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14411,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/1620508_500-1670761773.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14411",
-    "description": "Við fylgjumst með hinum ofurríku, þegar ungt par á uppleið í módel bransanum fær tækifæri til að dvelja á skemmtiferðaskipi þar sem dýr föt, yfirgengilegir málsverðir og stéttaskipting ræður ríkjum. En þegar skipið strandar og skipverjar flýja upp á eyju, þá breytist allt …",
-    "genres": [
-        "Gaman",
-        "Drama"
-    ],
-    "duration_in_mins": 147,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/triangle_of_sadness",
-        "http://imdb.com/title/tt7322224"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/1620508_500-1670761773.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-20T20:15:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3229",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=a9YxSJiOzKg",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/1620508_500-1670761773.jpg",
-            "path": "full/0bb7101abab42a57ea1a5d791f14a43711b74843.jpg",
-            "checksum": "dfa2b3c1b089c86b6018958817843192",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Asteroid City",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16090,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16090",
-    "description": "Myndin gerist í skálduðum bandarískum eyðimerkurbæ árið 1955. Dagskrá stjörnuskoðunarráðstefnu unglinga fær óvænta truflun af heimssögulegum atburðum.",
-    "genres": [
-        "Gaman",
-        "Rómantík"
-    ],
-    "duration_in_mins": 104,
-    "rating_urls": [
-        "http://imdb.com/title/tt14230388",
-        "https://www.rottentomatoes.com/m/asteroid_city"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16090_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-20T19:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3225",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=9FXCSXuGTF4",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
-            "path": "full/fe02bf23b5af26c4378cf315842a398e5eb1ddc0.jpg",
-            "checksum": "cea3ab25675e749453219a403b63c09f",
+            "checksum": "234635dfb6a79017473ab73425152ef8",
             "status": "downloaded"
         }
     ]
@@ -686,48 +768,6 @@
     ]
 },
 {
-    "title": "You Won't Be Alone",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16307,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/16307_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16307",
-    "description": "Í einangruðu fjallaþorpi í Makedóníu á 19. öld er ungri stúlku rænt af fornum anda og breytt í norn.",
-    "genres": [
-        "Drama",
-        "Hrollvekja",
-        "Ævintýri"
-    ],
-    "duration_in_mins": 108,
-    "rating_urls": [
-        "http://imdb.com/title/tt8296030",
-        "https://www.rottentomatoes.com/m/you_wont_be_alone"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16307_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-20T21:10:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3226",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=6-G39n2sCVU",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16307_500.jpg",
-            "path": "full/2bf6929b318547ba68d3280782a988b94d7565b6.jpg",
-            "checksum": "64ea730056213714c54ff22227c11e34",
-            "status": "downloaded"
-        }
-    ]
-},
-{
     "title": "Elemental",
     "alt_title": "",
     "kvikmyndir_is_id": 15016,
@@ -743,8 +783,8 @@
     ],
     "duration_in_mins": 103,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/elemental_2023",
-        "http://imdb.com/title/tt15789038"
+        "http://imdb.com/title/tt15789038",
+        "https://www.rottentomatoes.com/m/elemental_2023"
     ],
     "language": "Enska",
     "image_urls": [
@@ -781,6 +821,54 @@
     ]
 },
 {
+    "title": "Meet Me in the Bathroom",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16338,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/16338_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16338",
+    "description": "Yfirgripsmikið ferðalag um tónlistarsenuna í New York, heimildarmynd sem fjallar um sprengingu í uppgangi indie hljómsveita í kringum aldamótin 2000. Hljómsveitir á borð við The Strokes, The Moldy Peaches, Yeah Yeah Yeahs og Interpol stálu senunni.",
+    "genres": [
+        "Tónlist",
+        "Heimildarmynd"
+    ],
+    "duration_in_mins": 105,
+    "rating_urls": [
+        "http://imdb.com/title/tt16378298",
+        "https://www.rottentomatoes.com/m/meet_me_in_the_bathroom"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16338_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-20T16:50:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3221",
+            "hall": "Salur 1",
+            "tags": []
+        },
+        {
+            "time": "2023-08-20T16:50:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3221",
+            "hall": "Salur 1",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=UgHN-YE7IPI",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16338_500.jpg",
+            "path": "full/4c126497b9f8e3ca741f30381270b7badd71e4be.jpg",
+            "checksum": "edd766ac7be3acd2d5d943aa373752d1",
+            "status": "downloaded"
+        }
+    ]
+},
+{
     "title": "Ruby Gillman, Teenage Kraken",
     "alt_title": "Ruby Gillman: Táningssæskrímslið",
     "kvikmyndir_is_id": 16100,
@@ -796,8 +884,8 @@
     ],
     "duration_in_mins": 90,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/ruby_gillman_teenage_kraken",
-        "http://imdb.com/title/tt27155038"
+        "http://imdb.com/title/tt27155038",
+        "https://www.rottentomatoes.com/m/ruby_gillman_teenage_kraken"
     ],
     "language": "Enska",
     "image_urls": [
@@ -828,96 +916,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16100_500.jpg",
             "path": "full/6c311204eb14a6556d33b55b479d35b044a9912b.jpg",
-            "checksum": "d41384833f55a78d6fe6c5a5591352b1",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Kysset",
-    "alt_title": "Kossinn",
-    "kvikmyndir_is_id": 16161,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/16161_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16161",
-    "description": "Myndin fylgir Antoni sem hefur það helsta markmið að klára þjálfun sína í riddaraliðinu. Á meðan á þjálfuninni stendur skipar hann sveitinni sinni að hjálpa auðmanni úr klípu og hittir í kjölfarið Edith dóttur hans sem lenti í slysi.",
-    "genres": [
-        "Rómantík",
-        "Drama"
-    ],
-    "duration_in_mins": 116,
-    "rating_urls": [
-        "http://imdb.com/title/tt15822942"
-    ],
-    "language": "Danska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16161_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-20T16:45:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3224",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=gkTdXrPWJsg",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16161_500.jpg",
-            "path": "full/ad54988aa5fe44ed40c0cdf1c6386cc70194207f.jpg",
-            "checksum": "f44a4aaf7224470846a37e6d2828df92",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Meg 2: The Trench",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16277,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16277_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16277",
-    "description": "Neðansjávarrannsóknarteymið fer ofaní myrkustu hyldýpi sjávar og berst þar við skelfilegar forsögulegar sjávarskepnur. Allt breytist þegar námuverkefni setur ferðina í uppnám. Nú þurfa þau á öllu sínu að halda til að lifa af.",
-    "genres": [
-        "Spenna",
-        "Hrollvekja",
-        "Ævintýri"
-    ],
-    "duration_in_mins": 116,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/meg_2_the_trench",
-        "http://imdb.com/title/tt9224104"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16277_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-20T20:00:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771485/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T22:20:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/364915/",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=dG91B3hHyY4",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16277_500.jpg",
-            "path": "full/af966025d6912860e0433d26a896cf5998540a5e.jpg",
-            "checksum": "44f5a2df35f4575d581409940a5df27b",
+            "checksum": "c40db0db309dc66b3c5b0a6a78bbe16c",
             "status": "downloaded"
         }
     ]
@@ -979,139 +978,56 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16361_500.jpg",
             "path": "full/c778c4a084d78004b7ed6bbbb870cfeb32e2e664.jpg",
-            "checksum": "febcd6cf17d9eac6c0f32a3278d93663",
+            "checksum": "94114c1cbdae7d47d6dc8031db42d79e",
             "status": "downloaded"
         }
     ]
 },
 {
-    "title": "Meet Me in the Bathroom",
+    "title": "Meg 2: The Trench",
     "alt_title": "",
-    "kvikmyndir_is_id": 16338,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/16338_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16338",
-    "description": "Yfirgripsmikið ferðalag um tónlistarsenuna í New York, heimildarmynd sem fjallar um sprengingu í uppgangi indie hljómsveita í kringum aldamótin 2000. Hljómsveitir á borð við The Strokes, The Moldy Peaches, Yeah Yeah Yeahs og Interpol stálu senunni.",
-    "genres": [
-        "Tónlist",
-        "Heimildarmynd"
-    ],
-    "duration_in_mins": 105,
-    "rating_urls": [
-        "http://imdb.com/title/tt16378298",
-        "https://www.rottentomatoes.com/m/meet_me_in_the_bathroom"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16338_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-08-20T16:50:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3221",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T16:50:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3221",
-            "hall": "Salur 1",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=UgHN-YE7IPI",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16338_500.jpg",
-            "path": "full/4c126497b9f8e3ca741f30381270b7badd71e4be.jpg",
-            "checksum": "2b8192b404b367d93380498d1ccd0fe5",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Oppenheimer",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14181,
+    "kvikmyndir_is_id": 16277,
     "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg",
+    "poster_url": "https://kvikmyndir.is/images/poster/16277_500.jpg",
     "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14181",
-    "description": "Sagan af bandaríska vísindamanninum J. Robert Oppenheimer og þætti hans í þróun kjarnorkusprengjunnar.",
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16277",
+    "description": "Neðansjávarrannsóknarteymið fer ofaní myrkustu hyldýpi sjávar og berst þar við skelfilegar forsögulegar sjávarskepnur. Allt breytist þegar námuverkefni setur ferðina í uppnám. Nú þurfa þau á öllu sínu að halda til að lifa af.",
     "genres": [
-        "Drama",
-        "Söguleg",
-        "Æviágrip"
+        "Spenna",
+        "Hrollvekja",
+        "Ævintýri"
     ],
-    "duration_in_mins": 180,
+    "duration_in_mins": 116,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/oppenheimer_2023",
-        "http://imdb.com/title/tt15398776"
+        "http://imdb.com/title/tt9224104",
+        "https://www.rottentomatoes.com/m/meg_2_the_trench"
     ],
     "language": "Enska",
     "image_urls": [
-        "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg"
+        "https://kvikmyndir.is/images/poster/16277_500.jpg"
     ],
     "showtimes": [
         {
-            "time": "2023-08-20T14:00:00",
+            "time": "2023-08-20T20:00:00",
             "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771483/",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771485/",
             "hall": "Salur B",
             "tags": []
         },
         {
-            "time": "2023-08-20T16:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771480/",
-            "hall": "AXL",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T14:50:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/364597/",
-            "hall": "Ásberg",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T21:00:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/364543/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T19:40:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/364951/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T20:10:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101426&visLang=1",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-08-20T21:00:00",
+            "time": "2023-08-20T22:20:00",
             "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/364882/",
-            "hall": "Salur 3",
+            "purchase_url": "http://www.sambio.is/websales/show/364915/",
+            "hall": "Salur 2",
             "tags": []
         }
     ],
-    "trailer_url": "https://www.youtube.com/watch?v=bK6ldnjE3Y0",
+    "trailer_url": "https://www.youtube.com/watch?v=dG91B3hHyY4",
     "images": [
         {
-            "url": "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg",
-            "path": "full/abe9135f83065e8170e5ed1aad4dd0eca9ca91b5.jpg",
-            "checksum": "8bf6e975ac1653b57bb8a029715310c8",
+            "url": "https://kvikmyndir.is/images/poster/16277_500.jpg",
+            "path": "full/af966025d6912860e0433d26a896cf5998540a5e.jpg",
+            "checksum": "bfbc389d231c5da8ffc7f9ebb775a136",
             "status": "downloaded"
         }
     ]
@@ -1195,7 +1111,91 @@
         {
             "url": "https://kvikmyndir.is/images/poster/1708178_500-1691587575.jpg",
             "path": "full/b169dcc27cca1d0c506ae956c576e3d408605fb2.jpg",
-            "checksum": "e7122d5afacb6e8e000e740b2763f086",
+            "checksum": "21332aed7690639abbe1aca88cb2e4f5",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Oppenheimer",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14181,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14181",
+    "description": "Sagan af bandaríska vísindamanninum J. Robert Oppenheimer og þætti hans í þróun kjarnorkusprengjunnar.",
+    "genres": [
+        "Drama",
+        "Söguleg",
+        "Æviágrip"
+    ],
+    "duration_in_mins": 180,
+    "rating_urls": [
+        "http://imdb.com/title/tt15398776",
+        "https://www.rottentomatoes.com/m/oppenheimer_2023"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-08-20T14:00:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771483/",
+            "hall": "Salur B",
+            "tags": []
+        },
+        {
+            "time": "2023-08-20T16:30:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/771480/",
+            "hall": "AXL",
+            "tags": []
+        },
+        {
+            "time": "2023-08-20T14:50:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/364597/",
+            "hall": "Ásberg",
+            "tags": []
+        },
+        {
+            "time": "2023-08-20T21:00:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/364543/",
+            "hall": "Salur 3",
+            "tags": []
+        },
+        {
+            "time": "2023-08-20T19:40:00",
+            "cinema": "Sambíóin Keflavík",
+            "purchase_url": "http://www.sambio.is/websales/show/364951/",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-08-20T20:10:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101426&visLang=1",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-08-20T21:00:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/364882/",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=bK6ldnjE3Y0",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg",
+            "path": "full/abe9135f83065e8170e5ed1aad4dd0eca9ca91b5.jpg",
+            "checksum": "c339088c1da8b817d73f6005c1699509",
             "status": "downloaded"
         }
     ]
@@ -1321,7 +1321,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16351_500.jpg",
             "path": "full/59fca1faec469a41c79efe73e6c80302af906707.jpg",
-            "checksum": "6d4f1058b27d86b2153340d663f755cd",
+            "checksum": "706e44911dcc0082b26d60658124823d",
             "status": "downloaded"
         }
     ]
@@ -1560,7 +1560,7 @@
         {
             "url": "https://kvikmyndir.is/images/poster/16099_500.jpg",
             "path": "full/6a01b068935107ab283d3dd319528cdce106d357.jpg",
-            "checksum": "30e43cca923d6d5a692c1847d9d29c06",
+            "checksum": "ef1aa6e11f349055ba0686324de3c7df",
             "status": "downloaded"
         }
     ]
