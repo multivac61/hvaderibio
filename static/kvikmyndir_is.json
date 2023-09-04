@@ -1,143 +1,70 @@
 [
 {
-    "title": "Teenage Mutant Ninja Turtles: Mutant Mayhem",
+    "title": "Sound of Freedom",
     "alt_title": "",
-    "kvikmyndir_is_id": 16099,
+    "kvikmyndir_is_id": 16351,
     "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16099_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16099",
-    "description": "Eftir að hafa verið í mörg ár í felum í holræsunum fyrir heimi mannanna þá ákveða skjaldbökubræður að fara upp á yfirborðið og reyna að ávinna sér ást og aðdáun borgarbúa í New York og verða á sama tíma viðurkenndir sem venjulegir unglingar sem vinna hetjudáðir. Ný vinkona þeirra April O'Neil hjálpar þeim að vinna bug á alræmdu glæpagengi...",
+    "poster_url": "https://kvikmyndir.is/images/poster/16351_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16351",
+    "description": "Hin ótrúlega saga af Tim Ballard, fyrrum fulltrúa í leyniþjónustu Bandaríkjanna. Hann hættir í vinnunni til að helga líf sitt því að bjarga börnum úr klóm alþjóðlegs mansalshring djúpt inni í frumskógum Kólumbíu. Hann leggur allt í sölurnar og þarf að beita mikilli útsjónarsemi til bjarga fórnarlömbunum frá grimmum örlögum sem eru verri en dauðinn...",
     "genres": [
         "Spenna",
-        "Ævintýri",
-        "Teiknað"
+        "Drama",
+        "Æviágrip"
     ],
-    "duration_in_mins": 99,
+    "duration_in_mins": 131,
     "rating_urls": [
-        "http://imdb.com/title/tt8589698",
-        "https://www.rottentomatoes.com/m/teenage_mutant_ninja_turtles_mutant_mayhem"
+        "https://www.rottentomatoes.com/m/sound_of_freedom",
+        "http://imdb.com/title/tt7599146"
     ],
     "language": "Enska",
     "image_urls": [
-        "https://kvikmyndir.is/images/poster/16099_500.jpg"
+        "https://kvikmyndir.is/images/poster/16351_500.jpg"
     ],
     "showtimes": [
         {
-            "time": "2023-09-03T11:20:00",
+            "time": "2023-09-04T18:40:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365911/",
-            "hall": "Salur 3",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T13:40:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365909/",
-            "hall": "Salur 3",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T12:40:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365754/",
-            "hall": "Salur 1",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365752/",
-            "hall": "Salur 1",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T17:20:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365753/",
-            "hall": "Salur 1",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T13:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774737/",
-            "hall": "Salur B",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T13:00:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102112&visLang=1",
+            "purchase_url": "http://www.sambio.is/websales/show/365965/",
             "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
+            "tags": []
         },
         {
-            "time": "2023-09-03T15:30:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102125&visLang=1",
-            "hall": "Salur 5",
-            "tags": [
-                "ÍSL TAL"
-            ]
+            "time": "2023-09-04T21:20:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/365921/",
+            "hall": "Salur 2",
+            "tags": []
         },
         {
-            "time": "2023-09-03T17:40:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102120&visLang=1",
-            "hall": "Salur 5",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T14:00:00",
-            "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/365698/",
-            "hall": "Salur 1",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365678/",
+            "time": "2023-09-04T19:40:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365774/",
             "hall": "Salur 3",
-            "tags": [
-                "ÍSL TAL"
-            ]
+            "tags": []
         },
         {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/366262/",
-            "hall": "Salur 1",
-            "tags": [
-                "ÍSL TAL"
-            ]
+            "time": "2023-09-04T22:20:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365775/",
+            "hall": "Salur 3",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T19:50:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/365657/",
+            "hall": "Salur 3",
+            "tags": []
         }
     ],
-    "trailer_url": "https://www.youtube.com/watch?v=IHvzw4Ibuho",
+    "trailer_url": "https://www.youtube.com/watch?v=UwSBQWI-bek",
     "images": [
         {
-            "url": "https://kvikmyndir.is/images/poster/16099_500.jpg",
-            "path": "full/6a01b068935107ab283d3dd319528cdce106d357.jpg",
-            "checksum": "ef1aa6e11f349055ba0686324de3c7df",
+            "url": "https://kvikmyndir.is/images/poster/16351_500.jpg",
+            "path": "full/59fca1faec469a41c79efe73e6c80302af906707.jpg",
+            "checksum": "6d4f1058b27d86b2153340d663f755cd",
             "status": "downloaded"
         }
     ]
@@ -167,140 +94,74 @@
     ],
     "showtimes": [
         {
-            "time": "2023-09-03T14:00:00",
+            "time": "2023-09-04T14:20:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365958/",
+            "purchase_url": "http://www.sambio.is/websales/show/365902/",
+            "hall": "Salur 1",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T14:30:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/365960/",
             "hall": "Ásberg",
             "tags": []
         },
         {
-            "time": "2023-09-03T14:20:00",
+            "time": "2023-09-04T16:40:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365900/",
+            "purchase_url": "http://www.sambio.is/websales/show/365516/",
             "hall": "Salur 1",
             "tags": []
         },
         {
-            "time": "2023-09-03T16:40:00",
+            "time": "2023-09-04T16:50:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365519/",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T16:50:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365545/",
+            "purchase_url": "http://www.sambio.is/websales/show/365544/",
             "hall": "Ásberg",
             "tags": []
         },
         {
-            "time": "2023-09-03T19:00:00",
+            "time": "2023-09-04T19:00:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365520/",
+            "purchase_url": "http://www.sambio.is/websales/show/365517/",
             "hall": "Salur 1",
             "tags": []
         },
         {
-            "time": "2023-09-03T19:20:00",
+            "time": "2023-09-04T19:20:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365546/",
+            "purchase_url": "http://www.sambio.is/websales/show/365552/",
             "hall": "Ásberg",
             "tags": []
         },
         {
-            "time": "2023-09-03T21:20:00",
+            "time": "2023-09-04T21:20:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365521/",
+            "purchase_url": "http://www.sambio.is/websales/show/365523/",
             "hall": "Salur 1",
             "tags": []
         },
         {
-            "time": "2023-09-03T21:50:00",
+            "time": "2023-09-04T21:50:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365543/",
+            "purchase_url": "http://www.sambio.is/websales/show/365553/",
             "hall": "Ásberg",
             "tags": []
         },
         {
-            "time": "2023-09-03T14:00:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774733/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T15:45:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774738/",
-            "hall": "Salur B",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T17:45:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774018/",
-            "hall": "AXL",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T20:00:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774019/",
-            "hall": "AXL",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T22:10:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774020/",
-            "hall": "AXL",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3377",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T19:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3359",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T21:10:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3360",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T15:10:00",
+            "time": "2023-09-04T15:00:00",
             "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102107&visLang=1",
-            "hall": "Salur 2",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102140&visLang=1",
+            "hall": "MAX",
             "tags": [
                 "ÍSL TAL"
             ]
         },
         {
-            "time": "2023-09-03T16:50:00",
+            "time": "2023-09-04T17:00:00",
             "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102123&visLang=1",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101928&visLang=1",
             "hall": "LÚXUS",
             "tags": [
                 "LÚX",
@@ -308,27 +169,18 @@
             ]
         },
         {
-            "time": "2023-09-03T17:30:00",
+            "time": "2023-09-04T17:20:00",
             "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102121&visLang=1",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102153&visLang=1",
             "hall": "MAX",
             "tags": [
                 "ÍSL TAL"
             ]
         },
         {
-            "time": "2023-09-03T19:50:00",
+            "time": "2023-09-04T19:20:00",
             "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102136&visLang=1",
-            "hall": "MAX",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T21:50:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102119&visLang=1",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101909&visLang=1",
             "hall": "LÚXUS",
             "tags": [
                 "LÚX",
@@ -336,69 +188,108 @@
             ]
         },
         {
-            "time": "2023-09-03T22:10:00",
+            "time": "2023-09-04T19:40:00",
             "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102131&visLang=1",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102149&visLang=1",
             "hall": "MAX",
             "tags": [
                 "ÍSL TAL"
             ]
         },
         {
-            "time": "2023-09-03T16:20:00",
+            "time": "2023-09-04T21:40:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=101924&visLang=1",
+            "hall": "LÚXUS",
+            "tags": [
+                "LÚX",
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-09-04T22:00:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102162&visLang=1",
+            "hall": "MAX",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-09-04T17:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3361",
+            "hall": "Salur 1",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T19:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3362",
+            "hall": "Salur 1",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T17:30:00",
             "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/365710/",
+            "purchase_url": "http://www.sambio.is/websales/show/365696/",
             "hall": "Salur 2",
             "tags": []
         },
         {
-            "time": "2023-09-03T18:50:00",
+            "time": "2023-09-04T20:00:00",
             "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/365693/",
+            "purchase_url": "http://www.sambio.is/websales/show/365626/",
             "hall": "Salur 1",
             "tags": []
         },
         {
-            "time": "2023-09-03T21:00:00",
-            "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/365709/",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:30:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/365527/",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T20:00:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/365526/",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:40:00",
+            "time": "2023-09-04T17:40:00",
             "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365600/",
+            "purchase_url": "http://www.sambio.is/websales/show/365597/",
             "hall": "Salur 2",
             "tags": []
         },
         {
-            "time": "2023-09-03T20:00:00",
+            "time": "2023-09-04T20:00:00",
             "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365601/",
+            "purchase_url": "http://www.sambio.is/websales/show/365598/",
             "hall": "Salur 2",
             "tags": []
         },
         {
-            "time": "2023-09-03T22:10:00",
+            "time": "2023-09-04T22:10:00",
             "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365602/",
+            "purchase_url": "http://www.sambio.is/websales/show/365599/",
             "hall": "Salur 2",
             "tags": []
+        },
+        {
+            "time": "2023-09-04T17:45:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774743/",
+            "hall": "AXL",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-09-04T20:00:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774744/",
+            "hall": "AXL",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-09-04T22:10:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774745/",
+            "hall": "AXL",
+            "tags": [
+                "ÍSL TAL"
+            ]
         }
     ],
     "trailer_url": "https://www.youtube.com/watch?v=9v0b3felm5Q",
@@ -407,6 +298,138 @@
             "url": "https://kvikmyndir.is/images/poster/kuldi_poster_-1691405627.jpg",
             "path": "full/91972dc0196f24c6c46b042063d6241291540719.jpg",
             "checksum": "26143ea625a2ef422a3c1c5b465ecc30",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Asteroid City",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16090,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16090",
+    "description": "Myndin gerist í skálduðum bandarískum eyðimerkurbæ árið 1955. Dagskrá stjörnuskoðunarráðstefnu unglinga fær óvænta truflun af heimssögulegum atburðum.",
+    "genres": [
+        "Gaman",
+        "Rómantík"
+    ],
+    "duration_in_mins": 104,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/asteroid_city",
+        "http://imdb.com/title/tt14230388"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16090_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T16:50:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3396",
+            "hall": "Salur 2",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=9FXCSXuGTF4",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
+            "path": "full/fe02bf23b5af26c4378cf315842a398e5eb1ddc0.jpg",
+            "checksum": "ec0c249bc78edf6917fbb845a8ade32a",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "You Won't Be Alone",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16307,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/16307_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16307",
+    "description": "Í einangruðu fjallaþorpi í Makedóníu á 19. öld er ungri stúlku rænt af fornum anda og breytt í norn.",
+    "genres": [
+        "Drama",
+        "Hrollvekja",
+        "Ævintýri"
+    ],
+    "duration_in_mins": 108,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/you_wont_be_alone",
+        "http://imdb.com/title/tt8296030"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16307_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T21:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3395",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=6-G39n2sCVU",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16307_500.jpg",
+            "path": "full/2bf6929b318547ba68d3280782a988b94d7565b6.jpg",
+            "checksum": "c0b02e601de8302ef59cd14ed87e2e48",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Gran Turismo",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16176,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/1708178_500-1691587575.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16176",
+    "description": "Mögnuð saga breska kappakstursökumannsins Jann Mardenborough sem vann Gran Turismo tölvuleikjakeppnina \"GT Academy\" árið 2011 og sló þar út 90.000 manns aðeins 19 ára gamall. Hann keppti, í kjölfarið, í atvinnukappakstri á vegum Nissan - sem hann starfar enn við í dag.",
+    "genres": [
+        "Spenna",
+        "Drama",
+        "Ævintýri"
+    ],
+    "duration_in_mins": 135,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/gran_turismo_based_on_a_true_story",
+        "http://imdb.com/title/tt4495098"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/1708178_500-1691587575.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T19:40:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102150&visLang=1",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T22:00:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102163&visLang=1",
+            "hall": "Salur 5",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=GVPzGBvPrzw",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/1708178_500-1691587575.jpg",
+            "path": "full/b169dcc27cca1d0c506ae956c576e3d408605fb2.jpg",
+            "checksum": "e7122d5afacb6e8e000e740b2763f086",
             "status": "downloaded"
         }
     ]
@@ -427,8 +450,8 @@
     ],
     "duration_in_mins": 163,
     "rating_urls": [
-        "https://www.rottentomatoes.com/m/mission_impossible_dead_reckoning_part_one",
-        "http://imdb.com/title/tt9603212"
+        "http://imdb.com/title/tt9603212",
+        "https://www.rottentomatoes.com/m/mission_impossible_dead_reckoning_part_one"
     ],
     "language": "Enska",
     "image_urls": [
@@ -436,9 +459,9 @@
     ],
     "showtimes": [
         {
-            "time": "2023-09-03T21:30:00",
+            "time": "2023-09-04T21:20:00",
             "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365720/",
+            "purchase_url": "http://www.sambio.is/websales/show/365721/",
             "hall": "Salur B",
             "tags": []
         }
@@ -449,48 +472,6 @@
             "url": "https://kvikmyndir.is/images/poster/13420_500.jpg",
             "path": "full/e28f59afd4ad5969cd029e6033b266f9e5dff8a0.jpg",
             "checksum": "dbc155347144231dc401994253296173",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Haunted Mansion",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16245,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16245",
-    "description": "Einstæð móðir að nafni Gabbie ræður leiðsögumann, miðil, prest og sagnfræðing til að hjálpa sér að særa illa anda út úr húsi sem hún er nýbúin að kaupa sér.",
-    "genres": [
-        "Gaman",
-        "Drama",
-        "Fjölskylda"
-    ],
-    "duration_in_mins": 123,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/haunted_mansion_2023",
-        "http://imdb.com/title/tt1695843"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T15:20:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365744/",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=AjLKTz81bj8",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/1693199_500-1685874195.jpg",
-            "path": "full/046157701cfe0e7799c7d7aa96ce1c00cfa812db.jpg",
-            "checksum": "cf20d9aea88dd8172c538c771408fee1",
             "status": "downloaded"
         }
     ]
@@ -519,10 +500,17 @@
     ],
     "showtimes": [
         {
-            "time": "2023-09-03T21:20:00",
+            "time": "2023-09-04T19:00:00",
             "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3392",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3393",
             "hall": "Salur 3",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T21:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3394",
+            "hall": "Salur 2",
             "tags": []
         }
     ],
@@ -537,915 +525,48 @@
     ]
 },
 {
-    "title": "Close",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14992,
+    "title": "Fædre og mødre",
+    "alt_title": "Feður og mæður",
+    "kvikmyndir_is_id": 16166,
     "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/14992_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14992",
-    "description": "Innileg vinátta tveggja 13 ára drengja, Remí og Léo, er rofin án fyrirvara. Léó leitar skýringa og snýr sér að móður Remí til að reyna að skilja hvað gerðist.",
+    "poster_url": "https://kvikmyndir.is/images/poster/16166_500.jpg",
+    "content_rating_in_years": 0,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16166",
+    "description": "Hér er fjallað um hjónin Piv og Ulrik sem þurfa að feta sig í gegnum stigveldi, samkeppni og duldar áætlanir í nýja skóla dóttur sinnar, meðal annars í vinsælli útilegu skólans.",
     "genres": [
+        "Gaman",
         "Drama"
     ],
-    "duration_in_mins": 105,
+    "duration_in_mins": 97,
     "rating_urls": [
-        "http://imdb.com/title/tt9660502",
-        "https://www.rottentomatoes.com/m/close_2022"
+        "http://imdb.com/title/tt15964414"
     ],
-    "language": "Hollenska",
+    "language": "Danska",
     "image_urls": [
-        "https://kvikmyndir.is/images/poster/14992_500.jpg"
+        "https://kvikmyndir.is/images/poster/16166_500.jpg"
     ],
     "showtimes": [
         {
-            "time": "2023-09-03T17:00:00",
+            "time": "2023-09-04T17:00:00",
             "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3389",
-            "hall": "Salur 2",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3397",
+            "hall": "Salur 3",
             "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=-T12kvsAfjk",
-    "images": [
+        },
         {
-            "url": "https://kvikmyndir.is/images/poster/14992_500.jpg",
-            "path": "full/067a3c380f5443d0983e46c0686935d23fd102cc.jpg",
-            "checksum": "3d4213acfce82941da68853cbc62d172",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "You Won't Be Alone",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16307,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/16307_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16307",
-    "description": "Í einangruðu fjallaþorpi í Makedóníu á 19. öld er ungri stúlku rænt af fornum anda og breytt í norn.",
-    "genres": [
-        "Drama",
-        "Hrollvekja",
-        "Ævintýri"
-    ],
-    "duration_in_mins": 108,
-    "rating_urls": [
-        "http://imdb.com/title/tt8296030",
-        "https://www.rottentomatoes.com/m/you_wont_be_alone"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16307_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T19:10:00",
+            "time": "2023-09-04T17:00:00",
             "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3391",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3397",
             "hall": "Salur 3",
             "tags": []
         }
     ],
-    "trailer_url": "https://www.youtube.com/watch?v=6-G39n2sCVU",
+    "trailer_url": "https://www.youtube.com/watch?v=rfII6uPjUUA",
     "images": [
         {
-            "url": "https://kvikmyndir.is/images/poster/16307_500.jpg",
-            "path": "full/2bf6929b318547ba68d3280782a988b94d7565b6.jpg",
-            "checksum": "64ea730056213714c54ff22227c11e34",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Asteroid City",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16090,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16090",
-    "description": "Myndin gerist í skálduðum bandarískum eyðimerkurbæ árið 1955. Dagskrá stjörnuskoðunarráðstefnu unglinga fær óvænta truflun af heimssögulegum atburðum.",
-    "genres": [
-        "Gaman",
-        "Rómantík"
-    ],
-    "duration_in_mins": 104,
-    "rating_urls": [
-        "http://imdb.com/title/tt14230388",
-        "https://www.rottentomatoes.com/m/asteroid_city"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16090_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T17:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3390",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=9FXCSXuGTF4",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16090_500.jpg",
-            "path": "full/fe02bf23b5af26c4378cf315842a398e5eb1ddc0.jpg",
-            "checksum": "cea3ab25675e749453219a403b63c09f",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Kung Fu Hustle",
-    "alt_title": "Gong Fu",
-    "kvikmyndir_is_id": 3083,
-    "release_year": 2004,
-    "poster_url": "https://kvikmyndir.is/images/poster/157918_500-1693217734.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=3083",
-    "description": "Myndin gerist í Canton í Kína á fimmta áratug 20. aldarinnar, og segir frá bæ sem glæpagengið Axe Gang stjórnar, og Sing langar mikið að komast í gengið. Hann slysast inn í fátækrahverfi sem sérvitrir leigusalar stjórna, sem reynast vera miklir kung-fu meistarar í dulargervum.  Gjörðir Sing verða til þess að Axe Gang og leigusalarnir enda í miklum bardaga....",
-    "genres": [
-        "Spenna",
-        "Gaman",
-        "Ævintýri",
-        "Bardaga"
-    ],
-    "duration_in_mins": 95,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/kung_fu_hustle",
-        "http://imdb.com/title/tt0373074"
-    ],
-    "language": "Kínverska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/157918_500-1693217734.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T21:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/2726",
-            "hall": "Salur 1",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=-m3IB7N_PRk",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/157918_500-1693217734.jpg",
-            "path": "full/12588b88c90c79c12d6d1b90a122e4324b8362c2.jpg",
-            "checksum": "27e05acd6d6aff10ed0edb0637ec2172",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Elemental",
-    "alt_title": "",
-    "kvikmyndir_is_id": 15016,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/15016_500.jpg",
-    "content_rating_in_years": 0,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15016",
-    "description": "Myndin fjallar um Ember og Wade í borg þar sem elds-, lands-, og loftsíbúar búa saman. Unga logandi heita konan og vatnsgaurinn, sem lætur sig fljóta með straumnum, eru um það bil að uppgötva hversu mikið þau eiga í raun sameiginlegt - þó að frumefni eins og þau eigi auðvitað ekki að geta blandast saman.",
-    "genres": [
-        "Gaman",
-        "Ævintýri",
-        "Teiknað"
-    ],
-    "duration_in_mins": 103,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/elemental_2023",
-        "http://imdb.com/title/tt15789038"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/15016_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T12:10:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365882/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T13:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365717/",
-            "hall": "Salur 3",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=hXzcyx9V0xw",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/15016_500.jpg",
-            "path": "full/e98cfe7e6bb338dfc6feafd14ce3a8a1204ff3df.jpg",
-            "checksum": "a9d9b32f13d4da2a41df1ec40cabad76",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Gran Turismo",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16176,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/1708178_500-1691587575.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16176",
-    "description": "Mögnuð saga breska kappakstursökumannsins Jann Mardenborough sem vann Gran Turismo tölvuleikjakeppnina \"GT Academy\" árið 2011 og sló þar út 90.000 manns aðeins 19 ára gamall. Hann keppti, í kjölfarið, í atvinnukappakstri á vegum Nissan - sem hann starfar enn við í dag.",
-    "genres": [
-        "Spenna",
-        "Drama",
-        "Ævintýri"
-    ],
-    "duration_in_mins": 135,
-    "rating_urls": [
-        "http://imdb.com/title/tt4495098",
-        "https://www.rottentomatoes.com/m/gran_turismo_based_on_a_true_story"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/1708178_500-1691587575.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T19:30:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102118&visLang=1",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T22:00:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102132&visLang=1",
-            "hall": "Salur 5",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=GVPzGBvPrzw",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/1708178_500-1691587575.jpg",
-            "path": "full/b169dcc27cca1d0c506ae956c576e3d408605fb2.jpg",
-            "checksum": "21332aed7690639abbe1aca88cb2e4f5",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Fucking Bornholm",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16400,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/16400_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16400",
-    "description": "Pólskur vinahópur fer með börnin sín í langt helgarfrí á dönsku eyjuna Bornholm, rétt eins og gert hefur verið til margra ára. Atvik sem verður í barnahópnum veldur vandamálum í sambandi vinanna. Hvert par virðist hamingjusamt, en eru þau það í raun og veru?  Kannski láta þau bara líta út sem svo sé.",
-    "genres": [
-        "Drama"
-    ],
-    "duration_in_mins": 99,
-    "rating_urls": [
-        "http://imdb.com/title/tt13058146"
-    ],
-    "language": "Pólska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16400_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3378",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:00:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3343",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T19:10:00",
-            "cinema": "Bíó Paradís",
-            "purchase_url": "https://tickets.bioparadis.is/#book/3344",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=KQoDSWDzWHM",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16400_500.jpg",
-            "path": "full/79a23fac2f45f0056b42d7fe8e43a9de15ea9b8c.jpg",
-            "checksum": "839bfdeed71b8a1e87dfef37dad59ee7",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Oppenheimer",
-    "alt_title": "",
-    "kvikmyndir_is_id": 14181,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=14181",
-    "description": "Sagan af bandaríska vísindamanninum J. Robert Oppenheimer og þætti hans í þróun kjarnorkusprengjunnar.",
-    "genres": [
-        "Drama",
-        "Söguleg",
-        "Æviágrip"
-    ],
-    "duration_in_mins": 180,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/oppenheimer_2023",
-        "http://imdb.com/title/tt15398776"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T16:30:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365740/",
-            "hall": "Lúxus VIP",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T16:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774734/",
-            "hall": "Salur A",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T20:30:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774740/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T21:00:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365885/",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=bK6ldnjE3Y0",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg",
-            "path": "full/abe9135f83065e8170e5ed1aad4dd0eca9ca91b5.jpg",
-            "checksum": "c339088c1da8b817d73f6005c1699509",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Retribution",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16288,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16288_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16288",
-    "description": "Matt Turner er bandarískur athafnamaður búsettur í Berlín í Þýskalandi. Dag einn lendir hann í kapphlaupi við tímann við að bjarga fjölskyldu sinni og eigin lífi. Þegar hann er að aka börnum sínum í skólanum er hringt í hann og dularfull rödd varar hann við sprengiefni í bílnum. Til að bjarga fjölskyldunni og leysa gátuna þarf Matt að fylgja leiðbeiningum...",
-    "genres": [
-        "Spenna",
-        "Drama",
-        "Glæpa"
-    ],
-    "duration_in_mins": 91,
-    "rating_urls": [
-        "http://imdb.com/title/tt6906292",
-        "https://www.rottentomatoes.com/m/retribution_2023"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16288_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T18:00:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774739/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T20:00:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774735/",
-            "hall": "Salur A",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T22:00:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774736/",
-            "hall": "Salur A",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T19:50:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102135&visLang=1",
-            "hall": "Salur 5",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T22:20:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102130&visLang=1",
-            "hall": "Salur 4",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=jzQn0-WH4WM",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16288_500.jpg",
-            "path": "full/cb85631322f67cc7b094d1ffdf9c59e0ac3f9836.jpg",
-            "checksum": "6fc9d2752ce5bdb79f1cea2c8a76c1f5",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Sound of Freedom",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16351,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/16351_500.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16351",
-    "description": "Hin ótrúlega saga af Tim Ballard, fyrrum fulltrúa í leyniþjónustu Bandaríkjanna. Hann hættir í vinnunni til að helga líf sitt því að bjarga börnum úr klóm alþjóðlegs mansalshring djúpt inni í frumskógum Kólumbíu. Hann leggur allt í sölurnar og þarf að beita mikilli útsjónarsemi til bjarga fórnarlömbunum frá grimmum örlögum sem eru verri en dauðinn...",
-    "genres": [
-        "Spenna",
-        "Drama",
-        "Æviágrip"
-    ],
-    "duration_in_mins": 131,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/sound_of_freedom",
-        "http://imdb.com/title/tt7599146"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/16351_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T18:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365772/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T20:40:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365773/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T18:50:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365920/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T21:30:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365919/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T19:50:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365656/",
-            "hall": "Salur 3",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=UwSBQWI-bek",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/16351_500.jpg",
-            "path": "full/59fca1faec469a41c79efe73e6c80302af906707.jpg",
-            "checksum": "706e44911dcc0082b26d60658124823d",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Blue Beetle",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16040,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/1708071_500-1691933464.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16040",
-    "description": "Hinn nýútskrifaði Jaime Reyes kemur heim, fullur eftirvæntingar fyrir framtíðinni, en kemst að því að ekki er allt sem sýnist heima fyrir. Um leið og hann veltir fyrir sér hlutverki sínu og tilgangi grípa örlögin inn í þegar Jaime er skyndilega með í höndunum fornan líftækni-helgigrip ættaðan utanúr geimnum: the Scarab. Gripurinn velur Jaime til að verða...",
-    "genres": [
-        "Spenna",
-        "Vísindaskáldskapur",
-        "Ævintýri"
-    ],
-    "duration_in_mins": 127,
-    "rating_urls": [
-        "http://imdb.com/title/tt9362930",
-        "https://www.rottentomatoes.com/m/blue_beetle"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/1708071_500-1691933464.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T14:00:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102106&visLang=1",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365680/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T22:10:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365651/",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:20:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365762/",
-            "hall": "Salur A",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T20:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365763/",
-            "hall": "Salur A",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T22:40:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365764/",
-            "hall": "Salur A",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=vS3_72Gb-bI",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/1708071_500-1691933464.jpg",
-            "path": "full/e72f604d846f8b0b6052115e533f6907a644335d.jpg",
-            "checksum": "b2ae818052b1a03a44614b58371259b6",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Strays",
-    "alt_title": "",
-    "kvikmyndir_is_id": 16157,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/1693572_500-1686564706.jpg",
-    "content_rating_in_years": 12,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16157",
-    "description": "Þegar auðtrúa hundurinn Reggie er yfirgefinn á götum úti af eigingjörnum og miskunnarlausum eiganda sínum Doug, dýrahatandi eiturlyfjafíkli sem aldrei vildi hann, gengur hann í lið með öðrum flækingshundum til að hefna sín á Doug.",
-    "genres": [
-        "Gaman",
-        "Ævintýri",
-        "Teiknað"
-    ],
-    "duration_in_mins": 93,
-    "rating_urls": [
-        "http://imdb.com/title/tt15153532",
-        "https://www.rottentomatoes.com/m/strays_2023"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/1693572_500-1686564706.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T12:50:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365792/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365790/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:10:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365791/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T19:20:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365796/",
-            "hall": "Salur B",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T14:30:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365942/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T16:40:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365943/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:30:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365664/",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T22:30:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365663/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:40:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/366268/",
-            "hall": "Salur 2",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=BzwOLKTbCUw",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/1693572_500-1686564706.jpg",
-            "path": "full/ac73cef06bed37bc55fad87483b243221c98e9d9.jpg",
-            "checksum": "c8f215720a3035c907cb7850484d1616",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Vandræðaálfurinn",
-    "alt_title": "My Fairy Troublemaker",
-    "kvikmyndir_is_id": 16336,
-    "release_year": 2022,
-    "poster_url": "https://kvikmyndir.is/images/poster/1681822068657_ho00001605-1689868662.jpeg",
-    "content_rating_in_years": 0,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=16336",
-    "description": "Myndin fjallar um skemmtilega og forvitna tannálfinn Víólettu sem festist í mannheimum við að sækja tönn sem hún átti ekki að sækja! Hinn 12 ára, og mennska, Maxie aðstoðar hana við að komast aftur til baka í ævintýraheiminn sinn.",
-    "genres": [
-        "Gaman",
-        "Ævintýri",
-        "Teiknað"
-    ],
-    "duration_in_mins": 85,
-    "rating_urls": [
-        "http://imdb.com/title/tt20199226"
-    ],
-    "language": "Íslenska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/1681822068657_ho00001605-1689868662.jpeg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T13:45:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774741/",
-            "hall": "AXL",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T15:45:00",
-            "cinema": "Laugarásbíó",
-            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774742/",
-            "hall": "AXL",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T13:10:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102111&visLang=1",
-            "hall": "MAX",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T15:20:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102126&visLang=1",
-            "hall": "MAX",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T17:25:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102122&visLang=1",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T14:00:00",
-            "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/365972/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=KZjI2-0wv1Y",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/1681822068657_ho00001605-1689868662.jpeg",
-            "path": "full/fddaced3c2f8627c62cfbf39090102ef75c5776c.jpg",
-            "checksum": "a767ced80151860be4958f0acb1304c1",
-            "status": "downloaded"
-        }
-    ]
-},
-{
-    "title": "Barbie",
-    "alt_title": "",
-    "kvikmyndir_is_id": 15054,
-    "release_year": 2023,
-    "poster_url": "https://kvikmyndir.is/images/poster/15054_500.jpg",
-    "content_rating_in_years": 16,
-    "scrape_url": "https://kvikmyndir.is/mynd/?id=15054",
-    "description": "Barbie og Ken njóta lífsins í Barbie landi, hinum litríka og fullkomna heimi. En þegar þau fá tækifæri til að fara yfir í hina raunverulegu veröld uppgötva þau fljótt bæði gleðina og hætturnar sem felast í því að búa á meðal manna.",
-    "genres": [
-        "Gaman",
-        "Ævintýri"
-    ],
-    "duration_in_mins": 114,
-    "rating_urls": [
-        "https://www.rottentomatoes.com/m/barbie",
-        "http://imdb.com/title/tt1517268"
-    ],
-    "language": "Enska",
-    "image_urls": [
-        "https://kvikmyndir.is/images/poster/15054_500.jpg"
-    ],
-    "showtimes": [
-        {
-            "time": "2023-09-03T13:00:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102109&visLang=1",
-            "hall": "Salur 5",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T14:10:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102271&visLang=1",
-            "hall": "LÚXUS",
-            "tags": [
-                "LÚX"
-            ]
-        },
-        {
-            "time": "2023-09-03T16:50:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102124&visLang=1",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T14:30:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365729/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365733/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T19:30:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365734/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T22:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365735/",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365676/",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:20:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365640/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T19:40:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365646/",
-            "hall": "Salur 4",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T16:00:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365894/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T18:30:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365893/",
-            "hall": "Salur 3",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T16:20:00",
-            "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/365686/",
-            "hall": "Salur 1",
-            "tags": []
-        }
-    ],
-    "trailer_url": "https://www.youtube.com/watch?v=pBk4NYhWNMM",
-    "images": [
-        {
-            "url": "https://kvikmyndir.is/images/poster/15054_500.jpg",
-            "path": "full/84f8b73c4fbdd5c1b46d613bade1e980c760e509.jpg",
-            "checksum": "d8e23e40b01f01f4775eedcf90ec89b6",
+            "url": "https://kvikmyndir.is/images/poster/16166_500.jpg",
+            "path": "full/c960ca9e737fe3144f8574d30215f10147d516f5.jpg",
+            "checksum": "72dd0a04c7d607f25288de5e382d96c4",
             "status": "downloaded"
         }
     ]
@@ -1475,100 +596,19 @@
     ],
     "showtimes": [
         {
-            "time": "2023-09-03T10:40:00",
+            "time": "2023-09-04T14:40:00",
             "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365935/",
-            "hall": "Salur 1",
+            "purchase_url": "http://www.sambio.is/websales/show/365931/",
+            "hall": "Salur 3",
             "tags": [
                 "ÍSL TAL"
             ]
         },
         {
-            "time": "2023-09-03T11:00:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365930/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T12:00:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365928/",
-            "hall": "Salur 1",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T13:10:00",
-            "cinema": "Sambíóin Kringlunni",
-            "purchase_url": "http://www.sambio.is/websales/show/365929/",
-            "hall": "Salur 1",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T12:40:00",
+            "time": "2023-09-04T16:20:00",
             "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365776/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T13:20:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365777/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T13:50:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365854/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365855/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T16:10:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365856/",
-            "hall": "Salur A",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/366265/",
-            "hall": "Salur 2",
-            "tags": [
-                "ÍSL TAL"
-            ]
-        },
-        {
-            "time": "2023-09-03T16:20:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/366266/",
-            "hall": "Salur 2",
+            "purchase_url": "http://www.sambio.is/websales/show/365779/",
+            "hall": "Salur 3",
             "tags": [
                 "ÍSL TAL"
             ]
@@ -1579,7 +619,373 @@
         {
             "url": "https://kvikmyndir.is/images/poster/367758567_671405018358207_2471332308920503535_n-1692376248.jpg",
             "path": "full/5b78c0d2540c190a241af84e7e15c6debd4d8adc.jpg",
-            "checksum": "74f8550f0ed25f40d00f89bdbbdccb8a",
+            "checksum": "b6b13715442eb251e1910879ae26ee6e",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Fucking Bornholm",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16400,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/16400_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16400",
+    "description": "Pólskur vinahópur fer með börnin sín í langt helgarfrí á dönsku eyjuna Bornholm, rétt eins og gert hefur verið til margra ára. Atvik sem verður í barnahópnum veldur vandamálum í sambandi vinanna. Hvert par virðist hamingjusamt, en eru þau það í raun og veru?  Kannski láta þau bara líta út sem svo sé.",
+    "genres": [
+        "Drama"
+    ],
+    "duration_in_mins": 99,
+    "rating_urls": [
+        "http://imdb.com/title/tt13058146"
+    ],
+    "language": "Pólska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16400_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T19:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3346",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T21:00:00",
+            "cinema": "Bíó Paradís",
+            "purchase_url": "https://tickets.bioparadis.is/#book/3345",
+            "hall": "Salur 1",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=KQoDSWDzWHM",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16400_500.jpg",
+            "path": "full/79a23fac2f45f0056b42d7fe8e43a9de15ea9b8c.jpg",
+            "checksum": "2a9c0ae68f03c4adfd019983f50133ea",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Oppenheimer",
+    "alt_title": "",
+    "kvikmyndir_is_id": 14181,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=14181",
+    "description": "Sagan af bandaríska vísindamanninum J. Robert Oppenheimer og þætti hans í þróun kjarnorkusprengjunnar.",
+    "genres": [
+        "Drama",
+        "Söguleg",
+        "Æviágrip"
+    ],
+    "duration_in_mins": 180,
+    "rating_urls": [
+        "http://imdb.com/title/tt15398776",
+        "https://www.rottentomatoes.com/m/oppenheimer_2023"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T16:30:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365741/",
+            "hall": "Lúxus VIP",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T20:30:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774750/",
+            "hall": "Salur B",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T21:00:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/365886/",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=bK6ldnjE3Y0",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/1702120_500-1688982490.jpg",
+            "path": "full/abe9135f83065e8170e5ed1aad4dd0eca9ca91b5.jpg",
+            "checksum": "8bf6e975ac1653b57bb8a029715310c8",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Retribution",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16288,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16288_500.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16288",
+    "description": "Matt Turner er bandarískur athafnamaður búsettur í Berlín í Þýskalandi. Dag einn lendir hann í kapphlaupi við tímann við að bjarga fjölskyldu sinni og eigin lífi. Þegar hann er að aka börnum sínum í skólanum er hringt í hann og dularfull rödd varar hann við sprengiefni í bílnum. Til að bjarga fjölskyldunni og leysa gátuna þarf Matt að fylgja leiðbeiningum...",
+    "genres": [
+        "Spenna",
+        "Drama",
+        "Glæpa"
+    ],
+    "duration_in_mins": 91,
+    "rating_urls": [
+        "http://imdb.com/title/tt6906292",
+        "https://www.rottentomatoes.com/m/retribution_2023"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16288_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T19:50:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102148&visLang=1",
+            "hall": "Salur 5",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T22:30:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102160&visLang=1",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T20:00:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774747/",
+            "hall": "Salur A",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T22:00:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774748/",
+            "hall": "Salur A",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=jzQn0-WH4WM",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16288_500.jpg",
+            "path": "full/cb85631322f67cc7b094d1ffdf9c59e0ac3f9836.jpg",
+            "checksum": "df3ef947238f94fad5a512e3c976a0ab",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Vandræðaálfurinn",
+    "alt_title": "My Fairy Troublemaker",
+    "kvikmyndir_is_id": 16336,
+    "release_year": 2022,
+    "poster_url": "https://kvikmyndir.is/images/poster/1681822068657_ho00001605-1689868662.jpeg",
+    "content_rating_in_years": 0,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16336",
+    "description": "Myndin fjallar um skemmtilega og forvitna tannálfinn Víólettu sem festist í mannheimum við að sækja tönn sem hún átti ekki að sækja! Hinn 12 ára, og mennska, Maxie aðstoðar hana við að komast aftur til baka í ævintýraheiminn sinn.",
+    "genres": [
+        "Gaman",
+        "Ævintýri",
+        "Teiknað"
+    ],
+    "duration_in_mins": 85,
+    "rating_urls": [
+        "http://imdb.com/title/tt20199226"
+    ],
+    "language": "Íslenska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/1681822068657_ho00001605-1689868662.jpeg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T15:00:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102141&visLang=1",
+            "hall": "Salur 4",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-09-04T17:30:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102152&visLang=1",
+            "hall": "Salur 2",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-09-04T18:00:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774746/",
+            "hall": "Salur A",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=KZjI2-0wv1Y",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/1681822068657_ho00001605-1689868662.jpeg",
+            "path": "full/fddaced3c2f8627c62cfbf39090102ef75c5776c.jpg",
+            "checksum": "49994a75967b319da566f3a94df9f16c",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Blue Beetle",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16040,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/1708071_500-1691933464.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16040",
+    "description": "Hinn nýútskrifaði Jaime Reyes kemur heim, fullur eftirvæntingar fyrir framtíðinni, en kemst að því að ekki er allt sem sýnist heima fyrir. Um leið og hann veltir fyrir sér hlutverki sínu og tilgangi grípa örlögin inn í þegar Jaime er skyndilega með í höndunum fornan líftækni-helgigrip ættaðan utanúr geimnum: the Scarab. Gripurinn velur Jaime til að verða...",
+    "genres": [
+        "Spenna",
+        "Vísindaskáldskapur",
+        "Ævintýri"
+    ],
+    "duration_in_mins": 127,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/blue_beetle",
+        "http://imdb.com/title/tt9362930"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/1708071_500-1691933464.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T17:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365765/",
+            "hall": "Salur A",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T19:40:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365766/",
+            "hall": "Salur A",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T22:20:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365767/",
+            "hall": "Salur A",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T22:10:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/365652/",
+            "hall": "Salur 4",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=vS3_72Gb-bI",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/1708071_500-1691933464.jpg",
+            "path": "full/e72f604d846f8b0b6052115e533f6907a644335d.jpg",
+            "checksum": "fc5265c713bab3f1be442b7748c1c8ab",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Strays",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16157,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/1693572_500-1686564706.jpg",
+    "content_rating_in_years": 12,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16157",
+    "description": "Þegar auðtrúa hundurinn Reggie er yfirgefinn á götum úti af eigingjörnum og miskunnarlausum eiganda sínum Doug, dýrahatandi eiturlyfjafíkli sem aldrei vildi hann, gengur hann í lið með öðrum flækingshundum til að hefna sín á Doug.",
+    "genres": [
+        "Gaman",
+        "Ævintýri",
+        "Teiknað"
+    ],
+    "duration_in_mins": 93,
+    "rating_urls": [
+        "http://imdb.com/title/tt15153532",
+        "https://www.rottentomatoes.com/m/strays_2023"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/1693572_500-1686564706.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T14:20:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/365944/",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T16:30:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/365945/",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T17:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365797/",
+            "hall": "Salur B",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T19:10:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365795/",
+            "hall": "Salur B",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T17:30:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/365666/",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T22:30:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/365665/",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=BzwOLKTbCUw",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/1693572_500-1686564706.jpg",
+            "path": "full/ac73cef06bed37bc55fad87483b243221c98e9d9.jpg",
+            "checksum": "49715b7499abb63dcc648adc0b4fa1d3",
             "status": "downloaded"
         }
     ]
@@ -1608,109 +1014,93 @@
     ],
     "showtimes": [
         {
-            "time": "2023-09-03T14:00:00",
+            "time": "2023-09-04T17:20:00",
             "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365814/",
+            "purchase_url": "http://www.sambio.is/websales/show/365807/",
+            "hall": "Salur 3",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T19:40:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365805/",
+            "hall": "Salur 1",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T20:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365810/",
             "hall": "Lúxus VIP",
             "tags": []
         },
         {
-            "time": "2023-09-03T19:40:00",
+            "time": "2023-09-04T22:00:00",
             "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365804/",
+            "purchase_url": "http://www.sambio.is/websales/show/365806/",
             "hall": "Salur 1",
             "tags": []
         },
         {
-            "time": "2023-09-03T20:00:00",
+            "time": "2023-09-04T22:20:00",
             "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365812/",
+            "purchase_url": "http://www.sambio.is/websales/show/365811/",
             "hall": "Lúxus VIP",
             "tags": []
         },
         {
-            "time": "2023-09-03T22:00:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365802/",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T22:20:00",
-            "cinema": "Sambíóin Álfabakka",
-            "purchase_url": "http://www.sambio.is/websales/show/365813/",
-            "hall": "Lúxus VIP",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T15:00:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365681/",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T17:30:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365618/",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T20:00:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365619/",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T22:20:00",
-            "cinema": "Sambíóin Egilshöll",
-            "purchase_url": "http://www.sambio.is/websales/show/365620/",
-            "hall": "Salur 1",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T18:30:00",
+            "time": "2023-09-04T17:30:00",
             "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/365703/",
-            "hall": "Salur 2",
+            "purchase_url": "http://www.sambio.is/websales/show/365628/",
+            "hall": "Salur 1",
             "tags": []
         },
         {
-            "time": "2023-09-03T21:00:00",
+            "time": "2023-09-04T20:00:00",
             "cinema": "Sambíóin Akureyri",
-            "purchase_url": "http://www.sambio.is/websales/show/365694/",
+            "purchase_url": "http://www.sambio.is/websales/show/365711/",
             "hall": "Salur 2",
             "tags": []
         },
         {
-            "time": "2023-09-03T19:10:00",
-            "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102134&visLang=1",
-            "hall": "LÚXUS",
-            "tags": [
-                "LÚX"
-            ]
+            "time": "2023-09-04T17:30:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/365621/",
+            "hall": "Salur 1",
+            "tags": []
         },
         {
-            "time": "2023-09-03T19:30:00",
+            "time": "2023-09-04T20:00:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/365622/",
+            "hall": "Salur 1",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T22:20:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/365623/",
+            "hall": "Salur 1",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T17:10:00",
             "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102117&visLang=1",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102155&visLang=1",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T19:30:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102151&visLang=1",
             "hall": "Salur 2",
             "tags": []
         },
         {
-            "time": "2023-09-03T22:00:00",
+            "time": "2023-09-04T22:00:00",
             "cinema": "Smárabíó",
-            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102133&visLang=1",
-            "hall": "Salur 2",
-            "tags": []
-        },
-        {
-            "time": "2023-09-03T20:00:00",
-            "cinema": "Sambíóin Keflavík",
-            "purchase_url": "http://www.sambio.is/websales/show/366270/",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102161&visLang=1",
             "hall": "Salur 2",
             "tags": []
         }
@@ -1721,6 +1111,167 @@
             "url": "https://kvikmyndir.is/images/poster/16160_500.jpg",
             "path": "full/ab304b9482e858680bfce5d7447bd0a3be22b45c.jpg",
             "checksum": "03844b5ac80af5a2bc83e78774e528c4",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Teenage Mutant Ninja Turtles: Mutant Mayhem",
+    "alt_title": "",
+    "kvikmyndir_is_id": 16099,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/16099_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=16099",
+    "description": "Eftir að hafa verið í mörg ár í felum í holræsunum fyrir heimi mannanna þá ákveða skjaldbökubræður að fara upp á yfirborðið og reyna að ávinna sér ást og aðdáun borgarbúa í New York og verða á sama tíma viðurkenndir sem venjulegir unglingar sem vinna hetjudáðir. Ný vinkona þeirra April O'Neil hjálpar þeim að vinna bug á alræmdu glæpagengi...",
+    "genres": [
+        "Spenna",
+        "Ævintýri",
+        "Teiknað"
+    ],
+    "duration_in_mins": 99,
+    "rating_urls": [
+        "https://www.rottentomatoes.com/m/teenage_mutant_ninja_turtles_mutant_mayhem",
+        "http://imdb.com/title/tt8589698"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/16099_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T15:00:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102142&visLang=1",
+            "hall": "Salur 5",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-09-04T16:00:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/365912/",
+            "hall": "Salur 3",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-09-04T17:20:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365746/",
+            "hall": "Salur 1",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        },
+        {
+            "time": "2023-09-04T18:00:00",
+            "cinema": "Laugarásbíó",
+            "purchase_url": "http://kvikmyndahusio.azurewebsites.net/websales/show/774749/",
+            "hall": "Salur B",
+            "tags": [
+                "ÍSL TAL"
+            ]
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=IHvzw4Ibuho",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/16099_500.jpg",
+            "path": "full/6a01b068935107ab283d3dd319528cdce106d357.jpg",
+            "checksum": "30e43cca923d6d5a692c1847d9d29c06",
+            "status": "downloaded"
+        }
+    ]
+},
+{
+    "title": "Barbie",
+    "alt_title": "",
+    "kvikmyndir_is_id": 15054,
+    "release_year": 2023,
+    "poster_url": "https://kvikmyndir.is/images/poster/15054_500.jpg",
+    "content_rating_in_years": 16,
+    "scrape_url": "https://kvikmyndir.is/mynd/?id=15054",
+    "description": "Barbie og Ken njóta lífsins í Barbie landi, hinum litríka og fullkomna heimi. En þegar þau fá tækifæri til að fara yfir í hina raunverulegu veröld uppgötva þau fljótt bæði gleðina og hætturnar sem felast í því að búa á meðal manna.",
+    "genres": [
+        "Gaman",
+        "Ævintýri"
+    ],
+    "duration_in_mins": 114,
+    "rating_urls": [
+        "http://imdb.com/title/tt1517268",
+        "https://www.rottentomatoes.com/m/barbie"
+    ],
+    "language": "Enska",
+    "image_urls": [
+        "https://kvikmyndir.is/images/poster/15054_500.jpg"
+    ],
+    "showtimes": [
+        {
+            "time": "2023-09-04T15:00:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102143&visLang=1",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T17:15:00",
+            "cinema": "Smárabíó",
+            "purchase_url": "https://sala.smarabio.is/Ticketing/visSelectTickets.aspx?cinemacode=002&txtSessionId=102154&visLang=1",
+            "hall": "Salur 5",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T17:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365737/",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T19:30:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365731/",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T22:00:00",
+            "cinema": "Sambíóin Álfabakka",
+            "purchase_url": "http://www.sambio.is/websales/show/365732/",
+            "hall": "Salur 2",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T17:30:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/365647/",
+            "hall": "Salur 3",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T19:40:00",
+            "cinema": "Sambíóin Egilshöll",
+            "purchase_url": "http://www.sambio.is/websales/show/365648/",
+            "hall": "Salur 4",
+            "tags": []
+        },
+        {
+            "time": "2023-09-04T18:30:00",
+            "cinema": "Sambíóin Kringlunni",
+            "purchase_url": "http://www.sambio.is/websales/show/365895/",
+            "hall": "Salur 3",
+            "tags": []
+        }
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=pBk4NYhWNMM",
+    "images": [
+        {
+            "url": "https://kvikmyndir.is/images/poster/15054_500.jpg",
+            "path": "full/84f8b73c4fbdd5c1b46d613bade1e980c760e509.jpg",
+            "checksum": "e6eced93149ac16a9d5a1064e23478ad",
             "status": "downloaded"
         }
     ]
