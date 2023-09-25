@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import Showtimes from "$lib/Showtimes.svelte";
   import type { Movie, Showtime } from "$lib/schemas";
-  import { flyAndScale } from "./util";
 
-  export let selected_movie: Omit<Movie, "showtimes"> & { showtimes: [string, Showtime[]] };
+  export let selected_movie: Omit<Movie, "showtimes"> & { showtimes: [string, Showtime[]][] };
 
   export let movie_dialog;
+  export let today: string;
   let { portal, open, close, overlay, content, title, description } = movie_dialog;
 </script>
 
@@ -45,7 +44,7 @@
               </div>
             {/if}
           </div>
-          <h2 class="my-6 text-neutral-400 text-sm">{$page.data.today}</h2>
+          <h2 class="my-6 text-neutral-400 text-sm">{today}</h2>
           <Showtimes showtimes={selected_movie.showtimes} />
         </div>
         <div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">

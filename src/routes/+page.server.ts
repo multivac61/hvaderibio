@@ -1,8 +1,9 @@
 import { movies_schema, type Movie } from "$lib/schemas";
+import type { RequestEvent } from "./$types";
 
 export const prerender = true;
 
-export async function load({ fetch }) {
+export async function load({ fetch }: RequestEvent) {
   return {
     movies: await fetch("kvikmyndir_is.json")
       .then(async (response: Response) => movies_schema.parse(await response.json()))

@@ -8,6 +8,7 @@
   import { onMount } from "svelte";
 
   import { createDialog } from "@melt-ui/svelte";
+  import type { Movie, Showtime } from "$lib/schemas";
   const {
     trigger: about_trigger,
     portal: about_portal,
@@ -32,14 +33,17 @@
 
   let selected_movie: (typeof filtered_cinemas_showtimes)[0] | undefined;
 
-  const all_cinemas = [...new Set(data.movies.flatMap((movie) => movie.showtimes.flatMap((showtime) => showtime.cinema)))].sort();
+  const all_cinemas: string[] = data.movies
+    .flatMap((movie: Movie) => movie.showtimes.flatMap((showtime: Showtime) => showtime.cinema))
+    .filter((name: string, index: number, array: string[]) => array.indexOf(name) === index)
+    .sort();
 
   $: filtered_cinemas_showtimes = data.movies
-    .sort((a, b) => b.showtimes.length - a.showtimes.length)
-    .filter((movie) =>
+    .sort((a: Movie, b: Movie) => b.showtimes.length - a.showtimes.length)
+    .filter((movie: Movie) =>
       movie.showtimes.some((showtime) => selected_cinemas.includes(showtime.cinema) && in_range(to_float(showtime.time), from, to))
     )
-    .map((movie) => ({
+    .map((movie: Movie) => ({
       ...movie,
       showtimes: Object.entries(
         group_by(
@@ -51,7 +55,7 @@
 
   const capital_region_cinemas = all_cinemas.filter((name) =>
     ["Bíó Paradís", "Háskólabíó", "Laugarásbíó", "Sambíóin Egilshöll", "Sambíóin Kringlunni", "Sambíóin Álfabakka", "Smárabíó"].includes(
-      name
+      name as string
     )
   );
 
@@ -67,6 +71,13 @@
 
   let width: number;
   let height: number;
+
+  const change = (event: { currentTarget: HTMLSelectElement }) => {
+    selected_choice = event.currentTarget.value;
+    selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_choice, cinemas]) =>
+      group_choice === event.currentTarget.value ? cinemas : []
+    );
+  };
 </script>
 
 <svelte:window bind:outerWidth={width} bind:outerHeight={height} />
@@ -116,12 +127,7 @@
 
 <div class="fixed w-full inset-x-0 sm:hidden bottom-8 z-40">
   <select
-    on:change={(event) => {
-      selected_choice = event.currentTarget.value;
-      selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_choice, cinemas]) =>
-        group_choice === event.currentTarget.value ? cinemas : []
-      );
-    }}
+    on:change={change}
     class="mx-auto mt-2 block rounded-md border-0 py-1.5 pl-3 pr-10 bg-black bg-opacity-10 backdrop-blur-xl ring-0 ring-inset ring-black sm:text-sm sm:leading-6">
     {#each [...group_choices, ...all_choices] as [label]}
       <option value={label} selected={label === selected_choice}>{label}</option>
