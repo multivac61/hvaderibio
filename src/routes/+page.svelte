@@ -3,24 +3,37 @@
 
   import CinemaTab from "$lib/CinemaTab.svelte";
   import Dust from "$lib/Dust.svelte";
-  import ModalMovie from "$lib/ModalMovie.svelte";
   import { group_by, in_range, to_float, flyAndScale } from "$lib/util";
   import { onMount } from "svelte";
 
-  import { createDialog } from "@melt-ui/svelte";
+  import { createDialog, melt } from "@melt-ui/svelte";
   import type { Movie, Showtime } from "$lib/schemas";
+  import Showtimes from "$lib/Showtimes.svelte";
   const {
-    trigger: about_trigger,
-    portal: about_portal,
-    overlay: about_overlay,
-    content: about_content,
-    title: about_title,
-    description: about_description,
-    close: about_close,
-    open: about_open,
+    elements: {
+      trigger: about_trigger,
+      portalled: about_portal,
+      overlay: about_overlay,
+      content: about_content,
+      title: about_title,
+      description: about_description,
+      close: about_close,
+    },
+    states: { open: about_open },
   } = createDialog();
-  const movie_dialog = createDialog();
-  let movie_trigger = movie_dialog.trigger;
+
+  const {
+    elements: {
+      trigger: movie_trigger,
+      portalled: movie_portal,
+      overlay: movie_overlay,
+      content: movie_content,
+      title: movie_title,
+      description: movie_description,
+      close: movie_close,
+    },
+    states: { open: movie_open },
+  } = createDialog();
 
   export let data;
 
@@ -88,7 +101,7 @@
       <Dust {width} {height} />
     </div>
     <h1>
-      <button melt={$about_trigger} class="font-black text-4xl sm:text-6xl uppercase hover:text-yellow-500">
+      <button use:melt={$about_trigger} class="font-black text-4xl sm:text-6xl uppercase hover:text-yellow-500">
         Hvað er í <span class="bg-gradient-to-br from-yellow-500 to-red-500 bg-clip-text text-transparent box-decoration-clone">bíó</span>?
       </button>
     </h1>
@@ -111,7 +124,7 @@
 <div
   class="mb-8 md:md-30 grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] z-40">
   {#each filtered_cinemas_showtimes as movie (movie.title)}
-    <button on:click={() => (selected_movie = movie)} melt={$movie_trigger}>
+    <button on:click={() => (selected_movie = movie)} use:melt={$movie_trigger}>
       <img
         src={`posters/${movie.images[0].path}`}
         title={movie.title}
@@ -121,8 +134,56 @@
   {/each}
 </div>
 
-{#if selected_movie}
-  <ModalMovie {selected_movie} today={data.today} {movie_dialog} />
+{#if $movie_open}
+  <div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center transition-opacity" use:movie_portal>
+    <div
+      class="relative rounded-2xl bg-neutral-950 m-6 shadow-xl screen-height w-[min(100vw,640px)] overflow-y-auto p-4 sm:p-8 transition-opacity"
+      use:melt={$movie_overlay}>
+      <div use:melt={$movie_content}>
+        <h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200" use:melt={$movie_title}>{selected_movie.title}</h3>
+        <div class="mt-2 text-sm mb-4 text-neutral-300" use:melt={$movie_description}>
+          <p class="mb-4 text-neutral-400">{selected_movie.description}</p>
+          <div class="flex group gap-4 items-center">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={selected_movie.trailer_url}
+              class="relative py-1 px-3 border border-gray-300 text-gray-300 text-sm font-medium rounded-md flex gap-2 items-center hover:border-gray-400 hover:text-gray-400">
+              <span
+                class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" class="fill-current">
+                <path d="M3 22V2L21 12L3 22Z" />
+              </svg>
+              Stikla
+            </a>
+            {#if selected_movie.imdb}
+              <div class="group">
+                <a
+                  href={selected_movie.imdb.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="relative py-1 px-3 border border-[#f6c700] text-[#f6c700] text-sm font-medium rounded-md hover:border-yellow-200 hover:text-yellow-200">
+                  <span
+                    class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20" />
+                  IMDb · {selected_movie.imdb.star}</a>
+              </div>
+            {/if}
+          </div>
+          <h2 class="my-6 text-neutral-400 text-sm">{data.today}</h2>
+          <Showtimes showtimes={selected_movie.showtimes} />
+        </div>
+        <div class="sticky inset-0 bottom-0 rounded-b-xl z-50 isolate h-20">
+          <div class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none" />
+          <button
+            class="absolute group w-auto bottom-0 inset-x-0 sm:bottom-4 sm:inset-x-0 z-50 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900"
+            use:melt={$movie_close}>
+            <span class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10" />
+            Loka
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 {/if}
 
 <div class="fixed w-full inset-x-0 sm:hidden bottom-8 z-40">
@@ -140,15 +201,15 @@
     <div class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-end sm:items-center">
       <div
         class="relative rounded-2xl bg-neutral-950 m-4 shadow-xl screen-height w-[min(100vw,640px)] overflow-y-auto p-4 sm:p-8"
-        melt={$about_overlay}
+        use:melt={$about_overlay}
         transition:flyAndScale={{
           duration: 150,
           y: 8,
           start: 0.96,
         }}>
-        <div melt={$about_content}>
-          <h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200" melt={$about_title}>Um okkur 🍿</h3>
-          <div class="[&_a]:underline mt-2 text-sm mb-4 text-neutral-400" melt={$about_description}>
+        <div use:melt={$about_content}>
+          <h3 class="font-bold mb-2 text-lg md:text-2xl text-neutral-200" use:melt={$about_title}>Um okkur 🍿</h3>
+          <div class="[&_a]:underline mt-2 text-sm mb-4 text-neutral-400" use:melt={$about_description}>
             <p class="pb-4">
               Vefsísðan „Hvað er í bíó?“ var upprunarlega unnin af <a
                 class="hover:text-neutral-100"
@@ -188,7 +249,7 @@
           <div class="absolute -inset-x-4 -bottom-4 sm:-bottom-8 sm:-inset-x-8 h-24 bg-gradient-to-t from-black z-10 pointer-events-none" />
           <button
             class="absolute w-auto bottom-0 inset-x-0 z-20 text-neutral-300 hover:text-white text-base shadow-neutral-800 px-2.5 py-2 rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900"
-            melt={$about_close}>Loka</button>
+            use:melt={$about_close}>Loka</button>
         </div>
       </div>
     </div>
