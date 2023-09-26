@@ -8,39 +8,37 @@ const showtime = z.object({
   tags: z.array(z.string()),
 });
 
-const movie = z
-  .object({
-    title: z.string(),
-    alt_title: z.string(),
-    kvikmyndir_is_id: z.number(),
-    release_year: z.number(),
-    poster_url: z.string(),
-    content_rating_in_years: z.number(),
-    scrape_url: z.string(),
-    description: z.string(),
-    showtimes: z.array(showtime),
-    genres: z.array(z.string()),
-    duration_in_mins: z.number(),
-    rating_urls: z.array(z.string()),
-    language: z.string(),
-    trailer_url: z.string(),
-    image_urls: z.array(z.string()),
-    images: z.array(
-      z.object({
-        url: z.string(),
-        path: z.string(),
-        checksum: z.string(),
-        status: z.string(),
-      })
-    ),
-    imdb: z
-      .object({
-        link: z.string(),
-        star: z.number(),
-      })
-      .optional(),
-  })
-  .strict();
+const movie = z.object({
+  title: z.string(),
+  alt_title: z.string(),
+  kvikmyndir_is_id: z.number(),
+  release_year: z.number(),
+  poster_url: z.string(),
+  content_rating_in_years: z.string(),
+  scrape_url: z.string(),
+  description: z.string(),
+  showtimes: z.array(showtime),
+  genres: z.array(z.string()),
+  duration_in_mins: z.number(),
+  rating_urls: z.array(z.string()),
+  language: z.string(),
+  trailer_url: z.string(),
+  image_urls: z.array(z.string()),
+  images: z.array(
+    z.object({
+      url: z.string(),
+      path: z.string(),
+      checksum: z.string(),
+      status: z.string(),
+    })
+  ),
+  imdb: z
+    .object({
+      link: z.string(),
+      star: z.number(),
+    })
+    .optional(),
+});
 
 export type Movie = z.infer<typeof movie>;
 export type Showtime = z.infer<typeof showtime>;

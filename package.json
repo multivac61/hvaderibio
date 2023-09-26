@@ -17,8 +17,8 @@
     "@melt-ui/svelte": "^0.50.0",
     "@sveltejs/adapter-static": "^2.0.3",
     "@sveltejs/kit": "^1.25.1",
-    "@typescript-eslint/eslint-plugin": "^6.7.2",
-    "@typescript-eslint/parser": "^6.7.2",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
@@ -38,8 +38,10 @@
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vitest": "^0.34.5",
-    "zod": "^3.22.2"
+    "zod": "^3.22.2",
+    "linkedom": "^0.15.3"
   },
   "type": "module",
   "packageManager": "pnpm@8.3.1"
+  }
 }
