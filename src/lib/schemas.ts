@@ -1,37 +1,30 @@
 import { z } from "zod";
 
-const showtime = z.object({
-  time: z.string(),
-  cinema: z.string(),
-  purchase_url: z.string(),
-  hall: z.string(),
-  tags: z.array(z.string()),
+const showtime_schema = z.object({
+  time: z.string().optional(),
+  purchase_url: z.string().optional(),
+  hall: z.string().optional(),
 });
 
-const movie = z.object({
+export const cinema_showtimes_schema = z.record(z.array(showtime_schema));
+
+export type CinemaShowtimes = z.infer<typeof cinema_showtimes_schema>;
+export type Movie = z.infer<typeof movie_schema>;
+export type Showtime = z.infer<typeof showtime_schema>;
+
+export const movie_schema = z.object({
   title: z.string(),
-  alt_title: z.string(),
-  kvikmyndir_is_id: z.number(),
+  id: z.number(),
+  alt_title: z.string().optional(),
   release_year: z.number(),
   poster_url: z.string(),
-  content_rating_in_years: z.string(),
-  scrape_url: z.string(),
+  content_rating: z.string().optional(),
   description: z.string(),
-  showtimes: z.array(showtime),
   genres: z.array(z.string()),
   duration_in_mins: z.number(),
-  rating_urls: z.array(z.string()),
-  language: z.string(),
-  trailer_url: z.string(),
-  image_urls: z.array(z.string()),
-  images: z.array(
-    z.object({
-      url: z.string(),
-      path: z.string(),
-      checksum: z.string(),
-      status: z.string(),
-    })
-  ),
+  language: z.array(z.string()),
+  trailer_url: z.string().optional(),
+  cinema_showtimes: cinema_showtimes_schema,
   imdb: z
     .object({
       link: z.string(),
@@ -40,10 +33,7 @@ const movie = z.object({
     .optional(),
 });
 
-export type Movie = z.infer<typeof movie>;
-export type Showtime = z.infer<typeof showtime>;
-
-export const movies_schema = z.array(movie);
+export const movies_schema = z.array(movie_schema);
 
 export const imdb_movie = z.object({
   id: z.string(),

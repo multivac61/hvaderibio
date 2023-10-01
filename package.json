@@ -24,6 +24,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-svelte": "^2.33.2",
     "gh-pages": "^6.0.0",
+    "linkedom": "^0.15.3",
     "postcss": "^8.4.30",
     "postcss-load-config": "^4.0.1",
     "prettier": "^3.0.3",
@@ -38,9 +39,11 @@
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vitest": "^0.34.5",
-    "zod": "^3.22.2",
-    "linkedom": "^0.15.3"
+    "zod": "^3.22.2"
   },
   "type": "module",
-  "packageManager": "pnpm@8.3.1"
+  "packageManager": "pnpm@8.3.1",
+  "dependencies": {
+    "sharp": "^0.32.6"
+  }
 }
