@@ -9,13 +9,6 @@ function combineDateWithTime(hour_minute: string): string {
 }
 
 export function parse_movie(document: Document, id: number): Movie {
-  // const res = await fetch(poster_url ?? "", { headers });
-  // const abuffer = await res.arrayBuffer();
-  // const buffer = Buffer.from(new Uint8Array(abuffer));
-  // const buff = await sharp(buffer).toFormat("jpeg").toBuffer();
-  // let base64data = buff.toString("base64");
-  // poster: `data:image/jpeg;base64,${base64data.toString()}`,
-
   const match = document.querySelector<HTMLImageElement>("div.trailer_play_item > img")?.src?.match(/\/vi\/(.+?)\//);
 
   return movie_schema.parse({
@@ -23,6 +16,9 @@ export function parse_movie(document: Document, id: number): Movie {
     alt_title: document.querySelector<HTMLHeadElement>("h4")?.textContent?.replace(/\(|\)/g, ""),
     release_year: parseInt(document?.querySelector<HTMLSpanElement>("span.year")?.textContent?.trim()!),
     poster_url: document.querySelector<HTMLAnchorElement>("div.poster > a")?.href?.trim(),
+    rating_urls: [...document.querySelectorAll<HTMLAnchorElement>("div.movie-ratings > div.rating-box > a")].map((a) => {
+      a.href?.trim();
+    }),
     content_rating: document.querySelector("span.certtext")?.textContent?.trim(),
     description: document.querySelector<HTMLParagraphElement>("p.description")?.textContent?.trim(),
     genres: [...document.querySelectorAll("div.genres span")].map((genre) => genre?.textContent!),
@@ -41,9 +37,9 @@ export function parse_showtimes(document: Document): CinemaShowtimes {
 
     cinema_showtimes[cinema_name] = [...cinema.querySelectorAll<HTMLLIElement>("li.qtip.tip-top")].map((showtime) => {
       return {
-        time: combineDateWithTime(showtime.querySelector<HTMLAnchorElement>("a.rate")?.firstChild?.textContent?.replace(".", ":")!),
-        purchase_url: decodeURI(showtime.querySelector<HTMLAnchorElement>("a.rate")?.href!).trim(),
-        hall: showtime.querySelector<HTMLDivElement>("div.salur")?.firstChild?.textContent?.trim(),
+        time: combineDateWithTime(showtime.querySelector<HTMLAnchorElement>("a.rate")!.firstChild?.textContent?.replace(".", ":")!),
+        purchase_url: decodeURI(showtime.querySelector<HTMLAnchorElement>("a.rate")!.href).trim(),
+        hall: showtime.querySelector<HTMLDivElement>("div.salur")!.firstChild!.textContent!.trim(),
       };
     });
   });

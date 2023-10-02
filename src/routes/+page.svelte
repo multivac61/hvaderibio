@@ -8,7 +8,7 @@
   import CinemaTab from "$lib/CinemaTab.svelte";
   import Dust from "$lib/Dust.svelte";
 
-  import { group_by, in_range, to_float, flyAndScale } from "$lib/util";
+  import { in_range, to_float, flyAndScale } from "$lib/util";
   import type { Movie } from "$lib/schemas";
 
   const {
@@ -46,7 +46,7 @@
     from = Math.min(21, new Date().getHours() - 1);
   });
 
-  let selected_id: number | undefined;
+  let selected_movie: Movie | undefined;
 
   // Get all cinemas in data.movies
   const all_cinemas = data.movies
@@ -56,10 +56,8 @@
 
   $: filtered_cinemas_showtimes = data.movies.filter(
     (movie) =>
-      movie.cinema_showtimes &&
-      movie.cinema_showtimes.some(
-        (cinema_showtime) => selected_cinemas.includes(cinema_showtime.keys()) && in_range(to_float(cinema_showtime.time), from, to)
-      )
+      Object.keys(movie.cinema_showtimes).some((c) => selected_cinemas.includes(c)) &&
+      Object.values(movie.cinema_showtimes).some((times) => times.some(({ time }) => time && in_range(to_float(time), from, to)))
   );
 
   const capital_region_cinemas = all_cinemas.filter((name) =>
@@ -119,14 +117,19 @@
 
 <div
   class="md:md-30 z-40 mb-8 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] sm:gap-6">
-  {#each Object.entries(filtered_cinemas_showtimes) as movie (movie.titl)}
+  {#each filtered_cinemas_showtimes as movie (movie.title)}
     <button on:click={() => (selected_movie = movie)} use:melt={$movie_trigger}>
+      <img
+        style="display:block;"
+        id="base64image"
+        alt={movie.title}
+        src={movie.poster}
+        class="aspect-[2/3] rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
       <!-- <img -->
       <!--   src={`posters/${movie.images[0].path}`} -->
       <!--   title={movie.title} -->
       <!--   alt={movie.title} -->
       <!--   class="aspect-[2/3] rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" /> -->
-      {movie.title}
     </button>
   {/each}
 </div>
@@ -179,10 +182,11 @@
                         href={purchase_url}>
                         <span
                           class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10" />
-                        {new Date(time).toLocaleTimeString("is-IS", {
-                          timeStyle: "short",
-                          hour12: false,
-                        })}
+                        {time &&
+                          new Date(time).toLocaleTimeString("is-IS", {
+                            timeStyle: "short",
+                            hour12: false,
+                          })}
                       </a>
                     {/each}
                   </div>

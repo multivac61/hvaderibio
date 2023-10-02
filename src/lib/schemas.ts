@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 const showtime_schema = z.object({
-  time: z.string().optional(),
-  purchase_url: z.string().optional(),
-  hall: z.string().optional(),
+  time: z.string(),
+  purchase_url: z.string(),
+  hall: z.string(),
 });
 
 export const cinema_showtimes_schema = z.record(z.array(showtime_schema));
@@ -18,6 +18,8 @@ export const movie_schema = z.object({
   alt_title: z.string().optional(),
   release_year: z.number(),
   poster_url: z.string(),
+  rating_urls: z.array(z.string().optional()).optional(),
+  poster: z.string().optional(),
   content_rating: z.string().optional(),
   description: z.string(),
   genres: z.array(z.string()),

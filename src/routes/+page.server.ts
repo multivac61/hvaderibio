@@ -1,8 +1,10 @@
 import type { RequestEvent } from "@sveltejs/kit";
 
-import { parseHTML } from "linkedom";
+import fs from "fs/promises";
 
-import { movies_schema } from "$lib/schemas";
+import { parseHTML } from "linkedom";
+import sharp from "sharp";
+
 import { parse_movie, parse_movie_ids } from "$lib/parse";
 
 export const prerender = true;
@@ -37,49 +39,44 @@ export async function load({ fetch }: RequestEvent) {
       })
       .replace("dagur", "daginn")}`,
     movies: Promise.all(
-      parse_movie_ids(document).map(async (id) => {
+      parse_movie_ids(document).map(async (id: number) => {
         const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
         const { document: movie_document } = parseHTML(await movie.text());
         return parse_movie(movie_document, id);
       })
-    ),
+    ).then(async (movies) => {
+      const moviesWithPostersAndImdbRating = await Promise.all(
+        movies.map(async (movie) => {
+          let imdb: { star: number; link: string } | undefined = undefined;
+          const imdbLink = movie.rating_urls?.find((link) => link?.includes("imdb.com"));
+          if (imdbLink) {
+            try {
+              const imdbId = new URL(imdbLink).pathname.split("/").at(-1);
+              imdb = {
+                star: await fetch(`https://imdb-api.projects.thetuhin.com/title/${imdbId}`)
+                  .then(async (response: Response) => await response.json())
+                  .then((response: { rating: { star: number } }) => response.rating.star),
+                link: imdbLink,
+              };
+            } catch (e) {
+              console.error(e, imdbLink);
+            }
+          }
+
+          const res = await fetch(movie.poster_url, { headers });
+          const abuffer = await res.arrayBuffer();
+          const buffer = Buffer.from(new Uint8Array(abuffer));
+          const buff = await sharp(buffer).resize({ height: 393, width: 262 }).toFormat("webp").toBuffer();
+          let base64data = buff.toString("base64");
+
+          return {
+            ...movie,
+            poster: `data:image/jpeg;base64,${base64data.toString()}`,
+            imdb,
+          };
+        })
+      );
+      return moviesWithPostersAndImdbRating;
+    }),
   };
 }
-
-// export async function load({ fetch }: RequestEvent) {
-//   return {
-//     movies: await fetch("kvikmyndir_is.json")
-//       .then(async (response: Response) => movies_schema.parse(await response.json()))
-//       .then(async (movies: Movie[]) => {
-//         return Promise.all(
-//           movies.map(async (movie) => {
-//             const imdbLink = movie.rating_urls.find((link) => link.includes("imdb.com"));
-//             try {
-//               const imdbId = new URL(imdbLink ?? "").pathname.split("/").at(-1);
-//               return {
-//                 ...movie,
-//                 imdb: {
-//                   star: await fetch(`https://imdb-api.projects.thetuhin.com/title/${imdbId}`)
-//                     .then(async (response: Response) => await response.json())
-//                     .then((response: { rating: { star: number } }) => response.rating.star),
-//                   link: imdbLink,
-//                 },
-//               };
-//             } catch (e) {
-//               console.error(e, imdbLink);
-//             }
-//             return movie;
-//           })
-//         );
-//       }),
-//     today: `Í dag, ${new Date()
-//       .toLocaleString("is-IS", {
-//         weekday: "long",
-//         year: "numeric",
-//         month: "long",
-//         day: "numeric",
-//       })
-//       .replace("dagur", "daginn")}`,
-//   };
-// }
-//
