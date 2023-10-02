@@ -46,7 +46,7 @@
     from = Math.min(21, new Date().getHours() - 1);
   });
 
-  let selected_movie: Movie | undefined;
+  let selected_id: number | undefined;
 
   // Get all cinemas in data.movies
   const all_cinemas = data.movies
@@ -54,23 +54,13 @@
     .filter((name: string, index: number, array: string[]) => array.indexOf(name) === index)
     .sort();
 
-  const filtered_cinemas_showtimes = data.movies;
-
-  // TODO
-  // $: filtered_cinemas_showtimes = data.movies
-  //   .sort((a: Movie, b: Movie) => b.cinema_showtimes.length - a.cinema_showtimes.length)
-  //   .filter((movie: Movie) =>
-  //     movie.showtimes.some((showtime) => selected_cinemas.includes(showtime.cinema) && in_range(to_float(showtime.time), from, to))
-  //   )
-  //   .map((movie: Movie) => ({
-  //     ...movie,
-  //     showtimes: Object.entries(
-  //       group_by(
-  //         movie.showtimes.filter((showtime) => selected_cinemas.includes(showtime.cinema) && in_range(to_float(showtime.time), from, to)),
-  //         "cinema"
-  //       )
-  //     ),
-  //   }));
+  $: filtered_cinemas_showtimes = data.movies.filter(
+    (movie) =>
+      movie.cinema_showtimes &&
+      movie.cinema_showtimes.some(
+        (cinema_showtime) => selected_cinemas.includes(cinema_showtime.keys()) && in_range(to_float(cinema_showtime.time), from, to)
+      )
+  );
 
   const capital_region_cinemas = all_cinemas.filter((name) =>
     ["Bíó Paradís", "Háskólabíó", "Laugarásbíó", "Sambíóin Egilshöll", "Sambíóin Kringlunni", "Sambíóin Álfabakka", "Smárabíó"].includes(
@@ -129,7 +119,7 @@
 
 <div
   class="md:md-30 z-40 mb-8 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] sm:gap-6">
-  {#each filtered_cinemas_showtimes as movie (movie.title)}
+  {#each Object.entries(filtered_cinemas_showtimes) as movie (movie.titl)}
     <button on:click={() => (selected_movie = movie)} use:melt={$movie_trigger}>
       <!-- <img -->
       <!--   src={`posters/${movie.images[0].path}`} -->

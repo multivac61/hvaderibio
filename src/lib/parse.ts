@@ -8,7 +8,7 @@ function combineDateWithTime(hour_minute: string): string {
   return today.toISOString();
 }
 
-export function parse_movie(document: Document, id: number): Partial<Movie> {
+export function parse_movie(document: Document, id: number): Movie {
   // const res = await fetch(poster_url ?? "", { headers });
   // const abuffer = await res.arrayBuffer();
   // const buffer = Buffer.from(new Uint8Array(abuffer));
@@ -17,7 +17,6 @@ export function parse_movie(document: Document, id: number): Partial<Movie> {
   // poster: `data:image/jpeg;base64,${base64data.toString()}`,
 
   const match = document.querySelector<HTMLImageElement>("div.trailer_play_item > img")?.src?.match(/\/vi\/(.+?)\//);
-  const trailer_url = match ? `https://www.youtube.com/watch?v=${match[1]}` : undefined;
 
   return movie_schema.parse({
     title: document.querySelector<HTMLHeadElement>("h1")?.firstChild?.textContent?.trim(),
@@ -30,7 +29,7 @@ export function parse_movie(document: Document, id: number): Partial<Movie> {
     duration_in_mins: parseInt(document.querySelector("span.duration")?.textContent?.replace("mín", "").replace("MÍN", "").trim() ?? "0"),
     language: [...document.querySelectorAll("div.combined_details > span:nth-child(2)")].map((l) => l?.textContent?.trim()!),
     cinema_showtimes: parse_showtimes(document),
-    trailer_url,
+    trailer_url: match ? `https://www.youtube.com/watch?v=${match[1]}` : undefined,
     id,
   });
 }
