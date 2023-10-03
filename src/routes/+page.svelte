@@ -120,16 +120,10 @@
   {#each filtered_cinemas_showtimes as movie (movie.title)}
     <button on:click={() => (selected_movie = movie)} use:melt={$movie_trigger}>
       <img
-        style="display:block;"
-        id="base64image"
+        src={`${movie.id}.webp`}
+        title={movie.title}
         alt={movie.title}
-        src={movie.poster}
         class="aspect-[2/3] rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
-      <!-- <img -->
-      <!--   src={`posters/${movie.images[0].path}`} -->
-      <!--   title={movie.title} -->
-      <!--   alt={movie.title} -->
-      <!--   class="aspect-[2/3] rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" /> -->
     </button>
   {/each}
 </div>

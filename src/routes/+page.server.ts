@@ -65,7 +65,7 @@ export async function load({ fetch, setHeaders }: RequestEvent) {
           const res = await fetch(movie.poster_url, { headers });
           const abuffer = await res.arrayBuffer();
           const buffer = Buffer.from(new Uint8Array(abuffer));
-          await sharp(buffer).resize({ height: 393, width: 262 }).toFile(`${movie.id}.webp`);
+          await sharp(buffer).resize({ height: 393, width: 262 }).toFile(`static/${movie.id}.webp`);
 
           return {
             ...movie,
