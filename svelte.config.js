@@ -11,5 +11,5 @@ export default {
   // Consult https://kit.svelte.dev/docs/integrations#preprocessors
   // for more information about preprocessors
   preprocess: sequence([vitePreprocess(), preprocess({ postcss: true }), preprocessMeltUI()]),
-  kit: { adapter: adapter() },
+  kit: { adapter: adapter(), prerender: { handleHttpError: "warn" } },
 };

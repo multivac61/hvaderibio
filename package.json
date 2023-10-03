@@ -2,8 +2,9 @@
   "name": "hvaderibio",
   "version": "0.0.1",
   "scripts": {
+    "scrape": "pnpx tsx src/scrape.ts",
     "dev": "vite dev --host 0.0.0.0",
-    "build": "svelte-kit sync && vite build",
+    "build": "svelte-kit sync && pnpm scrape && vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
