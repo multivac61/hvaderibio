@@ -1,7 +1,5 @@
 import type { RequestEvent } from "@sveltejs/kit";
 
-import fs from "fs/promises";
-
 import { parseHTML } from "linkedom";
 import sharp from "sharp";
 

@@ -42,6 +42,9 @@ runs:
     #- name: Prune pnpm store
     #  shell: bash
     #  run: pnpm prune store
+    - name: Install sharp
+      shell: bash
+      run: pnpm install --ignore-scripts=false --foreground-scripts --verbose --platform=linux --arch=x64 sharp
 
     - name: Install dependencies
       shell: bash
