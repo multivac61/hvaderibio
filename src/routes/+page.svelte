@@ -206,6 +206,8 @@
 <div class="fixed inset-x-0 bottom-8 z-40 w-full sm:hidden">
   <select
     on:change={change}
+    id="select cinemas"
+    name="select cinemas"
     aria-label="Select cinemas"
     class="mx-auto mt-2 block rounded-md border-0 bg-black bg-opacity-10 py-1.5 pl-3 pr-10 ring-0 ring-inset ring-black backdrop-blur-xl sm:text-sm sm:leading-6">
     {#each [...group_choices, ...all_choices] as [label]}
