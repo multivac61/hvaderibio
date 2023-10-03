@@ -26,11 +26,15 @@ jobs:
       - name: 📥 Monorepo install
         uses: ./.github/actions/pnpm-install
 
-      - name: 🔨 build
+      - name: 🕷️ Scrape
+        shell: bash
+        run: pnpm run scrape
+
+      - name: 🔨 Build
         shell: bash
         run: pnpm run build
 
-      - name: Deploy 🚀
+      - name: 🚀 Deploy 
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build # The folder the action should deploy.
