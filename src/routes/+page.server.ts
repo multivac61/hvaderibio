@@ -24,7 +24,8 @@ const headers = {
   "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36",
 } as const;
 
-export async function load({ fetch }: RequestEvent) {
+export async function load({ fetch, setHeaders }: RequestEvent) {
+  setHeaders({ "cache-control": "1800" });
   const showtimes = await fetch("https://www.kvikmyndir.is/bio/syningatimar", { headers });
   const { document } = parseHTML(await showtimes.text());
   return {
@@ -64,12 +65,10 @@ export async function load({ fetch }: RequestEvent) {
           const res = await fetch(movie.poster_url, { headers });
           const abuffer = await res.arrayBuffer();
           const buffer = Buffer.from(new Uint8Array(abuffer));
-          const buff = await sharp(buffer).resize({ height: 393, width: 262 }).toFormat("webp").toBuffer();
-          let base64data = buff.toString("base64");
+          await sharp(buffer).resize({ height: 393, width: 262 }).toFile(`${movie.id}.webp`);
 
           return {
             ...movie,
-            poster: `data:image/jpeg;base64,${base64data.toString()}`,
             imdb,
           };
         })
