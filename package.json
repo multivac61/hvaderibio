@@ -2,7 +2,7 @@
   "name": "hvaderibio",
   "version": "0.0.1",
   "scripts": {
-    "scrape": "pnpx tsx src/scrape.ts",
+    "scrape": "svelte-kit sync && pnpx tsx src/scrape.ts",
     "dev": "vite dev --host 0.0.0.0",
     "build": "svelte-kit sync && vite build",
     "preview": "vite preview",
