@@ -118,7 +118,7 @@
 <div
   class="md:md-30 z-40 mb-8 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] sm:gap-6">
   {#each filtered_cinemas_showtimes as movie (movie.title)}
-    <button on:click={() => (selected_movie = movie)} use:melt={$movie_trigger}>
+    <button on:click={() => (selected_movie = movie)} use:melt={$movie_trigger} id={movie.title}>
       <img
         src={`${movie.id}.webp`}
         title={movie.title}
