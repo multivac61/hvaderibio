@@ -1,51 +1,41 @@
 import { z } from "zod";
 
-const showtime = z.object({
+const showtime_schema = z.object({
   time: z.string(),
-  cinema: z.string(),
   purchase_url: z.string(),
   hall: z.string(),
-  tags: z.array(z.string()),
 });
 
-const movie = z
-  .object({
-    title: z.string(),
-    alt_title: z.string(),
-    kvikmyndir_is_id: z.number(),
-    release_year: z.number(),
-    poster_url: z.string(),
-    content_rating_in_years: z.number(),
-    scrape_url: z.string(),
-    description: z.string(),
-    showtimes: z.array(showtime),
-    genres: z.array(z.string()),
-    duration_in_mins: z.number(),
-    rating_urls: z.array(z.string()),
-    language: z.string(),
-    trailer_url: z.string(),
-    image_urls: z.array(z.string()),
-    images: z.array(
-      z.object({
-        url: z.string(),
-        path: z.string(),
-        checksum: z.string(),
-        status: z.string(),
-      })
-    ),
-    imdb: z
-      .object({
-        link: z.string(),
-        star: z.number(),
-      })
-      .optional(),
-  })
-  .strict();
+export const cinema_showtimes_schema = z.record(z.array(showtime_schema));
 
-export type Movie = z.infer<typeof movie>;
-export type Showtime = z.infer<typeof showtime>;
+export type CinemaShowtimes = z.infer<typeof cinema_showtimes_schema>;
+export type Movie = z.infer<typeof movie_schema>;
+export type Showtime = z.infer<typeof showtime_schema>;
 
-export const movies_schema = z.array(movie);
+export const movie_schema = z.object({
+  title: z.string(),
+  id: z.number(),
+  alt_title: z.string().optional(),
+  release_year: z.number(),
+  poster_url: z.string(),
+  rating_urls: z.array(z.string().optional()).optional(),
+  poster: z.string().optional(),
+  content_rating: z.string().optional(),
+  description: z.string(),
+  genres: z.array(z.string()),
+  duration_in_mins: z.number(),
+  language: z.array(z.string()),
+  trailer_url: z.string().optional(),
+  cinema_showtimes: cinema_showtimes_schema,
+  imdb: z
+    .object({
+      link: z.string(),
+      star: z.number(),
+    })
+    .optional(),
+});
+
+export const movies_schema = z.array(movie_schema);
 
 export const imdb_movie = z.object({
   id: z.string(),
