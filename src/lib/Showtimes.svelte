@@ -6,7 +6,7 @@
 
 <div>
   <div class="space-y-4">
-    {#each showtimes as [cinema, times] (cinema)}
+    {#each Object.entries(showtimes) as [cinema, times] (cinema)}
       <div>
         <div class="mb-3 font-medium text-neutral-200">{cinema}</div>
         <div class="inline-flex flex-wrap gap-3">
