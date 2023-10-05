@@ -14,8 +14,8 @@
         this.x = x;
         this.y = y;
         this.size = size;
-        this.weight = Math.random() * 0.5 + 2.5;
-        this.alpha = Math.random() * 0.5 + 0.1;
+        this.weight = Math.random() * 0.5 + 5.5;
+        this.alpha = Math.random() * 0.5 + 0.2;
         this.angle = Math.random() * (Math.PI * 2);
         this.speed = Math.random() * 0.01 + 0.05;
       }
@@ -28,7 +28,7 @@
         context.fill();
 
         // Add sparkle effect
-        if (Math.random() < 0.0005) {
+        if (Math.random() < 0.001) {
           // 1% chance of sparkle
           const sparkleSize = this.size * 2;
           const gradient = context.createRadialGradient(this.x, this.y, 0, this.x, this.y, sparkleSize);
@@ -81,10 +81,10 @@
 
   export let width = 640;
   export let height = 640;
-  export let number_of_particles = 480;
+  export let number_of_particles = 1000;
 </script>
 
-<div class="fixed top-0 left-0 blur-[0.5px] w-[{width}px] h-[{height}px] -z-50">
+<div class="fixed left-0 top-0 blur-[0.5px] w-[{width}px] h-[{height}px] -z-50">
   <Canvas {width} {height}>
     <Layer {render} />
   </Canvas>
