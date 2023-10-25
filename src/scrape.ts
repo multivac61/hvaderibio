@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { parseHTML } from "linkedom";
 import sharp from "sharp";
 
+import type { Movie } from "$lib/schemas";
 import { parse_movie, parse_movie_ids } from "$lib/parse";
 
 // https://flaviocopes.com/fix-dirname-not-defined-es-module-scope/
@@ -29,7 +30,8 @@ const headers = {
 } as const;
 
 const showtimes = await fetch("https://www.kvikmyndir.is/bio/syningatimar", { headers });
-const { document } = parseHTML(await showtimes.text());
+const html = await showtimes.text();
+const { document } = parseHTML(html);
 await Promise.all(
   parse_movie_ids(document).map(async (id: number) => {
     const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
@@ -39,38 +41,41 @@ await Promise.all(
 )
   .then(async (movies) => {
     const moviesWithPostersAndImdbRating = await Promise.all(
-      movies.map(async (movie) => {
-        let imdb: { star: number; link: string } | undefined = undefined;
-        const imdbLink = movie.rating_urls?.find((link) => link?.includes("imdb.com"));
-        if (imdbLink) {
-          try {
-            const imdbId = new URL(imdbLink).pathname.split("/").at(-1);
-            imdb = {
-              star: await fetch(`https://imdb-api.projects.thetuhin.com/title/${imdbId}`)
-                .then(async (response: Response) => await response.json())
-                .then((response: { rating: { star: number } }) => response.rating.star),
-              link: imdbLink,
-            };
-          } catch (e) {
-            console.error(e, imdbLink);
+      movies
+        .filter((movie: Movie | null) => movie !== null)
+        .map(async (movie: Movie | null) => {
+          if (!movie) return; // Silence typescript errors...
+
+          let imdb: { star: number; link: string } | undefined = undefined;
+          const imdbLink = movie.rating_urls?.find((link: string | undefined) => link?.includes("imdb.com"));
+          if (imdbLink) {
+            try {
+              const imdbId = new URL(imdbLink).pathname.split("/").at(-1);
+              imdb = {
+                star: await fetch(`https://imdb-api.projects.thetuhin.com/title/${imdbId}`)
+                  .then(async (response: Response) => await response.json())
+                  .then((response: { rating: { star: number } }) => response.rating.star),
+                link: imdbLink,
+              };
+            } catch (e) {
+              console.error(e, imdbLink);
+            }
           }
-        }
 
-        const res = await fetch(movie.poster_url, { headers });
-        const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
-        await sharp(buffer)
-          .resize({ height: 393, width: 262 })
-          .toFile(path.resolve(__dirname, `../static/${movie.id}.webp`));
+          const res = await fetch(movie!.poster_url, { headers });
+          const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
+          await sharp(buffer)
+            .resize({ height: 393, width: 262 })
+            .toFile(path.resolve(__dirname, `../static/${movie!.id}.webp`));
 
-        return {
-          ...movie,
-          imdb,
-        };
-      })
+          return {
+            ...movie,
+            imdb,
+          };
+        })
     );
     return moviesWithPostersAndImdbRating;
   })
   .then(async (movies) => {
-    console.log(movies);
     await fs.writeFile(path.resolve(__dirname, "../static/movies.json"), JSON.stringify(movies, null, 2));
   });

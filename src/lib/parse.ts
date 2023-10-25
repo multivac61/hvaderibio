@@ -1,4 +1,4 @@
-import { movie_schema, cinema_showtimes_schema, type CinemaShowtimes, type Movie } from "./schemas";
+import { movie_schema, cinema_showtimes_schema, type CinemaShowtimes } from "./schemas";
 
 function combineDateWithTime(hour_minute: string): string {
   const [hours, minutes] = hour_minute.split(":");
@@ -8,17 +8,20 @@ function combineDateWithTime(hour_minute: string): string {
   return today.toISOString();
 }
 
-export function parse_movie(document: Document, id: number): Movie {
+export function parse_movie(document: Document, id: number) {
   const match = document.querySelector<HTMLImageElement>("div.trailer_play_item > img")?.src?.match(/\/vi\/(.+?)\//);
 
-  return movie_schema.parse({
+  const rating_urls: string[] = [];
+  document.querySelectorAll<HTMLAnchorElement>("div.movie-ratings > div.rating-box > a").forEach((a) => {
+    rating_urls.push(a.href.trim());
+  });
+
+  const parsed = movie_schema.safeParse({
     title: document.querySelector<HTMLHeadElement>("h1")?.firstChild?.textContent?.trim(),
     alt_title: document.querySelector<HTMLHeadElement>("h4")?.textContent?.replace(/\(|\)/g, ""),
     release_year: parseInt(document?.querySelector<HTMLSpanElement>("span.year")?.textContent?.trim()!),
     poster_url: document.querySelector<HTMLAnchorElement>("div.poster > a")?.href?.trim(),
-    rating_urls: [...document.querySelectorAll<HTMLAnchorElement>("div.movie-ratings > div.rating-box > a")].map((a) => {
-      a.href?.trim();
-    }),
+    rating_urls,
     content_rating: document.querySelector("span.certtext")?.textContent?.trim(),
     description: document.querySelector<HTMLParagraphElement>("p.description")?.textContent?.trim(),
     genres: [...document.querySelectorAll("div.genres span")].map((genre) => genre?.textContent!),
@@ -28,9 +31,10 @@ export function parse_movie(document: Document, id: number): Movie {
     trailer_url: match ? `https://www.youtube.com/watch?v=${match[1]}` : undefined,
     id,
   });
+  return parsed.success ? parsed.data : null;
 }
 
-export function parse_showtimes(document: Document): CinemaShowtimes {
+export function parse_showtimes(document: Document) {
   const cinema_showtimes: CinemaShowtimes = {};
   document.querySelectorAll<HTMLDivElement>("div.times_day.day0 div.biotimar").forEach((cinema) => {
     const cinema_name: string = cinema.querySelector<HTMLHeadElement>("h3")?.textContent?.trim()!;
