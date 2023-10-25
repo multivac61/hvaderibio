@@ -203,6 +203,3 @@ yarn.lock
 symlink-from
 
 *.webp
-
-# We don't want to store any static files. Only the source files. Rest is generated at build time and shipped to GitHub Pages
-static/movies.json
