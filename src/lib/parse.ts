@@ -16,6 +16,10 @@ export function parse_movie(document: Document, id: number) {
     rating_urls.push(a.href.trim());
   });
 
+  const description =
+    document.querySelector<HTMLParagraphElement>("p.description.fullplot")?.textContent?.replace("...  minna", "").trim() ??
+    document.querySelector<HTMLParagraphElement>("p.description")?.textContent?.trim();
+
   const parsed = movie_schema.safeParse({
     title: document.querySelector<HTMLHeadElement>("h1")?.firstChild?.textContent?.trim(),
     alt_title: document.querySelector<HTMLHeadElement>("h4")?.textContent?.replace(/\(|\)/g, ""),
@@ -23,7 +27,7 @@ export function parse_movie(document: Document, id: number) {
     poster_url: document.querySelector<HTMLAnchorElement>("div.poster > a")?.href?.trim(),
     rating_urls,
     content_rating: document.querySelector("span.certtext")?.textContent?.trim(),
-    description: document.querySelector<HTMLParagraphElement>("p.description.fullplot")?.textContent?.replace("...  minna", "").trim(),
+    description,
     genres: [...document.querySelectorAll("div.genres span")].map((genre) => genre?.textContent!),
     duration_in_mins: parseInt(document.querySelector("span.duration")?.textContent?.replace("mín", "").replace("MÍN", "").trim() ?? "0"),
     language: [...document.querySelectorAll("div.combined_details > span:nth-child(2)")].map((l) => l?.textContent?.trim()!),
