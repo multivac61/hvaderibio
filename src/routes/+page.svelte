@@ -50,23 +50,23 @@
 
   // Get all cinemas in data.movies
   const all_cinemas = data.movies
-    .flatMap((movie) => Object.keys(movie.cinema_showtimes!))
+    .flatMap((movie: Movie) => Object.keys(movie.cinema_showtimes!))
     .filter((name: string, index: number, array: string[]) => array.indexOf(name) === index)
     .sort();
 
   $: filtered_cinemas_showtimes = data.movies.filter(
-    (movie) =>
+    (movie: Movie) =>
       Object.keys(movie.cinema_showtimes).some((c) => selected_cinemas.includes(c)) &&
       Object.values(movie.cinema_showtimes).some((times) => times.some(({ time }) => time && in_range(to_float(time), from, to)))
   );
 
-  const capital_region_cinemas = all_cinemas.filter((name) =>
+  const capital_region_cinemas = all_cinemas.filter((name: string) =>
     ["Bíó Paradís", "Háskólabíó", "Laugarásbíó", "Sambíóin Egilshöll", "Sambíóin Kringlunni", "Sambíóin Álfabakka", "Smárabíó"].includes(
       name as string
     )
   );
 
-  const all_choices = all_cinemas.map((name) => [name, [name]] as const);
+  const all_choices = all_cinemas.map((name: string) => [name, [name]] as const);
 
   const group_choices = [
     ["Öll kvikmyndahús", all_cinemas],
