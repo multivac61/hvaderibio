@@ -23,7 +23,7 @@ export function parse_movie(document: Document, id: number) {
     poster_url: document.querySelector<HTMLAnchorElement>("div.poster > a")?.href?.trim(),
     rating_urls,
     content_rating: document.querySelector("span.certtext")?.textContent?.trim(),
-    description: document.querySelector<HTMLParagraphElement>("p.description")?.textContent?.trim(),
+    description: document.querySelector<HTMLParagraphElement>("p.description.fullplot")?.textContent?.replace("...  minna", "").trim(),
     genres: [...document.querySelectorAll("div.genres span")].map((genre) => genre?.textContent!),
     duration_in_mins: parseInt(document.querySelector("span.duration")?.textContent?.replace("mín", "").replace("MÍN", "").trim() ?? "0"),
     language: [...document.querySelectorAll("div.combined_details > span:nth-child(2)")].map((l) => l?.textContent?.trim()!),
