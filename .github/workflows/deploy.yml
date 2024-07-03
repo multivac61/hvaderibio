@@ -12,12 +12,11 @@ permissions:
   contents: write
 jobs:
   build-and-deploy:
-    concurrency: ci-${{ github.ref }} # github-pages-deploy-action: Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
-      - uses: actions/checkout@v4.1.6
+      - uses: actions/checkout@main
         with:
           persist-credentials: false
 
@@ -30,7 +29,9 @@ jobs:
       - name: 🔨 Build
         run: nix develop -c pnpm build
 
-      - name: 🚀 Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.6.1
-        with:
-          folder: build
+      - name: Deploy with gh-pages
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          nix develop -c pnpm run deploy -- -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
