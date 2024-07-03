@@ -40,27 +40,12 @@ await Promise.all(
   })
 )
   .then(async (movies) => {
-    const moviesWithPostersAndImdbRating = await Promise.all(
+    // TODO: Get IMDB links back again
+    const moviesWithPosters = await Promise.all(
       movies
         .filter((movie: Movie | null) => movie !== null)
         .map(async (movie: Movie | null) => {
           if (!movie) return; // Silence typescript errors...
-
-          let imdb: { star: number; link: string } | undefined = undefined;
-          const imdbLink = movie.rating_urls?.find((link: string | undefined) => link?.includes("imdb.com"));
-          if (imdbLink) {
-            try {
-              const imdbId = new URL(imdbLink).pathname.split("/").at(-1);
-              imdb = {
-                star: await fetch(`https://imdb-api.projects.thetuhin.com/title/${imdbId}`)
-                  .then(async (response: Response) => await response.json())
-                  .then((response: { rating: { star: number } }) => response.rating.star),
-                link: imdbLink,
-              };
-            } catch (e) {
-              console.error(e, imdbLink);
-            }
-          }
 
           const res = await fetch(movie!.poster_url, { headers });
           const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
@@ -70,11 +55,10 @@ await Promise.all(
 
           return {
             ...movie,
-            imdb,
           };
         })
     );
-    return moviesWithPostersAndImdbRating;
+    return moviesWithPosters;
   })
   .then(async (movies) => {
     await fs.writeFile(path.resolve(__dirname, "../static/movies.json"), JSON.stringify(movies, null, 2));
