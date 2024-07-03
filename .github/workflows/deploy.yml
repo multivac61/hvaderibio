@@ -29,10 +29,9 @@ jobs:
       - name: 🔨 Build
         run: nix develop -c pnpm build
 
-      - name: 🤖 Configure Git
+      - name: Deploy with gh-pages
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "github-actions-bot@users.noreply.github.com"
-
-      - name: 🚀 Deploy
-        run: nix develop -c pnpm deploy-github-pages
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          pnpx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
