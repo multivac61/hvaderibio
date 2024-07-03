@@ -29,5 +29,10 @@ jobs:
       - name: 🔨 Build
         run: nix develop -c pnpm build
 
+      - name: 🤖 Configure Git
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "github-actions-bot@users.noreply.github.com"
+
       - name: 🚀 Deploy
         run: nix develop -c pnpm deploy-github-pages
