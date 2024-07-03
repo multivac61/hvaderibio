@@ -202,5 +202,7 @@ yarn.lock
 .test-tmp
 symlink-from
 
-*.webp
+static/*.webp
+static/*.json
+
 .direnv
