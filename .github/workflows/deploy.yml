@@ -21,13 +21,13 @@ jobs:
           persist-credentials: false
 
       - name: 📚 Install node dependencies
-        run: nix develop -c 'pnpm scrape'
+        run: nix develop -c pnpm install
 
       - name: 🕷️ Scrape
-        run: nix develop -c 'pnpm scrape'
+        run: nix develop -c pnpm scrape
 
       - name: 🔨 Build
-        run: nix develop -c 'pnpm build'
+        run: nix develop -c pnpm build
 
       - name: 🚀 Deploy
         uses: JamesIves/github-pages-deploy-action@v4
