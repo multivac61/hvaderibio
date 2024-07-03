@@ -7,6 +7,7 @@ on:
   schedule:
     - cron: "0 * * * *" # Run every hour
 name: Deploy
+# TODO: Figure out a way not to have to write the scraped data to the repo...
 permissions:
   contents: write
 jobs:
