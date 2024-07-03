@@ -30,6 +30,4 @@ jobs:
         run: nix develop -c pnpm build
 
       - name: 🚀 Deploy
-        uses: JamesIves/github-pages-deploy-action@main
-        with:
-          folder: build
+        run: nix develop -c pnpm deploy-github-pages
