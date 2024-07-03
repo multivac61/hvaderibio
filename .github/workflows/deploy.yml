@@ -14,27 +14,22 @@ jobs:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: actions/checkout@v4.1.6
         with:
           persist-credentials: false
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: 📥 Monorepo install
-        uses: ./.github/actions/pnpm-install
+      - name: 📚 Install node dependencies
+        run: nix develop -c 'pnpm scrape'
 
       - name: 🕷️ Scrape
-        shell: bash
-        run: pnpm run scrape
+        run: nix develop -c 'pnpm scrape'
 
       - name: 🔨 Build
-        shell: bash
-        run: pnpm run build
+        run: nix develop -c 'pnpm build'
 
-      - name: 🚀 Deploy 
+      - name: 🚀 Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build # The folder the action should deploy.
+          folder: build
