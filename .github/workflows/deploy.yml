@@ -12,6 +12,7 @@ permissions:
   contents: write
 jobs:
   build-and-deploy:
+    concurrency: ci-${{ github.ref }} # github-pages-deploy-action: Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
       - uses: DeterminateSystems/nix-installer-action@main
@@ -30,6 +31,6 @@ jobs:
         run: nix develop -c pnpm build
 
       - name: 🚀 Deploy
-        uses: JamesIves/github-pages-deploy-action@dev
+        uses: JamesIves/github-pages-deploy-action@v4.6.1
         with:
           folder: build
