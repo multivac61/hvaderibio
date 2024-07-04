@@ -6,7 +6,8 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = inputs@{ flake-parts, ... }:
+  outputs =
+    inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -14,10 +15,20 @@
         "aarch64-darwin"
         "x86_64-darwin"
       ];
-      perSystem = { pkgs, system, ... }: {
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [ pnpm nodejs_20 ];
+      perSystem =
+        {
+          config,
+          self',
+          inputs',
+          pkgs,
+          lib,
+          system,
+          ...
+        }:
+        {
+          devShells.default = pkgs.mkShell { inputsFrom = [ self'.packages.default ]; };
+          packages.nodejs = pkgs.nodejs_20;
+          packages.default = pkgs.callPackage ./default.nix { };
         };
-      };
     };
 }
