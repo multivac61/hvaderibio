@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
-      - uses: actions/checkout@4
+      - uses: actions/checkout@v4
 
       - name: 📚 Install node dependencies
         run: nix develop -c pnpm install
