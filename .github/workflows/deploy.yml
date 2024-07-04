@@ -7,18 +7,13 @@ on:
   schedule:
     - cron: "0 * * * *" # Run every hour
 name: Deploy
-# TODO: Figure out a way not to have to write the scraped data to the repo...
-permissions:
-  contents: write
 jobs:
-  build-and-deploy:
+  build_site:
     runs-on: ubuntu-latest
     steps:
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
-      - uses: actions/checkout@main
-        with:
-          persist-credentials: false
+      - uses: actions/checkout@4
 
       - name: 📚 Install node dependencies
         run: nix develop -c pnpm install
@@ -29,9 +24,24 @@ jobs:
       - name: 🔨 Build
         run: nix develop -c pnpm build
 
-      - name: Deploy with gh-pages
-        run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          nix develop -c pnpx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "build/"
+
+deploy:
+  needs: build_site
+  runs-on: ubuntu-latest
+
+  permissions:
+    pages: write
+    id-token: write
+
+  environment:
+    name: github-pages
+    url: ${{ steps.deployment.outputs.page_url }}
+
+  steps:
+    - name: Deploy
+      id: deployment
+      uses: actions/deploy-pages@v4

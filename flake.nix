@@ -16,7 +16,7 @@
       ];
       perSystem = { pkgs, system, ... }: {
         devShells.default = pkgs.mkShell {
-          packages = with pkgs.nodePackages_latest; [ pnpm nodejs ];
+          packages = with pkgs; [ pnpm nodejs_20 ];
         };
       };
     };
