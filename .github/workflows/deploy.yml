@@ -24,7 +24,7 @@ jobs:
       - name: 🔨 Build
         run: nix develop -c pnpm build
 
-      - name: Upload Artifacts
+      - name: 📤 Upload
         uses: actions/upload-pages-artifact@v3
         with:
           path: "build/"
@@ -42,6 +42,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Deploy
+      - name: 🚀 Deploy
         id: deployment
         uses: actions/deploy-pages@v4
