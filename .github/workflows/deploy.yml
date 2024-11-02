@@ -22,12 +22,12 @@ jobs:
         run: nix develop -c pnpm scrape
 
       - name: 🔨 Build
-        run: nix build
+        run: nix develop -c pnpm build
 
       - name: 📤 Upload
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "result/build/"
+          path: "build/"
 
   deploy:
     needs: build_site
