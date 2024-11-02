@@ -1,12 +1,8 @@
 <script lang="ts">
   import "../app.postcss";
 
-
-  import { onMount } from "svelte";
-
   import { createDialog, melt } from "@melt-ui/svelte";
 
-  import CinemaTab from "$lib/CinemaTab.svelte";
   import Dust from "$lib/Dust.svelte";
 
   import { in_range, to_float, flyAndScale } from "$lib/util";
@@ -38,28 +34,18 @@
     states: { open: movie_open },
   } = createDialog();
 
-  export let data;
+  let { data } = $props();
 
-  let [from, to] = [Math.min(new Date().getHours(), 22), 24];
+  const to = $state(24);
+  const from = $derived(Math.min(21, new Date().getHours() - 1));
 
-  onMount(() => {
-    // Filter showtime again on the client
-    from = Math.min(21, new Date().getHours() - 1);
-  });
-
-  let selected_movie: Movie | undefined;
+  let selected_movie: Movie | undefined = $state();
 
   // Get all cinemas in data.movies
   const all_cinemas = data.movies
     .flatMap((movie: Movie) => Object.keys(movie.cinema_showtimes!))
     .filter((name: string, index: number, array: string[]) => array.indexOf(name) === index)
     .sort();
-
-  $: filtered_cinemas_showtimes = data.movies.filter(
-    (movie: Movie) =>
-      Object.keys(movie.cinema_showtimes).some((c) => selected_cinemas.includes(c)) &&
-      Object.values(movie.cinema_showtimes).some((times) => times.some(({ time }) => time && in_range(to_float(time), from, to)))
-  );
 
   const capital_region_cinemas = all_cinemas.filter((name: string) =>
     ["Bíó Paradís", "Háskólabíó", "Laugarásbíó", "Sambíóin Egilshöll", "Sambíóin Kringlunni", "Sambíóin Álfabakka", "Smárabíó"].includes(
@@ -74,11 +60,11 @@
     ["Höfuðborgarsvæðið", capital_region_cinemas],
   ] as const;
 
-  let selected_choice: string = group_choices[1][0];
-  let selected_cinemas = capital_region_cinemas;
+  let selected_choice: string = $state(group_choices[1][0]);
+  let selected_cinemas = $state(capital_region_cinemas);
 
-  let width: number;
-  let height: number;
+  let width: number | undefined = $state();
+  let height: number | undefined = $state();
 
   const change = (event: { currentTarget: HTMLSelectElement }) => {
     selected_choice = event.currentTarget.value;
@@ -86,6 +72,13 @@
       group_choice === event.currentTarget.value ? cinemas : []
     );
   };
+  let filtered_cinemas_showtimes = $derived(
+    data.movies.filter(
+      (movie: Movie) =>
+        Object.keys(movie.cinema_showtimes).some((c) => selected_cinemas.includes(c)) &&
+        Object.values(movie.cinema_showtimes).some((times) => times.some(({ time }) => time && in_range(to_float(time), from, to)))
+    )
+  );
 </script>
 
 <svelte:window bind:outerWidth={width} bind:outerHeight={height} />
@@ -104,13 +97,14 @@
   <div class="mb-4 hidden sm:block md:mx-auto md:max-w-xl">
     <div class="inline-flex flex-wrap gap-0.5 md:justify-center">
       {#each [...group_choices, ...all_choices] as [label, cinemas]}
-        <CinemaTab
-          {label}
-          is_selected={label === selected_choice}
-          on:click={() => {
+        <button
+          onclick={() => {
             selected_choice = label;
             selected_cinemas = Array.from(cinemas);
-          }} />
+          }}
+          class={`${
+            label === selected_choice ? "bg-white bg-opacity-10 backdrop-blur-xl" : "text-neutral-400"
+          } rounded-md px-3 py-1.5 text-sm font-medium hover:text-white`}>{label}</button>
       {/each}
     </div>
   </div>
@@ -119,7 +113,7 @@
 <div
   class="md:md-30 z-40 mb-8 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:grid-cols-[repeat(auto-fill,minmax(min(15rem,100%),2fr))] sm:gap-6">
   {#each filtered_cinemas_showtimes as movie (movie.title)}
-    <button on:click|preventDefault={() => (selected_movie = movie)} use:melt={$movie_trigger} id={movie.title}>
+    <button onclick={() => (selected_movie = movie)} use:melt={$movie_trigger} id={movie.title}>
       <img
         src={`${movie.id}.webp`}
         title={movie.title}
@@ -144,8 +138,8 @@
               rel="noopener noreferrer"
               href={selected_movie.trailer_url}
               class="relative flex items-center gap-2 rounded-md border border-gray-300 px-3 py-1 text-sm font-medium text-gray-300 hover:border-gray-400 hover:text-gray-400">
-              <span
-                class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20" />
+              <span class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"
+              ></span>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" class="fill-current">
                 <path d="M3 22V2L21 12L3 22Z" />
               </svg>
@@ -159,7 +153,8 @@
                   rel="noopener noreferrer"
                   class="relative rounded-md border border-[#f6c700] px-3 py-1 text-sm font-medium text-[#f6c700] hover:border-yellow-200 hover:text-yellow-200">
                   <span
-                    class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20" />
+                    class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"
+                  ></span>
                   IMDb · {selected_movie.imdb.star}</a>
               </div>
             {/if}
@@ -176,7 +171,8 @@
                         class="group relative rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900 px-2.5 py-1 text-base tabular-nums text-neutral-300 hover:bg-neutral-700 hover:text-white"
                         href={purchase_url}>
                         <span
-                          class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10" />
+                          class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"
+                        ></span>
                         {time &&
                           new Date(time).toLocaleTimeString("is-IS", {
                             timeStyle: "short",
@@ -191,11 +187,13 @@
           </div>
         </div>
         <div class="sticky inset-0 bottom-0 isolate z-50 h-20 rounded-b-xl">
-          <div class="pointer-events-none absolute -inset-x-4 -bottom-4 z-10 h-24 bg-gradient-to-t from-black sm:-inset-x-8 sm:-bottom-8" />
+          <div class="pointer-events-none absolute -inset-x-4 -bottom-4 z-10 h-24 bg-gradient-to-t from-black sm:-inset-x-8 sm:-bottom-8">
+          </div>
           <button
             class="group absolute inset-x-0 bottom-0 z-50 w-auto rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900 px-2.5 py-2 text-base text-neutral-300 shadow-neutral-800 hover:text-white sm:inset-x-0 sm:bottom-4"
             use:melt={$movie_close}>
-            <span class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10" />
+            <span class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"
+            ></span>
             Loka
           </button>
         </div>
@@ -206,7 +204,7 @@
 
 <div class="fixed inset-x-0 bottom-8 z-40 w-full sm:hidden">
   <select
-    on:change={change}
+    onchange={change}
     id="select cinemas"
     name="select cinemas"
     aria-label="Select cinemas"
@@ -267,7 +265,8 @@
           </div>
         </div>
         <div class="sticky inset-0 bottom-0 isolate z-50 h-20 rounded-b-xl">
-          <div class="pointer-events-none absolute -inset-x-4 -bottom-4 z-10 h-24 bg-gradient-to-t from-black sm:-inset-x-8 sm:-bottom-8" />
+          <div class="pointer-events-none absolute -inset-x-4 -bottom-4 z-10 h-24 bg-gradient-to-t from-black sm:-inset-x-8 sm:-bottom-8">
+          </div>
           <button
             class="absolute inset-x-0 bottom-0 z-20 w-auto rounded-md border border-neutral-600 bg-gradient-to-br from-neutral-800 to-neutral-900 px-2.5 py-2 text-base text-neutral-300 shadow-neutral-800 hover:text-white"
             use:melt={$about_close}>Loka</button>
