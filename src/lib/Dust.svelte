@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Canvas, Layer, type Render } from "svelte-canvas";
 
+  // svelte-ignore perf_avoid_nested_class
   const render: Render = ({ context, width, height }) => {
     class Particle {
       x: number;
@@ -79,9 +80,7 @@
     animateParticles();
   };
 
-  export let width = 640;
-  export let height = 640;
-  export let number_of_particles = 1000;
+  let { width = 640, height = 640, number_of_particles = 1000 } = $props();
 </script>
 
 <div class="fixed left-0 top-0 blur-[0.5px] w-[{width}px] h-[{height}px] -z-50">
