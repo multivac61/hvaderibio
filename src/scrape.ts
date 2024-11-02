@@ -3,7 +3,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { parseHTML } from "linkedom";
-import sharp from "sharp";
 
 import type { Movie } from "$lib/schemas";
 import { parse_movie, parse_movie_ids } from "$lib/parse";
@@ -39,6 +38,7 @@ await Promise.all(
     return parse_movie(movie_document, id);
   })
 )
+
   .then(async (movies) => {
     // TODO: Get IMDB links back again
     const moviesWithPosters = await Promise.all(
@@ -49,9 +49,10 @@ await Promise.all(
 
           const res = await fetch(movie!.poster_url, { headers });
           const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
-          await sharp(buffer)
-            .resize({ height: 393, width: 262 })
-            .toFile(path.resolve(__dirname, `../static/${movie!.id}.webp`));
+          await fs.writeFile(
+            path.resolve(__dirname, `../static/${movie!.id}.jpg`),
+            buffer
+          );
 
           return {
             ...movie,

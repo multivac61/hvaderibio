@@ -1,6 +1,3 @@
-// On some platforms, including glibc-based Linux, the main thread must call require('sharp') before worker threads are created. This is to ensure shared libraries remain loaded in memory until after all threads are complete.
-import sharp from "sharp";
-
 import preprocess from "svelte-preprocess";
 import adapter from "@sveltejs/adapter-static";
 import { preprocessMeltUI } from "@melt-ui/pp";
