@@ -2,7 +2,6 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 
-
 import { parseHTML } from "linkedom";
 
 import type { Movie } from "$lib/schemas";
@@ -50,10 +49,7 @@ await Promise.all(
 
           const res = await fetch(movie!.poster_url, { headers });
           const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
-          await fs.writeFile(
-            path.resolve(__dirname, `../static/${movie!.id}.jpg`),
-            buffer
-          );
+          await fs.writeFile(path.resolve(__dirname, `../static/${movie!.id}.jpg`), buffer);
 
           return {
             ...movie,

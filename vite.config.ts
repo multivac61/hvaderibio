@@ -1,5 +1,5 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import { enhancedImages } from '@sveltejs/enhanced-img';
+import { enhancedImages } from "@sveltejs/enhanced-img";
 
 import type { UserConfig } from "vite";
 
