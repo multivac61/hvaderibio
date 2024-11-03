@@ -1,6 +1,4 @@
 <script lang="ts">
-  import "../app.postcss";
-
   import { createDialog, melt } from "@melt-ui/svelte";
 
   import Dust from "$lib/Dust.svelte";

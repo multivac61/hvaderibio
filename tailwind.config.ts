@@ -1,13 +1,14 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
-const plugin = require("tailwindcss/plugin");
+import type { Config } from 'tailwindcss';
+import defaultTheme from 'tailwindcss/defaultTheme';
+import plugin from 'tailwindcss/plugin'
 
-const config = {
+export default {
   content: ["./src/**/*.{html,js,svelte,ts}"],
 
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter var", "Inter", ...defaultTheme.fontFamily.sans],
+        sans: ["Inter Variable", "Inter", ...defaultTheme.fontFamily.sans],
       },
     },
   },
@@ -20,6 +21,4 @@ const config = {
       addVariant("slider-track", ["&::-webkit-slider-runnable-track", "&::-moz-range-track", "&::-ms-track"]);
     }),
   ],
-};
-
-module.exports = config;
+} satisfies Config;
