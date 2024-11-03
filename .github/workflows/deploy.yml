@@ -32,6 +32,7 @@ jobs:
   deploy:
     needs: build_site
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
 
     permissions:
       pages: write
