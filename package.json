@@ -6,13 +6,11 @@
     "dev": "vite dev --host 0.0.0.0",
     "build": "svelte-kit sync && vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d build -t true",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test": "vitest",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
-    "gh-pages": "vite build && npx gh-pages -d build"
   },
   "devDependencies": {
     "@melt-ui/pp": "^0.3.2",
@@ -29,7 +27,6 @@
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.46.0",
-    "gh-pages": "^6.2.0",
     "globals": "^15.11.0",
     "linkedom": "^0.18.5",
     "prettier": "^3.3.3",
