@@ -89,4 +89,3 @@
     <Layer {render} />
   </Canvas>
 </div>
-
