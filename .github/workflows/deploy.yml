@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@main
 
       - name: 📚 Install node dependencies
         run: nix develop -c pnpm install
@@ -25,7 +25,7 @@ jobs:
         run: nix develop -c pnpm build
 
       - name: 📤 Upload
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@main
         with:
           path: "build/"
 
@@ -45,4 +45,4 @@ jobs:
     steps:
       - name: 🚀 Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@main
