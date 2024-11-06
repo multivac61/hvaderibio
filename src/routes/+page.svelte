@@ -1,8 +1,6 @@
 <script lang="ts">
   import { createDialog, melt } from "@melt-ui/svelte";
 
-  import Dust from "$lib/Dust.svelte";
-
   import { in_range, to_float, flyAndScale } from "$lib/util";
   import type { Movie } from "$lib/schemas";
 
@@ -61,9 +59,6 @@
   let selected_choice: string = $state(group_choices[1][0]);
   let selected_cinemas = $state(capital_region_cinemas);
 
-  let width: number | undefined = $state();
-  let height: number | undefined = $state();
-
   const change = (event: { currentTarget: HTMLSelectElement }) => {
     selected_choice = event.currentTarget.value;
     selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_choice, cinemas]) =>
@@ -79,13 +74,8 @@
   );
 </script>
 
-<svelte:window bind:outerWidth={width} bind:outerHeight={height} />
-
 <header class="relative my-4 sm:my-8">
   <div class="flex flex-col items-start sm:py-4 md:items-center">
-    <div class="pointer-events-none absolute w-full overflow-hidden">
-      <Dust {width} {height} />
-    </div>
     <h1>
       <button use:melt={$about_trigger} class="text-4xl font-black uppercase hover:text-yellow-500 sm:text-6xl">
         Hvað er í <span class="bg-gradient-to-br from-yellow-500 to-red-500 box-decoration-clone bg-clip-text text-transparent">bíó</span>?
