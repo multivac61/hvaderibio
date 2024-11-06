@@ -10,6 +10,9 @@ export default {
       fontFamily: {
         sans: ["Inter Variable", "Inter", ...defaultTheme.fontFamily.sans],
       },
+      maxWidth: {
+        '9xl': '128rem',
+      }
     },
   },
 
