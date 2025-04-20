@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy, tick } from "svelte";
-  import { Dialog, Label, Separator } from "bits-ui";
+  import { Dialog } from "bits-ui";
   import { in_range, to_float } from "$lib/util";
   import type { Movie } from "$lib/schemas";
   import gsap from 'gsap';
@@ -31,7 +31,13 @@
 
   let selected_choice: string = $state(group_choices[1][0]);
   let selected_cinemas = $state(capital_region_cinemas);
-  let gridElement: HTMLElement | null = null;
+  let gridElement: HTMLElement | null = $state(null);
+
+  // Reference for the scrollable div inside EACH dialog instance
+  // Note: This approach assumes only one dialog is effectively 'active' regarding focus management at a time.
+  // If multiple could be open AND need focus, a more complex Map or array would be needed.
+  let scrollableContentElement: HTMLElement | null = $state(null);
+
 
   const updateSelection = (choiceLabel: string) => {
     if (selected_choice === choiceLabel) return;
@@ -59,12 +65,12 @@
     const movies = filtered_cinemas_showtimes;
     if (!gridElement || !movies) return;
 
-    const items = gridElement.children;
+    const items = Array.from(gridElement.children) as HTMLElement[];
     const state = Flip.getState(items);
 
     tick().then(() => {
        if (!gridElement) return;
-        const newItems = Array.from(gridElement.children); // Capture as array
+        const newItems = Array.from(gridElement.children) as HTMLElement[];
 
         Flip.from(state, {
             targets: newItems,
@@ -81,27 +87,45 @@
 
 
   let activeDialogCount = 0;
+  const handleOpenChange = (isOpen: boolean) => {
+    setBodyScrollLock(isOpen); // Call the existing lock function
+
+    if (isOpen) {
+       // Use a small timeout to ensure the element is focusable after opening animation
+      setTimeout(() => {
+        scrollableContentElement?.focus({ preventScroll: true });
+      }, 50); // Adjust timing if needed
+    }
+  };
+
   const setBodyScrollLock = (isOpen: boolean) => {
+    const htmlElement = document.documentElement;
+    const bodyElement = document.body;
+
     if (isOpen) {
       activeDialogCount++;
       if (activeDialogCount === 1) {
-        requestAnimationFrame(() => {
-          if (activeDialogCount > 0) {
-            document.body.classList.add("overflow-hidden");
-          }
-        });
+        // Apply lock immediately (removed rAF as it might be too late for this scenario)
+        htmlElement.style.overflow = 'hidden';
+        bodyElement.style.overflow = 'hidden';
+        bodyElement.style.position = 'relative';
       }
     } else {
       activeDialogCount--;
       if (activeDialogCount === 0) {
-        document.body.classList.remove("overflow-hidden");
+        htmlElement.style.overflow = '';
+        bodyElement.style.overflow = '';
+        bodyElement.style.position = '';
       }
       if (activeDialogCount < 0) activeDialogCount = 0;
     }
   };
+
   onDestroy(() => {
     if (activeDialogCount > 0) {
-      document.body.classList.remove("overflow-hidden");
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
       activeDialogCount = 0;
     }
   });
@@ -163,7 +187,7 @@
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
 >
   {#each filtered_cinemas_showtimes as movie (movie.id)}
-    <Dialog.Root onOpenChange={({ next }) => setBodyScrollLock(next)}>
+    <Dialog.Root onOpenChange={({ next }) => handleOpenChange(next)}>
       <Dialog.Trigger class="block w-full">
         <img
           src={`${movie.id}.webp`}
@@ -179,8 +203,12 @@
             {movie.title}
           </Dialog.Title>
 
-          <div class="min-h-0 flex-grow overflow-y-auto [mask:linear-gradient(black_calc(100%-4rem),transparent)]">
-            <Dialog.Description class="text-sm text-neutral-300 pb-16">
+          <div
+            bind:this={scrollableContentElement}
+            tabindex="-1"
+            class="min-h-0 flex-grow overflow-y-auto [mask:linear-gradient(black_calc(100%-4rem),transparent)] focus:outline-none"
+          >
+            <Dialog.Description class="pb-16 text-sm text-neutral-300">
               <p class="mb-4 text-neutral-400">{movie.description}</p>
               <div class="group flex items-center gap-4">
                 <a
@@ -245,5 +273,7 @@
     </Dialog.Root>
   {/each}
 </div>
+
+
 
 
