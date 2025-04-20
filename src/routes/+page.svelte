@@ -180,7 +180,7 @@
           </Dialog.Title>
 
           <div class="min-h-0 flex-grow overflow-y-auto [mask:linear-gradient(black_calc(100%-4rem),transparent)]">
-            <Dialog.Description class="text-sm text-neutral-300">
+            <Dialog.Description class="text-sm text-neutral-300 pb-16">
               <p class="mb-4 text-neutral-400">{movie.description}</p>
               <div class="group flex items-center gap-4">
                 <a
