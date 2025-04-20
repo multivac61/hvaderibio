@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
   import { Dialog, Label, Separator } from "bits-ui";
   import { in_range, to_float } from "$lib/util";
   import type { Movie } from "$lib/schemas";
@@ -48,6 +49,36 @@
     )
   );
 
+  // --- Body Scroll Lock Logic (with delay) ---
+  let activeDialogCount = 0;
+
+  const setBodyScrollLock = (isOpen: boolean) => {
+    if (isOpen) {
+      activeDialogCount++;
+      if (activeDialogCount === 1) {
+        requestAnimationFrame(() => {
+          if (activeDialogCount > 0) {
+              document.body.classList.add('overflow-hidden');
+          }
+        });
+      }
+    } else {
+      activeDialogCount--;
+      if (activeDialogCount === 0) {
+        document.body.classList.remove('overflow-hidden');
+      }
+      if (activeDialogCount < 0) activeDialogCount = 0;
+    }
+  };
+
+  onDestroy(() => {
+    if (activeDialogCount > 0) {
+      document.body.classList.remove('overflow-hidden');
+      activeDialogCount = 0;
+    }
+  });
+  // --- End Body Scroll Lock Logic ---
+
 </script>
 
 <header class="relative my-4 sm:my-8">
@@ -70,14 +101,14 @@
     </div>
   </div>
 
-  <div class="fixed inset-x-0 bottom-0 z-40 w-full px-4 pb-4 sm:hidden">
+  <div class="fixed inset-x-0 bottom-0 z-40 w-full px-16 pb-4 sm:hidden">
     <div class="relative w-full">
       <select
         onchange={handleSelectChange}
         id="select-cinemas-mobile"
         name="select cinemas mobile"
         aria-label="Veldu kvikmyndahús"
-        class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/80 py-2.5 pl-4 pr-10 text-base text-neutral-100 shadow-lg backdrop-blur-md focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 text-center"
+        class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/80 py-2.5 pl-4 pr-10 text-base text-neutral-100 shadow-lg backdrop-blur-md focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 text-center [text-align-last:center]"
       >
         {#each [...group_choices, ...all_choices] as [label]}
           <option
@@ -102,7 +133,7 @@
 
 <div class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6">
   {#each filtered_cinemas_showtimes as movie (movie.title)}
-      <Dialog.Root>
+      <Dialog.Root onOpenChange={({ next }) => setBodyScrollLock(next)}>
         <Dialog.Trigger>
           <img
             src={`${movie.id}.jpg`}
@@ -114,59 +145,63 @@
         <Dialog.Portal>
           <Dialog.Overlay class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm transition-opacity" />
           <Dialog.Content
-            class="fixed inset-0 z-50 m-auto flex h-fit max-h-[90vh] w-[min(90vw,640px)] flex-col overflow-y-auto rounded-2xl bg-neutral-950 p-4 shadow-xl transition sm:p-8 md:h-auto"
+            class="fixed inset-0 z-50 m-auto flex h-fit max-h-[90vh] w-[min(90vw,640px)] flex-col overflow-hidden rounded-2xl bg-neutral-950 p-4 shadow-xl transition sm:p-8 md:h-auto"
           >
-            <Dialog.Title class="mb-2 text-lg font-bold text-neutral-200 md:text-2xl">
+            <Dialog.Title class="mb-2 flex-shrink-0 text-lg font-bold text-neutral-200 md:text-2xl">
               {movie.title}
             </Dialog.Title>
-            <Dialog.Description class="mb-4 mt-2 text-sm text-neutral-300">
-              <p class="mb-4 text-neutral-400">{movie.description}</p>
-              <div class="group flex items-center gap-4">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={movie.trailer_url}
-                  class="relative flex items-center gap-2 rounded-md border border-gray-300 px-3 py-1 text-sm font-medium text-gray-300 hover:border-gray-400 hover:text-gray-400"
-                >
-                  <span class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"></span>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" class="fill-current">
-                    <path d="M3 22V2L21 12L3 22Z" />
-                  </svg>
-                  Stikla
-                </a>
-              </div>
-              <h2 class="my-6 text-sm text-neutral-400">{data.today}</h2>
-              <div>
-                <div class="space-y-4">
-                  {#each Object.entries(movie.cinema_showtimes) as [cinema, times] (cinema)}
-                    {#if selected_cinemas.includes(cinema)}
-                      <div>
-                        <div class="mb-3 font-medium text-neutral-200">{cinema}</div>
-                        <div class="inline-flex flex-wrap gap-3">
-                          {#each times as { time, purchase_url } (purchase_url)}
-                            {@const showTime = to_float(time)}
-                            {#if time && in_range(showTime, from, to)}
-                              <a
-                                class="group relative rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900 px-2.5 py-1 text-base tabular-nums text-neutral-300 hover:bg-neutral-700 hover:text-white"
-                                href={purchase_url}
-                                target="_blank" rel="noopener noreferrer"
-                              >
-                                <span class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"></span>
-                                {new Date(time).toLocaleTimeString("is-IS", {
-                                  timeStyle: "short",
-                                  hour12: false,
-                                })}
-                              </a>
-                            {/if}
-                          {/each}
-                        </div>
-                      </div>
-                    {/if}
-                  {/each}
+
+            <div class="min-h-0 flex-grow overflow-y-auto [mask:linear-gradient(black_calc(100%-4rem),transparent)]">
+              <Dialog.Description class="text-sm text-neutral-300">
+                <p class="mb-4 text-neutral-400">{movie.description}</p>
+                <div class="group flex items-center gap-4">
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={movie.trailer_url}
+                    class="relative flex items-center gap-2 rounded-md border border-gray-300 px-3 py-1 text-sm font-medium text-gray-300 hover:border-gray-400 hover:text-gray-400"
+                  >
+                    <span class="absolute inset-0 rounded-md opacity-20 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-20"></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" class="fill-current">
+                      <path d="M3 22V2L21 12L3 22Z" />
+                    </svg>
+                    Stikla
+                  </a>
                 </div>
-              </div>
-            </Dialog.Description>
-             <div class="sticky -bottom-4 -mx-4 mt-auto isolate h-20 rounded-b-2xl bg-gradient-to-t from-neutral-950 pt-4 sm:-bottom-8 sm:-mx-8">
+                <h2 class="my-6 text-sm text-neutral-400">{data.today}</h2>
+                <div>
+                  <div class="space-y-4">
+                    {#each Object.entries(movie.cinema_showtimes) as [cinema, times] (cinema)}
+                      {#if selected_cinemas.includes(cinema)}
+                        <div>
+                          <div class="mb-3 font-medium text-neutral-200">{cinema}</div>
+                          <div class="inline-flex flex-wrap gap-3">
+                            {#each times as { time, purchase_url } (purchase_url)}
+                              {@const showTime = to_float(time)}
+                              {#if time && in_range(showTime, from, to)}
+                                <a
+                                  class="group relative rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900 px-2.5 py-1 text-base tabular-nums text-neutral-300 hover:bg-neutral-700 hover:text-white"
+                                  href={purchase_url}
+                                  target="_blank" rel="noopener noreferrer"
+                                >
+                                  <span class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"></span>
+                                  {new Date(time).toLocaleTimeString("is-IS", {
+                                    timeStyle: "short",
+                                    hour12: false,
+                                  })}
+                                </a>
+                              {/if}
+                            {/each}
+                          </div>
+                        </div>
+                      {/if}
+                    {/each}
+                  </div>
+                </div>
+              </Dialog.Description>
+            </div> 
+
+             <div class="sticky -bottom-4 -mx-4 mt-auto h-20 flex-shrink-0 rounded-b-2xl bg-neutral-950 pt-4 sm:-bottom-8 sm:-mx-8">
                  <Dialog.Close class="group absolute inset-x-4 bottom-4 z-50 flex w-auto items-center justify-center rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900 px-2.5 py-2 text-base text-neutral-300 shadow-neutral-800 hover:text-white sm:inset-x-8" >
                    <span class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"></span>
                    Loka
@@ -177,6 +212,5 @@
       </Dialog.Root>
   {/each}
 </div>
-
 
 
