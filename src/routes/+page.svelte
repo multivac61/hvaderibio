@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
-  import { Dialog, Label, Separator } from "bits-ui";
+  import { onMount, onDestroy, tick } from "svelte";
+  import { Dialog } from "bits-ui";
   import { in_range, to_float } from "$lib/util";
   import type { Movie } from "$lib/schemas";
+  import gsap from 'gsap';
+  import Flip from 'gsap/Flip';
 
   let { data } = $props();
 
@@ -29,8 +31,16 @@
 
   let selected_choice: string = $state(group_choices[1][0]);
   let selected_cinemas = $state(capital_region_cinemas);
+  let gridElement: HTMLElement | null = $state(null);
+
+  // Reference for the scrollable div inside EACH dialog instance
+  // Note: This approach assumes only one dialog is effectively 'active' regarding focus management at a time.
+  // If multiple could be open AND need focus, a more complex Map or array would be needed.
+  let scrollableContentElement: HTMLElement | null = $state(null);
+
 
   const updateSelection = (choiceLabel: string) => {
+    if (selected_choice === choiceLabel) return;
     selected_choice = choiceLabel;
     selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_label, cinemas]) => (group_label === choiceLabel ? cinemas : []));
   };
@@ -47,23 +57,65 @@
     )
   );
 
-  // --- Body Scroll Lock Logic (with delay) ---
+  onMount(() => {
+    gsap.registerPlugin(Flip);
+  });
+
+  $effect(() => {
+    const movies = filtered_cinemas_showtimes;
+    if (!gridElement || !movies) return;
+
+    const items = Array.from(gridElement.children) as HTMLElement[];
+    const state = Flip.getState(items);
+
+    tick().then(() => {
+       if (!gridElement) return;
+        const newItems = Array.from(gridElement.children) as HTMLElement[];
+
+        Flip.from(state, {
+            targets: newItems,
+            duration: 0.5,
+            scale: true,
+            ease: "power1.inOut",
+            stagger: 0.03,
+            absolute: true,
+            onEnter: elements => gsap.fromTo(elements, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.3 }),
+            onLeave: elements => gsap.to(elements, { opacity: 0, scale: 0.8, duration: 0.3 })
+        });
+    });
+  });
+
+
   let activeDialogCount = 0;
+  const handleOpenChange = (isOpen: boolean) => {
+    setBodyScrollLock(isOpen); // Call the existing lock function
+
+    if (isOpen) {
+       // Use a small timeout to ensure the element is focusable after opening animation
+      setTimeout(() => {
+        scrollableContentElement?.focus({ preventScroll: true });
+      }, 50); // Adjust timing if needed
+    }
+  };
 
   const setBodyScrollLock = (isOpen: boolean) => {
+    const htmlElement = document.documentElement;
+    const bodyElement = document.body;
+
     if (isOpen) {
       activeDialogCount++;
       if (activeDialogCount === 1) {
-        requestAnimationFrame(() => {
-          if (activeDialogCount > 0) {
-            document.body.classList.add("overflow-hidden");
-          }
-        });
+        // Apply lock immediately (removed rAF as it might be too late for this scenario)
+        htmlElement.style.overflow = 'hidden';
+        bodyElement.style.overflow = 'hidden';
+        bodyElement.style.position = 'relative';
       }
     } else {
       activeDialogCount--;
       if (activeDialogCount === 0) {
-        document.body.classList.remove("overflow-hidden");
+        htmlElement.style.overflow = '';
+        bodyElement.style.overflow = '';
+        bodyElement.style.position = '';
       }
       if (activeDialogCount < 0) activeDialogCount = 0;
     }
@@ -71,15 +123,16 @@
 
   onDestroy(() => {
     if (activeDialogCount > 0) {
-      document.body.classList.remove("overflow-hidden");
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
       activeDialogCount = 0;
     }
   });
-  // --- End Body Scroll Lock Logic ---
 </script>
 
 <header class="relative my-4 sm:my-8">
-  <div class="hidden sm:block md:mx-auto md:max-w-2xl lg:max-w-3xl">
+   <div class="hidden sm:block md:mx-auto md:max-w-2xl lg:max-w-3xl">
     <div class="flex flex-wrap justify-center gap-1.5 md:gap-2">
       {#each [...group_choices, ...all_choices] as [label, cinemas]}
         <button
@@ -88,7 +141,7 @@
           class={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none
             ${
               label === selected_choice
-                ? " bg-opacity-15 text-white shadow-sm"
+                ? "bg-neutral-800/30 bg-opacity-15 text-white shadow-sm"
                 : "bg-neutral-800/60 text-neutral-400 hover:bg-neutral-700/80 hover:text-neutral-200"
             }
           `}>
@@ -130,15 +183,17 @@
 </header>
 
 <div
-  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6">
-  {#each filtered_cinemas_showtimes as movie (movie.title)}
-    <Dialog.Root onOpenChange={({ next }) => setBodyScrollLock(next)}>
-      <Dialog.Trigger>
+  bind:this={gridElement}
+  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
+>
+  {#each filtered_cinemas_showtimes as movie (movie.id)}
+    <Dialog.Root onOpenChange={({ next }) => handleOpenChange(next)}>
+      <Dialog.Trigger class="block w-full">
         <img
           src={`${movie.id}.webp`}
           title={movie.title}
           alt={movie.title}
-          class="aspect-[2/3] rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
+          class="aspect-[2/3] w-full rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm transition-opacity" />
@@ -148,8 +203,12 @@
             {movie.title}
           </Dialog.Title>
 
-          <div class="min-h-0 flex-grow overflow-y-auto [mask:linear-gradient(black_calc(100%-4rem),transparent)]">
-            <Dialog.Description class="text-sm text-neutral-300">
+          <div
+            bind:this={scrollableContentElement}
+            tabindex="-1"
+            class="min-h-0 flex-grow overflow-y-auto [mask:linear-gradient(black_calc(100%-4rem),transparent)] focus:outline-none"
+          >
+            <Dialog.Description class="pb-16 text-sm text-neutral-300">
               <p class="mb-4 text-neutral-400">{movie.description}</p>
               <div class="group flex items-center gap-4">
                 <a
@@ -214,3 +273,7 @@
     </Dialog.Root>
   {/each}
 </div>
+
+
+
+
