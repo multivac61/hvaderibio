@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { parseHTML } from "linkedom";
-import sharp from "sharp"; // Import sharp
+import sharp from "sharp";
 
 import type { Movie } from "$lib/schemas";
 import { parse_movie, parse_movie_ids } from "$lib/parse";
@@ -28,11 +28,13 @@ const headers = {
   "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36",
 } as const;
 
-// --- Determine Target Image Size ---
-// From your Svelte code: aspect-[2/3] and max width sm:w-[min(100%,360px)]
-// Let's target 360px width for a decent resolution.
-const targetWidth = 360;
-const targetHeight = Math.round(targetWidth * (3 / 2)); // Calculate height for 2:3 aspect ratio (540)
+// --- Determine Target Image Size for High-Density Displays ---
+// Base display width is 360px. For 2x DPR screens, we need 2 * 360 = 720px.
+const baseWidth = 360;
+const targetWidth = baseWidth * 2; // 720
+const targetHeight = Math.round(targetWidth * (3 / 2)); // Calculate height for 2:3 aspect ratio (1080)
+
+console.log(`Targeting image dimensions: ${targetWidth}w x ${targetHeight}h`); // Log target size
 
 const showtimes = await fetch("https://www.kvikmyndir.is/bio/syningatimar", { headers });
 const html = await showtimes.text();
@@ -41,13 +43,12 @@ const { document } = parseHTML(html);
 await Promise.all(
   parse_movie_ids(document).map(async (id: number) => {
     try {
-      // Add try...catch for robustness
       const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
       const { document: movie_document } = parseHTML(await movie.text());
       return parse_movie(movie_document, id);
     } catch (error) {
       console.error(`Failed to fetch/parse movie ID ${id}:`, error);
-      return null; // Return null if fetching/parsing fails for a single movie
+      return null;
     }
   })
 )
@@ -57,38 +58,42 @@ await Promise.all(
     const moviesWithPosters = await Promise.all(
       validMovies.map(async (movie: Movie) => {
         try {
-          // Add try...catch for poster processing
           const res = await fetch(movie.poster_url, { headers });
           if (!res.ok) {
             throw new Error(`Failed to fetch poster ${movie.poster_url}: ${res.statusText}`);
           }
           const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
 
-          const webpPath = path.resolve(__dirname, `../static/${movie.id}.webp`); // Define WebP path
+          const webpPath = path.resolve(__dirname, `../static/${movie.id}.webp`);
 
-          await sharp(buffer).resize(targetWidth, targetHeight, { fit: "cover" }).webp().toFile(webpPath);
+          // Use sharp to resize to the NEW target dimensions
+          await sharp(buffer)
+            .resize(targetWidth, targetHeight, { // Use updated dimensions
+              fit: 'cover',
+            })
+            .webp({ quality: 80 })
+            .toFile(webpPath);
 
-          // No need to return the poster buffer itself anymore
           return {
             ...movie,
           };
         } catch (error) {
           console.error(`Failed to process poster for movie ID ${movie.id} (${movie.title}):`, error);
-          // Return the movie data even if poster fails, or return null if preferred
-          return {
+          return { // Still return movie data if poster fails
             ...movie,
           };
         }
       })
     );
-    // Filter out any potential nulls from failed poster processing if you chose to return null above
-    return moviesWithPosters.filter((m) => m !== null);
+    return moviesWithPosters.filter(m => m !== null);
   })
   .then(async (movies) => {
     console.log(`Processed ${movies.length} movies. Writing movies.json...`);
     await fs.writeFile(path.resolve(__dirname, "../static/movies.json"), JSON.stringify(movies, null, 2));
     console.log("Finished writing movies.json.");
   })
-  .catch((error) => {
+  .catch(error => {
     console.error("An error occurred during the main processing chain:", error);
   });
+
+
