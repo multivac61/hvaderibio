@@ -88,7 +88,7 @@
           class={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none
             ${
               label === selected_choice
-                ? " bg-opacity-15 text-white shadow-sm"
+                ? "bg-neutral-800/30 bg-opacity-15 text-white shadow-sm"
                 : "bg-neutral-800/60 text-neutral-400 hover:bg-neutral-700/80 hover:text-neutral-200"
             }
           `}>
