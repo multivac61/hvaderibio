@@ -1,12 +1,13 @@
-@import "@fontsource-variable/inter";
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "@fontsource-variable/inter";
 
 @layer base {
   :root {
-    font-family: "Inter Variable", sans-serif;
+    font-family-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+    /* Add new maxWidth */
+    max-width-9xl: 128rem; /* Corresponds to max-w-9xl */
   }
 
   html,
@@ -22,15 +23,6 @@
     -webkit-appearance: none;
   }
 
-  /* Hide scrollbars while maintaining functionality */
-  * {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  *::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 @layer utilities {

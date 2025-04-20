@@ -1,11 +1,8 @@
-import type { RequestEvent } from "@sveltejs/kit";
-
 import fs from "fs/promises";
 
 export const prerender = true;
 
-export async function load({ setHeaders }: RequestEvent) {
-  setHeaders({ "cache-control": "1800" });
+export async function load() {
   return {
     today: `Í dag, ${new Date()
       .toLocaleString("is-IS", {
