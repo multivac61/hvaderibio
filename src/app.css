@@ -15,6 +15,21 @@
   html,
   body {
     @apply h-full;
+    scrollbar-width: none;
+  }
+
+  /* Hide scrollbars */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Specific styling for when dialog is open */
+  body.dialog-open {
+    @apply overflow-hidden;
+    /* Prevent background interactions */
+    touch-action: none; 
+    user-select: none;
+    -webkit-overflow-scrolling: auto;
   }
 
   /* Remove search input decorations */
