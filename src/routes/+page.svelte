@@ -230,12 +230,12 @@
                 <div class="space-y-4">
                   {#each Object.entries(movie.cinema_showtimes) as [cinema, times] (cinema)}
                     {#if selected_cinemas.includes(cinema)}
-                      <div>
-                        <div class="mb-3 font-medium text-neutral-200">{cinema}</div>
-                        <div class="inline-flex flex-wrap gap-3">
-                          {#each times as { time, purchase_url } (purchase_url)}
-                            {@const showTime = to_float(time)}
-                            {#if time && in_range(showTime, from, to)}
+                      {@const validTimes = times.filter(({ time }) => time && in_range(to_float(time), from, to))}
+                      {#if validTimes.length > 0}
+                        <div>
+                          <div class="mb-3 font-medium text-neutral-200">{cinema}</div>
+                          <div class="inline-flex flex-wrap gap-3">
+                            {#each validTimes as { time, purchase_url } (purchase_url)}
                               <a
                                 class="group relative rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900 px-2.5 py-1 text-base text-neutral-300 tabular-nums hover:bg-neutral-700 hover:text-white"
                                 href={purchase_url}
@@ -249,10 +249,10 @@
                                   hour12: false,
                                 })}
                               </a>
-                            {/if}
-                          {/each}
+                            {/each}
+                          </div>
                         </div>
-                      </div>
+                      {/if}
                     {/if}
                   {/each}
                 </div>
