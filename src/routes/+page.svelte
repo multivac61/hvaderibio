@@ -90,52 +90,6 @@
         return bCount - aCount;
       })
   );
-
-
-
-  let activeDialogCount = 0;
-  const handleOpenChange = (isOpen: boolean) => {
-    setBodyScrollLock(isOpen); // Call the existing lock function
-
-    if (isOpen) {
-       // Use a small timeout to ensure the element is focusable after opening animation
-      setTimeout(() => {
-        scrollableContentElement?.focus({ preventScroll: true });
-      }, 50); // Adjust timing if needed
-    }
-  };
-
-  const setBodyScrollLock = (isOpen: boolean) => {
-    const htmlElement = document.documentElement;
-    const bodyElement = document.body;
-
-    if (isOpen) {
-      activeDialogCount++;
-      if (activeDialogCount === 1) {
-        // Apply lock immediately (removed rAF as it might be too late for this scenario)
-        htmlElement.style.overflow = 'hidden';
-        bodyElement.style.overflow = 'hidden';
-        bodyElement.style.position = 'relative';
-      }
-    } else {
-      activeDialogCount--;
-      if (activeDialogCount === 0) {
-        htmlElement.style.overflow = '';
-        bodyElement.style.overflow = '';
-        bodyElement.style.position = '';
-      }
-      if (activeDialogCount < 0) activeDialogCount = 0;
-    }
-  };
-
-  onDestroy(() => {
-    if (activeDialogCount > 0) {
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      activeDialogCount = 0;
-    }
-  });
 </script>
 
 <header class="relative my-4 sm:my-8">
@@ -165,7 +119,7 @@
         id="select-cinemas-mobile"
         name="select cinemas mobile"
         aria-label="Veldu kvikmyndahús"
-        class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/80 py-2.5 pr-10 pl-4 text-center text-base text-neutral-100 shadow-lg backdrop-blur-md [text-align-last:center] focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
+        class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/80 py-2.5 pr-10 pl-4 text-center text-base text-neutral-100 shadow-lg backdrop-blur-3xl [text-align-last:center] focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
         {#each [...group_choices, ...all_choices] as [label]}
           <option
             value={label}
@@ -204,7 +158,7 @@
           class="aspect-[2/3] w-full rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm transition-opacity" />
+        <Dialog.Overlay class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xl transition-opacity" />
         <Dialog.Content
           class="fixed inset-0 z-50 m-auto flex h-fit max-h-[90vh] w-[min(90vw,640px)] flex-col overflow-hidden rounded-2xl bg-neutral-950 p-4 shadow-xl transition sm:p-8 md:h-auto">
           <Dialog.Title class="mb-2 flex-shrink-0 text-lg font-bold text-neutral-200 md:text-2xl">
