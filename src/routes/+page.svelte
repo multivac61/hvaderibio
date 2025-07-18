@@ -127,7 +127,7 @@
 </script>
 
 <header class="relative my-4 sm:my-8">
-  <h1 class="mb-2 text-center text-3xl sm:text-6xl md:text-7xl text-pretty accent-cyan-50 bg-clip-text">
+  <h1 class="mb-4 text-center text-4xl sm:text-5xl text-pretty accent-cyan-50 bg-clip-text">
     Hvað er í bíó? 🍿 
   </h1>
    <div class="hidden sm:block md:mx-auto md:max-w-2xl lg:max-w-3xl">
