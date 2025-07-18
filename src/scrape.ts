@@ -65,13 +65,26 @@ await Promise.all(
           const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
 
           const webpPath = path.resolve(__dirname, `../static/${movie.id}.webp`);
+          const jpgPath = path.resolve(__dirname, `../static/${movie.id}.jpg`);
+
+          // Clean up any old JPG files
+          try {
+            await fs.unlink(jpgPath);
+          } catch (error) {
+            // Ignore if file doesn't exist
+          }
 
           // Use sharp to resize to the NEW target dimensions
           await sharp(buffer)
             .resize(targetWidth, targetHeight, { // Use updated dimensions
               fit: 'cover',
             })
-            .webp({ quality: 80 })
+            .webp({ 
+              quality: 80,
+              effort: 6, // Higher effort for better compression
+              nearLossless: false,
+              smartSubsample: true
+            })
             .toFile(webpPath);
 
           return {
