@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { Dialog } from "bits-ui";
   import { in_range, to_float } from "$lib/util";
   import type { Movie } from "$lib/schemas";
@@ -7,7 +7,24 @@
   let { data } = $props();
 
   const to = $state(24);
-  const from = $derived(Math.min(21, new Date().getHours() - 1));
+  let currentTime = $state(0);
+  
+  // Update current time every minute
+  onMount(() => {
+    const updateCurrentTime = () => {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinutes = now.getMinutes();
+      currentTime = currentHour + currentMinutes / 60;
+    };
+    
+    updateCurrentTime(); // Initial update
+    const interval = setInterval(updateCurrentTime, 60000); // Update every minute
+    
+    return () => clearInterval(interval);
+  });
+  
+  const from = $derived(Math.min(21, currentTime));
 
   const all_cinemas = data.movies
     .flatMap((movie: Movie) => Object.keys(movie.cinema_showtimes!))
@@ -47,11 +64,31 @@
   };
 
   let filtered_cinemas_showtimes = $derived(
-    data.movies.filter(
-      (movie: Movie) =>
-        Object.keys(movie.cinema_showtimes).some((c) => selected_cinemas.includes(c)) &&
-        Object.values(movie.cinema_showtimes).some((times: any[]) => times.some(({ time }: any) => time && in_range(to_float(time), from, to)))
-    )
+    data.movies
+      .filter(
+        (movie: Movie) =>
+          Object.keys(movie.cinema_showtimes).some((c) => selected_cinemas.includes(c)) &&
+          Object.values(movie.cinema_showtimes).some((times: any[]) => times.some(({ time }: any) => time && in_range(to_float(time), from, to)))
+      )
+      .sort((a: Movie, b: Movie) => {
+        // Count total valid showtimes for each movie across selected cinemas
+        const getTotalValidShowtimes = (movie: Movie) => {
+          return Object.entries(movie.cinema_showtimes)
+            .filter(([cinema]) => selected_cinemas.includes(cinema))
+            .reduce((total, [, times]) => {
+              const validTimes = (times as any[]).filter(({ time }: any) => 
+                time && in_range(to_float(time), from, to)
+              );
+              return total + validTimes.length;
+            }, 0);
+        };
+        
+        const aCount = getTotalValidShowtimes(a);
+        const bCount = getTotalValidShowtimes(b);
+        
+        // Sort by total valid showtimes (descending)
+        return bCount - aCount;
+      })
   );
 
 
