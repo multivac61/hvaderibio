@@ -6,7 +6,7 @@ import { parseHTML } from "linkedom";
 import sharp from "sharp";
 
 import type { Movie } from "$lib/schemas";
-import { parse_movie, parse_movie_ids } from "$lib/parse";
+import { parse_movie, parse_movie_ids, extract_direct_url } from "$lib/parse";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,7 +45,35 @@ await Promise.all(
     try {
       const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
       const { document: movie_document } = parseHTML(await movie.text());
-      return parse_movie(movie_document, id);
+      const parsed_movie = parse_movie(movie_document, id);
+      
+      if (parsed_movie) {
+        // Extract direct URLs from redirect URLs
+        const processed_cinema_showtimes: Record<string, any> = {};
+        
+        for (const [cinema_name, showtimes] of Object.entries(parsed_movie.cinema_showtimes)) {
+          processed_cinema_showtimes[cinema_name] = await Promise.all(
+            showtimes.map(async (showtime) => {
+              // Only process URLs that are redirect URLs
+              if (showtime.purchase_url.includes('showtime_redirect.php')) {
+                const direct_url = await extract_direct_url(showtime.purchase_url);
+                return {
+                  ...showtime,
+                  purchase_url: direct_url,
+                };
+              }
+              return showtime;
+            })
+          );
+        }
+        
+        return {
+          ...parsed_movie,
+          cinema_showtimes: processed_cinema_showtimes,
+        };
+      }
+      
+      return parsed_movie;
     } catch (error) {
       console.error(`Failed to fetch/parse movie ID ${id}:`, error);
       return null;
