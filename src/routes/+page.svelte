@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { onMount, onDestroy, tick } from "svelte";
+  import { onDestroy } from "svelte";
   import { Dialog } from "bits-ui";
   import { in_range, to_float } from "$lib/util";
   import type { Movie } from "$lib/schemas";
-  import gsap from 'gsap';
-  import Flip from 'gsap/Flip';
 
   let { data } = $props();
 
@@ -31,7 +29,6 @@
 
   let selected_choice: string = $state(group_choices[1][0]);
   let selected_cinemas = $state(capital_region_cinemas);
-  let gridElement: HTMLElement | null = $state(null);
 
   // Reference for the scrollable div inside EACH dialog instance
   // Note: This approach assumes only one dialog is effectively 'active' regarding focus management at a time.
@@ -53,37 +50,10 @@
     data.movies.filter(
       (movie: Movie) =>
         Object.keys(movie.cinema_showtimes).some((c) => selected_cinemas.includes(c)) &&
-        Object.values(movie.cinema_showtimes).some((times) => times.some(({ time }) => time && in_range(to_float(time), from, to)))
+        Object.values(movie.cinema_showtimes).some((times: any[]) => times.some(({ time }: any) => time && in_range(to_float(time), from, to)))
     )
   );
 
-  onMount(() => {
-    gsap.registerPlugin(Flip);
-  });
-
-  $effect(() => {
-    const movies = filtered_cinemas_showtimes;
-    if (!gridElement || !movies) return;
-
-    const items = Array.from(gridElement.children) as HTMLElement[];
-    const state = Flip.getState(items);
-
-    tick().then(() => {
-       if (!gridElement) return;
-        const newItems = Array.from(gridElement.children) as HTMLElement[];
-
-        Flip.from(state, {
-            targets: newItems,
-            duration: 0.5,
-            scale: true,
-            ease: "power1.inOut",
-            stagger: 0.03,
-            absolute: true,
-            onEnter: elements => gsap.fromTo(elements, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.3 }),
-            onLeave: elements => gsap.to(elements, { opacity: 0, scale: 0.8, duration: 0.3 })
-        });
-    });
-  });
 
 
   let activeDialogCount = 0;
@@ -183,16 +153,17 @@
 </header>
 
 <div
-  bind:this={gridElement}
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
 >
-  {#each filtered_cinemas_showtimes as movie (movie.id)}
-    <Dialog.Root onOpenChange={({ next }) => handleOpenChange(next)}>
+  {#each filtered_cinemas_showtimes as movie, index (movie.id)}
+    <Dialog.Root onOpenChange={(isOpen) => handleOpenChange(isOpen)}>
       <Dialog.Trigger class="block w-full">
         <img
           src={`${movie.id}.webp`}
           title={movie.title}
           alt={movie.title}
+          loading={index < 6 ? "eager" : "lazy"}
+          decoding="async"
           class="aspect-[2/3] w-full rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -229,8 +200,9 @@
               <div>
                 <div class="space-y-4">
                   {#each Object.entries(movie.cinema_showtimes) as [cinema, times] (cinema)}
+                    {@const typedTimes = times as any[]}
                     {#if selected_cinemas.includes(cinema)}
-                      {@const validTimes = times.filter(({ time }) => time && in_range(to_float(time), from, to))}
+                      {@const validTimes = typedTimes.filter(({ time }: any) => time && in_range(to_float(time), from, to))}
                       {#if validTimes.length > 0}
                         <div>
                           <div class="mb-3 font-medium text-neutral-200">{cinema}</div>
