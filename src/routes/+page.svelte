@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { onMount, onDestroy, tick } from "svelte";
+  import { onMount } from "svelte";
   import { Dialog } from "bits-ui";
   import { in_range, to_float } from "$lib/util";
   import type { Movie } from "$lib/schemas";
-  import gsap from 'gsap';
-  import Flip from 'gsap/Flip';
 
   let { data } = $props();
 
   const to = $state(24);
-  const from = $derived(Math.min(21, new Date().getHours() - 1));
+  // Use a consistent time for both server and client to avoid layout shifts
+  // We'll use the current hour as the baseline for consistency
+  const from = $derived(Math.min(21, new Date().getHours()));
 
   const all_cinemas = data.movies
     .flatMap((movie: Movie) => Object.keys(movie.cinema_showtimes!))
@@ -31,12 +31,11 @@
 
   let selected_choice: string = $state(group_choices[1][0]);
   let selected_cinemas = $state(capital_region_cinemas);
-  let gridElement: HTMLElement | null = $state(null);
+  
+  // Modal history state
+  let openModalId: number | null = $state(null);
+  let historyStateAdded = false;
 
-  // Reference for the scrollable div inside EACH dialog instance
-  // Note: This approach assumes only one dialog is effectively 'active' regarding focus management at a time.
-  // If multiple could be open AND need focus, a more complex Map or array would be needed.
-  let scrollableContentElement: HTMLElement | null = $state(null);
 
 
   const updateSelection = (choiceLabel: string) => {
@@ -50,88 +49,87 @@
   };
 
   let filtered_cinemas_showtimes = $derived(
-    data.movies.filter(
-      (movie: Movie) =>
-        Object.keys(movie.cinema_showtimes).some((c) => selected_cinemas.includes(c)) &&
-        Object.values(movie.cinema_showtimes).some((times) => times.some(({ time }) => time && in_range(to_float(time), from, to)))
-    )
+    data.movies
+      .filter((movie: Movie) => {
+        // Count total valid showtimes for this movie in selected cinemas
+        const totalValidShowtimes = Object.entries(movie.cinema_showtimes)
+          .filter(([cinema]) => selected_cinemas.includes(cinema))
+          .reduce((total, [, times]) => {
+            const validTimes = (times as any[]).filter(({ time }: any) => 
+              time && in_range(to_float(time), from, to)
+            );
+            return total + validTimes.length;
+          }, 0);
+        
+        // Only show movies that have at least one valid showtime in selected cinemas
+        return totalValidShowtimes > 0;
+      })
+      .sort((a: Movie, b: Movie) => {
+        // Count total valid showtimes for each movie across selected cinemas
+        const getTotalValidShowtimes = (movie: Movie) => {
+          return Object.entries(movie.cinema_showtimes)
+            .filter(([cinema]) => selected_cinemas.includes(cinema))
+            .reduce((total, [, times]) => {
+              const validTimes = (times as any[]).filter(({ time }: any) => 
+                time && in_range(to_float(time), from, to)
+              );
+              return total + validTimes.length;
+            }, 0);
+        };
+        
+        const aCount = getTotalValidShowtimes(a);
+        const bCount = getTotalValidShowtimes(b);
+        
+        // Sort by total valid showtimes (descending)
+        return bCount - aCount;
+      })
   );
 
+  // Modal history management
+  const openModal = (movieId: number) => {
+    openModalId = movieId;
+    // Add a history entry when opening modal
+    if (typeof window !== 'undefined' && !historyStateAdded) {
+      window.history.pushState({ modalId: movieId }, '', window.location.href);
+      historyStateAdded = true;
+    }
+  };
+
+  const closeModal = () => {
+    openModalId = null;
+    // Remove history entry when closing modal
+    if (typeof window !== 'undefined' && historyStateAdded) {
+      window.history.back();
+      historyStateAdded = false;
+    }
+  };
+
+  // Handle browser back/forward buttons
   onMount(() => {
-    gsap.registerPlugin(Flip);
-  });
+    if (typeof window !== 'undefined') {
+      const handlePopState = (event: PopStateEvent) => {
+        if (event.state?.modalId) {
+          openModalId = event.state.modalId;
+          historyStateAdded = true;
+        } else {
+          openModalId = null;
+          historyStateAdded = false;
+        }
+      };
 
-  $effect(() => {
-    const movies = filtered_cinemas_showtimes;
-    if (!gridElement || !movies) return;
-
-    const items = Array.from(gridElement.children) as HTMLElement[];
-    const state = Flip.getState(items);
-
-    tick().then(() => {
-       if (!gridElement) return;
-        const newItems = Array.from(gridElement.children) as HTMLElement[];
-
-        Flip.from(state, {
-            targets: newItems,
-            duration: 0.5,
-            scale: true,
-            ease: "power1.inOut",
-            stagger: 0.03,
-            absolute: true,
-            onEnter: elements => gsap.fromTo(elements, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.3 }),
-            onLeave: elements => gsap.to(elements, { opacity: 0, scale: 0.8, duration: 0.3 })
-        });
-    });
-  });
-
-
-  let activeDialogCount = 0;
-  const handleOpenChange = (isOpen: boolean) => {
-    setBodyScrollLock(isOpen); // Call the existing lock function
-
-    if (isOpen) {
-       // Use a small timeout to ensure the element is focusable after opening animation
-      setTimeout(() => {
-        scrollableContentElement?.focus({ preventScroll: true });
-      }, 50); // Adjust timing if needed
-    }
-  };
-
-  const setBodyScrollLock = (isOpen: boolean) => {
-    const htmlElement = document.documentElement;
-    const bodyElement = document.body;
-
-    if (isOpen) {
-      activeDialogCount++;
-      if (activeDialogCount === 1) {
-        // Apply lock immediately (removed rAF as it might be too late for this scenario)
-        htmlElement.style.overflow = 'hidden';
-        bodyElement.style.overflow = 'hidden';
-        bodyElement.style.position = 'relative';
-      }
-    } else {
-      activeDialogCount--;
-      if (activeDialogCount === 0) {
-        htmlElement.style.overflow = '';
-        bodyElement.style.overflow = '';
-        bodyElement.style.position = '';
-      }
-      if (activeDialogCount < 0) activeDialogCount = 0;
-    }
-  };
-
-  onDestroy(() => {
-    if (activeDialogCount > 0) {
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      activeDialogCount = 0;
+      window.addEventListener('popstate', handlePopState);
+      
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+      };
     }
   });
 </script>
 
 <header class="relative my-4 sm:my-8">
+  <h1 class="mb-4 text-center text-4xl sm:text-5xl text-pretty accent-cyan-50 bg-clip-text">
+    Hvað er í bíó? 🍿 
+  </h1>
    <div class="hidden sm:block md:mx-auto md:max-w-2xl lg:max-w-3xl">
     <div class="flex flex-wrap justify-center gap-1.5 md:gap-2">
       {#each [...group_choices, ...all_choices] as [label, cinemas]}
@@ -158,7 +156,7 @@
         id="select-cinemas-mobile"
         name="select cinemas mobile"
         aria-label="Veldu kvikmyndahús"
-        class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/80 py-2.5 pr-10 pl-4 text-center text-base text-neutral-100 shadow-lg backdrop-blur-md [text-align-last:center] focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
+        class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/80 py-2.5 pr-10 pl-4 text-center text-base text-neutral-100 shadow-lg backdrop-blur-3xl [text-align-last:center] focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
         {#each [...group_choices, ...all_choices] as [label]}
           <option
             value={label}
@@ -183,32 +181,28 @@
 </header>
 
 <div
-  bind:this={gridElement}
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
 >
-  {#each filtered_cinemas_showtimes as movie (movie.id)}
-    <Dialog.Root onOpenChange={({ next }) => handleOpenChange(next)}>
+  {#each filtered_cinemas_showtimes as movie, index (movie.id)}
+    <Dialog.Root open={openModalId === movie.id} onOpenChange={(open) => open ? openModal(movie.id) : closeModal()}>
       <Dialog.Trigger class="block w-full">
         <img
           src={`${movie.id}.webp`}
           title={movie.title}
           alt={movie.title}
+          loading={index < 6 ? "eager" : "lazy"}
+          decoding="async"
           class="aspect-[2/3] w-full rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay class="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm transition-opacity" />
+        <Dialog.Overlay class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xl transition-opacity" />
         <Dialog.Content
-          class="fixed inset-0 z-50 m-auto flex h-fit max-h-[90vh] w-[min(90vw,640px)] flex-col overflow-hidden rounded-2xl bg-neutral-950 p-4 shadow-xl transition sm:p-8 md:h-auto">
-          <Dialog.Title class="mb-2 flex-shrink-0 text-lg font-bold text-neutral-200 md:text-2xl">
+          class="fixed inset-0 z-50 m-auto flex h-[100dvh] w-[100vw] flex-col overflow-hidden bg-neutral-950 p-4 shadow-xl transition sm:h-[100vh] sm:w-[min(90vw,640px)] sm:rounded-2xl sm:p-8">
+          <Dialog.Title class="px-2 mb-2 flex-shrink-0 text-lg font-bold text-neutral-200 md:text-2xl text-xl">
             {movie.title}
           </Dialog.Title>
 
-          <div
-            bind:this={scrollableContentElement}
-            tabindex="-1"
-            class="min-h-0 flex-grow overflow-y-auto [mask:linear-gradient(black_calc(100%-4rem),transparent)] focus:outline-none"
-          >
-            <Dialog.Description class="pb-16 text-sm text-neutral-300">
+          <Dialog.Description class="min-h-0 flex-grow overflow-y-auto px-2 pb-16 text-sm text-neutral-300 [mask:linear-gradient(black_calc(100%-4rem),transparent)] sm:px-0">
               <p class="mb-4 text-neutral-400">{movie.description}</p>
               <div class="group flex items-center gap-4">
                 <a
@@ -229,13 +223,14 @@
               <div>
                 <div class="space-y-4">
                   {#each Object.entries(movie.cinema_showtimes) as [cinema, times] (cinema)}
+                    {@const typedTimes = times as any[]}
                     {#if selected_cinemas.includes(cinema)}
-                      <div>
-                        <div class="mb-3 font-medium text-neutral-200">{cinema}</div>
-                        <div class="inline-flex flex-wrap gap-3">
-                          {#each times as { time, purchase_url } (purchase_url)}
-                            {@const showTime = to_float(time)}
-                            {#if time && in_range(showTime, from, to)}
+                      {@const validTimes = typedTimes.filter(({ time }: any) => time && in_range(to_float(time), from, to))}
+                      {#if validTimes.length > 0}
+                        <div>
+                          <div class="mb-3 font-medium text-neutral-200">{cinema}</div>
+                          <div class="inline-flex flex-wrap gap-3">
+                            {#each validTimes as { time, purchase_url } (purchase_url)}
                               <a
                                 class="group relative rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900 px-2.5 py-1 text-base text-neutral-300 tabular-nums hover:bg-neutral-700 hover:text-white"
                                 href={purchase_url}
@@ -249,18 +244,17 @@
                                   hour12: false,
                                 })}
                               </a>
-                            {/if}
-                          {/each}
+                            {/each}
+                          </div>
                         </div>
-                      </div>
+                      {/if}
                     {/if}
                   {/each}
                 </div>
               </div>
             </Dialog.Description>
-          </div>
 
-          <div class="sticky -bottom-4 -mx-4 mt-auto h-20 flex-shrink-0 rounded-b-2xl bg-neutral-950 pt-4 sm:-bottom-8 sm:-mx-8">
+          <div class="sticky -bottom-4 -mx-4 mt-auto h-20 flex-shrink-0 bg-neutral-950 pt-4 sm:-bottom-8 sm:-mx-8 sm:rounded-b-2xl">
             <Dialog.Close
               class="group absolute inset-x-4 bottom-4 z-50 flex w-auto items-center justify-center rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900 px-2.5 py-2 text-base text-neutral-300 shadow-neutral-800 hover:text-white sm:inset-x-8">
               <span class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"

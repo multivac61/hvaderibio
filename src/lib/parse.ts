@@ -54,6 +54,32 @@ export function parse_showtimes(document: Document) {
   return cinema_showtimes_schema.parse(cinema_showtimes);
 }
 
+// Function to extract direct cinema URL from redirect page
+export async function extract_direct_url(redirect_url: string): Promise<string> {
+  try {
+    const response = await fetch(redirect_url);
+    const html = await response.text();
+    
+    // Look for the window.location.href pattern in the JavaScript
+    const match = html.match(/window\.location\.href\s*=\s*["']([^"']+)["']/);
+    if (match && match[1]) {
+      return match[1];
+    }
+    
+    // Fallback: look for meta refresh
+    const metaMatch = html.match(/<meta[^>]*http-equiv\s*=\s*["']refresh["'][^>]*content\s*=\s*["'][^;]*;\s*url\s*=\s*([^"']+)["']/i);
+    if (metaMatch && metaMatch[1]) {
+      return metaMatch[1];
+    }
+    
+    // If no direct URL found, return the original redirect URL
+    return redirect_url;
+  } catch (error) {
+    console.error(`Failed to extract direct URL from ${redirect_url}:`, error);
+    return redirect_url;
+  }
+}
+
 export function parse_movie_ids(document: Document): number[] {
   return [...document.querySelectorAll<HTMLAnchorElement>("a.movie_title")].map((a) => parseInt(a?.href?.match(/\d+/g)![0]));
 }

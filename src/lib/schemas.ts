@@ -6,7 +6,7 @@ const showtime_schema = z.object({
   hall: z.string(),
 });
 
-export const cinema_showtimes_schema = z.record(z.array(showtime_schema));
+export const cinema_showtimes_schema = z.record(z.string(), z.array(showtime_schema));
 
 export type CinemaShowtimes = z.infer<typeof cinema_showtimes_schema>;
 export type Movie = z.infer<typeof movie_schema>;
