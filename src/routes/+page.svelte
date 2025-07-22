@@ -197,8 +197,8 @@
       <Dialog.Portal>
         <Dialog.Overlay class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xl transition-opacity" />
         <Dialog.Content
-          class="fixed inset-0 z-50 m-auto flex h-[100dvh] w-[100vw] flex-col overflow-hidden bg-neutral-950 p-4 shadow-xl transition sm:h-[100vh] sm:w-[min(90vw,640px)] sm:rounded-2xl sm:p-8">
-          <Dialog.Title class="px-2 mb-2 flex-shrink-0 text-lg font-bold text-neutral-200 md:text-2xl text-xl">
+          class="fixed inset-0 z-50 m-auto flex h-screen min-h-screen md:h-[80vh] md:min-h-0 md:max-h-[80vh] w-[100vw] flex-col overflow-hidden bg-neutral-950 p-4 shadow-xl transition sm:w-[min(90vw,768px)] sm:rounded-2xl sm:p-8">
+          <Dialog.Title class="px-2 mb-2 flex-shrink-0 font-bold text-neutral-200 md:text-2xl text-xl">
             {movie.title}
           </Dialog.Title>
 
