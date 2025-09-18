@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
   import { base } from '$app/paths';
   import { in_range, to_float } from "$lib/util";
   import type { Movie } from "$lib/schemas";
@@ -78,10 +77,6 @@
         return bCount - aCount;
       })
   );
-  
-  const navigateToMovie = (movieId: number) => {
-    goto(`${base}/movie/${movieId}`);
-  };
 </script>
 
 <header class="relative my-4 sm:my-8">
@@ -142,9 +137,9 @@
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
 >
   {#each filtered_cinemas_showtimes as movie, index}
-    <button
-      onclick={() => navigateToMovie(movie.id)}
-      class="block w-full cursor-pointer">
+    <a
+      href={`${base}/movie/${movie.id}`}
+      class="block w-full">
       <img
         src={`${base}/${movie.id}.webp`}
         title={movie.title}
@@ -152,7 +147,7 @@
         loading={index < 6 ? "eager" : "lazy"}
         decoding="async"
         class="aspect-[2/3] w-full rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
-    </button>
+    </a>
   {/each}
 </div>
 
