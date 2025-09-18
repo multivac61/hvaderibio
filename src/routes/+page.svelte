@@ -139,14 +139,14 @@
   {#each filtered_cinemas_showtimes as movie, index}
     <a
       href={`${base}/movie/${movie.id}`}
-      class="block w-full">
+      class="block w-full aspect-[2/3] bg-neutral-900 rounded-lg">
       <img
         src={`${base}/${movie.id}.webp`}
         title={movie.title}
         alt={movie.title}
         loading={index < 6 ? "eager" : "lazy"}
         decoding="async"
-        class="aspect-[2/3] w-full rounded-lg object-fill shadow-2xl sm:w-[min(100%,360px)] sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
+        class="w-full h-full rounded-lg object-fill shadow-2xl sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
     </a>
   {/each}
 </div>
