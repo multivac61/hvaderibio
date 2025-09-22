@@ -16,10 +16,26 @@
     .filter((name, index, array) => array.indexOf(name) === index)
     .sort();
 
-  const selected_cinemas = all_cinemas.filter((name) =>
+  const capital_region_cinemas = all_cinemas.filter((name) =>
     ["Bíó Paradís", "Háskólabíó", "Laugarásbíó", "Sambíóin Egilshöll", "Sambíóin Kringlunni", "Sambíóin Álfabakka", "Smárabíó"].includes(
       name
     )
+  );
+
+  const all_choices = all_cinemas.map((name) => [name, [name]] as const);
+  
+  const group_choices = [
+    ["Öll kvikmyndahús", all_cinemas],
+    ["Höfuðborgarsvæðið", capital_region_cinemas],
+  ] as const;
+
+  // Get the stored cinema selection from sessionStorage
+  const savedChoice = typeof window !== 'undefined' ? sessionStorage.getItem('selectedCinemaChoice') : null;
+  
+  const selected_cinemas = $derived(
+    savedChoice 
+      ? [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1] || capital_region_cinemas
+      : capital_region_cinemas
   );
 </script>
 

@@ -28,13 +28,25 @@
     ["Höfuðborgarsvæðið", capital_region_cinemas],
   ] as const;
 
-  let selected_choice: string = $state(group_choices[1][0]);
-  let selected_cinemas = $state(capital_region_cinemas);
+  // Load saved selection from sessionStorage or use default
+  const savedChoice = typeof window !== 'undefined' ? sessionStorage.getItem('selectedCinemaChoice') : null;
+  const defaultChoice = savedChoice || group_choices[1][0];
+  
+  let selected_choice: string = $state(defaultChoice);
+  let selected_cinemas = $state(
+    savedChoice 
+      ? [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1] || capital_region_cinemas
+      : capital_region_cinemas
+  );
 
   const updateSelection = (choiceLabel: string) => {
     if (selected_choice === choiceLabel) return;
     selected_choice = choiceLabel;
     selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_label, cinemas]) => (group_label === choiceLabel ? cinemas : []));
+    // Save to sessionStorage
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('selectedCinemaChoice', choiceLabel);
+    }
   };
 
   const handleSelectChange = (event: Event & { currentTarget: HTMLSelectElement }) => {
