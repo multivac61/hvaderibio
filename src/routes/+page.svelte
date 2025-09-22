@@ -1,32 +1,9 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { base } from '$app/paths';
+  import { base } from "$app/paths";
   import { in_range, to_float } from "$lib/util";
-  import type { Movie } from "$lib/schemas";
+  import type { Movie, Showtime } from "$lib/schemas";
 
   let { data } = $props();
-  
-  // iOS-specific optimizations
-  onMount(() => {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    
-    if (isIOS) {
-      // Check if we came back via browser navigation
-      if (performance.navigation.type === 2) {
-        // We came from bfcache - force immediate render
-        document.body.style.opacity = '0';
-        requestAnimationFrame(() => {
-          document.body.style.opacity = '1';
-        });
-      }
-      
-      // Prevent iOS from unloading images when navigating away
-      window.addEventListener('pagehide', (e) => {
-        // Tell iOS to cache this page
-        e.persisted = true;
-      });
-    }
-  });
 
   const to = $state(24);
   // Use a consistent time for both server and client to avoid layout shifts
@@ -34,17 +11,17 @@
   const from = $derived(Math.min(21, new Date().getHours()));
 
   const all_cinemas = data.movies
-    .flatMap((movie: Movie) => Object.keys(movie.cinema_showtimes!))
-    .filter((name: string, index: number, array: string[]) => array.indexOf(name) === index)
+    .flatMap((movie) => Object.keys(movie.cinema_showtimes))
+    .filter((name, index, array) => array.indexOf(name) === index)
     .sort();
 
-  const capital_region_cinemas = all_cinemas.filter((name: string) =>
+  const capital_region_cinemas = all_cinemas.filter((name) =>
     ["Bíó Paradís", "Háskólabíó", "Laugarásbíó", "Sambíóin Egilshöll", "Sambíóin Kringlunni", "Sambíóin Álfabakka", "Smárabíó"].includes(
-      name as string
+      name
     )
   );
 
-  const all_choices = all_cinemas.map((name: string) => [name, [name]] as const);
+  const all_choices = all_cinemas.map((name) => [name, [name]] as const);
 
   const group_choices = [
     ["Öll kvikmyndahús", all_cinemas],
@@ -66,36 +43,32 @@
 
   let filtered_cinemas_showtimes = $derived(
     data.movies
-      .filter((movie: Movie) => {
+      .filter((movie) => {
         // Count total valid showtimes for this movie in selected cinemas
         const totalValidShowtimes = Object.entries(movie.cinema_showtimes)
           .filter(([cinema]) => selected_cinemas.includes(cinema))
           .reduce((total, [, times]) => {
-            const validTimes = (times as any[]).filter(({ time }: any) => 
-              time && in_range(to_float(time), from, to)
-            );
+            const validTimes = (times as Showtime[]).filter(({ time }) => time && in_range(to_float(time), from, to));
             return total + validTimes.length;
           }, 0);
-        
+
         // Only show movies that have at least one valid showtime in selected cinemas
         return totalValidShowtimes > 0;
       })
-      .sort((a: Movie, b: Movie) => {
+      .sort((a, b) => {
         // Count total valid showtimes for each movie across selected cinemas
         const getTotalValidShowtimes = (movie: Movie) => {
           return Object.entries(movie.cinema_showtimes)
             .filter(([cinema]) => selected_cinemas.includes(cinema))
             .reduce((total, [, times]) => {
-              const validTimes = (times as any[]).filter(({ time }: any) => 
-                time && in_range(to_float(time), from, to)
-              );
+              const validTimes = (times as Showtime[]).filter(({ time }) => time && in_range(to_float(time), from, to));
               return total + validTimes.length;
             }, 0);
         };
-        
+
         const aCount = getTotalValidShowtimes(a);
         const bCount = getTotalValidShowtimes(b);
-        
+
         // Sort by total valid showtimes (descending)
         return bCount - aCount;
       })
@@ -103,22 +76,20 @@
 </script>
 
 <header class="relative my-4 sm:my-8">
-  <h1 class="mb-4 hidden sm:block text-center text-4xl sm:text-5xl text-pretty accent-cyan-50 bg-clip-text">
-    Hvað er í bíó? 🍿 
-  </h1>
-   <div class="hidden sm:block md:mx-auto md:max-w-2xl lg:max-w-3xl">
+  <h1 class="mb-4 hidden bg-clip-text text-center text-4xl text-pretty accent-cyan-50 sm:block sm:text-5xl">Hvað er í bíó? 🍿</h1>
+  <div class="hidden sm:block md:mx-auto md:max-w-2xl lg:max-w-3xl">
     <div class="flex flex-wrap justify-center gap-1.5 md:gap-2">
-      {#each [...group_choices, ...all_choices] as [label, cinemas]}
+      {#each [...group_choices, ...all_choices] as [label] (label)}
         <button
           type="button"
           onclick={() => updateSelection(label)}
           class={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none
-            ${
-              label === selected_choice
-                ? "bg-neutral-800/30 bg-opacity-15 text-white shadow-sm"
-                : "bg-neutral-800/60 text-neutral-400 hover:bg-neutral-700/80 hover:text-neutral-200"
-            }
-          `}>
+                  ${
+                    label === selected_choice
+                      ? "bg-opacity-15 bg-neutral-800/30 text-white shadow-sm"
+                      : "bg-neutral-800/60 text-neutral-400 hover:bg-neutral-700/80 hover:text-neutral-200"
+                  }
+                `}>
           {label}
         </button>
       {/each}
@@ -133,7 +104,7 @@
         name="select cinemas mobile"
         aria-label="Veldu kvikmyndahús"
         class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/80 py-2.5 pr-10 pl-4 text-center text-base text-neutral-100 shadow-lg backdrop-blur-3xl [text-align-last:center] focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
-        {#each [...group_choices, ...all_choices] as [label]}
+        {#each [...group_choices, ...all_choices] as [label] (label)}
           <option
             value={label}
             id={`option-${label}`}
@@ -158,23 +129,16 @@
 
 <div
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
-  style="contain: layout style paint;"
->
-  {#each filtered_cinemas_showtimes as movie, index}
-    <a
-      href={`${base}/movie/${movie.id}`}
-      class="block w-full aspect-[2/3] bg-neutral-900 rounded-lg">
+  style="contain: layout style paint;">
+  {#each filtered_cinemas_showtimes as movie, index (index)}
+    <a href={`${base}/movie/${movie.id}`} class="block aspect-[2/3] w-full rounded-lg bg-neutral-900">
       <img
         src={`${base}/${movie.id}.webp`}
         title={movie.title}
         alt={movie.title}
         loading={index < 6 ? "eager" : "lazy"}
         decoding="async"
-        class="w-full h-full rounded-lg object-fill shadow-2xl sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
+        class="h-full w-full rounded-lg object-fill shadow-2xl sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
     </a>
   {/each}
 </div>
-
-
-
-
