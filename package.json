@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
-    "build:cloudflare": "ADAPTER=cloudflare vite build",
-    "build:github": "vite build",
+    "build": "pnpm scrape && vite build",
+    "build:cloudflare": "pnpm scrape && ADAPTER=cloudflare vite build",
+    "build:github": "pnpm scrape && vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
