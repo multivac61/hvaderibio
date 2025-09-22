@@ -1,11 +1,10 @@
-import { readFile } from "fs/promises";
 import type { Movie } from "$lib/schemas";
 import { movies_schema } from "$lib/schemas";
+import moviesData from "../../static/movies.json";
 
 export const prerender = true;
 
 export async function load() {
-  const moviesData = JSON.parse(await readFile("static/movies.json", "utf-8"));
   const validatedMovies = movies_schema.parse(moviesData);
   
   return {
