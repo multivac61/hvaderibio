@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { asset } from "$app/paths";
+  import { base } from "$app/paths";
   import { in_range, to_float } from "$lib/util";
 
   let { data } = $props();
@@ -55,7 +55,7 @@
         <div class="grid gap-8 md:grid-cols-[300px_1fr] lg:grid-cols-[360px_1fr] xl:grid-cols-[420px_1fr]">
           <div>
             <img
-              src={asset(`/${movie.id}.webp`)}
+              src={`${base}/${movie.id}.webp`}
               title={movie.title}
               alt={movie.title}
               class="mx-auto w-full max-w-sm rounded-lg shadow-2xl lg:max-w-md xl:max-w-lg" />

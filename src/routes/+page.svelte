@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { asset } from "$app/paths";
+  import { base } from "$app/paths";
   import { in_range, to_float } from "$lib/util";
   import type { Movie, Showtime } from "$lib/schemas";
 
@@ -143,9 +143,9 @@
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
   style="contain: layout style paint;">
   {#each filtered_cinemas_showtimes as movie, index (index)}
-    <a href={`./movie/${movie.id}`} class="block aspect-[2/3] w-full rounded-lg bg-neutral-900">
+    <a href={`${base}/movie/${movie.id}`} class="block aspect-[2/3] w-full rounded-lg bg-neutral-900">
       <img
-        src={asset(`/${movie.id}.webp`)}
+        src={`${base}/${movie.id}.webp`}
         title={movie.title}
         alt={movie.title}
         loading={index < 6 ? "eager" : "lazy"}

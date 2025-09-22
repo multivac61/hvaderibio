@@ -7,9 +7,6 @@ export default {
   kit: {
     adapter: adapter(),
     prerender: { handleHttpError: "warn" },
-    paths: { 
-      base: process.env.NODE_ENV === "production" ? "/hvaderibio" : "",
-      relative: false
-    },
+    paths: { base: process.env.NODE_ENV === "production" ? "/hvaderibio" : "" },
   },
 };
