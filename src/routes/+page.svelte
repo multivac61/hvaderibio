@@ -1,9 +1,32 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { base } from '$app/paths';
   import { in_range, to_float } from "$lib/util";
   import type { Movie } from "$lib/schemas";
 
   let { data } = $props();
+  
+  // iOS-specific optimizations
+  onMount(() => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
+    if (isIOS) {
+      // Check if we came back via browser navigation
+      if (performance.navigation.type === 2) {
+        // We came from bfcache - force immediate render
+        document.body.style.opacity = '0';
+        requestAnimationFrame(() => {
+          document.body.style.opacity = '1';
+        });
+      }
+      
+      // Prevent iOS from unloading images when navigating away
+      window.addEventListener('pagehide', (e) => {
+        // Tell iOS to cache this page
+        e.persisted = true;
+      });
+    }
+  });
 
   const to = $state(24);
   // Use a consistent time for both server and client to avoid layout shifts
@@ -135,6 +158,7 @@
 
 <div
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
+  style="contain: layout style paint;"
 >
   {#each filtered_cinemas_showtimes as movie, index}
     <a

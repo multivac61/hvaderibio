@@ -15,6 +15,9 @@
   body {
     @apply h-full bg-black;
     scrollbar-width: none;
+    /* Disable smooth scrolling on iOS for faster navigation */
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: auto !important;
   }
 
   /* Hide scrollbars */

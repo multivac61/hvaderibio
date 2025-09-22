@@ -28,30 +28,31 @@
   const selected_cinemas = capital_region_cinemas;
   
   const handleBack = () => {
-    goto(`${base}/`);
+    window.history.back();
   };
 </script>
 
 {#if movie}
-  <div class="min-h-screen bg-black text-neutral-100">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-      <button
-        onclick={handleBack}
-        class="mb-6 inline-flex items-center gap-2 rounded-md bg-neutral-800/60 px-4 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700/80 hover:text-neutral-200 transition-colors">
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-        Til baka
-      </button>
-      
-      <div class="grid gap-8 md:grid-cols-[300px_1fr]">
-        <div>
-          <img
-            src={`${base}/${movie.id}.webp`}
-            title={movie.title}
-            alt={movie.title}
-            class="w-full rounded-lg shadow-2xl" />
-        </div>
+  <div class="min-h-screen bg-black text-neutral-100 flex flex-col">
+    <div class="container mx-auto px-4 max-w-5xl flex-1 flex items-start md:items-center py-8">
+      <div class="w-full md:transform md:-translate-y-1/3">
+        <button
+          onclick={handleBack}
+          class="mb-6 inline-flex items-center gap-2 rounded-md bg-neutral-800/60 px-4 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700/80 hover:text-neutral-200 transition-colors">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Til baka
+        </button>
+        
+        <div class="grid gap-8 md:grid-cols-[300px_1fr] lg:grid-cols-[360px_1fr] xl:grid-cols-[420px_1fr]">
+          <div>
+            <img
+              src={`${base}/${movie.id}.webp`}
+              title={movie.title}
+              alt={movie.title}
+              class="w-full max-w-sm lg:max-w-md xl:max-w-lg mx-auto rounded-lg shadow-2xl" />
+          </div>
         
         <div>
           <h1 class="mb-4 text-3xl font-bold text-neutral-200 md:text-4xl">
@@ -73,8 +74,6 @@
             </a>
           </div>
           
-          <h2 class="mb-6 text-lg font-semibold text-neutral-300">{data.today}</h2>
-          
           <div class="space-y-6">
             {#each Object.entries(movie.cinema_showtimes) as [cinema, times] (cinema)}
               {@const typedTimes = times as any[]}
@@ -82,7 +81,7 @@
                 {@const validTimes = typedTimes.filter(({ time }: any) => time && in_range(to_float(time), from, to))}
                 {#if validTimes.length > 0}
                   <div>
-                    <div class="mb-3 text-lg font-medium text-neutral-200">{cinema}</div>
+                    <div class="mb-3 text-lg">{cinema}</div>
                     <div class="inline-flex flex-wrap gap-3">
                       {#each validTimes as { time, purchase_url } (purchase_url)}
                         <a
@@ -105,6 +104,7 @@
               {/if}
             {/each}
           </div>
+        </div>
         </div>
       </div>
     </div>
