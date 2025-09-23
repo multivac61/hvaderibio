@@ -27,16 +27,23 @@
     ["Höfuðborgarsvæðið", capital_region_cinemas],
   ] as const;
 
-  // Load saved selection from sessionStorage or use default
-  const savedChoice = typeof window !== 'undefined' ? sessionStorage.getItem('selectedCinemaChoice') : null;
-  const defaultChoice = savedChoice || group_choices[1][0];
+  // Initialize with default, will be updated on client side
+  let selected_choice: string = $state(group_choices[1][0]);
+  let selected_cinemas: string[] = $state(capital_region_cinemas);
   
-  let selected_choice: string = $state(defaultChoice);
-  let selected_cinemas = $state(
-    savedChoice 
-      ? [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1] || capital_region_cinemas
-      : capital_region_cinemas
-  );
+  // Load saved selection from sessionStorage after component mounts
+  $effect(() => {
+    if (typeof window !== 'undefined') {
+      const savedChoice = sessionStorage.getItem('selectedCinemaChoice');
+      if (savedChoice) {
+        const cinemas = [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1];
+        if (cinemas) {
+          selected_choice = savedChoice;
+          selected_cinemas = [...cinemas]; // Create mutable copy
+        }
+      }
+    }
+  });
 
   const updateSelection = (choiceLabel: string) => {
     if (selected_choice === choiceLabel) return;
