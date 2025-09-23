@@ -30,6 +30,7 @@
   // Initialize with default, will be updated on client side
   let selected_choice: string = $state(group_choices[1][0]);
   let selected_cinemas: string[] = $state(capital_region_cinemas);
+  let is_mounted = $state(false);
   
   // Load saved selection from sessionStorage after component mounts
   $effect(() => {
@@ -42,6 +43,7 @@
           selected_cinemas = [...cinemas]; // Create mutable copy
         }
       }
+      is_mounted = true;
     }
   });
 
@@ -146,8 +148,8 @@
 </header>
 
 <div
-  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
-  style="contain: layout style paint;">
+  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 transition-opacity duration-300"
+  style="contain: layout style paint; opacity: {is_mounted ? 1 : 0}">
   {#each filtered_cinemas_showtimes as movie, index (index)}
     <a href={`/movie/${movie.id}`} class="block aspect-[2/3] w-full rounded-lg bg-neutral-900">
       <img
