@@ -39,9 +39,9 @@
 </script>
 
 {#if movie}
-  <div class="flex min-h-screen flex-col bg-black text-neutral-100">
-    <div class="container mx-auto flex max-w-5xl flex-1 items-start px-4 py-8 md:items-center">
-      <div class="w-full md:-translate-y-1/3 md:transform">
+  <div class="min-h-screen bg-black text-neutral-100">
+    <div class="container mx-auto max-w-5xl px-4 py-8">
+      <div class="w-full">
         <button
           onclick={() => window.history.back()}
           class="mb-6 inline-flex items-center gap-2 rounded-md bg-neutral-800/60 px-4 py-2 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-700/80 hover:text-neutral-200">
@@ -50,14 +50,14 @@
           </svg>
           Til baka
         </button>
-
-        <div class="grid gap-8 md:grid-cols-[300px_1fr] lg:grid-cols-[360px_1fr] xl:grid-cols-[420px_1fr]">
+        
+        <div class="grid gap-8 md:grid-cols-2 lg:gap-12">
           <div>
             <img
               src={`/${movie.id}.webp`}
               title={movie.title}
               alt={movie.title}
-              class="mx-auto w-full max-w-sm rounded-lg shadow-2xl lg:max-w-md xl:max-w-lg" />
+              class="w-full max-w-md rounded-lg shadow-2xl" />
           </div>
 
           <div>
