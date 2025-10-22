@@ -1,0 +1,20 @@
+# Cache static assets
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+/movies.json
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# Cache HTML with revalidation
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Security headers for all pages
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: interest-cohort=()

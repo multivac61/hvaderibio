@@ -7,9 +7,10 @@
     src: string;
     title: string;
     loading?: "eager" | "lazy";
+    fetchpriority?: "high" | "low" | "auto";
   }
 
-  let { href, src, title, loading = "lazy" }: Props = $props();
+  let { href, src, title, loading = "lazy", fetchpriority = "auto" }: Props = $props();
 
   let posterElement = $state<HTMLDivElement>();
   let hasBeenVisible = $state(false);
@@ -62,10 +63,13 @@
   <img
     {src}
     srcset="{src.replace('.webp', '-360w.webp')} 360w, {src} 720w, {src.replace('.webp', '-1080w.webp')} 1080w"
-    sizes="(max-width: 640px) 180px, (max-width: 1024px) 360px, 540px"
+    sizes="(max-width: 640px) calc(50vw - 2rem), (max-width: 1024px) 360px, 540px"
     {title}
     alt={title}
     {loading}
+    fetchpriority={fetchpriority}
     decoding="async"
+    width="720"
+    height="1080"
     class="pointer-events-none h-full w-full rounded-lg object-fill shadow-2xl [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-200 [@media(hover:hover)]:group-hover:scale-105" />
 </div>
