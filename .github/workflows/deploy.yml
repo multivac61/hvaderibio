@@ -8,8 +8,9 @@ on:
     - cron: "0 * * * *" # Run every hour
 name: Deploy
 jobs:
-  build_site:
+  build_and_deploy:
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
     steps:
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
@@ -18,31 +19,12 @@ jobs:
       - name: 📚 Install node dependencies
         run: nix develop -c pnpm install
 
-      - name: 🕷️ Scrape
-        run: nix develop -c pnpm scrape
+      - name: 🔨 Build for Cloudflare
+        run: nix develop -c pnpm build:cloudflare
 
-      - name: 🔨 Build
-        run: nix develop -c pnpm build
-
-      - name: 📤 Upload
-        uses: actions/upload-pages-artifact@main
+      - name: 🚀 Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
         with:
-          path: "build/"
-
-  deploy:
-    needs: build_site
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-
-    permissions:
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: 🚀 Deploy
-        id: deployment
-        uses: actions/deploy-pages@main
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy .svelte-kit/cloudflare --project-name=hvaderibio
