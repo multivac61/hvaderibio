@@ -13,15 +13,18 @@
   let { href, src, title, loading = "lazy", fetchpriority = "auto" }: Props = $props();
 
   let posterElement = $state<HTMLDivElement>();
-  let hasBeenVisible = $state(false);
+  let hasBeenVisible = $state(loading === "eager"); // Eager images visible immediately
 
   const inViewport = new IsInViewport(() => posterElement, {
     threshold: 0.1, // Trigger when 10% of the element is visible
   });
 
   // Track if element has ever been visible - one-time fade-in
+  // Skip animation for eager-loaded images
   $effect(() => {
-    if (inViewport.current && !hasBeenVisible) {
+    if (loading === "eager") {
+      hasBeenVisible = true;
+    } else if (inViewport.current && !hasBeenVisible) {
       hasBeenVisible = true;
     }
   });
