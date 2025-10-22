@@ -102,19 +102,29 @@ await Promise.all(
             // Ignore if file doesn't exist
           }
 
-          // Use sharp to resize to the NEW target dimensions
-          await sharp(buffer)
-            .resize(targetWidth, targetHeight, {
-              // Use updated dimensions
-              fit: "cover",
-            })
-            .webp({
-              quality: 80,
-              effort: 6, // Higher effort for better compression
-              nearLossless: false,
-              smartSubsample: true,
-            })
+          // Generate multiple sizes for responsive images
+          const image = sharp(buffer);
+
+          // Small size for mobile (360w for 1x displays)
+          await image
+            .clone()
+            .resize(360, 540, { fit: "cover" })
+            .webp({ quality: 80, effort: 6, nearLossless: false, smartSubsample: true })
+            .toFile(path.resolve(__dirname, `../static/${movie.id}-360w.webp`));
+
+          // Medium size for mobile retina (720w for 2x displays)
+          await image
+            .clone()
+            .resize(targetWidth, targetHeight, { fit: "cover" })
+            .webp({ quality: 80, effort: 6, nearLossless: false, smartSubsample: true })
             .toFile(webpPath);
+
+          // Large size for desktop (1080w for larger screens)
+          await image
+            .clone()
+            .resize(1080, 1620, { fit: "cover" })
+            .webp({ quality: 80, effort: 6, nearLossless: false, smartSubsample: true })
+            .toFile(path.resolve(__dirname, `../static/${movie.id}-1080w.webp`));
 
           return {
             ...movie,

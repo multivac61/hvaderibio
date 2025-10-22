@@ -61,6 +61,8 @@
   style="cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <img
     {src}
+    srcset="{src.replace('.webp', '-360w.webp')} 360w, {src} 720w, {src.replace('.webp', '-1080w.webp')} 1080w"
+    sizes="(max-width: 640px) 180px, (max-width: 1024px) 360px, 540px"
     {title}
     alt={title}
     {loading}
