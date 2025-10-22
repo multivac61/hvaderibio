@@ -59,7 +59,7 @@
   ontouchend={handleTouchEnd}
   onclick={handleClick}
   onkeydown={(e) => (e.key === "Enter" || e.key === " ") && handleClick()}
-  class="group block aspect-[2/3] w-full overflow-visible rounded-lg bg-neutral-900 touch-manipulation transition-opacity duration-700 ease-out [@media(hover:hover)]:hover:z-50"
+  class="group block aspect-[2/3] w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900 transition-opacity duration-700 ease-out [@media(hover:hover)]:hover:z-50"
   class:opacity-0={!hasBeenVisible}
   class:opacity-100={hasBeenVisible}
   style="cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
@@ -70,7 +70,7 @@
     {title}
     alt={title}
     {loading}
-    fetchpriority={fetchpriority}
+    {fetchpriority}
     decoding="async"
     width="720"
     height="1080"

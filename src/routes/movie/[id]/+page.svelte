@@ -53,7 +53,10 @@
 </script>
 
 {#if movie}
-  <div class="fixed inset-0 flex flex-col bg-black text-neutral-100 transition-opacity duration-500 ease-out" class:opacity-0={!isVisible} class:opacity-100={isVisible}>
+  <div
+    class="fixed inset-0 flex flex-col bg-black text-neutral-100 transition-opacity duration-500 ease-out"
+    class:opacity-0={!isVisible}
+    class:opacity-100={isVisible}>
     <div class="container mx-auto flex h-full max-w-5xl flex-col overflow-y-auto px-4 py-8">
       <div class="w-full">
         <button
@@ -67,7 +70,13 @@
 
         <div class="grid gap-8 md:grid-cols-2 lg:gap-12">
           <div>
-            <img src={`/${movie.id}.webp`} title={movie.title} alt={movie.title} loading="eager" decoding="async" class="w-full max-w-md rounded-lg shadow-2xl" />
+            <img
+              src={`/${movie.id}.webp`}
+              title={movie.title}
+              alt={movie.title}
+              loading="eager"
+              decoding="async"
+              class="w-full max-w-md rounded-lg shadow-2xl" />
           </div>
 
           <div>
@@ -86,7 +95,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" class="fill-current">
                   <path d="M3 22V2L21 12L3 22Z" />
                 </svg>
-                Horfa á stiklu
+                Stikla
               </a>
             </div>
 
