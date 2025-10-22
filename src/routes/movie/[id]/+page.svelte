@@ -7,6 +7,16 @@
   const movieId = $derived(Number(page.params.id));
   const movie = $derived(data.movies.find((m) => m.id === movieId));
 
+  // Fade-in animation on mount
+  let isVisible = $state(false);
+  $effect(() => {
+    // Trigger fade-in after a small delay for smooth transition
+    const timeout = setTimeout(() => {
+      isVisible = true;
+    }, 50);
+    return () => clearTimeout(timeout);
+  });
+
   const to = 24;
   const from = Math.min(21, new Date().getHours());
 
@@ -43,7 +53,7 @@
 </script>
 
 {#if movie}
-  <div class="fixed inset-0 flex flex-col bg-black text-neutral-100">
+  <div class="fixed inset-0 flex flex-col bg-black text-neutral-100 transition-opacity duration-500 ease-out" class:opacity-0={!isVisible} class:opacity-100={isVisible}>
     <div class="container mx-auto flex h-full max-w-5xl flex-col overflow-y-auto px-4 py-8">
       <div class="w-full">
         <button
@@ -57,7 +67,7 @@
 
         <div class="grid gap-8 md:grid-cols-2 lg:gap-12">
           <div>
-            <img src={`/${movie.id}.webp`} title={movie.title} alt={movie.title} class="w-full max-w-md rounded-lg shadow-2xl" />
+            <img src={`/${movie.id}.webp`} title={movie.title} alt={movie.title} loading="eager" decoding="async" class="w-full max-w-md rounded-lg shadow-2xl" />
           </div>
 
           <div>
