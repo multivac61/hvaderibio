@@ -22,20 +22,24 @@
   );
 
   const all_choices = all_cinemas.map((name) => [name, [name]] as const);
-  
+
   const group_choices = [
     ["Öll kvikmyndahús", all_cinemas],
     ["Höfuðborgarsvæðið", capital_region_cinemas],
   ] as const;
 
   // Get the stored cinema selection from sessionStorage
-  const savedChoice = typeof window !== 'undefined' ? sessionStorage.getItem('selectedCinemaChoice') : null;
-  
+  const savedChoice = typeof window !== "undefined" ? sessionStorage.getItem("selectedCinemaChoice") : null;
+
   const selected_cinemas = $derived(
-    savedChoice 
+    savedChoice
       ? [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1] || capital_region_cinemas
       : capital_region_cinemas
   );
+
+  const goBack = () => {
+    window.history.back();
+  };
 </script>
 
 {#if movie}
@@ -43,21 +47,17 @@
     <div class="container mx-auto max-w-5xl px-4 py-8">
       <div class="w-full">
         <button
-          onclick={() => window.history.back()}
+          onclick={goBack}
           class="mb-6 inline-flex items-center gap-2 rounded-md bg-neutral-800/60 px-4 py-2 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-700/80 hover:text-neutral-200">
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
           Til baka
         </button>
-        
+
         <div class="grid gap-8 md:grid-cols-2 lg:gap-12">
           <div>
-            <img
-              src={`/${movie.id}.webp`}
-              title={movie.title}
-              alt={movie.title}
-              class="w-full max-w-md rounded-lg shadow-2xl" />
+            <img src={`/${movie.id}.webp`} title={movie.title} alt={movie.title} class="w-full max-w-md rounded-lg shadow-2xl" />
           </div>
 
           <div>
@@ -119,7 +119,7 @@
     <div class="text-center">
       <h1 class="mb-4 text-2xl font-bold">Mynd fannst ekki</h1>
       <button
-        onclick={() => window.history.back()}
+        onclick={goBack}
         class="inline-flex items-center gap-2 rounded-md bg-neutral-800/60 px-4 py-2 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-700/80 hover:text-neutral-200">
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />

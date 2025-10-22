@@ -1,11 +1,8 @@
 @import "tailwindcss";
 
-
 @layer base {
   :root {
-    font-family-sans:
-      ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-      "Noto Color Emoji";
+    font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
     /* Add new maxWidth */
     max-width-9xl: 128rem; /* Corresponds to max-w-9xl */
@@ -29,7 +26,7 @@
   body.dialog-open {
     @apply overflow-hidden;
     /* Prevent background interactions */
-    touch-action: none; 
+    touch-action: none;
     user-select: none;
     -webkit-overflow-scrolling: auto;
   }

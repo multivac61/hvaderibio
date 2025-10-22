@@ -2,14 +2,14 @@ import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
 // Dynamically choose adapter based on environment variable
 const getAdapter = async () => {
-  if (process.env.ADAPTER === 'cloudflare') {
+  if (process.env.ADAPTER === "cloudflare") {
     const adapterCloudflare = (await import("@sveltejs/adapter-cloudflare")).default;
     return adapterCloudflare({
       // Cloudflare Pages specific options
       routes: {
-        include: ['/*'],
-        exclude: ['<all>']
-      }
+        include: ["/*"],
+        exclude: ["<all>"],
+      },
     });
   } else {
     const adapterStatic = (await import("@sveltejs/adapter-static")).default;

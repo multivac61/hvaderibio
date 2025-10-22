@@ -6,7 +6,7 @@ export const prerender = true;
 
 export async function load() {
   const validatedMovies = movies_schema.parse(moviesData);
-  
+
   return {
     today: `Í dag, ${new Date()
       .toLocaleString("is-IS", {

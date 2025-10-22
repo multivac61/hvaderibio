@@ -46,16 +46,16 @@ await Promise.all(
       const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
       const { document: movie_document } = parseHTML(await movie.text());
       const parsed_movie = parse_movie(movie_document, id);
-      
+
       if (parsed_movie) {
         // Extract direct URLs from redirect URLs
         const processed_cinema_showtimes: Record<string, any> = {};
-        
+
         for (const [cinema_name, showtimes] of Object.entries(parsed_movie.cinema_showtimes)) {
           processed_cinema_showtimes[cinema_name] = await Promise.all(
             showtimes.map(async (showtime) => {
               // Only process URLs that are redirect URLs
-              if (showtime.purchase_url.includes('showtime_redirect.php')) {
+              if (showtime.purchase_url.includes("showtime_redirect.php")) {
                 const direct_url = await extract_direct_url(showtime.purchase_url);
                 return {
                   ...showtime,
@@ -66,13 +66,13 @@ await Promise.all(
             })
           );
         }
-        
+
         return {
           ...parsed_movie,
           cinema_showtimes: processed_cinema_showtimes,
         };
       }
-      
+
       return parsed_movie;
     } catch (error) {
       console.error(`Failed to fetch/parse movie ID ${id}:`, error);
@@ -104,14 +104,15 @@ await Promise.all(
 
           // Use sharp to resize to the NEW target dimensions
           await sharp(buffer)
-            .resize(targetWidth, targetHeight, { // Use updated dimensions
-              fit: 'cover',
+            .resize(targetWidth, targetHeight, {
+              // Use updated dimensions
+              fit: "cover",
             })
-            .webp({ 
+            .webp({
               quality: 80,
               effort: 6, // Higher effort for better compression
               nearLossless: false,
-              smartSubsample: true
+              smartSubsample: true,
             })
             .toFile(webpPath);
 
@@ -120,21 +121,20 @@ await Promise.all(
           };
         } catch (error) {
           console.error(`Failed to process poster for movie ID ${movie.id} (${movie.title}):`, error);
-          return { // Still return movie data if poster fails
+          return {
+            // Still return movie data if poster fails
             ...movie,
           };
         }
       })
     );
-    return moviesWithPosters.filter(m => m !== null);
+    return moviesWithPosters.filter((m) => m !== null);
   })
   .then(async (movies) => {
     console.log(`Processed ${movies.length} movies. Writing movies.json...`);
     await fs.writeFile(path.resolve(__dirname, "../static/movies.json"), JSON.stringify(movies, null, 2));
     console.log("Finished writing movies.json.");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error("An error occurred during the main processing chain:", error);
   });
-
-

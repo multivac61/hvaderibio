@@ -1,6 +1,7 @@
 <script lang="ts">
   import { in_range, to_float } from "$lib/util";
   import type { Movie, Showtime } from "$lib/schemas";
+  import FadeInPoster from "$lib/components/FadeInPoster.svelte";
 
   let { data } = $props();
 
@@ -31,11 +32,11 @@
   let selected_choice: string = $state(group_choices[1][0]);
   let selected_cinemas: string[] = $state(capital_region_cinemas);
   let is_mounted = $state(false);
-  
+
   // Load saved selection from sessionStorage after component mounts
   $effect(() => {
-    if (typeof window !== 'undefined') {
-      const savedChoice = sessionStorage.getItem('selectedCinemaChoice');
+    if (typeof window !== "undefined") {
+      const savedChoice = sessionStorage.getItem("selectedCinemaChoice");
       if (savedChoice) {
         const cinemas = [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1];
         if (cinemas) {
@@ -52,8 +53,8 @@
     selected_choice = choiceLabel;
     selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_label, cinemas]) => (group_label === choiceLabel ? cinemas : []));
     // Save to sessionStorage
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem('selectedCinemaChoice', choiceLabel);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("selectedCinemaChoice", choiceLabel);
     }
   };
 
@@ -148,17 +149,9 @@
 </header>
 
 <div
-  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 transition-opacity duration-300"
+  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 transition-opacity duration-300 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6"
   style="contain: layout style paint; opacity: {is_mounted ? 1 : 0}">
   {#each filtered_cinemas_showtimes as movie, index (index)}
-    <a href={`/movie/${movie.id}`} class="block aspect-[2/3] w-full rounded-lg bg-neutral-900">
-      <img
-        src={`/${movie.id}.webp`}
-        title={movie.title}
-        alt={movie.title}
-        loading={index < 6 ? "eager" : "lazy"}
-        decoding="async"
-        class="h-full w-full rounded-lg object-fill shadow-2xl sm:transition-all sm:hover:z-50 sm:hover:scale-105" />
-    </a>
+    <FadeInPoster href={`/movie/${movie.id}`} src={`/${movie.id}.webp`} title={movie.title} loading={index < 6 ? "eager" : "lazy"} />
   {/each}
 </div>
