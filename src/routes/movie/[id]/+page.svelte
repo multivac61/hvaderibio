@@ -43,8 +43,8 @@
 </script>
 
 {#if movie}
-  <div class="min-h-screen bg-black text-neutral-100">
-    <div class="container mx-auto max-w-5xl px-4 py-8">
+  <div class="fixed inset-0 flex flex-col bg-black text-neutral-100">
+    <div class="container mx-auto flex h-full max-w-5xl flex-col overflow-y-auto px-4 py-8">
       <div class="w-full">
         <button
           onclick={goBack}
