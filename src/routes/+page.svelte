@@ -31,7 +31,6 @@
   // Initialize with default, will be updated on client side
   let selected_choice: string = $state(group_choices[1][0]);
   let selected_cinemas: string[] = $state(capital_region_cinemas);
-  let is_mounted = $state(false);
 
   // Load saved selection from sessionStorage after component mounts
   $effect(() => {
@@ -44,7 +43,6 @@
           selected_cinemas = [...cinemas]; // Create mutable copy
         }
       }
-      is_mounted = true;
     }
   });
 
@@ -120,11 +118,12 @@
   <div class="fixed inset-x-0 bottom-0 z-40 w-full px-16 pb-4 sm:hidden">
     <div class="relative w-full">
       <select
+        value={selected_choice}
         onchange={handleSelectChange}
         id="select-cinemas-mobile"
         name="select cinemas mobile"
         aria-label="Veldu kvikmyndahús"
-        class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/80 py-2.5 pr-10 pl-4 text-center text-base text-neutral-100 shadow-lg backdrop-blur-3xl [text-align-last:center] focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
+        class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/95 py-2.5 pr-10 pl-4 text-center text-base text-neutral-100 shadow-lg [text-align-last:center] focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
         {#each [...group_choices, ...all_choices] as [label] (label)}
           <option
             value={label}
@@ -149,8 +148,8 @@
 </header>
 
 <div
-  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 pt-2 transition-opacity duration-300 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4"
-  style="contain: layout style; opacity: {is_mounted ? 1 : 0}">
+  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 pt-2 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4"
+  style="contain: layout style;">
   {#each filtered_cinemas_showtimes as movie, index (movie.id)}
     <FadeInPoster
       href={`/movie/${movie.id}`}
