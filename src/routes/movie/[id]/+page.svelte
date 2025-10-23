@@ -57,7 +57,19 @@
     class="fixed inset-0 flex flex-col bg-black text-neutral-100 transition-opacity duration-500 ease-out"
     class:opacity-0={!isVisible}
     class:opacity-100={isVisible}>
-    <div class="container mx-auto flex h-full max-w-5xl flex-col overflow-y-auto px-4 py-8">
+    <!-- Background glow effect -->
+    <div
+      class="pointer-events-none fixed inset-0 opacity-20 transition-opacity duration-700"
+      class:opacity-0={!isVisible}
+      class:opacity-20={isVisible}
+      style="background-image: url('/{movie.id}.webp'); background-size: cover; background-position: center; filter: blur(80px) saturate(1.5); transform: scale(1.2);">
+    </div>
+    <!-- Vignette overlay to darken edges -->
+    <div
+      class="pointer-events-none fixed inset-0"
+      style="background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.8) 100%);">
+    </div>
+    <div class="container relative z-10 mx-auto flex h-full max-w-5xl flex-col overflow-y-auto px-4 py-8">
       <div class="w-full">
         <button
           onclick={goBack}
