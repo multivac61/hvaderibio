@@ -105,25 +105,19 @@ await Promise.all(
           // Generate multiple sizes for responsive images
           const image = sharp(buffer);
 
-          // Small size for mobile (360w for 1x displays) - higher compression
-          await image
-            .clone()
-            .resize(360, 540, { fit: "cover" })
-            .webp({ quality: 75, effort: 6, nearLossless: false, smartSubsample: true })
+          // Small size for mobile (360w for 1x displays) - aggressive compression
+          const img360 = image.clone().resize(360, 540, { fit: "cover" });
+          await img360.clone().webp({ quality: 70, effort: 6, nearLossless: false, smartSubsample: true })
             .toFile(path.resolve(__dirname, `../static/${movie.id}-360w.webp`));
 
           // Medium size for mobile retina (720w for 2x displays)
-          await image
-            .clone()
-            .resize(targetWidth, targetHeight, { fit: "cover" })
-            .webp({ quality: 78, effort: 6, nearLossless: false, smartSubsample: true })
+          const img720 = image.clone().resize(targetWidth, targetHeight, { fit: "cover" });
+          await img720.clone().webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true })
             .toFile(webpPath);
 
           // Large size for desktop (1080w for larger screens)
-          await image
-            .clone()
-            .resize(1080, 1620, { fit: "cover" })
-            .webp({ quality: 78, effort: 6, nearLossless: false, smartSubsample: true })
+          const img1080 = image.clone().resize(1080, 1620, { fit: "cover" });
+          await img1080.clone().webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true })
             .toFile(path.resolve(__dirname, `../static/${movie.id}-1080w.webp`));
 
           return {
