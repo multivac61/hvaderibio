@@ -69,17 +69,8 @@
       class="pointer-events-none fixed inset-0"
       style="background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.8) 100%);">
     </div>
-    <div class="container relative z-10 mx-auto flex h-full max-w-5xl flex-col overflow-y-auto px-4 py-8">
+    <div class="relative z-10 container mx-auto flex h-full max-w-5xl flex-col justify-start overflow-y-auto px-4 py-16 md:py-24">
       <div class="w-full">
-        <button
-          onclick={goBack}
-          class="mb-6 inline-flex items-center gap-2 rounded-md bg-neutral-800/60 px-4 py-2 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-700/80 hover:text-neutral-200">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-          Til baka
-        </button>
-
         <div class="grid gap-8 md:grid-cols-2 lg:gap-12">
           <div>
             <img
@@ -103,11 +94,13 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 href={movie.trailer_url}
-                class="inline-flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:border-gray-400 hover:text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" class="fill-current">
+                class="group relative inline-flex items-center gap-2 rounded-md bg-gradient-to-br from-neutral-800 to-neutral-900 px-4 py-2 text-base text-neutral-300 transition-colors hover:bg-neutral-700 hover:text-white">
+                <span class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity group-hover:opacity-10"
+                ></span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" class="relative fill-current">
                   <path d="M3 22V2L21 12L3 22Z" />
                 </svg>
-                Stikla
+                <span class="relative">Stikla</span>
               </a>
             </div>
 
@@ -143,20 +136,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-{:else}
-  <div class="flex min-h-screen items-center justify-center bg-black text-neutral-100">
-    <div class="text-center">
-      <h1 class="mb-4 text-2xl font-bold">Mynd fannst ekki</h1>
-      <button
-        onclick={goBack}
-        class="inline-flex items-center gap-2 rounded-md bg-neutral-800/60 px-4 py-2 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-700/80 hover:text-neutral-200">
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-        Til baka á forsíðu
-      </button>
     </div>
   </div>
 {/if}
