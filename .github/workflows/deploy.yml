@@ -19,11 +19,16 @@ jobs:
       - name: 📚 Install node dependencies
         run: nix develop -c pnpm install
 
-      - name: ☑️ Check format and linting
+      - name: 🎬 Scrape movie data
+        run: nix develop -c pnpm scrape
+
+      - name: ☑️ Check svelte-kit, format and linting
         run: nix develop -c pnpm check
 
       - name: 🔨 Build for Cloudflare
-        run: nix develop -c pnpm build:cloudflare
+        run: nix develop -c pnpm build
+        env:
+          ADAPTER: cloudflare
 
       - name: 🚀 Deploy to Cloudflare Pages
         run: nix develop -c npx wrangler pages deploy .svelte-kit/cloudflare --project-name=hvaderibio
