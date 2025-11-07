@@ -6,10 +6,12 @@ export default defineConfig({
   plugins: [tailwindcss(), sveltekit()],
   build: {
     minify: "esbuild",
-    cssMinify: true,
+    cssMinify: "lightningcss",
+    target: "es2022",
     rollupOptions: {
       output: {
         manualChunks: undefined,
+        experimentalMinChunkSize: 500,
       },
     },
   },
