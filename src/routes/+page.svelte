@@ -1,7 +1,8 @@
 <script lang="ts">
+  import { resolve } from "$app/paths";
+
   import { in_range, to_float } from "$lib/util";
   import type { Movie, Showtime } from "$lib/schemas";
-  import FadeInPoster from "$lib/components/FadeInPoster.svelte";
 
   let { data } = $props();
 
@@ -159,6 +160,25 @@
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4"
   style="contain: layout style;">
   {#each filtered_cinemas_showtimes as movie, index (movie.id)}
-    <FadeInPoster href={`/movie/${movie.id}`} src={`/${movie.id}.webp`} title={movie.title} priority={index < 4 ? "high" : "auto"} />
+    <a
+      href={resolve(`/movie/${movie.id}`)}
+      class="group block aspect-2/3 w-full overflow-visible rounded-lg bg-neutral-900 [@media(hover:hover)]:hover:z-50">
+      <picture>
+        <source
+          type="image/webp"
+          srcset="/{movie.id}-360w.webp 360w, /{movie.id}.webp 720w, /{movie.id}-1080w.webp 1080w"
+          sizes="(max-width: 640px) calc(50vw - 2rem), 360px" />
+        <img
+          src="/{movie.id}.webp"
+          alt={movie.title}
+          title={movie.title}
+          fetchpriority={index < 4 ? "high" : "auto"}
+          loading="eager"
+          decoding="async"
+          width="720"
+          height="1080"
+          class="shadow-5xl pointer-events-none h-full w-full rounded-lg object-fill [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-300 [@media(hover:hover)]:ease-out [@media(hover:hover)]:group-hover:scale-[1.02]" />
+      </picture>
+    </a>
   {/each}
 </div>
