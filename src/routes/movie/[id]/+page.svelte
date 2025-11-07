@@ -35,22 +35,28 @@
 <!-- Background glow effect with top/bottom mask -->
 <div
   class="pointer-events-none fixed inset-0 opacity-20"
-  style="background-image: url('/{movie.id}.webp'); background-size: cover; background-position: center; filter: blur(80px) saturate(1.5); transform: scale(1.2); mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);">
+  style="background-image: url('/{movie.id}-360w.webp'); background-size: cover; background-position: center; filter: blur(80px) saturate(1.5); transform: scale(1.2); mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);">
 </div>
 
 <div class="relative z-10 container mx-auto flex h-full max-w-7xl flex-col justify-start overflow-y-auto px-4 py-8 md:py-16">
   <div class="w-full">
     <div class="grid gap-8 md:grid-cols-2 lg:gap-16 xl:gap-20">
       <div class="flex justify-center md:justify-end">
-        <img
-          src={`/${movie.id}.webp`}
-          title={movie.title}
-          alt={movie.title}
-          loading="eager"
-          decoding="async"
-          width="720"
-          height="1080"
-          class="shadow-5xl w-full max-w-md rounded-lg bg-neutral-900 xl:max-w-lg" />
+        <picture>
+          <source
+            type="image/webp"
+            srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w, /${movie.id}-1080w.webp 1080w`}
+            sizes="(max-width: 768px) 90vw, (max-width: 1280px) 448px, 512px" />
+          <img
+            src={`/${movie.id}.webp`}
+            title={movie.title}
+            alt={movie.title}
+            loading="eager"
+            decoding="async"
+            width="720"
+            height="1080"
+            class="shadow-5xl w-full max-w-md rounded-lg bg-neutral-900 xl:max-w-lg" />
+        </picture>
       </div>
 
       <div class="flex flex-col">

@@ -39,7 +39,7 @@
     <source
       type="image/webp"
       srcset="{src.replace('.webp', '-360w.webp')} 360w, {src} 720w, {src.replace('.webp', '-1080w.webp')} 1080w"
-      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 360px, 360px" />
+      sizes="(max-width: 640px) calc(50vw - 2rem), 360px" />
     <img
       {src}
       {title}
