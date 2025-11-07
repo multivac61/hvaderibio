@@ -1,12 +1,11 @@
-import type { RequestHandler } from "./$types";
 import { movies_schema } from "$lib/schemas";
 import movies_json from "../../../static/movies.json";
 
-export const prerender = true;
-
 const site_url = "https://hvaderibio.is";
 
-export const GET: RequestHandler = async () => {
+export const prerender = true;
+
+export const GET = async () => {
   const movies = movies_schema.parse(movies_json);
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -17,14 +16,14 @@ export const GET: RequestHandler = async () => {
     <priority>1.0</priority>
   </url>
   ${movies
-    .map(
-      (movie) => `  <url>
+      .map(
+        (movie) => `  <url>
     <loc>${site_url}/movie/${movie.id}</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`
-    )
-    .join("\n")}
+      )
+      .join("\n")}
 </urlset>`;
 
   return new Response(sitemap, {
