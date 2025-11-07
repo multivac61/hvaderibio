@@ -49,6 +49,6 @@
       decoding="async"
       width="720"
       height="1080"
-      class="pointer-events-none h-full w-full rounded-lg object-fill shadow-2xl [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-300 [@media(hover:hover)]:ease-out [@media(hover:hover)]:group-hover:scale-[1.02]" />
+      class="shadow-5xl pointer-events-none h-full w-full rounded-lg object-fill [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-300 [@media(hover:hover)]:ease-out [@media(hover:hover)]:group-hover:scale-[1.02]" />
   </picture>
 </div>

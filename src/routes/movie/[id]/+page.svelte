@@ -50,7 +50,7 @@
           decoding="async"
           width="720"
           height="1080"
-          class="w-full max-w-md rounded-lg bg-neutral-900 shadow-2xl xl:max-w-lg" />
+          class="shadow-5xl w-full max-w-md rounded-lg bg-neutral-900 xl:max-w-lg" />
       </div>
 
       <div class="flex flex-col">
