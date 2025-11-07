@@ -16,14 +16,14 @@ export const GET = async () => {
     <priority>1.0</priority>
   </url>
   ${movies
-      .map(
-        (movie) => `  <url>
+    .map(
+      (movie) => `  <url>
     <loc>${site_url}/movie/${movie.id}</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`
-      )
-      .join("\n")}
+    )
+    .join("\n")}
 </urlset>`;
 
   return new Response(sitemap, {

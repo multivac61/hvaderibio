@@ -23,14 +23,14 @@ export function parse_movie(document: Document, id: number) {
   const parsed = movie_schema.safeParse({
     title: document.querySelector<HTMLHeadElement>("h1")?.firstChild?.textContent?.trim(),
     alt_title: document.querySelector<HTMLHeadElement>("h4")?.textContent?.replace(/\(|\)/g, ""),
-    release_year: parseInt(document?.querySelector<HTMLSpanElement>("span.year")?.textContent?.trim()!),
+    release_year: parseInt(document?.querySelector<HTMLSpanElement>("span.year")?.textContent?.trim() ?? "0"),
     poster_url: document.querySelector<HTMLAnchorElement>("div.poster > a")?.href?.trim(),
     rating_urls,
     content_rating: document.querySelector("span.certtext")?.textContent?.trim(),
     description,
-    genres: [...document.querySelectorAll("div.genres span")].map((genre) => genre?.textContent!),
+    genres: [...document.querySelectorAll("div.genres span")].map((genre) => genre?.textContent ?? ""),
     duration_in_mins: parseInt(document.querySelector("span.duration")?.textContent?.replace("mín", "").replace("MÍN", "").trim() ?? "0"),
-    language: [...document.querySelectorAll("div.combined_details > span:nth-child(2)")].map((l) => l?.textContent?.trim()!),
+    language: [...document.querySelectorAll("div.combined_details > span:nth-child(2)")].map((l) => l?.textContent?.trim() ?? ""),
     cinema_showtimes: parse_showtimes(document),
     trailer_url: match ? `https://www.youtube.com/watch?v=${match[1]}` : undefined,
     id,
@@ -41,13 +41,15 @@ export function parse_movie(document: Document, id: number) {
 export function parse_showtimes(document: Document) {
   const cinema_showtimes: CinemaShowtimes = {};
   document.querySelectorAll<HTMLDivElement>("div.times_day.day0 div.biotimar").forEach((cinema) => {
-    const cinema_name: string = cinema.querySelector<HTMLHeadElement>("h3")?.textContent?.trim()!;
+    const cinema_name = cinema.querySelector<HTMLHeadElement>("h3")?.textContent?.trim() ?? "";
 
     cinema_showtimes[cinema_name] = [...cinema.querySelectorAll<HTMLLIElement>("li.qtip.tip-top")].map((showtime) => {
+      const rateLink = showtime.querySelector<HTMLAnchorElement>("a.rate");
+      const salurDiv = showtime.querySelector<HTMLDivElement>("div.salur");
       return {
-        time: combineDateWithTime(showtime.querySelector<HTMLAnchorElement>("a.rate")!.firstChild?.textContent?.replace(".", ":")!),
-        purchase_url: decodeURI(showtime.querySelector<HTMLAnchorElement>("a.rate")!.href).trim(),
-        hall: showtime.querySelector<HTMLDivElement>("div.salur")!.firstChild!.textContent!.trim(),
+        time: combineDateWithTime(rateLink?.firstChild?.textContent?.replace(".", ":") ?? ""),
+        purchase_url: rateLink ? decodeURI(rateLink.href).trim() : "",
+        hall: salurDiv?.firstChild?.textContent?.trim() ?? "",
       };
     });
   });

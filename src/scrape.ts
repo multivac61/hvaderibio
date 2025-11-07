@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { parseHTML } from "linkedom";
 import sharp from "sharp";
 
-import type { Movie } from "$lib/schemas";
+import type { Movie, Showtime } from "$lib/schemas";
 import { parse_movie, parse_movie_ids, extract_direct_url } from "$lib/parse";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -49,7 +49,7 @@ await Promise.all(
 
       if (parsed_movie) {
         // Extract direct URLs from redirect URLs
-        const processed_cinema_showtimes: Record<string, any> = {};
+        const processed_cinema_showtimes: Record<string, Showtime[]> = {};
 
         for (const [cinema_name, showtimes] of Object.entries(parsed_movie.cinema_showtimes)) {
           processed_cinema_showtimes[cinema_name] = await Promise.all(
@@ -98,7 +98,7 @@ await Promise.all(
           // Clean up any old JPG files
           try {
             await fs.unlink(jpgPath);
-          } catch (error) {
+          } catch {
             // Ignore if file doesn't exist
           }
 
