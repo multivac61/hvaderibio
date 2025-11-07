@@ -63,7 +63,7 @@
         <div class="mb-8">
           <a
             target="_blank"
-            rel="noopener noreferrer"
+            rel="external noopener noreferrer"
             href={movie.trailer_url}
             class="group relative inline-flex items-center gap-2 rounded-md bg-linear-to-br from-neutral-800 to-neutral-900 px-4 py-2 text-base text-neutral-300 transition-all duration-200 ease-out hover:bg-neutral-700 hover:text-white">
             <span
@@ -89,7 +89,7 @@
                         class="group relative rounded-md bg-linear-to-br from-neutral-800 to-neutral-900 px-3 py-2 text-base text-neutral-300 tabular-nums transition-all duration-200 ease-out hover:bg-neutral-700 hover:text-white xl:px-4 xl:py-2.5 xl:text-lg"
                         href={purchase_url}
                         target="_blank"
-                        rel="noopener noreferrer">
+                        rel="external noopener noreferrer">
                         <span
                           class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity duration-200 group-hover:opacity-10"
                         ></span>
