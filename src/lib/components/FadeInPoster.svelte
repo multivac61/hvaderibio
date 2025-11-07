@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { IsInViewport } from "runed";
   import { goto } from "$app/navigation";
 
   interface Props {
@@ -11,23 +10,6 @@
   }
 
   let { href, src, title, loading = "lazy", fetchpriority = "auto" }: Props = $props();
-
-  let posterElement = $state<HTMLDivElement>();
-  let hasBeenVisible = $state(loading === "eager"); // Eager images visible immediately
-
-  const inViewport = new IsInViewport(() => posterElement, {
-    threshold: 0.1, // Trigger when 10% of the element is visible
-  });
-
-  // Track if element has ever been visible - one-time fade-in
-  // Skip animation for eager-loaded images
-  $effect(() => {
-    if (loading === "eager") {
-      hasBeenVisible = true;
-    } else if (inViewport.current && !hasBeenVisible) {
-      hasBeenVisible = true;
-    }
-  });
 
   // Use programmatic navigation to bypass iOS Safari tap issues
   let touchStartY = 0;
@@ -52,16 +34,13 @@
 </script>
 
 <div
-  bind:this={posterElement}
   role="button"
   tabindex="0"
   ontouchstart={handleTouchStart}
   ontouchend={handleTouchEnd}
   onclick={handleClick}
   onkeydown={(e) => (e.key === "Enter" || e.key === " ") && handleClick()}
-  class="group block aspect-[2/3] w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900 transition-opacity duration-700 ease-out [@media(hover:hover)]:hover:z-50"
-  class:opacity-0={!hasBeenVisible}
-  class:opacity-100={hasBeenVisible}
+  class="group block aspect-[2/3] w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900 [@media(hover:hover)]:hover:z-50"
   style="cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <picture>
     <source
@@ -77,6 +56,6 @@
       decoding="async"
       width="720"
       height="1080"
-      class="pointer-events-none h-full w-full rounded-lg object-fill shadow-2xl [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-200 [@media(hover:hover)]:group-hover:scale-105" />
+      class="pointer-events-none h-full w-full rounded-lg object-fill shadow-2xl [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-300 [@media(hover:hover)]:ease-out [@media(hover:hover)]:group-hover:scale-[1.02]" />
   </picture>
 </div>
