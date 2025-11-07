@@ -96,7 +96,7 @@
 </script>
 
 <svelte:head>
-  {#each filtered_cinemas_showtimes.slice(0, 4) as movie}
+  {#each filtered_cinemas_showtimes.slice(0, 4) as movie (movie.id)}
     <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />
   {/each}
 </svelte:head>
