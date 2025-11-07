@@ -19,6 +19,9 @@ jobs:
       - name: 📚 Install node dependencies
         run: nix develop -c pnpm install
 
+      - name: ☑️ Check format and linting
+        run: nix develop -c pnpm check
+
       - name: 🔨 Build for Cloudflare
         run: nix develop -c pnpm build:cloudflare
 
