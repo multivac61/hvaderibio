@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { resolve } from "$app/paths";
 
   interface Props {
     href: string;
@@ -23,13 +24,13 @@
     const touchEndY = e.changedTouches[0].clientY;
     if (Math.abs(touchEndY - touchStartY) < 10) {
       e.preventDefault(); // Prevent the click event from firing
-      goto(href);
+      goto(resolve(href));
     }
   };
 
   const handleClick = () => {
     // Fallback for non-touch devices
-    goto(href);
+    goto(resolve(href));
   };
 </script>
 
