@@ -102,7 +102,7 @@
         <button
           type="button"
           onclick={() => updateSelection(label)}
-          class={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none
+          class={`rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200 ease-out focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none
                   ${
                     label === selected_choice
                       ? "bg-opacity-15 bg-neutral-800/30 text-white shadow-sm"
@@ -157,7 +157,7 @@
       href={`/movie/${movie.id}`}
       src={`/${movie.id}.webp`}
       title={movie.title}
-      loading={index < 6 ? "eager" : "lazy"}
-      fetchpriority={index < 2 ? "high" : "auto"} />
+      loading="eager"
+      fetchpriority={index < 6 ? "high" : "auto"} />
   {/each}
 </div>
