@@ -61,6 +61,7 @@
         <p class="mb-6 text-base leading-relaxed text-neutral-400 md:text-lg">{movie.description}</p>
 
         <div class="mb-8">
+          <!-- eslint-disable svelte/no-navigation-without-resolve -->
           <a
             target="_blank"
             rel="external noopener noreferrer"
@@ -85,6 +86,7 @@
                   <div class="mb-3 text-lg font-medium xl:text-xl">{cinema}</div>
                   <div class="inline-flex flex-wrap gap-3 xl:gap-4">
                     {#each validTimes as { time, purchase_url } (purchase_url)}
+                      <!-- eslint-disable svelte/no-navigation-without-resolve -->
                       <a
                         class="group relative rounded-md bg-linear-to-br from-neutral-800 to-neutral-900 px-3 py-2 text-base text-neutral-300 tabular-nums transition-all duration-200 ease-out hover:bg-neutral-700 hover:text-white xl:px-4 xl:py-2.5 xl:text-lg"
                         href={purchase_url}
