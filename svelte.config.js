@@ -6,17 +6,9 @@ const getAdapter = async () => {
     const adapterCloudflare = (await import("@sveltejs/adapter-cloudflare")).default;
     return adapterCloudflare({
       routes: {
-        include: ['/*'],
-        exclude: [
-          '/_app/*',
-          '/*.webp',
-          '/*.json',
-          '/*.txt',
-          '/*.ico',
-          '/*.xml',
-          '/movie/*'
-        ]
-      }
+        include: ["/*"],
+        exclude: ["/_app/*", "/*.webp", "/*.json", "/*.txt", "/*.ico", "/*.xml", "/movie/*"],
+      },
     });
   } else {
     const adapterStatic = (await import("@sveltejs/adapter-static")).default;
