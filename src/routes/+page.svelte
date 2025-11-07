@@ -94,9 +94,9 @@
   );
 </script>
 
-<header class="relative my-4 sm:my-8">
-  <h1 class="mb-4 hidden bg-clip-text text-center text-4xl text-pretty accent-cyan-50 sm:block sm:text-5xl">Hvað er í bíó? 🍿</h1>
-  <div class="hidden sm:block md:mx-auto md:max-w-2xl lg:max-w-3xl">
+<header class="relative hidden sm:my-8 sm:block">
+  <h1 class="mb-4 bg-clip-text text-center text-5xl text-pretty accent-cyan-50">Hvað er í bíó? 🍿</h1>
+  <div class="mx-auto sm:block md:max-w-2xl lg:max-w-3xl">
     <div class="flex flex-wrap justify-center gap-1.5 md:gap-2">
       {#each [...group_choices, ...all_choices] as [label] (label)}
         <button
@@ -114,7 +114,9 @@
       {/each}
     </div>
   </div>
+</header>
 
+<header class="relative">
   <div class="fixed inset-x-0 bottom-0 z-40 w-full px-16 pb-4 sm:hidden">
     <div class="relative w-full">
       <select
@@ -148,7 +150,7 @@
 </header>
 
 <div
-  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 pt-2 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4"
+  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4"
   style="contain: layout style;">
   {#each filtered_cinemas_showtimes as movie, index (movie.id)}
     <FadeInPoster
