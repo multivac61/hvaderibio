@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
 
-  let { href, src, title } = $props();
+  let { href, src, title, priority = "auto" } = $props();
 
   // Use programmatic navigation to bypass iOS Safari tap issues
   let touchStartY = 0;
@@ -44,7 +44,7 @@
       {src}
       {title}
       alt={title}
-      fetchpriority="auto"
+      fetchpriority={priority}
       loading="eager"
       decoding="async"
       width="720"

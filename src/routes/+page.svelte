@@ -94,6 +94,12 @@
   );
 </script>
 
+<svelte:head>
+  {#each filtered_cinemas_showtimes.slice(0, 4) as movie}
+    <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />
+  {/each}
+</svelte:head>
+
 <header class="relative hidden sm:my-8 sm:block">
   <h1 class="mb-4 bg-clip-text text-center text-5xl text-pretty accent-cyan-50">Hvað er í bíó? 🍿</h1>
   <div class="mx-auto sm:block md:max-w-2xl lg:max-w-3xl">
@@ -152,7 +158,7 @@
 <div
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4"
   style="contain: layout style;">
-  {#each filtered_cinemas_showtimes as movie (movie.id)}
-    <FadeInPoster href={`/movie/${movie.id}`} src={`/${movie.id}.webp`} title={movie.title} />
+  {#each filtered_cinemas_showtimes as movie, index (movie.id)}
+    <FadeInPoster href={`/movie/${movie.id}`} src={`/${movie.id}.webp`} title={movie.title} priority={index < 4 ? "high" : "auto"} />
   {/each}
 </div>
