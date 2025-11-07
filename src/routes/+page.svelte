@@ -152,12 +152,7 @@
 <div
   class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4"
   style="contain: layout style;">
-  {#each filtered_cinemas_showtimes as movie, index (movie.id)}
-    <FadeInPoster
-      href={`/movie/${movie.id}`}
-      src={`/${movie.id}.webp`}
-      title={movie.title}
-      loading="eager"
-      fetchpriority={index < 6 ? "high" : "auto"} />
+  {#each filtered_cinemas_showtimes as movie (movie.id)}
+    <FadeInPoster href={`/movie/${movie.id}`} src={`/${movie.id}.webp`} title={movie.title} />
   {/each}
 </div>

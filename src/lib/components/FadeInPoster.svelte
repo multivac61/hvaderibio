@@ -2,15 +2,7 @@
   import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
 
-  interface Props {
-    href: string;
-    src: string;
-    title: string;
-    loading?: "eager" | "lazy";
-    fetchpriority?: "high" | "low" | "auto";
-  }
-
-  let { href, src, title, loading = "lazy", fetchpriority = "auto" }: Props = $props();
+  let { href, src, title } = $props();
 
   // Use programmatic navigation to bypass iOS Safari tap issues
   let touchStartY = 0;
@@ -41,7 +33,7 @@
   ontouchend={handleTouchEnd}
   onclick={handleClick}
   onkeydown={(e) => (e.key === "Enter" || e.key === " ") && handleClick()}
-  class="group block aspect-[2/3] w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900 [@media(hover:hover)]:hover:z-50"
+  class="group block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900 [@media(hover:hover)]:hover:z-50"
   style="cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <picture>
     <source
@@ -52,8 +44,8 @@
       {src}
       {title}
       alt={title}
-      {loading}
-      {fetchpriority}
+      fetchpriority="auto"
+      loading="eager"
       decoding="async"
       width="720"
       height="1080"
