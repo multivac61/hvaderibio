@@ -12,11 +12,8 @@ const getAdapter = async () => {
 };
 
 export default {
-  // Consult https://kit.svelte.dev/docs/integrations#preprocessors for more information about preprocessors
   preprocess: vitePreprocess(),
   kit: {
     adapter: await getAdapter(),
-    prerender: { handleHttpError: "warn" },
-    paths: { base: "" },
   },
 };
