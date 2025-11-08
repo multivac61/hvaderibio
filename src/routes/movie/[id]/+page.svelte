@@ -32,6 +32,10 @@
   );
 </script>
 
+<svelte:head>
+  <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />
+</svelte:head>
+
 <!-- Background glow effect with top/bottom mask -->
 <div
   class="pointer-events-none fixed inset-0 opacity-20"
@@ -42,7 +46,7 @@
   <div class="w-full">
     <div class="grid gap-8 md:grid-cols-2 lg:gap-16 xl:gap-20">
       <div class="flex justify-center md:justify-end">
-        <picture>
+        <picture class="block w-full max-w-md rounded-lg bg-neutral-900 xl:max-w-lg" style="aspect-ratio: 2/3;">
           <source
             type="image/webp"
             srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w, /${movie.id}-1080w.webp 1080w`}
@@ -51,11 +55,12 @@
             src={`/${movie.id}.webp`}
             title={movie.title}
             alt={movie.title}
+            fetchpriority="high"
             loading="eager"
             decoding="async"
             width="720"
             height="1080"
-            class="shadow-5xl w-full max-w-md rounded-lg bg-neutral-900 xl:max-w-lg" />
+            class="shadow-5xl h-full w-full rounded-lg object-cover" />
         </picture>
       </div>
 
