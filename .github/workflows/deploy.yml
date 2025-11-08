@@ -12,30 +12,26 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
     steps:
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: actions/checkout@main
+      - uses: oven-sh/setup-bun@main
 
       - name: 📚 Install node dependencies
-        run: nix develop -c bun install
-
-      - name: 🔧 Rebuild sharp for Linux
-        run: nix develop -c bun install sharp --force
+        run: bun install
 
       - name: 🎬 Scrape movie data
-        run: nix develop -c bun scrape
+        run: bun scrape
 
       - name: ☑️ Check svelte-kit, format and linting
-        run: nix develop -c bun check
+        run: bun check
 
       - name: 🔨 Build for Cloudflare
-        run: nix develop -c bun run build
+        run: bun run build
         env:
           ADAPTER: cloudflare
           NODE_ENV: production
 
       - name: 🚀 Deploy to Cloudflare Pages
-        run: nix develop -c npx wrangler pages deploy .svelte-kit/cloudflare --project-name=hvaderibio --minify
+        run: bunx wrangler pages deploy .svelte-kit/cloudflare --project-name=hvaderibio --minify
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
