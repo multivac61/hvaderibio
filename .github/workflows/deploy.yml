@@ -19,6 +19,9 @@ jobs:
       - name: 📚 Install node dependencies
         run: nix develop -c bun install
 
+      - name: 🔧 Rebuild sharp for Linux
+        run: nix develop -c bun install sharp --force
+
       - name: 🎬 Scrape movie data
         run: nix develop -c bun scrape
 
