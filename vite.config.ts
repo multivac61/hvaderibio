@@ -7,11 +7,17 @@ export default defineConfig({
   build: {
     cssMinify: "lightningcss",
     target: "es2022",
+    sourcemap: false, // Disable source maps in production for smaller bundles
+    minify: "esbuild",
     rollupOptions: {
       output: {
         manualChunks: undefined,
         experimentalMinChunkSize: 500,
       },
     },
+  },
+  esbuild: {
+    drop: process.env.NODE_ENV === "production" ? ["console", "debugger"] : [],
+    legalComments: "none",
   },
 });
