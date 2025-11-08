@@ -6,11 +6,11 @@
     "dev": "vite dev",
     "build": "svelte-kit sync && vite build",
     "preview": "vite preview",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && pnpm lint",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && bun lint",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
-    "scrape": "svelte-kit sync && tsx src/scrape.ts",
+    "scrape": "svelte-kit sync && bun src/scrape.ts",
     "clean": "rm -rf static/*.webp static/movies.json .svelte-kit build"
   },
   "devDependencies": {
@@ -33,16 +33,10 @@
     "svelte": "^5.43.4",
     "svelte-check": "^4.3.3",
     "tailwindcss": "^4.1.17",
-    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.3",
     "vite": "^7.2.2",
     "wrangler": "^4.46.0",
     "zod": "^4.1.12"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
   }
 }

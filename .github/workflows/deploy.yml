@@ -17,16 +17,16 @@ jobs:
       - uses: actions/checkout@main
 
       - name: 📚 Install node dependencies
-        run: nix develop -c pnpm install
+        run: nix develop -c bun install
 
       - name: 🎬 Scrape movie data
-        run: nix develop -c pnpm scrape
+        run: nix develop -c bun scrape
 
       - name: ☑️ Check svelte-kit, format and linting
-        run: nix develop -c pnpm check
+        run: nix develop -c bun check
 
       - name: 🔨 Build for Cloudflare
-        run: nix develop -c pnpm build
+        run: nix develop -c bun run build --minify
         env:
           ADAPTER: cloudflare
 

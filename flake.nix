@@ -48,8 +48,8 @@
           checks.formatting = treefmtEval.config.build.check self;
           devshell.default = pkgs.mkShell {
             packages = with pkgs; [
-              pnpm
-              nodejs_20
+              bun
+              nodejs_20 # tooling compatibility with ecosystem tools that still use node shebangs
             ];
           };
         }
