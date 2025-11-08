@@ -1,10 +1,34 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
+  import { goto } from "$app/navigation";
 
   import { in_range, to_float } from "$lib/util";
   import type { Movie, Showtime } from "$lib/schemas";
 
   let { data } = $props();
+
+  // Handle touch events to bypass iOS Safari tap issues
+  let touchStartY = 0;
+
+  const createTouchHandlers = (href: string) => ({
+    handleTouchStart: (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    },
+    handleTouchEnd: (e: TouchEvent) => {
+      // Only navigate if it wasn't a scroll (touch moved less than 10px)
+      const touchEndY = e.changedTouches[0].clientY;
+      if (Math.abs(touchEndY - touchStartY) < 10) {
+        e.preventDefault();
+        // @ts-expect-error - Dynamic route navigation
+        goto(resolve(href));
+      }
+    },
+    handleClick: () => {
+      // Fallback for non-touch devices
+      // @ts-expect-error - Dynamic route navigation
+      goto(resolve(href));
+    },
+  });
 
   const to = $state(24);
   // Use a consistent time for both server and client to avoid layout shifts
@@ -157,12 +181,19 @@
 </header>
 
 <div
-  class="md:md-30 z-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4"
-  style="contain: layout style;">
+  class="md:md-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4">
   {#each filtered_cinemas_showtimes as movie, index (movie.id)}
-    <a
-      href={resolve(`/movie/${movie.id}`)}
-      class="group block aspect-2/3 w-full overflow-visible rounded-lg bg-neutral-900 [@media(hover:hover)]:hover:z-50">
+    {@const handlers = createTouchHandlers(`/movie/${movie.id}`)}
+    <div
+      role="button"
+      tabindex="0"
+      data-movie-id={movie.id}
+      ontouchstart={handlers.handleTouchStart}
+      ontouchend={handlers.handleTouchEnd}
+      onclick={handlers.handleClick}
+      onkeydown={(e) => (e.key === "Enter" || e.key === " ") && handlers.handleClick()}
+      class="group block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900 [@media(hover:hover)]:hover:z-50"
+      style="cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
       <picture>
         <source
           type="image/webp"
@@ -179,6 +210,6 @@
           height="1080"
           class="shadow-5xl pointer-events-none h-full w-full rounded-lg object-fill [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-300 [@media(hover:hover)]:ease-out [@media(hover:hover)]:group-hover:scale-[1.02]" />
       </picture>
-    </a>
+    </div>
   {/each}
 </div>
