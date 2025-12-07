@@ -83,5 +83,10 @@ export async function extract_direct_url(redirect_url: string): Promise<string> 
 }
 
 export function parse_movie_ids(document: Document): number[] {
-  return [...document.querySelectorAll<HTMLAnchorElement>("a.movie_title")].map((a) => parseInt(a?.href?.match(/\d+/g)![0]));
+  return [...document.querySelectorAll<HTMLAnchorElement>("a.movie_title")]
+    .map((a) => {
+      const match = a?.href?.match(/\d+/g);
+      return match ? parseInt(match[0]) : null;
+    })
+    .filter((id): id is number => id !== null);
 }

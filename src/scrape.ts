@@ -34,114 +34,125 @@ const baseWidth = 360;
 const targetWidth = baseWidth * 2; // 720
 const targetHeight = Math.round(targetWidth * (3 / 2)); // Calculate height for 2:3 aspect ratio (1080)
 
-console.log(`Targeting image dimensions: ${targetWidth}w x ${targetHeight}h`); // Log target size
+console.log(`Targeting image dimensions: ${targetWidth}w x ${targetHeight}h`);
 
-const showtimes = await fetch("https://www.kvikmyndir.is/bio/syningatimar", { headers });
-const html = await showtimes.text();
-const { document } = parseHTML(html);
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-await Promise.all(
-  parse_movie_ids(document).map(async (id: number) => {
-    try {
-      const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
-      const { document: movie_document } = parseHTML(await movie.text());
-      const parsed_movie = parse_movie(movie_document, id);
+async function scrapeMovie(id: number): Promise<Movie | null> {
+  try {
+    const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
+    const { document: movie_document } = parseHTML(await movie.text());
+    const parsed_movie = parse_movie(movie_document, id);
 
-      if (parsed_movie) {
-        // Extract direct URLs from redirect URLs
-        const processed_cinema_showtimes: Record<string, Showtime[]> = {};
+    if (parsed_movie) {
+      // Extract direct URLs from redirect URLs
+      const processed_cinema_showtimes: Record<string, Showtime[]> = {};
 
-        for (const [cinema_name, showtimes] of Object.entries(parsed_movie.cinema_showtimes)) {
-          processed_cinema_showtimes[cinema_name] = await Promise.all(
-            showtimes.map(async (showtime) => {
-              // Only process URLs that are redirect URLs
-              if (showtime.purchase_url.includes("showtime_redirect.php")) {
-                const direct_url = await extract_direct_url(showtime.purchase_url);
-                return {
-                  ...showtime,
-                  purchase_url: direct_url,
-                };
-              }
-              return showtime;
-            })
-          );
-        }
-
-        return {
-          ...parsed_movie,
-          cinema_showtimes: processed_cinema_showtimes,
-        };
+      for (const [cinema_name, showtimes] of Object.entries(parsed_movie.cinema_showtimes)) {
+        processed_cinema_showtimes[cinema_name] = await Promise.all(
+          showtimes.map(async (showtime) => {
+            // Only process URLs that are redirect URLs
+            if (showtime.purchase_url.includes("showtime_redirect.php")) {
+              const direct_url = await extract_direct_url(showtime.purchase_url);
+              return {
+                ...showtime,
+                purchase_url: direct_url,
+              };
+            }
+            return showtime;
+          })
+        );
       }
 
-      return parsed_movie;
-    } catch (error) {
-      console.error(`Failed to fetch/parse movie ID ${id}:`, error);
-      return null;
+      return {
+        ...parsed_movie,
+        cinema_showtimes: processed_cinema_showtimes,
+      };
     }
-  })
-)
-  .then(async (movies) => {
-    const validMovies = movies.filter((movie): movie is Movie => movie !== null);
 
-    const moviesWithPosters = await Promise.all(
-      validMovies.map(async (movie: Movie) => {
-        try {
-          const res = await fetch(movie.poster_url, { headers });
-          if (!res.ok) {
-            throw new Error(`Failed to fetch poster ${movie.poster_url}: ${res.statusText}`);
-          }
-          const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
+    return null;
+  } catch (error) {
+    console.error(`Failed to fetch/parse movie ID ${id}:`, error);
+    return null;
+  }
+}
 
-          const webpPath = path.resolve(__dirname, `../static/${movie.id}.webp`);
-          const jpgPath = path.resolve(__dirname, `../static/${movie.id}.jpg`);
+async function processMoviePoster(movie: Movie): Promise<Movie> {
+  try {
+    const res = await fetch(movie.poster_url, { headers });
+    if (!res.ok) {
+      throw new Error(`Failed to fetch poster ${movie.poster_url}: ${res.statusText}`);
+    }
+    const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
 
-          // Clean up any old JPG files
-          try {
-            await fs.unlink(jpgPath);
-          } catch {
-            // Ignore if file doesn't exist
-          }
+    const webpPath = path.resolve(__dirname, `../static/${movie.id}.webp`);
+    const jpgPath = path.resolve(__dirname, `../static/${movie.id}.jpg`);
 
-          // Generate multiple sizes for responsive images
-          const image = sharp(buffer);
+    // Clean up any old JPG files
+    try {
+      await fs.unlink(jpgPath);
+    } catch {
+      // Ignore if file doesn't exist
+    }
 
-          // Small size for mobile (360w for 1x displays) - aggressive compression
-          const img360 = image.clone().resize(360, 540, { fit: "cover" });
-          await img360
-            .clone()
-            .webp({ quality: 70, effort: 6, nearLossless: false, smartSubsample: true })
-            .toFile(path.resolve(__dirname, `../static/${movie.id}-360w.webp`));
+    // Generate multiple sizes for responsive images
+    const image = sharp(buffer);
 
-          // Medium size for mobile retina (720w for 2x displays)
-          const img720 = image.clone().resize(targetWidth, targetHeight, { fit: "cover" });
-          await img720.clone().webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true }).toFile(webpPath);
+    // Small size for mobile (360w for 1x displays) - aggressive compression
+    const img360 = image.clone().resize(360, 540, { fit: "cover" });
+    await img360
+      .clone()
+      .webp({ quality: 70, effort: 6, nearLossless: false, smartSubsample: true })
+      .toFile(path.resolve(__dirname, `../static/${movie.id}-360w.webp`));
 
-          // Large size for desktop (1080w for larger screens)
-          const img1080 = image.clone().resize(1080, 1620, { fit: "cover" });
-          await img1080
-            .clone()
-            .webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true })
-            .toFile(path.resolve(__dirname, `../static/${movie.id}-1080w.webp`));
+    // Medium size for mobile retina (720w for 2x displays)
+    const img720 = image.clone().resize(targetWidth, targetHeight, { fit: "cover" });
+    await img720.clone().webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true }).toFile(webpPath);
 
-          return {
-            ...movie,
-          };
-        } catch (error) {
-          console.error(`Failed to process poster for movie ID ${movie.id} (${movie.title}):`, error);
-          return {
-            // Still return movie data if poster fails
-            ...movie,
-          };
-        }
-      })
-    );
-    return moviesWithPosters.filter((m) => m !== null);
-  })
-  .then(async (movies) => {
-    console.log(`Processed ${movies.length} movies. Writing movies.json...`);
-    await fs.writeFile(path.resolve(__dirname, "../static/movies.json"), JSON.stringify(movies, null, 2));
-    console.log("Finished writing movies.json.");
-  })
-  .catch((error) => {
-    console.error("An error occurred during the main processing chain:", error);
-  });
+    // Large size for desktop (1080w for larger screens)
+    const img1080 = image.clone().resize(1080, 1620, { fit: "cover" });
+    await img1080
+      .clone()
+      .webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true })
+      .toFile(path.resolve(__dirname, `../static/${movie.id}-1080w.webp`));
+
+    return movie;
+  } catch (error) {
+    console.error(`Failed to process poster for movie ID ${movie.id} (${movie.title}):`, error);
+    // Still return movie data if poster fails
+    return movie;
+  }
+}
+
+async function main() {
+  const showtimesResponse = await fetch("https://www.kvikmyndir.is/bio/syningatimar", { headers });
+  const html = await showtimesResponse.text();
+  const { document } = parseHTML(html);
+
+  const movieIds = parse_movie_ids(document);
+  console.log(`Found ${movieIds.length} movies to scrape`);
+
+  // Process movies sequentially with rate limiting to avoid overwhelming the server
+  const movies: Movie[] = [];
+  for (const id of movieIds) {
+    await delay(100); // 100ms delay between requests
+    const movie = await scrapeMovie(id);
+    if (movie) {
+      movies.push(movie);
+    }
+  }
+
+  console.log(`Scraped ${movies.length} valid movies. Processing posters...`);
+
+  // Process posters (can be done in parallel since they're different URLs)
+  const moviesWithPosters = await Promise.all(movies.map(processMoviePoster));
+
+  console.log(`Processed ${moviesWithPosters.length} movies. Writing movies.json...`);
+  await fs.writeFile(path.resolve(__dirname, "../static/movies.json"), JSON.stringify(moviesWithPosters, null, 2));
+  console.log("Finished writing movies.json.");
+}
+
+main().catch((error) => {
+  console.error("An error occurred during the main processing chain:", error);
+  process.exit(1);
+});

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { in_range, to_float } from "$lib/util";
+  import { CAPITAL_REGION_CINEMAS } from "$lib/constants";
 
   let { data } = $props();
   const movie = data.movie;
@@ -9,11 +10,7 @@
 
   const all_cinemas = Object.keys(movie.cinema_showtimes).sort();
 
-  const capital_region_cinemas = all_cinemas.filter((name) =>
-    ["Bíó Paradís", "Háskólabíó", "Laugarásbíó", "Sambíóin Egilshöll", "Sambíóin Kringlunni", "Sambíóin Álfabakka", "Smárabíó"].includes(
-      name
-    )
-  );
+  const capital_region_cinemas = all_cinemas.filter((name) => (CAPITAL_REGION_CINEMAS as readonly string[]).includes(name));
 
   const all_choices = all_cinemas.map((name) => [name, [name]] as const);
 
@@ -22,14 +19,20 @@
     ["Höfuðborgarsvæðið", capital_region_cinemas],
   ] as const;
 
-  // Get the stored cinema selection from sessionStorage
-  const savedChoice = typeof window !== "undefined" ? sessionStorage.getItem("selectedCinemaChoice") : null;
+  // SSR-safe: initialize with default, update from sessionStorage on client
+  let selected_cinemas: readonly string[] = $state(capital_region_cinemas);
 
-  const selected_cinemas = $derived(
-    savedChoice
-      ? [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1] || capital_region_cinemas
-      : capital_region_cinemas
-  );
+  $effect(() => {
+    if (typeof window !== "undefined") {
+      const savedChoice = sessionStorage.getItem("selectedCinemaChoice");
+      if (savedChoice) {
+        const cinemas = [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1];
+        if (cinemas) {
+          selected_cinemas = cinemas;
+        }
+      }
+    }
+  });
 </script>
 
 <svelte:head>

@@ -13,7 +13,8 @@ export function in_range(x: number, from: number, to: number) {
 }
 
 export function to_hhmm(time: number) {
-  return `${Math.floor(time)}:${(time % 1) * 60}`.replace(":0", ":00");
+  const mins = Math.round((time % 1) * 60);
+  return `${Math.floor(time)}:${mins.toString().padStart(2, "0")}`;
 }
 
 export function to_float(date: string) {

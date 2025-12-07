@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const showtime_schema = z.object({
   time: z.string(),
-  purchase_url: z.string(),
+  purchase_url: z.string().url(),
   hall: z.string(),
 });
 
@@ -17,19 +17,18 @@ export const movie_schema = z.object({
   id: z.number(),
   alt_title: z.string().optional(),
   release_year: z.number(),
-  poster_url: z.string(),
-  rating_urls: z.array(z.string().optional()).optional(),
-  poster: z.string().optional(),
+  poster_url: z.string().url(),
+  rating_urls: z.array(z.string().url()).optional(),
   content_rating: z.string().optional(),
   description: z.string(),
   genres: z.array(z.string()),
   duration_in_mins: z.number(),
   language: z.array(z.string()),
-  trailer_url: z.string().optional(),
+  trailer_url: z.string().url().optional(),
   cinema_showtimes: cinema_showtimes_schema,
   imdb: z
     .object({
-      link: z.string(),
+      link: z.string().url(),
       star: z.number(),
     })
     .optional(),
@@ -53,7 +52,7 @@ export const imdb_movie = z.object({
   genre: z.array(z.string()),
   year: z.number(),
   runtime: z.null(),
-  releaseDeatiled: z.object({
+  releaseDetailed: z.object({
     day: z.number(),
     month: z.number(),
     year: z.number(),

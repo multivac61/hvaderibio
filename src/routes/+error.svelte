@@ -46,6 +46,7 @@
     <p class="mb-2 text-neutral-400">{description}</p>
     <div class="mb-8"></div>
     <button
+      type="button"
       onclick={() => (window.location.href = "/")}
       class="group relative inline-flex items-center gap-2 rounded-md bg-linear-to-br from-neutral-800 to-neutral-900 px-4 py-2 text-base text-neutral-300 transition-all duration-200 ease-out hover:bg-neutral-700 hover:text-white">
       <span

@@ -3,6 +3,7 @@
   import { goto } from "$app/navigation";
 
   import { in_range, to_float } from "$lib/util";
+  import { CAPITAL_REGION_CINEMAS } from "$lib/constants";
   import type { Movie, Showtime } from "$lib/schemas";
 
   let { data } = $props();
@@ -40,11 +41,7 @@
     .filter((name, index, array) => array.indexOf(name) === index)
     .sort();
 
-  const capital_region_cinemas = all_cinemas.filter((name) =>
-    ["Bíó Paradís", "Háskólabíó", "Laugarásbíó", "Sambíóin Egilshöll", "Sambíóin Kringlunni", "Sambíóin Álfabakka", "Smárabíó"].includes(
-      name
-    )
-  );
+  const capital_region_cinemas = all_cinemas.filter((name) => (CAPITAL_REGION_CINEMAS as readonly string[]).includes(name));
 
   const all_choices = all_cinemas.map((name) => [name, [name]] as const);
 

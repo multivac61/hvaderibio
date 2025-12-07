@@ -10,7 +10,7 @@
     "sourceMap": true,
     "strict": true,
     "typeRoots": ["./node_modules/@types"],
-    "types": ["node"],
+    "types": ["node", "bun"],
     "moduleResolution": "bundler"
   }
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
