@@ -36,13 +36,7 @@
   <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />
 </svelte:head>
 
-<!-- Background glow effect with top/bottom mask -->
-<div
-  class="pointer-events-none fixed inset-0 opacity-20"
-  style="background-image: url('/{movie.id}-360w.webp'); background-size: cover; background-position: center; filter: blur(80px) saturate(1.5); transform: scale(1.2); mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);">
-</div>
-
-<div class="relative z-10 container mx-auto flex h-full max-w-7xl flex-col justify-start overflow-y-auto px-4 py-8 md:py-16">
+<div class="relative z-10 container mx-auto flex min-h-full max-w-7xl flex-col justify-start px-4 pt-0 pb-8 md:py-16">
   <div class="w-full">
     <div class="grid gap-8 md:grid-cols-2 lg:gap-16 xl:gap-20">
       <div class="flex justify-center md:justify-end">
