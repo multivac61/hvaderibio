@@ -12,6 +12,7 @@
 
 <svelte:head>
   <title>{title} - Hvað er í bíó?</title>
+  <meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
 <div class="flex min-h-screen items-center justify-center bg-black text-neutral-100">

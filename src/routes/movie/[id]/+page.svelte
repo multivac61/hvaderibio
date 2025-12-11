@@ -1,38 +1,22 @@
 <script lang="ts">
+  import { error } from "@sveltejs/kit";
+  import { page } from "$app/state";
   import { in_range, to_float } from "$lib/util";
-  import { CAPITAL_REGION_CINEMAS } from "$lib/constants";
+  import { getMovie, getCinemaOptions } from "$lib/data.remote";
+  import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice } from "$lib/cinema-state.svelte";
 
-  let { data } = $props();
-  const movie = data.movie;
+  const movie = await getMovie(page.params.id!);
+  const cinema_options = await getCinemaOptions();
+
+  if (!movie) {
+    error(404, "Movie not found");
+  }
 
   const to = 24;
   const from = Math.min(21, new Date().getHours());
 
-  const all_cinemas = Object.keys(movie.cinema_showtimes).sort();
-
-  const capital_region_cinemas = all_cinemas.filter((name) => (CAPITAL_REGION_CINEMAS as readonly string[]).includes(name));
-
-  const all_choices = all_cinemas.map((name) => [name, [name]] as const);
-
-  const group_choices = [
-    ["Öll kvikmyndahús", all_cinemas],
-    ["Höfuðborgarsvæðið", capital_region_cinemas],
-  ] as const;
-
-  // SSR-safe: initialize with default, update from sessionStorage on client
-  let selected_cinemas: readonly string[] = $state(capital_region_cinemas);
-
-  $effect(() => {
-    if (typeof window !== "undefined") {
-      const savedChoice = sessionStorage.getItem("selectedCinemaChoice");
-      if (savedChoice) {
-        const cinemas = [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1];
-        if (cinemas) {
-          selected_cinemas = cinemas;
-        }
-      }
-    }
-  });
+  const selected_choice = $derived(page.url.searchParams.get("cinema") ?? DEFAULT_CINEMA_CHOICE);
+  const selected_cinemas = $derived(get_cinemas_for_choice(selected_choice, cinema_options));
 </script>
 
 <svelte:head>

@@ -1,12 +1,15 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
   import { goto } from "$app/navigation";
+  import { page } from "$app/state";
 
   import { in_range, to_float } from "$lib/util";
-  import { CAPITAL_REGION_CINEMAS } from "$lib/constants";
   import type { Movie, Showtime } from "$lib/schemas";
+  import { getMovies, getCinemaOptions } from "$lib/data.remote";
+  import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice } from "$lib/cinema-state.svelte";
 
-  let { data } = $props();
+  const movies = await getMovies();
+  const cinema_options = await getCinemaOptions();
 
   // Handle touch events to bypass iOS Safari tap issues
   let touchStartY = 0;
@@ -32,50 +35,21 @@
   });
 
   const to = $state(24);
-  // Use a consistent time for both server and client to avoid layout shifts
-  // We'll use the current hour as the baseline for consistency
   const from = $derived(Math.min(21, new Date().getHours()));
 
-  const all_cinemas = data.movies
-    .flatMap((movie) => Object.keys(movie.cinema_showtimes))
-    .filter((name, index, array) => array.indexOf(name) === index)
-    .sort();
-
-  const capital_region_cinemas = all_cinemas.filter((name) => (CAPITAL_REGION_CINEMAS as readonly string[]).includes(name));
-
-  const all_choices = all_cinemas.map((name) => [name, [name]] as const);
-
-  const group_choices = [
-    ["Öll kvikmyndahús", all_cinemas],
-    ["Höfuðborgarsvæðið", capital_region_cinemas],
-  ] as const;
-
-  // Initialize with default, will be updated on client side
-  let selected_choice: string = $state(group_choices[1][0]);
-  let selected_cinemas: string[] = $state(capital_region_cinemas);
-
-  // Load saved selection from sessionStorage after component mounts
-  $effect(() => {
-    if (typeof window !== "undefined") {
-      const savedChoice = sessionStorage.getItem("selectedCinemaChoice");
-      if (savedChoice) {
-        const cinemas = [...group_choices, ...all_choices].find(([label]) => label === savedChoice)?.[1];
-        if (cinemas) {
-          selected_choice = savedChoice;
-          selected_cinemas = [...cinemas]; // Create mutable copy
-        }
-      }
-    }
-  });
+  // Read cinema from URL, fallback to default
+  const selected_choice = $derived(page.url.searchParams.get("cinema") ?? DEFAULT_CINEMA_CHOICE);
+  const selected_cinemas = $derived(get_cinemas_for_choice(selected_choice, cinema_options));
 
   const updateSelection = (choiceLabel: string) => {
-    if (selected_choice === choiceLabel) return;
-    selected_choice = choiceLabel;
-    selected_cinemas = [...group_choices, ...all_choices].flatMap(([group_label, cinemas]) => (group_label === choiceLabel ? cinemas : []));
-    // Save to sessionStorage
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("selectedCinemaChoice", choiceLabel);
+    const url = new URL(page.url);
+    if (choiceLabel === DEFAULT_CINEMA_CHOICE) {
+      url.searchParams.delete("cinema");
+    } else {
+      url.searchParams.set("cinema", choiceLabel);
     }
+    // eslint-disable-next-line svelte/no-navigation-without-resolve
+    goto(url, { replaceState: true, noScroll: true, keepFocus: true });
   };
 
   const handleSelectChange = (event: Event & { currentTarget: HTMLSelectElement }) => {
@@ -83,21 +57,17 @@
   };
 
   let filtered_cinemas_showtimes = $derived(
-    data.movies
+    movies
       .filter((movie) => {
-        // Count total valid showtimes for this movie in selected cinemas
         const totalValidShowtimes = Object.entries(movie.cinema_showtimes)
           .filter(([cinema]) => selected_cinemas.includes(cinema))
           .reduce((total, [, times]) => {
             const validTimes = (times as Showtime[]).filter(({ time }) => time && in_range(to_float(time), from, to));
             return total + validTimes.length;
           }, 0);
-
-        // Only show movies that have at least one valid showtime in selected cinemas
         return totalValidShowtimes > 0;
       })
       .sort((a, b) => {
-        // Count total valid showtimes for each movie across selected cinemas
         const getTotalValidShowtimes = (movie: Movie) => {
           return Object.entries(movie.cinema_showtimes)
             .filter(([cinema]) => selected_cinemas.includes(cinema))
@@ -106,37 +76,31 @@
               return total + validTimes.length;
             }, 0);
         };
-
-        const aCount = getTotalValidShowtimes(a);
-        const bCount = getTotalValidShowtimes(b);
-
-        // Sort by total valid showtimes (descending)
-        return bCount - aCount;
+        return getTotalValidShowtimes(b) - getTotalValidShowtimes(a);
       })
   );
 </script>
 
 <svelte:head>
-  {#each filtered_cinemas_showtimes.slice(0, 4) as movie (movie.id)}
-    <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />
-  {/each}
+  <title>Hvað er í bíó? - Bíódagskrá kvöldsins</title>
+  <meta name="description" content="Fljótlegt yfirlit yfir bíódagskrá kvöldsins á öllu landinu. Skoðaðu sýningartíma og bókaðu miða." />
 </svelte:head>
 
 <header class="relative hidden sm:my-8 sm:block">
   <h1 class="mb-4 bg-clip-text text-center text-5xl text-pretty accent-cyan-50">Hvað er í bíó? 🍿</h1>
   <div class="mx-auto sm:block md:max-w-2xl lg:max-w-3xl">
     <div class="flex flex-wrap justify-center gap-1.5 md:gap-2">
-      {#each [...group_choices, ...all_choices] as [label] (label)}
+      {#each cinema_options as [label] (label)}
         <button
           type="button"
           onclick={() => updateSelection(label)}
           class={`rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200 ease-out focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none
-                  ${
-                    label === selected_choice
-                      ? "bg-opacity-15 bg-neutral-800/30 text-white shadow-sm"
-                      : "bg-neutral-800/60 text-neutral-400 hover:bg-neutral-700/80 hover:text-neutral-200"
-                  }
-                `}>
+                    ${
+                      label === selected_choice
+                        ? "bg-opacity-15 bg-neutral-800/30 text-white shadow-sm"
+                        : "bg-neutral-800/60 text-neutral-400 hover:bg-neutral-700/80 hover:text-neutral-200"
+                    }
+                  `}>
           {label}
         </button>
       {/each}
@@ -154,7 +118,7 @@
         name="select cinemas mobile"
         aria-label="Veldu kvikmyndahús"
         class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/95 py-2.5 pr-10 pl-4 text-center text-base text-neutral-100 shadow-lg [text-align-last:center] focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
-        {#each [...group_choices, ...all_choices] as [label] (label)}
+        {#each cinema_options as [label] (label)}
           <option
             value={label}
             id={`option-${label}`}
