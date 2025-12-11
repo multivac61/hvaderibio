@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from "zod/mini";
 
 const showtime_schema = z.object({
   time: z.string(),
-  purchase_url: z.string().url(),
+  purchase_url: z.url(),
   hall: z.string(),
 });
 
@@ -15,23 +15,23 @@ export type Showtime = z.infer<typeof showtime_schema>;
 export const movie_schema = z.object({
   title: z.string(),
   id: z.number(),
-  alt_title: z.string().optional(),
+  alt_title: z.optional(z.string()),
   release_year: z.number(),
-  poster_url: z.string().url(),
-  rating_urls: z.array(z.string().url()).optional(),
-  content_rating: z.string().optional(),
+  poster_url: z.url(),
+  rating_urls: z.optional(z.array(z.url())),
+  content_rating: z.optional(z.string()),
   description: z.string(),
   genres: z.array(z.string()),
   duration_in_mins: z.number(),
   language: z.array(z.string()),
-  trailer_url: z.string().url().optional(),
+  trailer_url: z.optional(z.url()),
   cinema_showtimes: cinema_showtimes_schema,
-  imdb: z
-    .object({
-      link: z.string().url(),
+  imdb: z.optional(
+    z.object({
+      link: z.url(),
       star: z.number(),
     })
-    .optional(),
+  ),
 });
 
 export const movies_schema = z.array(movie_schema);
