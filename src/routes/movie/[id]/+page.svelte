@@ -311,7 +311,7 @@
             <div class="relative flex shrink-0 items-center rounded-full bg-neutral-800 p-1">
               <!-- Sliding indicator -->
               <div
-                class="absolute h-[calc(100%-8px)] rounded-full bg-white {slider_animated ? 'transition-all duration-300 ease-out' : ''}"
+                class="absolute h-[calc(100%-14px)] rounded-full bg-white {slider_animated ? 'transition-all duration-300 ease-out' : ''}"
                 style={slider_style}>
               </div>
               {#each available_days as day, i (day)}
