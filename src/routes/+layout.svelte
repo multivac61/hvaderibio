@@ -4,8 +4,14 @@
 
   let { children } = $props();
 
+  // Detect mobile devices to disable view transitions (Safari butchers them)
+  const isMobile = () => {
+    if (typeof window === "undefined") return false;
+    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+  };
+
   onNavigate((navigation) => {
-    if (!document.startViewTransition) return;
+    if (!document.startViewTransition || isMobile()) return;
     return new Promise((resolve) => {
       document.startViewTransition(async () => {
         resolve();
