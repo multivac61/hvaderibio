@@ -76,9 +76,59 @@
     Til baka
   </button>
   <div class="grid gap-6 md:grid-cols-[320px_1fr] md:gap-8 lg:grid-cols-[400px_1fr] lg:gap-10 xl:grid-cols-[480px_1fr] xl:gap-12">
-    <!-- Poster -->
+    <!-- Poster (desktop) / Trailer (mobile if available) -->
     <div class="w-full md:mx-0">
-      <picture class="block">
+      <!-- Mobile: Show trailer if available, otherwise poster -->
+      {#if youtube_id}
+        <div class="aspect-video overflow-hidden rounded-md bg-neutral-900 md:hidden">
+          {#if play_trailer}
+            <iframe
+              src="https://www.youtube.com/embed/{youtube_id}?autoplay=1&rel=0&modestbranding=1"
+              title="Trailer"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              class="h-full w-full"></iframe>
+          {:else}
+            <button type="button" onclick={() => (play_trailer = true)} class="group relative h-full w-full cursor-pointer">
+              <img
+                src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg"
+                alt="Trailer"
+                width="1280"
+                height="720"
+                fetchpriority="high"
+                loading="eager"
+                decoding="async"
+                class="h-full w-full object-cover" />
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
+                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
+                  <svg class="ml-0.5 h-6 w-6 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+            </button>
+          {/if}
+        </div>
+      {:else}
+        <!-- Mobile fallback: poster if no trailer -->
+        <picture class="block md:hidden">
+          <source type="image/webp" srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w`} sizes="100vw" />
+          <img
+            src={`/${movie.id}.webp`}
+            title={movie.title}
+            alt={movie.title}
+            width="720"
+            height="1080"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+            style:view-transition-name="poster-{movie.id}"
+            class="w-full rounded-md shadow-2xl" />
+        </picture>
+      {/if}
+      <!-- Desktop: Always show poster -->
+      <picture class="hidden md:block">
         <source type="image/webp" srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w`} sizes="(max-width: 768px) 192px, 320px" />
         <img
           src={`/${movie.id}.webp`}
@@ -221,9 +271,9 @@
 
       <p class="text-sm leading-relaxed text-neutral-400 md:text-base">{movie.description}</p>
 
-      <!-- Trailer -->
+      <!-- Trailer (desktop only - mobile shows in hero position) -->
       {#if youtube_id}
-        <div class="aspect-video overflow-hidden rounded-md bg-neutral-900">
+        <div class="hidden aspect-video overflow-hidden rounded-md bg-neutral-900 md:block">
           {#if play_trailer}
             <iframe
               src="https://www.youtube.com/embed/{youtube_id}?autoplay=1&rel=0&modestbranding=1"
@@ -308,13 +358,13 @@
                     {:else}
                       <span class="text-sm font-medium text-neutral-300">{cinema}</span>
                     {/if}
-                    <div class="flex flex-wrap gap-1.5">
+                    <div class="flex flex-wrap gap-2">
                       {#each validTimes as { time, purchase_url, is_icelandic, is_3d, is_luxus, is_vip, is_atmos, is_max, is_flauel } (purchase_url)}
                         <a
                           href={purchase_url}
                           target="_blank"
                           rel="external noopener noreferrer"
-                          class="relative rounded bg-neutral-800 px-2 py-1 text-xs text-neutral-400 tabular-nums transition-colors hover:bg-neutral-700 hover:text-white">
+                          class="relative rounded bg-neutral-800 px-2.5 py-1.5 text-sm text-neutral-400 tabular-nums transition-colors hover:bg-neutral-700 hover:text-white">
                           {#if is_icelandic || is_3d || is_luxus || is_vip || is_atmos || is_max || is_flauel}
                             <span class="absolute -top-1.5 -right-1.5 flex gap-0.5">
                               {#if is_icelandic}
