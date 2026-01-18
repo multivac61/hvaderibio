@@ -174,7 +174,7 @@
             bind:this={day_buttons[i]}
             type="button"
             onclick={() => updateDay(day)}
-            class="relative z-10 rounded-full px-2.5 py-1 text-xs font-medium transition-colors duration-200 {selected_day === day
+            class="relative z-10 rounded-full px-2 py-1 text-xs font-medium transition-colors duration-200 {selected_day === day
               ? 'text-neutral-900'
               : 'text-neutral-400 hover:text-neutral-200'}">
             {get_day_label(day)}
@@ -239,7 +239,7 @@
               bind:this={day_buttons_mobile[i]}
               type="button"
               onclick={() => updateDay(day)}
-              class="relative z-10 rounded-full px-2.5 py-1.5 text-xs font-medium transition-colors duration-200 {selected_day === day
+              class="relative z-10 rounded-full px-2 py-1.5 text-xs font-medium transition-colors duration-200 {selected_day === day
                 ? 'text-neutral-900'
                 : 'text-neutral-400'}">
               {get_day_label(day)}
