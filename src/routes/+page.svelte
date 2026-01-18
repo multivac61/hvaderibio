@@ -160,14 +160,15 @@
         {/each}
       </div>
       <!-- Cinema dropdown -->
-      <div class="relative w-full">
-        <select
-          value={selected_choice}
-          onchange={handleSelectChange}
-          id="select-cinemas-mobile"
-          name="select cinemas mobile"
-          aria-label="Veldu kvikmyndahús"
-          class="block w-full appearance-none rounded-lg border border-neutral-700/50 bg-neutral-900/95 py-1.5 pr-8 pl-3 text-center text-sm text-neutral-100 shadow-lg [text-align-last:center] focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
+      <div class="flex justify-center">
+        <div class="relative">
+          <select
+            value={selected_choice}
+            onchange={handleSelectChange}
+            id="select-cinemas-mobile"
+            name="select cinemas mobile"
+            aria-label="Veldu kvikmyndahús"
+            class="appearance-none rounded-full border border-neutral-700/50 bg-neutral-900/95 py-2 pr-8 pl-4 text-center text-sm text-neutral-100 shadow-lg focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
           {#each cinema_options as [label] (label)}
             <option
               value={label}
@@ -178,19 +179,20 @@
               {label}
             </option>
           {/each}
-        </select>
-        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-          <svg
-            class="h-5 w-5 text-neutral-400"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true">
-            <path
-              fill-rule="evenodd"
-              d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.29a.75.75 0 01.02-1.06z"
-              clip-rule="evenodd" />
-          </svg>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+            <svg
+              class="h-4 w-4 text-neutral-400"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true">
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.29a.75.75 0 01.02-1.06z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
         </div>
       </div>
     </div>
