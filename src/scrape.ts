@@ -6,7 +6,15 @@ import { parseHTML } from "linkedom";
 import sharp from "sharp";
 
 import type { Movie, Showtime } from "$lib/schemas";
-import { parse_movie, parse_movie_ids, extract_direct_url, fetch_external_urls } from "$lib/parse";
+import {
+  parse_movie,
+  parse_movie_ids,
+  extract_direct_url,
+  fetch_external_urls,
+  scrape_rotten_tomatoes,
+  scrape_metacritic,
+  scrape_letterboxd,
+} from "$lib/parse";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -146,9 +154,9 @@ async function main() {
     }
   }
 
-  console.log(`Scraped ${movies.length} valid movies. Fetching external URLs from Wikidata...`);
+  console.log(`Scraped ${movies.length} valid movies. Fetching external URLs and scores...`);
 
-  // Fetch RT and Metacritic URLs from Wikidata
+  // Fetch RT, Metacritic, and Letterboxd URLs from Wikidata, then scrape scores
   const moviesWithUrls = await Promise.all(
     movies.map(async (movie) => {
       if (!movie.imdb?.link) return movie;
@@ -157,12 +165,67 @@ async function main() {
       if (!imdbId) return movie;
 
       await delay(100); // Rate limit Wikidata requests
-      const { rtUrl, mcUrl } = await fetch_external_urls(imdbId);
+      const { rtUrl, mcUrl, letterboxdUrl } = await fetch_external_urls(imdbId);
+
+      let rotten_tomatoes = movie.rotten_tomatoes;
+      let metacritic = movie.metacritic;
+      let letterboxd: { score?: number; url?: string } | undefined;
+
+      // Scrape RT scores if we have a URL
+      if (rtUrl) {
+        await delay(200);
+        const rtScores = await scrape_rotten_tomatoes(rtUrl);
+        if (rtScores?.score !== undefined) {
+          rotten_tomatoes = {
+            score: rtScores.score,
+            audience_score: rtScores.audience_score,
+            url: rtUrl,
+          };
+          console.log(`  RT scores for ${movie.title}: ${rtScores.score}% (audience: ${rtScores.audience_score ?? "N/A"}%)`);
+        } else if (movie.rotten_tomatoes) {
+          // Keep kvikmyndir.is score but add URL
+          rotten_tomatoes = { ...movie.rotten_tomatoes, url: rtUrl };
+        }
+      }
+
+      // Scrape MC scores if we have a URL
+      if (mcUrl) {
+        await delay(200);
+        const mcScores = await scrape_metacritic(mcUrl);
+        if (mcScores?.score !== undefined) {
+          metacritic = {
+            score: mcScores.score,
+            user_score: mcScores.user_score,
+            url: mcUrl,
+          };
+          console.log(`  MC scores for ${movie.title}: ${mcScores.score} (user: ${mcScores.user_score ?? "N/A"})`);
+        } else if (movie.metacritic) {
+          // Keep kvikmyndir.is score but add URL
+          metacritic = { ...movie.metacritic, url: mcUrl };
+        }
+      }
+
+      // Scrape Letterboxd score if we have a URL
+      if (letterboxdUrl) {
+        await delay(200);
+        const lbScore = await scrape_letterboxd(letterboxdUrl);
+        if (lbScore?.score !== undefined) {
+          letterboxd = {
+            score: lbScore.score,
+            url: letterboxdUrl,
+          };
+          console.log(`  Letterboxd score for ${movie.title}: ${lbScore.score}/5`);
+        } else {
+          // Still include URL even without score
+          letterboxd = { url: letterboxdUrl };
+        }
+      }
 
       return {
         ...movie,
-        rotten_tomatoes: movie.rotten_tomatoes ? { ...movie.rotten_tomatoes, url: rtUrl } : undefined,
-        metacritic: movie.metacritic ? { ...movie.metacritic, url: mcUrl } : undefined,
+        rotten_tomatoes,
+        metacritic,
+        letterboxd,
       };
     })
   );

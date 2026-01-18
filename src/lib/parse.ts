@@ -100,7 +100,8 @@ function parse_showtimes_for_day(document: Document, dayIndex: number): CinemaSh
       const is_3d = showtimeText.includes("3D") || showtimeHtml.includes("3D");
 
       // Check for LÚXUS (premium seating) - check both text and hall name
-      const is_luxus = showtimeText.includes("LÚXUS") || showtimeText.includes("LÚX") || hallUpper.includes("LÚXUS") || hallUpper.includes("LÚX");
+      const is_luxus =
+        showtimeText.includes("LÚXUS") || showtimeText.includes("LÚX") || hallUpper.includes("LÚXUS") || hallUpper.includes("LÚX");
 
       // Check for VIP - check both text and hall name
       const is_vip = showtimeText.includes("VIP") || hallUpper.includes("VIP");
@@ -181,14 +182,15 @@ export function parse_movie_ids(document: Document): number[] {
     .filter((id): id is number => id !== null);
 }
 
-// Fetch RT and Metacritic URLs from Wikidata using IMDb ID
-export async function fetch_external_urls(imdbId: string): Promise<{ rtUrl?: string; mcUrl?: string }> {
+// Fetch RT, Metacritic, and Letterboxd URLs from Wikidata using IMDb ID
+export async function fetch_external_urls(imdbId: string): Promise<{ rtUrl?: string; mcUrl?: string; letterboxdUrl?: string }> {
   try {
     const sparql = `
-      SELECT ?rtId ?mcId WHERE {
+      SELECT ?rtId ?mcId ?lbId WHERE {
         ?movie wdt:P345 "${imdbId}" .
         OPTIONAL { ?movie wdt:P1258 ?rtId . }
         OPTIONAL { ?movie wdt:P1712 ?mcId . }
+        OPTIONAL { ?movie wdt:P6127 ?lbId . }
       }`;
 
     const response = await fetch("https://query.wikidata.org/sparql?" + new URLSearchParams({ query: sparql, format: "json" }), {
@@ -201,9 +203,144 @@ export async function fetch_external_urls(imdbId: string): Promise<{ rtUrl?: str
     return {
       rtUrl: result?.rtId?.value ? `https://www.rottentomatoes.com/${result.rtId.value}` : undefined,
       mcUrl: result?.mcId?.value ? `https://www.metacritic.com/${result.mcId.value}` : undefined,
+      letterboxdUrl: result?.lbId?.value ? `https://letterboxd.com/film/${result.lbId.value}/` : undefined,
     };
   } catch (error) {
     console.error(`Failed to fetch external URLs for ${imdbId}:`, error);
     return {};
+  }
+}
+
+// Scrape Rotten Tomatoes scores from RT page
+export async function scrape_rotten_tomatoes(url: string): Promise<{ score?: number; audience_score?: number } | null> {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      },
+    });
+
+    if (!response.ok) return null;
+    const html = await response.text();
+
+    // Extract tomatometer score from score-board or rt-text
+    let score: number | undefined;
+    let audience_score: number | undefined;
+
+    // Look for JSON-LD data first (most reliable)
+    const jsonLdMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    if (jsonLdMatch) {
+      try {
+        const jsonLd = JSON.parse(jsonLdMatch[1]);
+        if (jsonLd.aggregateRating?.ratingValue) {
+          // RT stores as percentage in some cases
+          const rating = parseFloat(jsonLd.aggregateRating.ratingValue);
+          if (rating <= 10) {
+            score = Math.round(rating * 10);
+          } else {
+            score = Math.round(rating);
+          }
+        }
+      } catch {
+        // JSON parse failed, try regex fallback
+      }
+    }
+
+    // Fallback: Look for tomatometer in HTML
+    if (!score) {
+      const tomatometerMatch = html.match(/tomatometer[^>]*>(\d+)%?</i) || html.match(/"tomatometerScore":(\d+)/);
+      if (tomatometerMatch) {
+        score = parseInt(tomatometerMatch[1]);
+      }
+    }
+
+    // Look for audience score
+    const audienceMatch = html.match(/audienceScore[^>]*>(\d+)%?</i) || html.match(/"audienceScore":(\d+)/);
+    if (audienceMatch) {
+      audience_score = parseInt(audienceMatch[1]);
+    }
+
+    if (score !== undefined) {
+      return { score, audience_score };
+    }
+    return null;
+  } catch (error) {
+    console.error(`Failed to scrape RT scores from ${url}:`, error);
+    return null;
+  }
+}
+
+// Scrape Metacritic scores from MC page
+export async function scrape_metacritic(url: string): Promise<{ score?: number; user_score?: number } | null> {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      },
+    });
+
+    if (!response.ok) return null;
+    const html = await response.text();
+
+    let score: number | undefined;
+    let user_score: number | undefined;
+
+    // Look for metascore in JSON data or HTML
+    const metascoreMatch =
+      html.match(/"metaScore":(\d+)/) ||
+      html.match(/metascore[^>]*>(\d+)</i) ||
+      html.match(/<span[^>]*class="[^"]*metascore[^"]*"[^>]*>(\d+)</i);
+    if (metascoreMatch) {
+      score = parseInt(metascoreMatch[1]);
+    }
+
+    // Look for user score (usually as X.X format)
+    const userScoreMatch = html.match(/"userScore":([\d.]+)/) || html.match(/userscore[^>]*>([\d.]+)</i);
+    if (userScoreMatch) {
+      const rawScore = parseFloat(userScoreMatch[1]);
+      // Convert from 0-10 scale to 0-100
+      user_score = rawScore <= 10 ? Math.round(rawScore * 10) : Math.round(rawScore);
+    }
+
+    if (score !== undefined) {
+      return { score, user_score };
+    }
+    return null;
+  } catch (error) {
+    console.error(`Failed to scrape MC scores from ${url}:`, error);
+    return null;
+  }
+}
+
+// Scrape Letterboxd score from Letterboxd page
+export async function scrape_letterboxd(url: string): Promise<{ score?: number } | null> {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      },
+    });
+
+    if (!response.ok) return null;
+    const html = await response.text();
+
+    // Letterboxd shows rating as X.X out of 5
+    const ratingMatch = html.match(/"ratingValue":\s*([\d.]+)/) || html.match(/average rating of ([\d.]+)/i);
+    if (ratingMatch) {
+      const rating = parseFloat(ratingMatch[1]);
+      // Return as 0-5 scale (Letterboxd's native format)
+      return { score: Math.round(rating * 10) / 10 };
+    }
+
+    return null;
+  } catch (error) {
+    console.error(`Failed to scrape Letterboxd score from ${url}:`, error);
+    return null;
   }
 }

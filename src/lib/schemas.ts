@@ -46,12 +46,20 @@ export const movie_schema = z.object({
   rotten_tomatoes: z.optional(
     z.object({
       score: z.number(),
+      audience_score: z.optional(z.number()),
       url: z.optional(z.url()),
     })
   ),
   metacritic: z.optional(
     z.object({
       score: z.number(),
+      user_score: z.optional(z.number()),
+      url: z.optional(z.url()),
+    })
+  ),
+  letterboxd: z.optional(
+    z.object({
+      score: z.optional(z.number()),
       url: z.optional(z.url()),
     })
   ),
