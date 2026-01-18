@@ -20,9 +20,25 @@
 
   // Day selection from shared state
   const selected_day = $derived(dayState.value ?? "0");
-  let play_trailer = $state(false);
+  let trailer_modal_open = $state(false);
   // Always show days 0-3 for consistent UI
   const available_days = ["0", "1", "2", "3"];
+
+  const openTrailer = () => {
+    // On mobile, open YouTube directly (autoplay doesn't work in iframe)
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile && youtube_id) {
+      window.open(`https://www.youtube.com/watch?v=${youtube_id}`, "_blank");
+    } else {
+      trailer_modal_open = true;
+      document.body.style.overflow = "hidden";
+    }
+  };
+
+  const closeTrailerModal = () => {
+    trailer_modal_open = false;
+    document.body.style.overflow = "";
+  };
 
   // Day selector slider
   let day_buttons: HTMLButtonElement[] = $state([]);
@@ -78,37 +94,27 @@
   <div class="grid gap-6 md:grid-cols-[320px_1fr] md:gap-8 lg:grid-cols-[400px_1fr] lg:gap-10 xl:grid-cols-[480px_1fr] xl:gap-12">
     <!-- Poster (desktop) / Trailer (mobile if available) -->
     <div class="w-full md:mx-0">
-      <!-- Mobile: Show trailer if available, otherwise poster -->
+      <!-- Mobile: Show trailer thumbnail if available, otherwise poster -->
       {#if youtube_id}
         <div class="aspect-video overflow-hidden rounded-md bg-neutral-900 md:hidden">
-          {#if play_trailer}
-            <iframe
-              src="https://www.youtube.com/embed/{youtube_id}?autoplay=1&rel=0&modestbranding=1"
-              title="Trailer"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              class="h-full w-full"></iframe>
-          {:else}
-            <button type="button" onclick={() => (play_trailer = true)} class="group relative h-full w-full cursor-pointer">
-              <img
-                src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg"
-                alt="Trailer"
-                width="1280"
-                height="720"
-                fetchpriority="high"
-                loading="eager"
-                decoding="async"
-                class="h-full w-full object-cover" />
-              <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
-                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
-                  <svg class="ml-0.5 h-6 w-6 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
+          <button type="button" onclick={openTrailer} class="group relative h-full w-full cursor-pointer">
+            <img
+              src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg"
+              alt="Trailer"
+              width="1280"
+              height="720"
+              fetchpriority="high"
+              loading="eager"
+              decoding="async"
+              class="h-full w-full object-cover" />
+            <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
+              <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
+                <svg class="ml-0.5 h-6 w-6 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
               </div>
-            </button>
-          {/if}
+            </div>
+          </button>
         </div>
       {:else}
         <!-- Mobile fallback: poster if no trailer -->
@@ -274,33 +280,23 @@
       <!-- Trailer (desktop only - mobile shows in hero position) -->
       {#if youtube_id}
         <div class="hidden aspect-video overflow-hidden rounded-md bg-neutral-900 md:block">
-          {#if play_trailer}
-            <iframe
-              src="https://www.youtube.com/embed/{youtube_id}?autoplay=1&rel=0&modestbranding=1"
-              title="Trailer"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              class="h-full w-full"></iframe>
-          {:else}
-            <button type="button" onclick={() => (play_trailer = true)} class="group relative h-full w-full cursor-pointer">
-              <img
-                src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg"
-                alt="Trailer"
-                width="1280"
-                height="720"
-                loading="lazy"
-                decoding="async"
-                class="h-full w-full object-cover" />
-              <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
-                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
-                  <svg class="ml-0.5 h-5 w-5 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
+          <button type="button" onclick={openTrailer} class="group relative h-full w-full cursor-pointer">
+            <img
+              src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg"
+              alt="Trailer"
+              width="1280"
+              height="720"
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover" />
+            <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
+                <svg class="ml-0.5 h-5 w-5 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
               </div>
-            </button>
-          {/if}
+            </div>
+          </button>
         </div>
       {/if}
 
@@ -311,7 +307,9 @@
             <div class="relative flex shrink-0 items-center rounded-full bg-neutral-800 p-1">
               <!-- Sliding indicator -->
               <div
-                class="absolute h-[calc(100%-14px)] rounded-full bg-white {slider_animated ? 'transition-all duration-300 ease-out' : ''}"
+                class="absolute h-[calc(100%-10px)] rounded-full bg-white shadow-sm {slider_animated
+                  ? 'transition-all duration-300 ease-out'
+                  : ''}"
                 style={slider_style}>
               </div>
               {#each available_days as day, i (day)}
@@ -319,7 +317,7 @@
                   bind:this={day_buttons[i]}
                   type="button"
                   onclick={() => updateDay(day)}
-                  class="relative z-10 rounded-full px-3 py-1 text-xs font-medium transition-colors duration-200 {selected_day === day
+                  class="relative z-10 rounded-full px-2 py-1 text-xs font-medium transition-colors duration-200 {selected_day === day
                     ? 'text-neutral-900'
                     : 'text-neutral-400 hover:text-neutral-200'}">
                   {get_day_label(day)}
@@ -364,7 +362,7 @@
                           href={purchase_url}
                           target="_blank"
                           rel="external noopener noreferrer"
-                          class="relative rounded bg-neutral-800 px-2.5 py-1.5 text-sm text-neutral-400 tabular-nums transition-colors hover:bg-neutral-700 hover:text-white">
+                          class="relative rounded bg-neutral-800 px-2 py-1.5 text-sm text-neutral-400 tabular-nums transition-colors hover:bg-neutral-700 hover:text-white">
                           {#if is_icelandic || is_3d || is_luxus || is_vip || is_atmos || is_max || is_flauel}
                             <span class="absolute -top-1.5 -right-1.5 flex gap-0.5">
                               {#if is_icelandic}
@@ -410,3 +408,29 @@
     </div>
   </div>
 </div>
+
+<!-- Trailer Modal -->
+{#if trailer_modal_open && youtube_id}
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4" role="dialog" aria-modal="true" aria-label="Trailer">
+    <button
+      type="button"
+      onclick={closeTrailerModal}
+      aria-label="Loka"
+      class="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20">
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="absolute inset-0" onclick={closeTrailerModal} onkeydown={(e) => e.key === "Escape" && closeTrailerModal()}></div>
+    <div class="relative aspect-video w-full max-w-5xl">
+      <iframe
+        src="https://www.youtube.com/embed/{youtube_id}?autoplay=1&rel=0&modestbranding=1"
+        title="Trailer"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        class="h-full w-full rounded-lg"></iframe>
+    </div>
+  </div>
+{/if}

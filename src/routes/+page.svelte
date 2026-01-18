@@ -164,7 +164,9 @@
       <div class="relative flex items-center rounded-full bg-neutral-800 p-1">
         <!-- Sliding indicator -->
         <div
-          class="absolute h-[calc(100%-14px)] rounded-full bg-white {slider_animated ? 'transition-all duration-300 ease-out' : ''}"
+          class="absolute h-[calc(100%-10px)] rounded-full bg-white shadow-sm {slider_animated
+            ? 'transition-all duration-300 ease-out'
+            : ''}"
           style={slider_style}>
         </div>
         {#each available_days as day, i (day)}
@@ -172,7 +174,7 @@
             bind:this={day_buttons[i]}
             type="button"
             onclick={() => updateDay(day)}
-            class="relative z-10 rounded-full px-3 py-1 text-xs font-medium transition-colors duration-200 {selected_day === day
+            class="relative z-10 rounded-full px-2.5 py-1 text-xs font-medium transition-colors duration-200 {selected_day === day
               ? 'text-neutral-900'
               : 'text-neutral-400 hover:text-neutral-200'}">
             {get_day_label(day)}
@@ -227,7 +229,7 @@
         <div class="relative flex items-center rounded-full bg-neutral-800/90 p-1">
           <!-- Sliding indicator -->
           <div
-            class="absolute h-[calc(100%-14px)] rounded-full bg-white shadow-md {slider_animated_mobile
+            class="absolute h-[calc(100%-10px)] rounded-full bg-white shadow-md {slider_animated_mobile
               ? 'transition-all duration-300 ease-out'
               : ''}"
             style={slider_style_mobile}>
@@ -237,7 +239,7 @@
               bind:this={day_buttons_mobile[i]}
               type="button"
               onclick={() => updateDay(day)}
-              class="relative z-10 rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-200 {selected_day === day
+              class="relative z-10 rounded-full px-2.5 py-1.5 text-xs font-medium transition-colors duration-200 {selected_day === day
                 ? 'text-neutral-900'
                 : 'text-neutral-400'}">
               {get_day_label(day)}
