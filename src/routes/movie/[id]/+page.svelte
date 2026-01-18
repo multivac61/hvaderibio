@@ -62,6 +62,8 @@
           src={`/${movie.id}.webp`}
           title={movie.title}
           alt={movie.title}
+          width="720"
+          height="1080"
           fetchpriority="high"
           loading="eager"
           decoding="async"
@@ -144,7 +146,7 @@
               class="h-full w-full"></iframe>
           {:else}
             <button type="button" onclick={() => (play_trailer = true)} class="group relative h-full w-full cursor-pointer">
-              <img src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg" alt="Trailer" class="h-full w-full object-cover" />
+              <img src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg" alt="Trailer" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover" />
               <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
                   <svg class="ml-0.5 h-5 w-5 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">

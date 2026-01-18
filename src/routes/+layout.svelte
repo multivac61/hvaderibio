@@ -16,7 +16,15 @@
 </script>
 
 <svelte:head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <!-- Preconnect to external domains for faster loading -->
+  <link rel="preconnect" href="https://www.youtube.com" />
+  <link rel="preconnect" href="https://img.youtube.com" />
+  <link rel="preconnect" href="https://cdn.usefathom.com" />
+  <!-- DNS prefetch for cinema ticket purchase domains -->
+  <link rel="dns-prefetch" href="https://www.sambio.is" />
+  <link rel="dns-prefetch" href="https://eu.internet-ticketing.com" />
+  <link rel="dns-prefetch" href="https://www.bioparadis.is" />
+  <link rel="dns-prefetch" href="https://www.smarabio.is" />
 </svelte:head>
 
 {@render children()}
