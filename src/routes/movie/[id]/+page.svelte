@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { resolve } from "$app/paths";
   import { in_range, to_float } from "$lib/util";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "$lib/cinema-state.svelte";
   import { CINEMA_URLS } from "$lib/constants";
@@ -47,12 +46,15 @@
 </svelte:head>
 
 <div class="container mx-auto max-w-7xl px-4 py-4 md:px-8 md:py-8 lg:px-12 lg:py-10">
-  <a href={resolve("/")} class="mb-4 inline-flex items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-white md:mb-6">
+  <button
+    type="button"
+    onclick={() => history.back()}
+    class="mb-4 inline-flex cursor-pointer items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-white md:mb-6">
     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
     </svg>
     Til baka
-  </a>
+  </button>
   <div class="grid gap-6 md:grid-cols-[320px_1fr] md:gap-8 lg:grid-cols-[400px_1fr] lg:gap-10 xl:grid-cols-[480px_1fr] xl:gap-12">
     <!-- Poster -->
     <div class="w-full md:mx-0">
