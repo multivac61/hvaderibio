@@ -347,7 +347,7 @@
               {#if selected_cinemas.includes(cinema)}
                 {@const validTimes = selected_day === "0" ? times.filter(({ time }) => time && in_range(to_float(time), from, to)) : times}
                 {#if validTimes.length > 0}
-                  <div class="grid grid-cols-[auto_1fr] items-baseline gap-x-3">
+                  <div class="flex flex-col gap-1.5 md:grid md:grid-cols-[auto_1fr] md:items-baseline md:gap-x-3 md:gap-y-0">
                     {#if CINEMA_URLS[cinema]}
                       <a
                         href={CINEMA_URLS[cinema]}
