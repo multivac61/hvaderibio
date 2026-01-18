@@ -4,11 +4,22 @@ const showtime_schema = z.object({
   time: z.string(),
   purchase_url: z.url(),
   hall: z.string(),
+  is_icelandic: z.optional(z.boolean()),
+  is_3d: z.optional(z.boolean()),
+  is_luxus: z.optional(z.boolean()),
+  is_vip: z.optional(z.boolean()),
+  is_atmos: z.optional(z.boolean()),
+  is_max: z.optional(z.boolean()),
+  is_flauel: z.optional(z.boolean()),
 });
 
 export const cinema_showtimes_schema = z.record(z.string(), z.array(showtime_schema));
 
+// Showtimes organized by day (0 = today, 1 = tomorrow, etc.)
+export const showtimes_by_day_schema = z.record(z.string(), cinema_showtimes_schema);
+
 export type CinemaShowtimes = z.infer<typeof cinema_showtimes_schema>;
+export type ShowtimesByDay = z.infer<typeof showtimes_by_day_schema>;
 export type Movie = z.infer<typeof movie_schema>;
 export type Showtime = z.infer<typeof showtime_schema>;
 
@@ -25,11 +36,23 @@ export const movie_schema = z.object({
   duration_in_mins: z.number(),
   language: z.array(z.string()),
   trailer_url: z.optional(z.url()),
-  cinema_showtimes: cinema_showtimes_schema,
+  showtimes_by_day: showtimes_by_day_schema,
   imdb: z.optional(
     z.object({
       link: z.url(),
       star: z.number(),
+    })
+  ),
+  rotten_tomatoes: z.optional(
+    z.object({
+      score: z.number(),
+      url: z.optional(z.url()),
+    })
+  ),
+  metacritic: z.optional(
+    z.object({
+      score: z.number(),
+      url: z.optional(z.url()),
     })
   ),
 });

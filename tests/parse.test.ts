@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { parseHTML } from "linkedom";
-import { parse_movie_ids, parse_showtimes } from "../src/lib/parse";
+import { parse_movie_ids, parse_showtimes_by_day } from "../src/lib/parse";
 
 describe("parse_movie_ids", () => {
   test("extracts movie IDs from anchor elements", () => {
@@ -42,7 +42,7 @@ describe("parse_movie_ids", () => {
   });
 });
 
-describe("parse_showtimes", () => {
+describe("parse_showtimes_by_day", () => {
   test("extracts showtimes from cinema divs", () => {
     const html = `
       <html>
@@ -66,20 +66,21 @@ describe("parse_showtimes", () => {
       </html>
     `;
     const { document } = parseHTML(html);
-    const showtimes = parse_showtimes(document);
+    const showtimes_by_day = parse_showtimes_by_day(document);
 
-    expect(showtimes["Test Cinema"]).toBeDefined();
-    expect(showtimes["Test Cinema"].length).toBe(2);
-    expect(showtimes["Test Cinema"][0].hall).toBe("Hall 1");
-    expect(showtimes["Test Cinema"][0].purchase_url).toBe("https://tickets.example.com/show1");
-    expect(showtimes["Test Cinema"][1].hall).toBe("Hall 2");
+    expect(showtimes_by_day["0"]).toBeDefined();
+    expect(showtimes_by_day["0"]["Test Cinema"]).toBeDefined();
+    expect(showtimes_by_day["0"]["Test Cinema"].length).toBe(2);
+    expect(showtimes_by_day["0"]["Test Cinema"][0].hall).toBe("Hall 1");
+    expect(showtimes_by_day["0"]["Test Cinema"][0].purchase_url).toBe("https://tickets.example.com/show1");
+    expect(showtimes_by_day["0"]["Test Cinema"][1].hall).toBe("Hall 2");
   });
 
   test("returns empty object when no showtimes found", () => {
     const html = `<html><body><p>No showtimes</p></body></html>`;
     const { document } = parseHTML(html);
-    const showtimes = parse_showtimes(document);
-    expect(showtimes).toEqual({});
+    const showtimes_by_day = parse_showtimes_by_day(document);
+    expect(showtimes_by_day).toEqual({});
   });
 
   test("handles multiple cinemas", () => {
@@ -110,10 +111,48 @@ describe("parse_showtimes", () => {
       </html>
     `;
     const { document } = parseHTML(html);
-    const showtimes = parse_showtimes(document);
+    const showtimes_by_day = parse_showtimes_by_day(document);
 
-    expect(Object.keys(showtimes)).toHaveLength(2);
-    expect(showtimes["Cinema A"]).toBeDefined();
-    expect(showtimes["Cinema B"]).toBeDefined();
+    expect(showtimes_by_day["0"]).toBeDefined();
+    expect(Object.keys(showtimes_by_day["0"])).toHaveLength(2);
+    expect(showtimes_by_day["0"]["Cinema A"]).toBeDefined();
+    expect(showtimes_by_day["0"]["Cinema B"]).toBeDefined();
+  });
+
+  test("parses multiple days", () => {
+    const html = `
+      <html>
+        <body>
+          <div class="times_day day0">
+            <div class="biotimar">
+              <h3>Cinema A</h3>
+              <ul>
+                <li class="qtip tip-top">
+                  <a class="rate" href="https://tickets.example.com/a1">18.00</a>
+                  <div class="salur">Hall A</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="times_day day1">
+            <div class="biotimar">
+              <h3>Cinema A</h3>
+              <ul>
+                <li class="qtip tip-top">
+                  <a class="rate" href="https://tickets.example.com/a2">19.00</a>
+                  <div class="salur">Hall A</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+    const { document } = parseHTML(html);
+    const showtimes_by_day = parse_showtimes_by_day(document);
+
+    expect(Object.keys(showtimes_by_day)).toHaveLength(2);
+    expect(showtimes_by_day["0"]).toBeDefined();
+    expect(showtimes_by_day["1"]).toBeDefined();
   });
 });

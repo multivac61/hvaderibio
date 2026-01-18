@@ -1,21 +1,8 @@
-import { error } from "@sveltejs/kit";
 import { readMovies } from "$lib/movies";
 import { CAPITAL_REGION_CINEMAS } from "$lib/constants";
-import type { PageServerLoad } from "./$types";
 
-// The prerenderer can't find the /movie/[id] routes because it needs the entries() function to know which routes to prerender.
-export const entries = async () => {
+export const load = async () => {
   const { movies } = await readMovies();
-  return movies.map((movie) => ({ id: String(movie.id) }));
-};
-
-export const load: PageServerLoad = async ({ params }) => {
-  const { movies } = await readMovies();
-  const movie = movies.find((m) => m.id === Number(params.id));
-
-  if (!movie) {
-    error(404, "Movie not found");
-  }
 
   const all_cinemas = movies
     .flatMap((movie) => Object.values(movie.showtimes_by_day).flatMap((day) => Object.keys(day)))
@@ -31,7 +18,7 @@ export const load: PageServerLoad = async ({ params }) => {
   ] as const;
 
   return {
-    movie,
+    movies,
     cinema_options,
   };
 };

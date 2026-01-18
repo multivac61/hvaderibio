@@ -20,13 +20,5 @@ export default {
   preprocess: vitePreprocess(),
   kit: {
     adapter: await getAdapter(),
-    experimental: {
-      remoteFunctions: true,
-    },
-  },
-  compilerOptions: {
-    experimental: {
-      async: true,
-    },
   },
 };

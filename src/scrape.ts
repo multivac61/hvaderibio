@@ -6,7 +6,7 @@ import { parseHTML } from "linkedom";
 import sharp from "sharp";
 
 import type { Movie, Showtime } from "$lib/schemas";
-import { parse_movie, parse_movie_ids, extract_direct_url } from "$lib/parse";
+import { parse_movie, parse_movie_ids, extract_direct_url, fetch_external_urls } from "$lib/parse";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,28 +45,32 @@ async function scrapeMovie(id: number): Promise<Movie | null> {
     const parsed_movie = parse_movie(movie_document, id);
 
     if (parsed_movie) {
-      // Extract direct URLs from redirect URLs
-      const processed_cinema_showtimes: Record<string, Showtime[]> = {};
+      // Extract direct URLs from redirect URLs for all days
+      const processed_showtimes_by_day: Record<string, Record<string, Showtime[]>> = {};
 
-      for (const [cinema_name, showtimes] of Object.entries(parsed_movie.cinema_showtimes)) {
-        processed_cinema_showtimes[cinema_name] = await Promise.all(
-          showtimes.map(async (showtime) => {
-            // Only process URLs that are redirect URLs
-            if (showtime.purchase_url.includes("showtime_redirect.php")) {
-              const direct_url = await extract_direct_url(showtime.purchase_url);
-              return {
-                ...showtime,
-                purchase_url: direct_url,
-              };
-            }
-            return showtime;
-          })
-        );
+      for (const [day, cinema_showtimes] of Object.entries(parsed_movie.showtimes_by_day)) {
+        processed_showtimes_by_day[day] = {};
+
+        for (const [cinema_name, showtimes] of Object.entries(cinema_showtimes)) {
+          processed_showtimes_by_day[day][cinema_name] = await Promise.all(
+            showtimes.map(async (showtime) => {
+              // Only process URLs that are redirect URLs
+              if (showtime.purchase_url.includes("showtime_redirect.php")) {
+                const direct_url = await extract_direct_url(showtime.purchase_url);
+                return {
+                  ...showtime,
+                  purchase_url: direct_url,
+                };
+              }
+              return showtime;
+            })
+          );
+        }
       }
 
       return {
         ...parsed_movie,
-        cinema_showtimes: processed_cinema_showtimes,
+        showtimes_by_day: processed_showtimes_by_day,
       };
     }
 
@@ -142,10 +146,31 @@ async function main() {
     }
   }
 
-  console.log(`Scraped ${movies.length} valid movies. Processing posters...`);
+  console.log(`Scraped ${movies.length} valid movies. Fetching external URLs from Wikidata...`);
+
+  // Fetch RT and Metacritic URLs from Wikidata
+  const moviesWithUrls = await Promise.all(
+    movies.map(async (movie) => {
+      if (!movie.imdb?.link) return movie;
+
+      const imdbId = movie.imdb.link.match(/tt\d+/)?.[0];
+      if (!imdbId) return movie;
+
+      await delay(100); // Rate limit Wikidata requests
+      const { rtUrl, mcUrl } = await fetch_external_urls(imdbId);
+
+      return {
+        ...movie,
+        rotten_tomatoes: movie.rotten_tomatoes ? { ...movie.rotten_tomatoes, url: rtUrl } : undefined,
+        metacritic: movie.metacritic ? { ...movie.metacritic, url: mcUrl } : undefined,
+      };
+    })
+  );
+
+  console.log(`Fetched external URLs. Processing posters...`);
 
   // Process posters (can be done in parallel since they're different URLs)
-  const moviesWithPosters = await Promise.all(movies.map(processMoviePoster));
+  const moviesWithPosters = await Promise.all(moviesWithUrls.map(processMoviePoster));
 
   console.log(`Processed ${moviesWithPosters.length} movies. Writing movies.json...`);
   await fs.writeFile(path.resolve(__dirname, "../static/movies.json"), JSON.stringify(moviesWithPosters, null, 2));

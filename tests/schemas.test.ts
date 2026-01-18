@@ -35,8 +35,10 @@ describe("movie_schema", () => {
     genres: ["Action", "Comedy"],
     duration_in_mins: 120,
     language: ["English"],
-    cinema_showtimes: {
-      "Test Cinema": [{ time: "2024-01-01T20:30:00.000Z", purchase_url: "https://example.com/buy", hall: "Hall 1" }],
+    showtimes_by_day: {
+      "0": {
+        "Test Cinema": [{ time: "2024-01-01T20:30:00.000Z", purchase_url: "https://example.com/buy", hall: "Hall 1" }],
+      },
     },
   };
 
