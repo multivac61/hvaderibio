@@ -21,7 +21,27 @@
   // Day selection from shared state
   const selected_day = $derived(dayState.value ?? "0");
   let play_trailer = $state(false);
-  const available_days = $derived(Object.keys(movie.showtimes_by_day).sort());
+  // Always show days 0-3 for consistent UI
+  const available_days = ["0", "1", "2", "3"];
+
+  // Day selector slider
+  let day_buttons: HTMLButtonElement[] = $state([]);
+  let slider_style = $state("width: 0; left: 0; opacity: 0;");
+  let slider_animated = $state(false);
+
+  $effect(() => {
+    const idx = parseInt(selected_day);
+    const btn = day_buttons[idx];
+    if (btn) {
+      slider_style = `width: ${btn.offsetWidth}px; left: ${btn.offsetLeft}px; opacity: 1;`;
+      // Enable animation after first position is set
+      if (!slider_animated) {
+        requestAnimationFrame(() => {
+          slider_animated = true;
+        });
+      }
+    }
+  });
 
   const updateDay = (day: string) => {
     dayState.set(day);
@@ -79,7 +99,7 @@
       <div>
         <h1 class="text-2xl font-bold text-balance text-white md:text-3xl">{movie.title}</h1>
 
-        <!-- Meta row: year, duration, genres -->
+        <!-- Meta info: year, duration, genres + ratings on desktop -->
         <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-500">
           <span>{movie.release_year}</span>
           <span>·</span>
@@ -88,24 +108,74 @@
             <span>·</span>
             <span>{movie.genres.slice(0, 2).join(", ")}</span>
           {/if}
+          <!-- Ratings inline on desktop -->
+          <!-- eslint-disable svelte/no-navigation-without-resolve -->
+          {#if movie.imdb}
+            <span class="hidden md:inline">·</span>
+            <a
+              href={movie.imdb.link}
+              target="_blank"
+              rel="external noopener noreferrer"
+              class="hidden items-center gap-1 text-neutral-500 hover:text-white md:inline-flex">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 32" width="28" height="14" class="fill-[#F5C518]">
+                <rect rx="3" width="64" height="32" />
+                <text x="32" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#000"
+                  >IMDb</text>
+              </svg>
+              <span>{movie.imdb.star}</span>
+            </a>
+          {/if}
+          {#if movie.rotten_tomatoes}
+            <span class="hidden md:inline">·</span>
+            <a
+              href={movie.rotten_tomatoes.url ??
+                `https://www.rottentomatoes.com/search?search=${encodeURIComponent(movie.alt_title || movie.title)}`}
+              target="_blank"
+              rel="external noopener noreferrer"
+              class="hidden items-center gap-1 text-neutral-500 hover:text-white md:inline-flex">
+              <img src="/rotten-tomatoes.svg" alt="RT" width="14" height="14" />
+              <span>{movie.rotten_tomatoes.score}%</span>
+            </a>
+          {/if}
+          {#if movie.metacritic}
+            <span class="hidden md:inline">·</span>
+            <a
+              href={movie.metacritic.url ?? `https://www.metacritic.com/search/${encodeURIComponent(movie.alt_title || movie.title)}/`}
+              target="_blank"
+              rel="external noopener noreferrer"
+              class="hidden items-center gap-1 text-neutral-500 hover:text-white md:inline-flex">
+              <img src="/metacritic.svg" alt="MC" width="14" height="14" />
+              <span>{movie.metacritic.score}</span>
+            </a>
+          {/if}
+          {#if movie.letterboxd?.score}
+            <span class="hidden md:inline">·</span>
+            <a
+              href={movie.letterboxd.url ?? `https://letterboxd.com/search/${encodeURIComponent(movie.alt_title || movie.title)}/`}
+              target="_blank"
+              rel="external noopener noreferrer"
+              class="hidden items-center gap-1 text-neutral-500 hover:text-white md:inline-flex">
+              <img src="/letterboxd.svg" alt="LB" width="14" height="14" />
+              <span>{movie.letterboxd.score}</span>
+            </a>
+          {/if}
         </div>
 
-        <!-- Ratings -->
-        <!-- eslint-disable svelte/no-navigation-without-resolve -->
-        {#if movie.imdb || movie.rotten_tomatoes || movie.metacritic}
-          <div class="mt-3 flex items-center gap-4 text-sm">
+        <!-- Ratings row - mobile only -->
+        {#if movie.imdb || movie.rotten_tomatoes || movie.metacritic || movie.letterboxd}
+          <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-neutral-500 md:hidden">
             {#if movie.imdb}
               <a
                 href={movie.imdb.link}
                 target="_blank"
                 rel="external noopener noreferrer"
-                class="flex items-center gap-1 text-neutral-400 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 32" width="32" height="16" class="fill-[#F5C518]">
+                class="inline-flex items-center gap-1 text-neutral-500 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 32" width="28" height="14" class="fill-[#F5C518]">
                   <rect rx="3" width="64" height="32" />
                   <text x="32" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#000"
                     >IMDb</text>
                 </svg>
-                <span class="font-medium">{movie.imdb.star}</span>
+                <span>{movie.imdb.star}</span>
               </a>
             {/if}
             {#if movie.rotten_tomatoes}
@@ -114,9 +184,12 @@
                   `https://www.rottentomatoes.com/search?search=${encodeURIComponent(movie.alt_title || movie.title)}`}
                 target="_blank"
                 rel="external noopener noreferrer"
-                class="flex items-center gap-1 text-neutral-400 hover:text-white">
-                <img src="/rotten-tomatoes.svg" alt="RT" width="16" height="16" />
-                <span class="font-medium">{movie.rotten_tomatoes.score}%</span>
+                class="inline-flex items-center gap-1 text-neutral-500 hover:text-white">
+                <img src="/rotten-tomatoes.svg" alt="RT" width="14" height="14" />
+                <span>{movie.rotten_tomatoes.score}%</span>
+                {#if movie.rotten_tomatoes.audience_score}
+                  <span class="text-neutral-600">({movie.rotten_tomatoes.audience_score}%)</span>
+                {/if}
               </a>
             {/if}
             {#if movie.metacritic}
@@ -124,9 +197,22 @@
                 href={movie.metacritic.url ?? `https://www.metacritic.com/search/${encodeURIComponent(movie.alt_title || movie.title)}/`}
                 target="_blank"
                 rel="external noopener noreferrer"
-                class="flex items-center gap-1 text-neutral-400 hover:text-white">
-                <img src="/metacritic.svg" alt="MC" width="16" height="16" />
-                <span class="font-medium">{movie.metacritic.score}</span>
+                class="inline-flex items-center gap-1 text-neutral-500 hover:text-white">
+                <img src="/metacritic.svg" alt="MC" width="14" height="14" />
+                <span>{movie.metacritic.score}</span>
+                {#if movie.metacritic.user_score}
+                  <span class="text-neutral-600">({movie.metacritic.user_score})</span>
+                {/if}
+              </a>
+            {/if}
+            {#if movie.letterboxd?.score}
+              <a
+                href={movie.letterboxd.url ?? `https://letterboxd.com/search/${encodeURIComponent(movie.alt_title || movie.title)}/`}
+                target="_blank"
+                rel="external noopener noreferrer"
+                class="inline-flex items-center gap-1 text-neutral-500 hover:text-white">
+                <img src="/letterboxd.svg" alt="LB" width="14" height="14" />
+                <span>{movie.letterboxd.score}</span>
               </a>
             {/if}
           </div>
@@ -148,7 +234,14 @@
               class="h-full w-full"></iframe>
           {:else}
             <button type="button" onclick={() => (play_trailer = true)} class="group relative h-full w-full cursor-pointer">
-              <img src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg" alt="Trailer" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover" />
+              <img
+                src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg"
+                alt="Trailer"
+                width="1280"
+                height="720"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover" />
               <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
                   <svg class="ml-0.5 h-5 w-5 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
@@ -164,15 +257,21 @@
       <!-- Showtimes -->
       {#if available_days.length > 0}
         <div class="pt-2">
-          <div class="mb-4 flex items-center gap-1.5">
-            <div class="flex items-center gap-1">
-              {#each available_days as day (day)}
+          <div class="mb-6 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <div class="relative flex shrink-0 items-center rounded-full bg-neutral-800 p-1">
+              <!-- Sliding indicator -->
+              <div
+                class="absolute h-[calc(100%-8px)] rounded-full bg-white {slider_animated ? 'transition-all duration-300 ease-out' : ''}"
+                style={slider_style}>
+              </div>
+              {#each available_days as day, i (day)}
                 <button
+                  bind:this={day_buttons[i]}
                   type="button"
                   onclick={() => updateDay(day)}
-                  class="rounded-full px-3 py-1 text-xs font-medium transition-all duration-200 {selected_day === day
-                    ? 'bg-white text-neutral-900 scale-105 shadow-md'
-                    : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700 hover:text-neutral-200 hover:scale-102'}">
+                  class="relative z-10 rounded-full px-3 py-1 text-xs font-medium transition-colors duration-200 {selected_day === day
+                    ? 'text-neutral-900'
+                    : 'text-neutral-400 hover:text-neutral-200'}">
                   {get_day_label(day)}
                 </button>
               {/each}
@@ -181,10 +280,10 @@
               <button
                 type="button"
                 onclick={() => cinemaState.set(DEFAULT_CINEMA_CHOICE)}
-                class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-neutral-800 py-1 pr-1.5 pl-3 text-xs font-medium text-neutral-300 transition-colors hover:bg-neutral-700 hover:text-white">
-                <span class="truncate">{selected_choice}</span>
-                <span class="flex h-4 w-4 items-center justify-center rounded-full bg-neutral-700 transition-colors hover:bg-neutral-600">
-                  <svg class="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                class="inline-flex items-center gap-1.5 rounded-full bg-neutral-800 py-1 pr-1.5 pl-3 text-xs font-medium text-neutral-300 transition-colors hover:bg-neutral-700 hover:text-white">
+                <span class="max-w-[120px] truncate">{selected_choice}</span>
+                <span class="flex h-4 w-4 items-center justify-center rounded-full bg-neutral-600 transition-colors hover:bg-neutral-500">
+                  <svg class="h-2.5 w-2.5 text-neutral-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </span>
@@ -220,11 +319,11 @@
                             <span class="absolute -top-1.5 -right-1.5 flex gap-0.5">
                               {#if is_icelandic}
                                 <svg class="h-2.5 w-3" viewBox="0 0 25 18" fill="none">
-                                  <rect width="25" height="18" fill="#003897"/>
-                                  <rect x="7" width="4" height="18" fill="#fff"/>
-                                  <rect y="7" width="25" height="4" fill="#fff"/>
-                                  <rect x="8" width="2" height="18" fill="#D72828"/>
-                                  <rect y="8" width="25" height="2" fill="#D72828"/>
+                                  <rect width="25" height="18" fill="#003897" />
+                                  <rect x="7" width="4" height="18" fill="#fff" />
+                                  <rect y="7" width="25" height="4" fill="#fff" />
+                                  <rect x="8" width="2" height="18" fill="#D72828" />
+                                  <rect y="8" width="25" height="2" fill="#D72828" />
                                 </svg>
                               {/if}
                               {#if is_3d}
