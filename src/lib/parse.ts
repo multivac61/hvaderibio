@@ -1,124 +1,140 @@
 import { movie_schema, cinema_showtimes_schema, type CinemaShowtimes, type ShowtimesByDay } from "./schemas";
 
 function combineDateWithTime(hour_minute: string, dayOffset: number = 0): string {
-  const [hours, minutes] = hour_minute.split(":");
+  // Handle both "15:10" and "15.10" formats
+  const normalized = hour_minute.replace(".", ":");
+  const [hours, minutes] = normalized.split(":");
 
   const date = new Date();
   date.setDate(date.getDate() + dayOffset);
-  date.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+  date.setHours(parseInt(hours), parseInt(minutes || "0"), 0, 0);
   return date.toISOString();
 }
 
 export function parse_movie(document: Document, id: number) {
-  const match = document.querySelector<HTMLImageElement>("div.trailer_play_item > img")?.src?.match(/\/vi\/(.+?)\//);
+  // New structure uses mp-hero classes
+  const heroTitle = document.querySelector<HTMLHeadingElement>("h1.mp-hero__title");
+  const title = heroTitle?.childNodes[0]?.textContent?.trim();
 
-  const rating_urls: string[] = [];
-  document.querySelectorAll<HTMLAnchorElement>("div.movie-ratings > div.rating-box > a").forEach((a) => {
-    rating_urls.push(a.href.trim());
-  });
+  // Year is in span inside h1 or in mp-hero__year
+  const yearText = document.querySelector<HTMLSpanElement>("span.mp-hero__year")?.textContent?.trim();
+  const release_year = parseInt(yearText?.replace(/[()]/g, "") ?? "0");
 
-  const description =
-    document.querySelector<HTMLParagraphElement>("p.description.fullplot")?.textContent?.replace("...  minna", "").trim() ??
-    document.querySelector<HTMLParagraphElement>("p.description")?.textContent?.trim();
+  // Poster URL from hero section
+  const posterImg = document.querySelector<HTMLImageElement>("div.mp-hero__poster img");
+  const poster_url = posterImg?.src;
 
-  // Extract IMDb info
+  // Description from tagline
+  const description = document.querySelector<HTMLParagraphElement>("p.mp-hero__tagline")?.textContent?.trim() ?? "";
+
+  // Genres
+  const genres = [...document.querySelectorAll<HTMLAnchorElement>("a.mp-genres__tag")].map((a) => a.textContent?.trim() ?? "");
+
+  // Duration - format is "X klst Y mín" or just "Y mín"
+  const runtimeText = document.querySelector<HTMLSpanElement>("span.mp-hero__runtime")?.textContent?.trim() ?? "";
+  let duration_in_mins = 0;
+  const hoursMatch = runtimeText.match(/(\d+)\s*klst/);
+  const minsMatch = runtimeText.match(/(\d+)\s*mín/);
+  if (hoursMatch) duration_in_mins += parseInt(hoursMatch[1]) * 60;
+  if (minsMatch) duration_in_mins += parseInt(minsMatch[1]);
+
+  // Trailer URL from hero button
+  const trailerLink = document.querySelector<HTMLAnchorElement>("a.mp-hero__btn--primary[href*='youtube']");
+  const trailer_url = trailerLink?.href;
+
+  // Ratings from hero section
   let imdb: { link: string; star: number } | undefined;
-  const imdbBox = [...document.querySelectorAll("div.rating-box")].find((box) => box.innerHTML.includes("imdb.com"));
-  if (imdbBox) {
-    const link = imdbBox.querySelector<HTMLAnchorElement>("a")?.href?.trim();
-    const starText = imdbBox.querySelector(".imdb-rating strong")?.textContent?.trim();
-    if (link && starText) {
-      const star = parseFloat(starText);
-      if (!isNaN(star)) {
+  let rotten_tomatoes: { score: number } | undefined;
+  let metacritic: { score: number } | undefined;
+
+  document.querySelectorAll<HTMLDivElement>("div.mp-hero__rating-item").forEach((item) => {
+    const img = item.querySelector("img");
+    const scoreEl = item.querySelector<HTMLSpanElement>("span.mp-hero__rating-score");
+    const scoreText = scoreEl?.textContent?.trim() ?? "";
+    const link = item.querySelector<HTMLAnchorElement>("a")?.href;
+
+    if (img?.alt?.toLowerCase().includes("imdb")) {
+      const star = parseFloat(scoreText);
+      if (!isNaN(star) && link) {
         imdb = { link, star };
       }
+    } else if (img?.alt?.toLowerCase().includes("rotten")) {
+      const score = parseInt(scoreText.replace("%", ""));
+      if (!isNaN(score)) {
+        rotten_tomatoes = { score };
+      }
+    } else if (img?.alt?.toLowerCase().includes("metacritic")) {
+      const score = parseInt(scoreText);
+      if (!isNaN(score)) {
+        metacritic = { score };
+      }
     }
-  }
+  });
 
-  // Extract Rotten Tomatoes score
-  let rotten_tomatoes: { score: number } | undefined;
-  const rtBox = [...document.querySelectorAll("div.rating-box")].find((box) => box.innerHTML.includes("Rottentomatoes"));
-  if (rtBox) {
-    const scoreText = rtBox.querySelector("strong")?.textContent?.trim();
-    const scoreMatch = scoreText?.match(/(\d+)/);
-    if (scoreMatch) {
-      rotten_tomatoes = { score: parseInt(scoreMatch[1]) };
-    }
-  }
-
-  // Extract Metacritic score
-  let metacritic: { score: number } | undefined;
-  const mcBox = [...document.querySelectorAll("div.rating-box")].find((box) => box.innerHTML.includes("Metacritic"));
-  if (mcBox) {
-    const scoreText = mcBox.querySelector("strong")?.textContent?.trim();
-    const scoreMatch = scoreText?.match(/(\d+)/);
-    if (scoreMatch) {
-      metacritic = { score: parseInt(scoreMatch[1]) };
+  // Also check external links section for IMDb if not found in ratings
+  if (!imdb) {
+    const imdbLink = document.querySelector<HTMLAnchorElement>("a.mp-external-links__item[href*='imdb.com']");
+    if (imdbLink) {
+      imdb = { link: imdbLink.href, star: 0 };
     }
   }
 
   const parsed = movie_schema.safeParse({
-    title: document.querySelector<HTMLHeadElement>("h1")?.firstChild?.textContent?.trim(),
-    alt_title: document.querySelector<HTMLHeadElement>("h4")?.textContent?.replace(/\(|\)/g, ""),
-    release_year: parseInt(document?.querySelector<HTMLSpanElement>("span.year")?.textContent?.trim() ?? "0"),
-    poster_url: document.querySelector<HTMLAnchorElement>("div.poster > a")?.href?.trim(),
-    rating_urls,
-    content_rating: document.querySelector("span.certtext")?.textContent?.trim(),
+    title,
+    alt_title: undefined, // Alt title not visible in new design
+    release_year,
+    poster_url,
+    rating_urls: [],
+    content_rating: undefined,
     description,
-    genres: [...document.querySelectorAll("div.genres span")].map((genre) => genre?.textContent ?? ""),
-    duration_in_mins: parseInt(document.querySelector("span.duration")?.textContent?.replace("mín", "").replace("MÍN", "").trim() ?? "0"),
-    language: [...document.querySelectorAll("div.combined_details > span:nth-child(2)")].map((l) => l?.textContent?.trim() ?? ""),
+    genres,
+    duration_in_mins,
+    language: [],
     showtimes_by_day: parse_showtimes_by_day(document),
-    trailer_url: match ? `https://www.youtube.com/watch?v=${match[1]}` : undefined,
+    trailer_url,
     id,
     imdb,
     rotten_tomatoes,
     metacritic,
   });
+
+  if (!parsed.success) {
+    console.error(`Failed to parse movie ${id}:`, parsed.error.issues);
+  }
   return parsed.success ? parsed.data : null;
 }
 
 function parse_showtimes_for_day(document: Document, dayIndex: number): CinemaShowtimes {
   const cinema_showtimes: CinemaShowtimes = {};
-  document.querySelectorAll<HTMLDivElement>(`div.times_day.day${dayIndex} div.biotimar`).forEach((cinema) => {
-    const cinema_name = cinema.querySelector<HTMLHeadElement>("h3")?.textContent?.trim() ?? "";
 
-    cinema_showtimes[cinema_name] = [...cinema.querySelectorAll<HTMLLIElement>("li.qtip.tip-top")].map((showtime) => {
-      const rateLink = showtime.querySelector<HTMLAnchorElement>("a.rate");
-      const salurDiv = showtime.querySelector<HTMLDivElement>("div.salur");
+  // New structure: div.mp-showtimes__day[data-date="X"] contains cinemas
+  const dayContainer = document.querySelector<HTMLDivElement>(`div.mp-showtimes__day[data-date="${dayIndex}"]`);
+  if (!dayContainer) return cinema_showtimes;
+
+  dayContainer.querySelectorAll<HTMLDivElement>("div.mp-showtimes__cinema").forEach((cinema) => {
+    const cinema_name = cinema.querySelector<HTMLSpanElement>("span.mp-showtimes__cinema-name")?.textContent?.trim() ?? "";
+    if (!cinema_name) return;
+
+    const showtimes = [...cinema.querySelectorAll<HTMLAnchorElement>("a.mp-showtimes__time")].map((showtime) => {
+      const timeText = showtime.querySelector<HTMLSpanElement>("span.mp-showtimes__time-value")?.textContent?.trim() ?? "";
+      const purchase_url = showtime.href ?? "";
+
+      // Check for special attributes in the showtime or class
       const showtimeText = showtime.textContent?.toUpperCase() ?? "";
-      const showtimeHtml = showtime.innerHTML?.toUpperCase() ?? "";
+      const showtimeClass = showtime.className?.toUpperCase() ?? "";
 
-      const hall = salurDiv?.firstChild?.textContent?.trim() ?? "";
-      const hallUpper = hall.toUpperCase();
-
-      // Check for Icelandic dubbed: look for "ÍSL TAL" text or Icelandic flag image
-      const hasIcelandicFlag = showtime.querySelector('img[src*="flag"]') !== null;
-      const is_icelandic = showtimeText.includes("ÍSL TAL") || showtimeText.includes("ÍSL. TAL") || hasIcelandicFlag;
-
-      // Check for 3D
-      const is_3d = showtimeText.includes("3D") || showtimeHtml.includes("3D");
-
-      // Check for LÚXUS (premium seating) - check both text and hall name
-      const is_luxus =
-        showtimeText.includes("LÚXUS") || showtimeText.includes("LÚX") || hallUpper.includes("LÚXUS") || hallUpper.includes("LÚX");
-
-      // Check for VIP - check both text and hall name
-      const is_vip = showtimeText.includes("VIP") || hallUpper.includes("VIP");
-
-      // Check for ÁSBERG (Dolby Atmos) - check both text and hall name
-      const is_atmos = showtimeText.includes("ÁSBERG") || showtimeText.includes("ATMOS") || hallUpper.includes("ÁSBERG");
-
-      // Check for MAX (large format) - check both text and hall name
-      const is_max = showtimeText.includes("MAX") || hallUpper === "MAX";
-
-      // Check for FLAUEL (premium velvet seating)
-      const is_flauel = showtimeText.includes("FLAUEL") || hallUpper.includes("FLAUEL");
+      const is_icelandic = showtimeText.includes("ÍSL TAL") || showtimeText.includes("ÍSL. TAL");
+      const is_3d = showtimeText.includes("3D") || showtimeClass.includes("3D");
+      const is_luxus = showtimeText.includes("LÚXUS") || showtimeText.includes("LÚX");
+      const is_vip = showtimeText.includes("VIP");
+      const is_atmos = showtimeText.includes("ÁSBERG") || showtimeText.includes("ATMOS");
+      const is_max = showtimeText.includes("MAX");
+      const is_flauel = showtimeText.includes("FLAUEL");
 
       return {
-        time: combineDateWithTime(rateLink?.firstChild?.textContent?.replace(".", ":") ?? "", dayIndex),
-        purchase_url: rateLink ? decodeURI(rateLink.href).trim() : "",
-        hall,
+        time: combineDateWithTime(timeText, dayIndex),
+        purchase_url,
+        hall: "",
         is_icelandic: is_icelandic || undefined,
         is_3d: is_3d || undefined,
         is_luxus: is_luxus || undefined,
@@ -128,7 +144,12 @@ function parse_showtimes_for_day(document: Document, dayIndex: number): CinemaSh
         is_flauel: is_flauel || undefined,
       };
     });
+
+    if (showtimes.length > 0) {
+      cinema_showtimes[cinema_name] = showtimes;
+    }
   });
+
   return cinema_showtimes_schema.parse(cinema_showtimes);
 }
 
