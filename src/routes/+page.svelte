@@ -11,8 +11,8 @@
   const movies = $derived(data.movies);
   const cinema_options = $derived(data.cinema_options);
 
-  // Get all available days from movies
-  const available_days = $derived([...new Set(movies.flatMap((m) => Object.keys(m.showtimes_by_day)))].sort());
+  // Always show days 0-3 for consistent UI
+  const available_days = ["0", "1", "2", "3"];
 
   const get_day_label = (day: string) => {
     // eslint-disable-next-line svelte/prefer-svelte-reactivity
@@ -55,6 +55,38 @@
   const selected_choice = $derived(cinemaState.value ?? DEFAULT_CINEMA_CHOICE);
   const selected_cinemas = $derived(get_cinemas_for_choice(selected_choice, cinema_options));
   const selected_day = $derived(dayState.value ?? "0");
+
+  // Day selector slider (desktop)
+  let day_buttons: HTMLButtonElement[] = $state([]);
+  let slider_style = $state("width: 0; left: 0; opacity: 0;");
+  let slider_animated = $state(false);
+
+  // Day selector slider (mobile)
+  let day_buttons_mobile: HTMLButtonElement[] = $state([]);
+  let slider_style_mobile = $state("width: 0; left: 0; opacity: 0;");
+  let slider_animated_mobile = $state(false);
+
+  $effect(() => {
+    const idx = parseInt(selected_day);
+    const btn = day_buttons[idx];
+    if (btn) {
+      slider_style = `width: ${btn.offsetWidth}px; left: ${btn.offsetLeft}px; opacity: 1;`;
+      if (!slider_animated) {
+        requestAnimationFrame(() => {
+          slider_animated = true;
+        });
+      }
+    }
+    const btnMobile = day_buttons_mobile[idx];
+    if (btnMobile) {
+      slider_style_mobile = `width: ${btnMobile.offsetWidth}px; left: ${btnMobile.offsetLeft}px; opacity: 1;`;
+      if (!slider_animated_mobile) {
+        requestAnimationFrame(() => {
+          slider_animated_mobile = true;
+        });
+      }
+    }
+  });
 
   const updateCinema = (choiceLabel: string) => {
     cinemaState.set(choiceLabel);
@@ -108,23 +140,10 @@
 </svelte:head>
 
 <header class="relative hidden sm:my-8 sm:block">
-  <h1 class="mb-4 bg-clip-text text-center text-5xl text-pretty accent-cyan-50">Hvað er í bíó? 🍿</h1>
+  <h1 class="mb-4 text-center text-5xl tracking-tight text-pretty" style="font-family: 'Space Grotesk', sans-serif;">Hvað er í bíó? 🍿</h1>
   <div class="mx-auto sm:block md:max-w-2xl lg:max-w-3xl">
-    <!-- Day selection -->
-    <div class="mb-3 flex justify-center gap-1">
-      {#each available_days as day (day)}
-        <button
-          type="button"
-          onclick={() => updateDay(day)}
-          class="rounded-full px-3 py-1 text-xs font-medium transition-all duration-200 {selected_day === day
-            ? 'bg-white text-neutral-900 scale-105 shadow-md'
-            : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700 hover:text-neutral-200'}">
-          {get_day_label(day)}
-        </button>
-      {/each}
-    </div>
     <!-- Cinema selection -->
-    <div class="flex flex-wrap justify-center gap-1.5 md:gap-2">
+    <div class="mb-5 flex flex-wrap justify-center gap-1.5 md:gap-2">
       {#each cinema_options as [label] (label)}
         <button
           type="button"
@@ -140,25 +159,33 @@
         </button>
       {/each}
     </div>
+    <!-- Day selection -->
+    <div class="flex justify-center">
+      <div class="relative flex items-center rounded-full bg-neutral-800 p-1">
+        <!-- Sliding indicator -->
+        <div
+          class="absolute h-[calc(100%-8px)] rounded-full bg-white {slider_animated ? 'transition-all duration-300 ease-out' : ''}"
+          style={slider_style}>
+        </div>
+        {#each available_days as day, i (day)}
+          <button
+            bind:this={day_buttons[i]}
+            type="button"
+            onclick={() => updateDay(day)}
+            class="relative z-10 rounded-full px-3 py-1 text-xs font-medium transition-colors duration-200 {selected_day === day
+              ? 'text-neutral-900'
+              : 'text-neutral-400 hover:text-neutral-200'}">
+            {get_day_label(day)}
+          </button>
+        {/each}
+      </div>
+    </div>
   </div>
 </header>
 
 <header class="relative">
   <div class="fixed inset-x-0 bottom-0 z-40 w-full px-4 pb-4 sm:hidden">
     <div class="flex flex-col gap-2">
-      <!-- Day pills -->
-      <div class="flex justify-center gap-1">
-        {#each available_days as day (day)}
-          <button
-            type="button"
-            onclick={() => updateDay(day)}
-            class="rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 {selected_day === day
-              ? 'bg-white text-neutral-900 scale-105 shadow-md'
-              : 'bg-neutral-800/90 text-neutral-400'}">
-            {get_day_label(day)}
-          </button>
-        {/each}
-      </div>
       <!-- Cinema dropdown -->
       <div class="flex justify-center">
         <div class="relative">
@@ -169,16 +196,16 @@
             name="select cinemas mobile"
             aria-label="Veldu kvikmyndahús"
             class="appearance-none rounded-full border border-neutral-700/50 bg-neutral-900/95 py-2 pr-8 pl-4 text-center text-sm text-neutral-100 shadow-lg focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 focus:outline-none">
-          {#each cinema_options as [label] (label)}
-            <option
-              value={label}
-              id={`option-${label}`}
-              aria-label={label}
-              selected={label === selected_choice}
-              class="bg-neutral-800 text-center text-white">
-              {label}
-            </option>
-          {/each}
+            {#each cinema_options as [label] (label)}
+              <option
+                value={label}
+                id={`option-${label}`}
+                aria-label={label}
+                selected={label === selected_choice}
+                class="bg-neutral-800 text-center text-white">
+                {label}
+              </option>
+            {/each}
           </select>
           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <svg
@@ -193,6 +220,29 @@
                 clip-rule="evenodd" />
             </svg>
           </div>
+        </div>
+      </div>
+      <!-- Day pills -->
+      <div class="flex justify-center">
+        <div class="relative flex items-center rounded-full bg-neutral-800/90 p-1">
+          <!-- Sliding indicator -->
+          <div
+            class="absolute h-[calc(100%-8px)] rounded-full bg-white shadow-md {slider_animated_mobile
+              ? 'transition-all duration-300 ease-out'
+              : ''}"
+            style={slider_style_mobile}>
+          </div>
+          {#each available_days as day, i (day)}
+            <button
+              bind:this={day_buttons_mobile[i]}
+              type="button"
+              onclick={() => updateDay(day)}
+              class="relative z-10 rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-200 {selected_day === day
+                ? 'text-neutral-900'
+                : 'text-neutral-400'}">
+              {get_day_label(day)}
+            </button>
+          {/each}
         </div>
       </div>
     </div>
