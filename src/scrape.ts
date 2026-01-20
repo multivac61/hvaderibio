@@ -9,11 +9,13 @@ import type { Movie, Showtime } from "$lib/schemas";
 import {
   parse_movie,
   parse_movie_ids,
+  parse_hall_info_from_listing,
   extract_direct_url,
   fetch_external_urls,
   scrape_rotten_tomatoes,
   scrape_metacritic,
   scrape_letterboxd,
+  type HallInfo,
 } from "$lib/parse";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -136,10 +138,48 @@ async function processMoviePoster(movie: Movie): Promise<Movie> {
   }
 }
 
+// Merge hall info from listing page with movie showtimes
+function mergeHallInfo(movie: Movie, hallInfoMap: Map<string, HallInfo>): Movie {
+  const updatedShowtimesByDay: Record<string, Record<string, Showtime[]>> = {};
+
+  for (const [day, cinemaShowtimes] of Object.entries(movie.showtimes_by_day)) {
+    updatedShowtimesByDay[day] = {};
+
+    for (const [cinemaName, showtimes] of Object.entries(cinemaShowtimes)) {
+      updatedShowtimesByDay[day][cinemaName] = showtimes.map((showtime) => {
+        const hallInfo = hallInfoMap.get(showtime.purchase_url);
+        if (hallInfo) {
+          return {
+            ...showtime,
+            hall: hallInfo.hall || showtime.hall,
+            is_icelandic: hallInfo.is_icelandic || showtime.is_icelandic,
+            is_3d: hallInfo.is_3d || showtime.is_3d,
+            is_luxus: hallInfo.is_luxus || showtime.is_luxus,
+            is_vip: hallInfo.is_vip || showtime.is_vip,
+            is_atmos: hallInfo.is_atmos || showtime.is_atmos,
+            is_max: hallInfo.is_max || showtime.is_max,
+            is_flauel: hallInfo.is_flauel || showtime.is_flauel,
+          };
+        }
+        return showtime;
+      });
+    }
+  }
+
+  return {
+    ...movie,
+    showtimes_by_day: updatedShowtimesByDay,
+  };
+}
+
 async function main() {
   const showtimesResponse = await fetch("https://www.kvikmyndir.is/bio/syningatimar", { headers });
   const html = await showtimesResponse.text();
   const { document } = parseHTML(html);
+
+  // Parse hall info from listing page (contains Flauel, Lúxus, VIP, Ásberg, etc.)
+  const hallInfoMap = parse_hall_info_from_listing(document);
+  console.log(`Parsed hall info for ${hallInfoMap.size} showtimes`);
 
   const movieIds = parse_movie_ids(document);
   console.log(`Found ${movieIds.length} movies to scrape`);
@@ -150,7 +190,9 @@ async function main() {
     await delay(100); // 100ms delay between requests
     const movie = await scrapeMovie(id);
     if (movie) {
-      movies.push(movie);
+      // Merge hall info from listing page with movie showtimes
+      const movieWithHallInfo = mergeHallInfo(movie, hallInfoMap);
+      movies.push(movieWithHallInfo);
     }
   }
 

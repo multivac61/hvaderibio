@@ -24,8 +24,10 @@ export function parse_movie(document: Document, id: number) {
   const posterImg = document.querySelector<HTMLImageElement>("div.mp-hero__poster img");
   const poster_url = posterImg?.src;
 
-  // Description from tagline
-  const description = document.querySelector<HTMLParagraphElement>("p.mp-hero__tagline")?.textContent?.trim() ?? "";
+  // Description from plot section (mp-plot > p), fallback to tagline
+  const plotDescription = document.querySelector<HTMLParagraphElement>("div.mp-plot p")?.textContent?.trim();
+  const taglineDescription = document.querySelector<HTMLParagraphElement>("p.mp-hero__tagline")?.textContent?.trim();
+  const description = plotDescription || taglineDescription || "";
 
   // Genres
   const genres = [...document.querySelectorAll<HTMLAnchorElement>("a.mp-genres__tag")].map((a) => a.textContent?.trim() ?? "");
@@ -119,17 +121,21 @@ function parse_showtimes_for_day(document: Document, dayIndex: number): CinemaSh
       const timeText = showtime.querySelector<HTMLSpanElement>("span.mp-showtimes__time-value")?.textContent?.trim() ?? "";
       const purchase_url = showtime.href ?? "";
 
-      // Check for special attributes in the showtime or class
+      // Check for Icelandic language indicator (new structure uses separate span)
+      const hasLangSpan = showtime.querySelector("span.mp-showtimes__time-lang--is") !== null;
       const showtimeText = showtime.textContent?.toUpperCase() ?? "";
-      const showtimeClass = showtime.className?.toUpperCase() ?? "";
+      const is_icelandic = hasLangSpan || showtimeText.includes("ÍSL");
 
-      const is_icelandic = showtimeText.includes("ÍSL TAL") || showtimeText.includes("ÍSL. TAL");
-      const is_3d = showtimeText.includes("3D") || showtimeClass.includes("3D");
-      const is_luxus = showtimeText.includes("LÚXUS") || showtimeText.includes("LÚX");
-      const is_vip = showtimeText.includes("VIP");
-      const is_atmos = showtimeText.includes("ÁSBERG") || showtimeText.includes("ATMOS");
-      const is_max = showtimeText.includes("MAX");
-      const is_flauel = showtimeText.includes("FLAUEL");
+      // Check for special format types (3D, LÚX, ÁSBERG, etc.)
+      const typeSpan = showtime.querySelector<HTMLSpanElement>("span.mp-showtimes__time-type");
+      const typeText = typeSpan?.textContent?.toUpperCase() ?? "";
+
+      const is_3d = typeText.includes("3D") || showtimeText.includes("3D");
+      const is_luxus = typeText.includes("LÚX") || typeText.includes("LUXUS") || showtimeText.includes("LÚX");
+      const is_vip = typeText.includes("VIP") || showtimeText.includes("VIP");
+      const is_atmos = typeText.includes("ÁSBERG") || typeText.includes("ATMOS") || showtimeText.includes("ÁSBERG");
+      const is_max = typeText.includes("MAX") || showtimeText.includes("MAX");
+      const is_flauel = typeText.includes("FLAUEL") || showtimeText.includes("FLAUEL");
 
       return {
         time: combineDateWithTime(timeText, dayIndex),
@@ -201,6 +207,63 @@ export function parse_movie_ids(document: Document): number[] {
       return match ? parseInt(match[0]) : null;
     })
     .filter((id): id is number => id !== null);
+}
+
+// Parse hall info from the showtimes listing page (/bio/syningatimar/)
+// Returns a map of purchase_url -> hall attributes
+export interface HallInfo {
+  hall: string;
+  is_icelandic?: boolean;
+  is_luxus?: boolean;
+  is_vip?: boolean;
+  is_atmos?: boolean;
+  is_max?: boolean;
+  is_flauel?: boolean;
+  is_3d?: boolean;
+}
+
+export function parse_hall_info_from_listing(document: Document): Map<string, HallInfo> {
+  const hallInfoMap = new Map<string, HallInfo>();
+
+  // Find all showtime links in the listing page
+  document.querySelectorAll<HTMLAnchorElement>("a.rate.tooltip").forEach((link) => {
+    const href = link.href;
+    if (!href) return;
+
+    // Extract hall name from <div class="salur">
+    const salurDiv = link.querySelector<HTMLDivElement>("div.salur");
+    const hall = salurDiv?.textContent?.trim() ?? "";
+
+    // Extract language info from <div class="tegund">
+    const tegundDiv = link.querySelector<HTMLDivElement>("div.tegund");
+    const tegundText = tegundDiv?.textContent?.toUpperCase() ?? "";
+    const is_icelandic = tegundText.includes("ÍSL TAL") || tegundText.includes("ÍSL.TAL");
+
+    // Check link text for 3D
+    const linkText = link.textContent?.toUpperCase() ?? "";
+    const is_3d = linkText.includes("3D");
+
+    // Determine special formats based on hall name
+    const hallUpper = hall.toUpperCase();
+    const is_luxus = hallUpper.includes("LÚXUS") || hallUpper.includes("LUX");
+    const is_vip = hallUpper.includes("VIP");
+    const is_atmos = hallUpper.includes("ÁSBERG") || hallUpper.includes("ATMOS");
+    const is_max = hallUpper.includes("MAX");
+    const is_flauel = hallUpper.includes("FLAUEL");
+
+    hallInfoMap.set(href, {
+      hall,
+      is_icelandic: is_icelandic || undefined,
+      is_luxus: is_luxus || undefined,
+      is_vip: is_vip || undefined,
+      is_atmos: is_atmos || undefined,
+      is_max: is_max || undefined,
+      is_flauel: is_flauel || undefined,
+      is_3d: is_3d || undefined,
+    });
+  });
+
+  return hallInfoMap;
 }
 
 // Fetch RT, Metacritic, and Letterboxd URLs from Wikidata using IMDb ID

@@ -13,9 +13,9 @@ export type CapitalRegionCinema = (typeof CAPITAL_REGION_CINEMAS)[number];
 export const CINEMA_URLS: Record<string, string> = {
   "Bíó Paradís": "https://bioparadis.is",
   Háskólabíó: "https://haskolabio.is",
-  Laugarásbíó: "https://laugarasbio.is",
-  "Sambíóin Egilshöll": "https://sambio.is/kinemas/egillsholl",
-  "Sambíóin Kringlunni": "https://sambio.is/kinemas/kringlunni",
-  "Sambíóin Álfabakka": "https://sambio.is/kinemas/alfabakki",
-  Smárabíó: "https://smarabio.is",
+  Laugarásbíó: "https://laugarasbio.is/i-bio",
+  "Sambíóin Egilshöll": "https://www.sambio.is/showtimes",
+  "Sambíóin Kringlunni": "https://www.sambio.is/showtimes",
+  "Sambíóin Álfabakka": "https://www.sambio.is/showtimes",
+  Smárabíó: "https://smarabio.is/bio",
 };
