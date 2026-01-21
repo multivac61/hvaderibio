@@ -258,7 +258,7 @@
   </div>
 {:else}
   <div
-    class="md:md-30 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4">
+    class="md:md-30 -mx-1 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-4">
     {#each filtered_cinemas_showtimes as movie, index (movie.id)}
       {@const handlers = createTouchHandlers(`/movie/${movie.id}`)}
       <div

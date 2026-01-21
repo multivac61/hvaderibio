@@ -40,9 +40,22 @@ export function parse_movie(document: Document, id: number) {
   if (hoursMatch) duration_in_mins += parseInt(hoursMatch[1]) * 60;
   if (minsMatch) duration_in_mins += parseInt(minsMatch[1]);
 
-  // Trailer URL from hero button
-  const trailerLink = document.querySelector<HTMLAnchorElement>("a.mp-hero__btn--primary[href*='youtube']");
-  const trailer_url = trailerLink?.href;
+  // Trailer URL from JSON-LD structured data
+  let trailer_url: string | undefined;
+  const jsonLdScript = document.querySelector<HTMLScriptElement>('script[type="application/ld+json"]');
+  if (jsonLdScript?.textContent) {
+    try {
+      const jsonLd = JSON.parse(jsonLdScript.textContent);
+      if (jsonLd.trailer?.embedUrl) {
+        // Convert embed URL to watch URL for consistency
+        const embedUrl = jsonLd.trailer.embedUrl;
+        const videoId = embedUrl.match(/embed\/([^?&/]+)/)?.[1];
+        trailer_url = videoId ? `https://www.youtube.com/watch?v=${videoId}` : embedUrl;
+      }
+    } catch {
+      // JSON parse failed, trailer will be undefined
+    }
+  }
 
   // Ratings from hero section
   let imdb: { link: string; star: number } | undefined;

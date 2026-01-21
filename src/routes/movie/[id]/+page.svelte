@@ -81,7 +81,7 @@
   <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />
 </svelte:head>
 
-<div class="container mx-auto max-w-7xl px-4 py-4 md:px-8 md:py-8 lg:px-12 lg:py-10">
+<div class="container mx-auto max-w-7xl py-4 md:px-8 md:py-8 lg:px-12 lg:py-10">
   <button
     type="button"
     onclick={() => history.back()}
@@ -99,7 +99,7 @@
         <div class="aspect-video overflow-hidden rounded-md bg-neutral-900 md:hidden">
           <button type="button" onclick={openTrailer} class="group relative h-full w-full cursor-pointer">
             <img
-              src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg"
+              src="https://img.youtube.com/vi/{youtube_id}/hqdefault.jpg"
               alt="Trailer"
               width="1280"
               height="720"
@@ -282,7 +282,7 @@
         <div class="hidden aspect-video overflow-hidden rounded-md bg-neutral-900 md:block">
           <button type="button" onclick={openTrailer} class="group relative h-full w-full cursor-pointer">
             <img
-              src="https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg"
+              src="https://img.youtube.com/vi/{youtube_id}/hqdefault.jpg"
               alt="Trailer"
               width="1280"
               height="720"
@@ -357,7 +357,7 @@
                       <span class="text-sm font-medium text-neutral-300">{cinema}</span>
                     {/if}
                     <div class="flex flex-wrap gap-2">
-                      {#each validTimes as { time, purchase_url, is_icelandic, is_3d, is_luxus, is_vip, is_atmos, is_max, is_flauel } (purchase_url)}
+                      {#each validTimes as { time, purchase_url, is_icelandic, is_3d, is_luxus, is_vip, is_atmos, is_max, is_flauel }, i (`${time}-${i}`)}
                         <a
                           href={purchase_url}
                           target="_blank"
