@@ -47,19 +47,15 @@ describe("parse_showtimes_by_day", () => {
     const html = `
       <html>
         <body>
-          <div class="times_day day0">
-            <div class="biotimar">
-              <h3>Test Cinema</h3>
-              <ul>
-                <li class="qtip tip-top">
-                  <a class="rate" href="https://tickets.example.com/show1">20.30</a>
-                  <div class="salur">Hall 1</div>
-                </li>
-                <li class="qtip tip-top">
-                  <a class="rate" href="https://tickets.example.com/show2">22.00</a>
-                  <div class="salur">Hall 2</div>
-                </li>
-              </ul>
+          <div class="mp-showtimes__day" data-date="0">
+            <div class="mp-showtimes__cinema">
+              <span class="mp-showtimes__cinema-name">Test Cinema</span>
+              <a class="mp-showtimes__time" href="https://tickets.example.com/show1">
+                <span class="mp-showtimes__time-value">20:30</span>
+              </a>
+              <a class="mp-showtimes__time" href="https://tickets.example.com/show2">
+                <span class="mp-showtimes__time-value">22:00</span>
+              </a>
             </div>
           </div>
         </body>
@@ -71,9 +67,7 @@ describe("parse_showtimes_by_day", () => {
     expect(showtimes_by_day["0"]).toBeDefined();
     expect(showtimes_by_day["0"]["Test Cinema"]).toBeDefined();
     expect(showtimes_by_day["0"]["Test Cinema"].length).toBe(2);
-    expect(showtimes_by_day["0"]["Test Cinema"][0].hall).toBe("Hall 1");
     expect(showtimes_by_day["0"]["Test Cinema"][0].purchase_url).toBe("https://tickets.example.com/show1");
-    expect(showtimes_by_day["0"]["Test Cinema"][1].hall).toBe("Hall 2");
   });
 
   test("returns empty object when no showtimes found", () => {
@@ -87,24 +81,18 @@ describe("parse_showtimes_by_day", () => {
     const html = `
       <html>
         <body>
-          <div class="times_day day0">
-            <div class="biotimar">
-              <h3>Cinema A</h3>
-              <ul>
-                <li class="qtip tip-top">
-                  <a class="rate" href="https://tickets.example.com/a1">18.00</a>
-                  <div class="salur">Hall A</div>
-                </li>
-              </ul>
+          <div class="mp-showtimes__day" data-date="0">
+            <div class="mp-showtimes__cinema">
+              <span class="mp-showtimes__cinema-name">Cinema A</span>
+              <a class="mp-showtimes__time" href="https://tickets.example.com/a1">
+                <span class="mp-showtimes__time-value">18:00</span>
+              </a>
             </div>
-            <div class="biotimar">
-              <h3>Cinema B</h3>
-              <ul>
-                <li class="qtip tip-top">
-                  <a class="rate" href="https://tickets.example.com/b1">19.00</a>
-                  <div class="salur">Hall B</div>
-                </li>
-              </ul>
+            <div class="mp-showtimes__cinema">
+              <span class="mp-showtimes__cinema-name">Cinema B</span>
+              <a class="mp-showtimes__time" href="https://tickets.example.com/b1">
+                <span class="mp-showtimes__time-value">19:00</span>
+              </a>
             </div>
           </div>
         </body>
@@ -123,26 +111,20 @@ describe("parse_showtimes_by_day", () => {
     const html = `
       <html>
         <body>
-          <div class="times_day day0">
-            <div class="biotimar">
-              <h3>Cinema A</h3>
-              <ul>
-                <li class="qtip tip-top">
-                  <a class="rate" href="https://tickets.example.com/a1">18.00</a>
-                  <div class="salur">Hall A</div>
-                </li>
-              </ul>
+          <div class="mp-showtimes__day" data-date="0">
+            <div class="mp-showtimes__cinema">
+              <span class="mp-showtimes__cinema-name">Cinema A</span>
+              <a class="mp-showtimes__time" href="https://tickets.example.com/a1">
+                <span class="mp-showtimes__time-value">18:00</span>
+              </a>
             </div>
           </div>
-          <div class="times_day day1">
-            <div class="biotimar">
-              <h3>Cinema A</h3>
-              <ul>
-                <li class="qtip tip-top">
-                  <a class="rate" href="https://tickets.example.com/a2">19.00</a>
-                  <div class="salur">Hall A</div>
-                </li>
-              </ul>
+          <div class="mp-showtimes__day" data-date="1">
+            <div class="mp-showtimes__cinema">
+              <span class="mp-showtimes__cinema-name">Cinema A</span>
+              <a class="mp-showtimes__time" href="https://tickets.example.com/a2">
+                <span class="mp-showtimes__time-value">19:00</span>
+              </a>
             </div>
           </div>
         </body>
