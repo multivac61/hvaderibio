@@ -138,9 +138,21 @@ async function processMoviePoster(movie: Movie): Promise<Movie> {
   }
 }
 
+// Extract time-of-day (HH:MM) from ISO time string
+function getTimeOfDay(isoTime: string): string {
+  const date = new Date(isoTime);
+  return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+}
+
 // Merge hall info from listing page with movie showtimes
+// The listing page only has today's showtimes, so for future days we
+// carry forward hall info by matching on cinema name + time-of-day.
 function mergeHallInfo(movie: Movie, hallInfoMap: Map<string, HallInfo>): Movie {
   const updatedShowtimesByDay: Record<string, Record<string, Showtime[]>> = {};
+
+  // First pass: apply direct URL matches (works for today's showtimes)
+  // and build a time-based lookup per cinema for carrying forward
+  const cinemaTimeLookup = new Map<string, HallInfo>(); // key: "cinemaName|HH:MM"
 
   for (const [day, cinemaShowtimes] of Object.entries(movie.showtimes_by_day)) {
     updatedShowtimesByDay[day] = {};
@@ -148,6 +160,36 @@ function mergeHallInfo(movie: Movie, hallInfoMap: Map<string, HallInfo>): Movie 
     for (const [cinemaName, showtimes] of Object.entries(cinemaShowtimes)) {
       updatedShowtimesByDay[day][cinemaName] = showtimes.map((showtime) => {
         const hallInfo = hallInfoMap.get(showtime.purchase_url);
+        if (hallInfo) {
+          // Store in time-based lookup for future days
+          const timeKey = `${cinemaName}|${getTimeOfDay(showtime.time)}`;
+          cinemaTimeLookup.set(timeKey, hallInfo);
+
+          return {
+            ...showtime,
+            hall: hallInfo.hall || showtime.hall,
+            is_icelandic: hallInfo.is_icelandic || showtime.is_icelandic,
+            is_3d: hallInfo.is_3d || showtime.is_3d,
+            is_luxus: hallInfo.is_luxus || showtime.is_luxus,
+            is_vip: hallInfo.is_vip || showtime.is_vip,
+            is_atmos: hallInfo.is_atmos || showtime.is_atmos,
+            is_max: hallInfo.is_max || showtime.is_max,
+            is_flauel: hallInfo.is_flauel || showtime.is_flauel,
+          };
+        }
+        return showtime;
+      });
+    }
+  }
+
+  // Second pass: for showtimes without hall info, try time-based lookup
+  for (const [day, cinemaShowtimes] of Object.entries(updatedShowtimesByDay)) {
+    for (const [cinemaName, showtimes] of Object.entries(cinemaShowtimes)) {
+      updatedShowtimesByDay[day][cinemaName] = showtimes.map((showtime) => {
+        if (showtime.hall) return showtime; // Already has hall info
+
+        const timeKey = `${cinemaName}|${getTimeOfDay(showtime.time)}`;
+        const hallInfo = cinemaTimeLookup.get(timeKey);
         if (hallInfo) {
           return {
             ...showtime,
