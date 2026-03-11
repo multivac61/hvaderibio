@@ -11,6 +11,31 @@ function combineDateWithTime(hour_minute: string, dayOffset: number = 0): string
   return date.toISOString();
 }
 
+// Parse Icelandic premiere date like "19.  mars  2026" into a Date object
+function parse_premiere_date(text: string): Date | null {
+  const months: Record<string, number> = {
+    janúar: 0,
+    febrúar: 1,
+    mars: 2,
+    apríl: 3,
+    maí: 4,
+    júní: 5,
+    júlí: 6,
+    ágúst: 7,
+    september: 8,
+    október: 9,
+    nóvember: 10,
+    desember: 11,
+  };
+  // Match patterns like "19.  mars  2026" or "19. mars 2026"
+  const match = text.match(/(\d{1,2})\.\s*(\S+)\s+(\d{4})/);
+  if (!match) return null;
+  const [, day, monthName, year] = match;
+  const month = months[monthName.toLowerCase()];
+  if (month === undefined) return null;
+  return new Date(parseInt(year), month, parseInt(day));
+}
+
 export function parse_movie(document: Document, id: number) {
   // New structure uses mp-hero classes
   const heroTitle = document.querySelector<HTMLHeadingElement>("h1.mp-hero__title");
@@ -94,6 +119,27 @@ export function parse_movie(document: Document, id: number) {
     }
   }
 
+  // Check for premiere date badge ("Væntanleg í bíó: DD. month YYYY")
+  // If premiere is in the future, this movie has hidden preview screenings
+  const premiereDateText = document.querySelector<HTMLSpanElement>("span.mp-hero__premiere-date")?.textContent?.trim();
+  const premiereLabel = document.querySelector<HTMLSpanElement>("span.mp-hero__premiere-label")?.textContent?.trim();
+  let has_future_premiere = false;
+  if (premiereDateText && premiereLabel?.includes("Væntanleg")) {
+    const premiereDate = parse_premiere_date(premiereDateText);
+    if (premiereDate) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      has_future_premiere = premiereDate > today;
+      if (has_future_premiere) {
+        console.log(`  Movie "${title}" (${id}) has future premiere: ${premiereDateText} - filtering Smárabíó preview showtimes`);
+      }
+    }
+  }
+
+  // Parse showtimes, filtering out Smárabíó hidden preview screenings
+  const raw_showtimes = parse_showtimes_by_day(document);
+  const showtimes_by_day = has_future_premiere ? filter_hidden_showtimes(raw_showtimes, ["Smárabíó"]) : raw_showtimes;
+
   const parsed = movie_schema.safeParse({
     title,
     alt_title: undefined, // Alt title not visible in new design
@@ -105,7 +151,7 @@ export function parse_movie(document: Document, id: number) {
     genres,
     duration_in_mins,
     language: [],
-    showtimes_by_day: parse_showtimes_by_day(document),
+    showtimes_by_day,
     trailer_url,
     id,
     imdb,
@@ -170,6 +216,23 @@ function parse_showtimes_for_day(document: Document, dayIndex: number): CinemaSh
   });
 
   return cinema_showtimes_schema.parse(cinema_showtimes);
+}
+
+// Filter out showtimes for specific cinemas (used for hidden preview screenings)
+function filter_hidden_showtimes(showtimes_by_day: ShowtimesByDay, cinemas_to_filter: string[]): ShowtimesByDay {
+  const filtered: ShowtimesByDay = {};
+  for (const [day, cinema_showtimes] of Object.entries(showtimes_by_day)) {
+    const filtered_cinemas: Record<string, (typeof cinema_showtimes)[string]> = {};
+    for (const [cinema_name, showtimes] of Object.entries(cinema_showtimes)) {
+      if (!cinemas_to_filter.includes(cinema_name)) {
+        filtered_cinemas[cinema_name] = showtimes;
+      }
+    }
+    if (Object.keys(filtered_cinemas).length > 0) {
+      filtered[day] = filtered_cinemas;
+    }
+  }
+  return filtered;
 }
 
 export function parse_showtimes_by_day(document: Document): ShowtimesByDay {
