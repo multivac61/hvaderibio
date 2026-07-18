@@ -49,6 +49,13 @@ console.log(`Targeting image dimensions: ${targetWidth}w x ${targetHeight}h`);
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Keep scraping known movie pages if the upstream listing is temporarily empty.
+// Movie pages are still updated independently and movies without showtimes are discarded.
+const fallbackMovieIds = [
+  17887, 17858, 17857, 17855, 18423, 18525, 17815, 18516, 18414, 17542, 17812, 17876, 17978, 17926, 18651, 18091,
+  17736, 18614, 18371,
+];
+
 async function scrapeMovie(id: number): Promise<Movie | null> {
   try {
     const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
@@ -224,7 +231,11 @@ async function main() {
   const hallInfoMap = parse_hall_info_from_listing(document);
   console.log(`Parsed hall info for ${hallInfoMap.size} showtimes`);
 
-  const movieIds = parse_movie_ids(document);
+  const listedMovieIds = parse_movie_ids(document);
+  const movieIds = listedMovieIds.length > 0 ? listedMovieIds : fallbackMovieIds;
+  if (listedMovieIds.length === 0) {
+    console.warn(`The showtimes listing was empty; falling back to ${fallbackMovieIds.length} known movie IDs`);
+  }
   console.log(`Found ${movieIds.length} movies to scrape`);
 
   // Process movies sequentially with rate limiting to avoid overwhelming the server
@@ -233,10 +244,19 @@ async function main() {
     await delay(100); // 100ms delay between requests
     const movie = await scrapeMovie(id);
     if (movie) {
-      // Merge hall info from listing page with movie showtimes
-      const movieWithHallInfo = mergeHallInfo(movie, hallInfoMap);
-      movies.push(movieWithHallInfo);
+      const hasShowtimes = Object.values(movie.showtimes_by_day).some((cinemas) =>
+        Object.values(cinemas).some((showtimes) => showtimes.length > 0)
+      );
+      if (hasShowtimes) {
+        // Merge hall info from listing page with movie showtimes
+        const movieWithHallInfo = mergeHallInfo(movie, hallInfoMap);
+        movies.push(movieWithHallInfo);
+      }
     }
+  }
+
+  if (movies.length === 0) {
+    throw new Error("No movies could be scraped; refusing to overwrite movies.json with empty data");
   }
 
   const imdbIds = movies.flatMap((movie) => movie.imdb?.link.match(/tt\d+/)?.[0] ?? []);
