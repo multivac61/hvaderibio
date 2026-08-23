@@ -85,10 +85,10 @@
   {#if client_ready}
     {#key `${selected_day}-${selected_choice}`}
       {#if filtered_cinemas_showtimes.length === 0}
-      <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
-        <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
-        <p class="mt-1 text-sm text-neutral-500">Prófaðu að velja annan dag eða kvikmyndahús</p>
-      </div>
+        <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
+          <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
+          <p class="mt-1 text-sm text-neutral-500">Prófaðu að velja annan dag eða kvikmyndahús</p>
+        </div>
       {:else}
         <div
           class="md:md-30 -mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
