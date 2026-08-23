@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, setSystemTime, test } from "bun:test";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { parseHTML } from "linkedom";
@@ -24,15 +24,21 @@ describe("premiere filtering (fixture)", () => {
   });
 
   test("filters Smárabíó showtimes for movie with future premiere", () => {
-    const { document } = parseHTML(html);
-    const movie = parse_movie(document, 17825);
+    setSystemTime(new Date("2026-03-11T12:00:00Z"));
 
-    expect(movie).not.toBeNull();
-    expect(movie!.title).toBe("Project Hail Mary");
+    try {
+      const { document } = parseHTML(html);
+      const movie = parse_movie(document, 17825);
 
-    // Smárabíó should have no showtimes (filtered as hidden preview)
-    for (const [, cinemas] of Object.entries(movie!.showtimes_by_day)) {
-      expect(cinemas["Smárabíó"]).toBeUndefined();
+      expect(movie).not.toBeNull();
+      expect(movie!.title).toBe("Project Hail Mary");
+
+      // Smárabíó should have no showtimes (filtered as hidden preview)
+      for (const [, cinemas] of Object.entries(movie!.showtimes_by_day)) {
+        expect(cinemas["Smárabíó"]).toBeUndefined();
+      }
+    } finally {
+      setSystemTime();
     }
   });
 });
