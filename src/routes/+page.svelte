@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { count_movie_showtimes, get_showtime_window, HYDRATION_SAFE_SHOWTIME_WINDOW } from "$lib/showtimes";
+  import { count_movie_showtimes, get_showtime_window } from "$lib/showtimes";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "$lib/cinema-state.svelte";
   import { dayState } from "$lib/day-state.svelte";
   import CinemaSelect from "$lib/CinemaSelect.svelte";
@@ -13,12 +13,14 @@
   const movies = $derived(data.movies);
   const cinema_options = $derived(data.cinema_options);
 
-  // Keep the prerendered and initial client-side order identical. Reordering
-  // during hydration can leave Safari's poster image attached to another link.
-  let showtime_window: { from: number; to: number } = $state(HYDRATION_SAFE_SHOWTIME_WINDOW);
+  // Do not render the time-sensitive grid until the browser has calculated its
+  // current window. This prevents Safari from hydrating stale poster ordering.
+  let showtime_window = $state({ from: 0, to: 24 });
+  let client_ready = $state(false);
 
   onMount(() => {
     showtime_window = get_showtime_window();
+    client_ready = true;
   });
 
   // Read cinema and day from shared state
@@ -80,19 +82,21 @@
     </div>
   </div>
 
-  {#key `${selected_day}-${selected_choice}`}
-    {#if filtered_cinemas_showtimes.length === 0}
+  {#if client_ready}
+    {#key `${selected_day}-${selected_choice}`}
+      {#if filtered_cinemas_showtimes.length === 0}
       <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
         <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
         <p class="mt-1 text-sm text-neutral-500">Prófaðu að velja annan dag eða kvikmyndahús</p>
       </div>
-    {:else}
-      <div
-        class="md:md-30 -mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
-        {#each filtered_cinemas_showtimes as movie, index (movie.id)}
-          <MoviePosterCard {movie} {index} />
-        {/each}
-      </div>
-    {/if}
-  {/key}
+      {:else}
+        <div
+          class="md:md-30 -mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
+          {#each filtered_cinemas_showtimes as movie, index (movie.id)}
+            <MoviePosterCard {movie} {index} />
+          {/each}
+        </div>
+      {/if}
+    {/key}
+  {/if}
 </div>
