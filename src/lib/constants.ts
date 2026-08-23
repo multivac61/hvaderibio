@@ -10,6 +10,11 @@ export const CAPITAL_REGION_CINEMAS = [
 
 export type CapitalRegionCinema = (typeof CAPITAL_REGION_CINEMAS)[number];
 
+export const CINEMA_DISPLAY_NAMES: Record<string, string> = {
+  "Sambíóin Egilshöll": "Egilshöll",
+  "Sambíóin Kringlunni": "Kringlubíó",
+};
+
 export const CINEMA_URLS: Record<string, string> = {
   "Bíó Paradís": "https://bioparadis.is",
   Háskólabíó: "https://haskolabio.is",
