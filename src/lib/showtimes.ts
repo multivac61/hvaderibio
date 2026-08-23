@@ -1,6 +1,8 @@
 import type { Movie, Showtime } from "$lib/schemas";
 import { in_range, to_float } from "$lib/util";
 
+export const HYDRATION_SAFE_SHOWTIME_WINDOW = { from: 0, to: 24 } as const;
+
 export const get_showtime_window = () => ({
   from: Math.min(21, new Date().getHours()),
   to: 24,
