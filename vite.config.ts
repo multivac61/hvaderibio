@@ -12,7 +12,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: undefined,
-        experimentalMinChunkSize: 500,
       },
     },
   },
