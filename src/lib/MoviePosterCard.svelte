@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
+  import { fade } from "svelte/transition";
 
   import type { Movie } from "$lib/schemas";
 
@@ -11,29 +11,13 @@
 
   const { movie, index }: Props = $props();
   const movieHref = $derived(resolve(`/movie/${movie.id}`));
-
-  let touchStartY = 0;
-
-  const handleTouchStart = (event: TouchEvent) => {
-    touchStartY = event.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (event: TouchEvent) => {
-    const touchEndY = event.changedTouches[0].clientY;
-    if (Math.abs(touchEndY - touchStartY) < 10) {
-      event.preventDefault();
-      // eslint-disable-next-line svelte/no-navigation-without-resolve
-      goto(movieHref);
-    }
-  };
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->
 <a
   href={movieHref}
   data-movie-id={movie.id}
-  ontouchstart={handleTouchStart}
-  ontouchend={handleTouchEnd}
+  in:fade={{ duration: 280, delay: Math.min(index, 12) * 30 }}
   class="group block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900 [@media(hover:hover)]:hover:z-50"
   style="-webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <picture>

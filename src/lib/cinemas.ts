@@ -1,4 +1,4 @@
-import { CAPITAL_REGION_CINEMAS } from "$lib/constants";
+import { CAPITAL_REGION_CINEMAS, CINEMA_DISPLAY_NAMES } from "$lib/constants";
 import type { Movie } from "$lib/schemas";
 
 export type CinemaOption = readonly [string, readonly string[]];
@@ -16,6 +16,6 @@ export const get_cinema_options = (movies: readonly Movie[]): readonly CinemaOpt
   return [
     ["Öll kvikmyndahús", all_cinemas],
     ["Höfuðborgarsvæðið", capital_region_cinemas],
-    ...all_cinemas.map((name) => [name, [name]] as const),
+    ...all_cinemas.map((name) => [CINEMA_DISPLAY_NAMES[name] ?? name, [name]] as const),
   ] as const;
 };

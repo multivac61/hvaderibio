@@ -1,5 +1,27 @@
 <script lang="ts">
   import { page } from "$app/state";
+  import { linear } from "svelte/easing";
+  import { Tween } from "svelte/motion";
+  import { onMount } from "svelte";
+
+  const rotation = new Tween(0, { duration: 4000, easing: linear });
+
+  onMount(() => {
+    let active = true;
+
+    const spin = async () => {
+      while (active) {
+        await rotation.set(360);
+        if (active) await rotation.set(0, { duration: 0 });
+      }
+    };
+
+    void spin();
+
+    return () => {
+      active = false;
+    };
+  });
 
   const status = $derived(page.status);
 
@@ -17,9 +39,9 @@
 
 <div class="flex min-h-screen items-center justify-center bg-black text-neutral-100">
   <div class="max-w-md px-4 text-center">
-    <!-- Animated film reel -->
+    <!-- Film reel -->
     <div class="mb-6 flex justify-center">
-      <svg class="h-24 w-24 text-neutral-600" style="animation: spin 4s linear infinite;" fill="currentColor" viewBox="0 0 24 24">
+      <svg class="h-24 w-24 text-neutral-600" style:transform="rotate({rotation.current}deg)" fill="currentColor" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
         <circle cx="12" cy="12" r="3" fill="currentColor" />
         <circle cx="12" cy="5" r="1.5" fill="currentColor" />
@@ -32,16 +54,6 @@
         <circle cx="7.5" cy="16.5" r="1.5" fill="currentColor" />
       </svg>
     </div>
-    <style>
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
     <h1 class="mb-4 text-6xl font-bold text-neutral-400">{status}</h1>
     <h2 class="mb-2 text-2xl font-bold">{title}</h2>
     <p class="mb-2 text-neutral-400">{description}</p>

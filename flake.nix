@@ -49,7 +49,6 @@
           devshell.default = pkgs.mkShell {
             packages = with pkgs; [
               bun
-              nodejs_20 # tooling compatibility with ecosystem tools that still use node shebangs
             ];
           };
         }

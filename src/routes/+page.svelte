@@ -6,6 +6,7 @@
   import CinemaTabs from "$lib/CinemaTabs.svelte";
   import DayPicker from "$lib/DayPicker.svelte";
   import MoviePosterCard from "$lib/MoviePosterCard.svelte";
+  import { fade } from "svelte/transition";
 
   const { data } = $props();
   const movies = $derived(data.movies);
@@ -56,33 +57,35 @@
   </div>
 </header>
 
-<header class="relative">
-  <div class="animate-slide-up fixed inset-x-0 bottom-0 z-40 flex w-full justify-center px-4 pb-3 sm:hidden">
-    <div class="flex flex-col items-center gap-2">
-      <!-- Cinema dropdown -->
-      <div class="flex justify-center">
-        <CinemaSelect cinemaOptions={cinema_options} selectedChoice={selected_choice} onSelect={updateCinema} />
-      </div>
-      <!-- Day pills -->
-      <div class="flex justify-center">
-        <DayPicker selectedDay={selected_day} onSelect={updateDay} size="sm" />
+<div class="relative">
+  <div in:fade={{ duration: 220 }} class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
+    <div class="flex w-full justify-center px-4 pb-3">
+      <div class="flex flex-col items-center gap-2">
+        <!-- Cinema dropdown -->
+        <div class="flex justify-center">
+          <CinemaSelect cinemaOptions={cinema_options} selectedChoice={selected_choice} onSelect={updateCinema} />
+        </div>
+        <!-- Day pills -->
+        <div class="flex justify-center">
+          <DayPicker selectedDay={selected_day} onSelect={updateDay} size="sm" />
+        </div>
       </div>
     </div>
   </div>
-</header>
 
-{#key `${selected_day}-${selected_choice}`}
-  {#if filtered_cinemas_showtimes.length === 0}
-    <div class="animate-fade-in flex flex-col items-center justify-center py-16 text-center">
-      <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
-      <p class="mt-1 text-sm text-neutral-500">Prófaðu að velja annan dag eða kvikmyndahús</p>
-    </div>
-  {:else}
-    <div
-      class="animate-fade-slide md:md-30 -mx-1 mb-24 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
-      {#each filtered_cinemas_showtimes as movie, index (movie.id)}
-        <MoviePosterCard {movie} {index} />
-      {/each}
-    </div>
-  {/if}
-{/key}
+  {#key `${selected_day}-${selected_choice}`}
+    {#if filtered_cinemas_showtimes.length === 0}
+      <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
+        <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
+        <p class="mt-1 text-sm text-neutral-500">Prófaðu að velja annan dag eða kvikmyndahús</p>
+      </div>
+    {:else}
+      <div
+        class="md:md-30 -mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
+        {#each filtered_cinemas_showtimes as movie, index (movie.id)}
+          <MoviePosterCard {movie} {index} />
+        {/each}
+      </div>
+    {/if}
+  {/key}
+</div>

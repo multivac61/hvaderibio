@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CINEMA_URLS } from "$lib/constants";
+  import { CINEMA_DISPLAY_NAMES, CINEMA_URLS } from "$lib/constants";
   import type { Showtime } from "$lib/schemas";
   import ShowtimeBadges from "$lib/ShowtimeBadges.svelte";
 
@@ -10,6 +10,7 @@
 
   const { cinema, showtimes }: Props = $props();
   const cinemaUrl = $derived(CINEMA_URLS[cinema]);
+  const cinemaName = $derived(CINEMA_DISPLAY_NAMES[cinema] ?? cinema);
 </script>
 
 <div
@@ -21,10 +22,10 @@
         target="_blank"
         rel="external noopener noreferrer"
         class="text-sm font-semibold text-neutral-200 transition-colors hover:text-white md:text-base">
-        {cinema}
+        {cinemaName}
       </a>
     {:else}
-      <span class="text-sm font-semibold text-neutral-200 md:text-base">{cinema}</span>
+      <span class="text-sm font-semibold text-neutral-200 md:text-base">{cinemaName}</span>
     {/if}
   </div>
 
