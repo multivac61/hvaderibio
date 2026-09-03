@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
 
   import { movie_path_segment } from "$lib/movie-path";
@@ -12,12 +13,38 @@
 
   const { movie, catalog, index }: Props = $props();
   const movieHref = $derived(resolve(`/movie/${movie_path_segment(movie, catalog)}`));
+
+  let touchStart: { x: number; y: number } | null = null;
+
+  const handleTouchStart = (event: TouchEvent) => {
+    const touch = event.touches[0];
+    touchStart = touch ? { x: touch.clientX, y: touch.clientY } : null;
+  };
+
+  const handleTouchEnd = (event: TouchEvent) => {
+    const touch = event.changedTouches[0];
+    if (!touchStart || !touch) return;
+
+    const movement = Math.hypot(touch.clientX - touchStart.x, touch.clientY - touchStart.y);
+    touchStart = null;
+    if (movement >= 10) return;
+
+    // iOS Safari can retain the previously tapped link's hover state after
+    // history navigation and consume the next synthetic click. Navigate from
+    // the real touch event instead; preventDefault suppresses the later click.
+    event.preventDefault();
+    // eslint-disable-next-line svelte/no-navigation-without-resolve
+    void goto(movieHref);
+  };
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->
 <a
   href={movieHref}
   data-movie-id={movie.id}
+  ontouchstart={handleTouchStart}
+  ontouchend={handleTouchEnd}
+  ontouchcancel={() => (touchStart = null)}
   class="movie-poster-card block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900"
   style="-webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <picture>
