@@ -4,12 +4,14 @@ import { find_movie_by_path, movie_path_segment } from "../src/lib/movie-path";
 const movies = [
   { id: 18679, title: "Hvar er draumurinn?" },
   { id: 42, title: "Þrír á ferð með Æsu" },
+  { id: 43, title: "Um tímann og vatnið" },
 ];
 
 describe("movie paths", () => {
-  test("keeps Icelandic letters and omits IDs from unique titles", () => {
+  test("transliterates Icelandic letters and omits IDs from unique titles", () => {
     expect(movie_path_segment(movies[0], movies)).toBe("hvar-er-draumurinn");
-    expect(movie_path_segment(movies[1], movies)).toBe("þrír-á-ferð-með-æsu");
+    expect(movie_path_segment(movies[1], movies)).toBe("thrir-a-ferd-med-aesu");
+    expect(movie_path_segment(movies[2], movies)).toBe("um-timann-og-vatnid");
   });
 
   test("adds IDs only when titles collide", () => {
@@ -23,7 +25,7 @@ describe("movie paths", () => {
   });
 
   test("finds readable paths and preserves legacy numeric paths", () => {
-    expect(find_movie_by_path(movies, "þrír-á-ferð-með-æsu")?.id).toBe(42);
+    expect(find_movie_by_path(movies, "thrir-a-ferd-med-aesu")?.id).toBe(42);
     expect(find_movie_by_path(movies, "42")?.id).toBe(42);
     expect(find_movie_by_path(movies, "missing")?.id).toBeUndefined();
   });
