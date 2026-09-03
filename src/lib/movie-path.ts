@@ -5,8 +5,12 @@ type MovieIdentity = Pick<Movie, "id" | "title">;
 const title_slug = (title: string) =>
   title
     .toLocaleLowerCase("is")
-    .normalize("NFC")
-    .replace(/[^\p{L}\p{N}]+/gu, "-")
+    .replace(/ð/g, "d")
+    .replace(/þ/g, "th")
+    .replace(/æ/g, "ae")
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
 export const movie_path_segment = (movie: MovieIdentity, catalog: readonly MovieIdentity[]) => {

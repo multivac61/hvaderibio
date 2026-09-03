@@ -14,7 +14,7 @@ export const get_cinema_options = (movies: readonly Movie[]): readonly CinemaOpt
   const capital_region_cinemas = all_cinemas.filter((name) => (CAPITAL_REGION_CINEMAS as readonly string[]).includes(name));
 
   return [
-    ["Öll kvikmyndahús", all_cinemas],
+    ["Allt", all_cinemas],
     ["Höfuðborgarsvæðið", capital_region_cinemas],
     ...all_cinemas.map((name) => [CINEMA_DISPLAY_NAMES[name] ?? name, [name]] as const),
   ] as const;
