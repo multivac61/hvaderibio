@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { get_showtime_window, get_valid_showtimes } from "$lib/showtimes";
+  import { get_showtime_window } from "$lib/showtimes";
+  import { get_movie_programme } from "$lib/programme";
   import { get_youtube_id, is_mobile_user_agent } from "$lib/video";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "$lib/cinema-state.svelte";
   import { dayState } from "$lib/day-state.svelte";
-  import CinemaSelect from "$lib/CinemaSelect.svelte";
-  import DayPicker from "$lib/DayPicker.svelte";
+  import ProgrammeControls from "$lib/ProgrammeControls.svelte";
   import MovieRatings from "$lib/MovieRatings.svelte";
   import CinemaShowtimeRow from "$lib/CinemaShowtimeRow.svelte";
   import { fade } from "svelte/transition";
@@ -40,20 +40,7 @@
     document.body.style.overflow = "";
   };
 
-  const updateDay = (day: string) => {
-    dayState.set(day);
-  };
-
-  const updateCinema = (choice: string) => {
-    cinemaState.set(choice);
-  };
-
-  const visible_showtimes = $derived.by(() =>
-    Object.entries(movie.showtimes_by_day[selected_day] ?? {})
-      .filter(([cinema]) => selected_cinemas.includes(cinema))
-      .map(([cinema, times]) => ({ cinema, showtimes: get_valid_showtimes(times, selected_day, from, to) }))
-      .filter(({ showtimes }) => showtimes.length > 0)
-  );
+  const visible_showtimes = $derived(get_movie_programme(movie, selected_day, selected_cinemas, { from, to }));
 </script>
 
 <svelte:head>
@@ -63,18 +50,12 @@
 <div class="relative">
   <div in:fade={{ duration: 220 }} class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
     <div class="flex w-full justify-center px-4 pb-3">
-      <div class="flex flex-col items-center gap-2">
-        <div class="flex justify-center">
-          <CinemaSelect
-            cinemaOptions={cinema_options}
-            selectedChoice={selected_choice}
-            onSelect={updateCinema}
-            id="select-cinemas-movie-mobile" />
-        </div>
-        <div class="flex justify-center">
-          <DayPicker selectedDay={selected_day} onSelect={updateDay} size="sm" />
-        </div>
-      </div>
+      <ProgrammeControls
+        cinemaOptions={cinema_options}
+        selectedChoice={selected_choice}
+        selectedDay={selected_day}
+        presentation="floating"
+        id="select-cinemas-movie-mobile" />
     </div>
   </div>
 
@@ -204,14 +185,13 @@
 
         <!-- Showtimes -->
         <div class="pt-2 md:max-w-3xl">
-          <div class="mb-5 hidden flex-wrap items-center gap-x-3 gap-y-2 sm:flex">
-            <DayPicker selectedDay={selected_day} onSelect={updateDay} shrink />
-            <CinemaSelect
+          <div class="mb-5 hidden sm:block">
+            <ProgrammeControls
               cinemaOptions={cinema_options}
               selectedChoice={selected_choice}
-              onSelect={updateCinema}
-              id="select-cinemas-movie-desktop"
-              size="sm" />
+              selectedDay={selected_day}
+              presentation="inline"
+              id="select-cinemas-movie-desktop" />
           </div>
 
           <!-- eslint-disable svelte/no-navigation-without-resolve -->

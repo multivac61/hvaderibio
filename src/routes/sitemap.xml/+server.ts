@@ -1,3 +1,4 @@
+import { movie_path_segment } from "$lib/movie-path";
 import { movies_schema } from "$lib/schemas";
 import movies_json from "../../../static/movies.json";
 
@@ -18,7 +19,7 @@ export const GET = async () => {
   ${movies
     .map(
       (movie) => `  <url>
-    <loc>${site_url}/movie/${movie.id}</loc>
+    <loc>${site_url}/movie/${movie_path_segment(movie, movies)}</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`

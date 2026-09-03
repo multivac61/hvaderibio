@@ -2,15 +2,17 @@
   import { resolve } from "$app/paths";
   import { fade } from "svelte/transition";
 
+  import { movie_path_segment } from "$lib/movie-path";
   import type { Movie } from "$lib/schemas";
 
   type Props = {
     movie: Movie;
+    catalog: readonly Movie[];
     index: number;
   };
 
-  const { movie, index }: Props = $props();
-  const movieHref = $derived(resolve(`/movie/${movie.id}`));
+  const { movie, catalog, index }: Props = $props();
+  const movieHref = $derived(resolve(`/movie/${movie_path_segment(movie, catalog)}`));
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->

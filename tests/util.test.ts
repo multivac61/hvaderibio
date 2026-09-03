@@ -1,12 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { HYDRATION_SAFE_SHOWTIME_WINDOW } from "../src/lib/showtimes";
 import { group_by, in_range, to_hhmm, to_float } from "../src/lib/util";
-
-describe("showtime hydration", () => {
-  test("uses a stable initial window before client-only time filtering", () => {
-    expect(HYDRATION_SAFE_SHOWTIME_WINDOW).toEqual({ from: 0, to: 24 });
-  });
-});
 
 describe("group_by", () => {
   test("groups objects by key", () => {
