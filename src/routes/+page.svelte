@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { count_movie_showtimes, get_showtime_window } from "$lib/showtimes";
+  import { get_showtime_window } from "$lib/showtimes";
+  import { get_programme_movies } from "$lib/programme";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "$lib/cinema-state.svelte";
   import { dayState } from "$lib/day-state.svelte";
-  import CinemaSelect from "$lib/CinemaSelect.svelte";
-  import CinemaTabs from "$lib/CinemaTabs.svelte";
-  import DayPicker from "$lib/DayPicker.svelte";
+  import ProgrammeControls from "$lib/ProgrammeControls.svelte";
   import MoviePosterCard from "$lib/MoviePosterCard.svelte";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
@@ -28,23 +27,7 @@
   const selected_cinemas = $derived(get_cinemas_for_choice(selected_choice, cinema_options));
   const selected_day = $derived(dayState.value ?? "0");
 
-  const updateCinema = (choiceLabel: string) => {
-    cinemaState.set(choiceLabel);
-  };
-
-  const updateDay = (day: string) => {
-    dayState.set(day);
-  };
-
-  const filtered_cinemas_showtimes = $derived.by(() =>
-    movies
-      .filter((movie) => count_movie_showtimes(movie, selected_day, selected_cinemas, showtime_window.from, showtime_window.to) > 0)
-      .sort(
-        (a, b) =>
-          count_movie_showtimes(b, selected_day, selected_cinemas, showtime_window.from, showtime_window.to) -
-          count_movie_showtimes(a, selected_day, selected_cinemas, showtime_window.from, showtime_window.to)
-      )
-  );
+  const filtered_cinemas_showtimes = $derived(get_programme_movies(movies, selected_day, selected_cinemas, showtime_window));
 </script>
 
 <svelte:head>
@@ -57,28 +40,18 @@
     Hvað er í bíó?
   </h1>
   <div class="mx-auto sm:block md:max-w-none">
-    <!-- Cinema selection -->
-    <CinemaTabs cinemaOptions={cinema_options} selectedChoice={selected_choice} onSelect={updateCinema} />
-    <!-- Day selection -->
-    <div class="flex justify-center">
-      <DayPicker selectedDay={selected_day} onSelect={updateDay} />
-    </div>
+    <ProgrammeControls cinemaOptions={cinema_options} selectedChoice={selected_choice} selectedDay={selected_day} presentation="tabs" />
   </div>
 </header>
 
 <div class="relative">
   <div in:fade={{ duration: 220 }} class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
     <div class="flex w-full justify-center px-4 pb-3">
-      <div class="flex flex-col items-center gap-2">
-        <!-- Cinema dropdown -->
-        <div class="flex justify-center">
-          <CinemaSelect cinemaOptions={cinema_options} selectedChoice={selected_choice} onSelect={updateCinema} />
-        </div>
-        <!-- Day pills -->
-        <div class="flex justify-center">
-          <DayPicker selectedDay={selected_day} onSelect={updateDay} size="sm" />
-        </div>
-      </div>
+      <ProgrammeControls
+        cinemaOptions={cinema_options}
+        selectedChoice={selected_choice}
+        selectedDay={selected_day}
+        presentation="floating" />
     </div>
   </div>
 
