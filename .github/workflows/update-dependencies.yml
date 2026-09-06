@@ -60,7 +60,6 @@ jobs:
             flake.lock
             package.json
             bun.lock
-            bun.lockb
           commit-message: "deps: keep Nix inputs and Bun dependencies current"
           title: "deps: keep Nix inputs and Bun dependencies current"
           body: |
