@@ -192,6 +192,7 @@ vite.config.ts.timestamp-*
 dist
 package-lock.json
 yarn.lock
+bun.lockb
 .vercel_build_output
 .svelte-kit
 .cloudflare
