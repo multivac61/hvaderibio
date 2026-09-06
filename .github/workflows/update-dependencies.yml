@@ -1,0 +1,70 @@
+name: Update dependencies
+
+on:
+  schedule:
+    - cron: "23 3 * * *" # Nightly at 03:23 UTC (Iceland time)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-dependencies
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@main
+        with:
+          ref: main
+      - uses: cachix/install-nix-action@v31
+      - uses: oven-sh/setup-bun@main
+        with:
+          bun-version: latest
+
+      - name: Update Nix inputs
+        run: nix flake update
+
+      - name: Update Bun dependencies within their declared ranges
+        run: bun update
+
+      - name: Format updated files
+        run: |
+          nix fmt
+          bunx --no-install prettier --write package.json
+
+      # PRs created with GITHUB_TOKEN do not trigger pull_request workflows,
+      # so validate the updates here before opening or refreshing the PR.
+      - name: Validate updated dependencies
+        run: |
+          bun install --frozen-lockfile
+          mkdir -p static
+          echo '[]' > static/movies.json
+          bun test
+          bun run check
+          bun run build
+        env:
+          ADAPTER: cloudflare
+          NODE_ENV: production
+
+      - uses: peter-evans/create-pull-request@v8
+        with:
+          branch: automation/nightly-dependencies
+          delete-branch: true
+          add-paths: |
+            flake.lock
+            package.json
+            bun.lock
+            bun.lockb
+          commit-message: "deps: keep Nix inputs and Bun dependencies current"
+          title: "deps: keep Nix inputs and Bun dependencies current"
+          body: |
+            Refresh Nix inputs and Bun dependencies nightly to keep the project current.
+            Bun dependency updates stay within the ranges declared in package.json.
+
+            Validated with nix fmt, a frozen Bun install, bun test, bun run check,
+            and a Cloudflare build before opening this pull request.
