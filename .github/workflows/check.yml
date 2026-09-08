@@ -14,3 +14,29 @@ jobs:
       - run: mkdir -p static && echo '[]' > static/movies.json
       - run: bun run check
       - run: bun test
+
+  # Dispatched checks can be absent from the PR's required-check rollup.
+  # Publish the actual test result on the same commit for branch protection.
+  dependency-status:
+    if: >-
+      always() && github.event_name == 'workflow_dispatch' &&
+      github.ref == 'refs/heads/automation/nightly-dependencies'
+    needs: bun-check
+    runs-on: ubuntu-latest
+    permissions:
+      statuses: write
+    steps:
+      - name: Report dependency check result
+        run: |
+          gh api --method POST "repos/$GH_REPO/statuses/$CHECK_SHA" \
+            -f context=bun-check \
+            -f state="$CHECK_STATE" \
+            -f description="Dependency checks: $CHECK_RESULT" \
+            -f target_url="$CHECK_URL"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          CHECK_SHA: ${{ github.sha }}
+          CHECK_RESULT: ${{ needs.bun-check.result }}
+          CHECK_STATE: ${{ needs.bun-check.result == 'success' && 'success' || 'failure' }}
+          CHECK_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
