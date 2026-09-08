@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 
@@ -37,8 +38,7 @@ jobs:
           nix fmt
           bunx --no-install prettier --write package.json
 
-      # PRs created with GITHUB_TOKEN do not trigger pull_request workflows,
-      # so validate the updates here before opening or refreshing the PR.
+      # Validate before publishing the update; required PR checks run below too.
       - name: Validate updated dependencies
         run: |
           bun install --frozen-lockfile
@@ -53,6 +53,7 @@ jobs:
           NODE_ENV: production
 
       - uses: peter-evans/create-pull-request@v8
+        id: dependencies
         with:
           branch: automation/nightly-dependencies
           delete-branch: true
@@ -68,3 +69,22 @@ jobs:
 
             Validated with nix fmt, a frozen Bun install, bun test, bun run check,
             and a Cloudflare build before opening this pull request.
+
+      # Explicit dispatch lets GITHUB_TOKEN-created PRs run checks unattended.
+      - name: Run required checks on the dependency branch
+        if: steps.dependencies.outputs.pull-request-number != ''
+        run: gh workflow run check.yml --ref "$PR_BRANCH"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_BRANCH: ${{ steps.dependencies.outputs.pull-request-branch }}
+
+      # GitHub's required checks on main decide when this PR may merge.
+      - name: Enable auto-merge for dependency updates
+        if: steps.dependencies.outputs.pull-request-number != ''
+        run: gh pr merge "$PR_NUMBER" --auto --merge --match-head-commit "$PR_HEAD_SHA"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.dependencies.outputs.pull-request-number }}
+          PR_HEAD_SHA: ${{ steps.dependencies.outputs.pull-request-head-sha }}
