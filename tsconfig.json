@@ -9,9 +9,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "typeRoots": ["./node_modules/@types"],
-    "types": ["node", "bun"],
-    "moduleResolution": "bundler"
+    "types": ["bun"]
   }
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
   //

@@ -14,8 +14,8 @@ jobs:
       - uses: actions/checkout@main
       - uses: oven-sh/setup-bun@main
 
-      - name: 📚 Install node dependencies
-        run: bun install
+      - name: 📚 Install dependencies
+        run: bun install --frozen-lockfile
 
       - name: 🔐 Trust TLS certificate chain for kvikmyndir.is
         run: |
