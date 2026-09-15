@@ -5,18 +5,17 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [tailwindcss(), sveltekit()],
   build: {
-    cssMinify: "lightningcss",
     target: "es2022",
-    sourcemap: false, // Disable source maps in production for smaller bundles
-    minify: "esbuild",
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: undefined,
+        comments: { legal: false },
+        minify: {
+          compress: {
+            dropConsole: process.env.NODE_ENV === "production",
+            dropDebugger: process.env.NODE_ENV === "production",
+          },
+        },
       },
     },
-  },
-  esbuild: {
-    drop: process.env.NODE_ENV === "production" ? ["console", "debugger"] : [],
-    legalComments: "none",
   },
 });
