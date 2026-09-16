@@ -10,6 +10,9 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
+    env:
+      XDG_CACHE_HOME: ${{ github.workspace }}/.cache
+      IMDB_RATINGS_FILE: ${{ github.workspace }}/.cache/hvaderibio/imdb/ratings.tsv.gz
     steps:
       - uses: actions/checkout@main
       - uses: oven-sh/setup-bun@main
@@ -35,6 +38,28 @@ jobs:
           key: showtime-metadata-${{ github.run_id }}
           restore-keys: |
             showtime-metadata-
+
+      - name: Determine daily cache key
+        id: cache-date
+        run: echo "day=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore today's IMDb dataset
+        id: imdb-cache
+        uses: actions/cache@main
+        with:
+          path: .cache/hvaderibio/imdb/ratings.tsv.gz
+          key: imdb-ratings-v1-${{ steps.cache-date.outputs.day }}
+
+      - name: Download IMDb dataset on cache miss
+        if: steps.imdb-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$(dirname "$IMDB_RATINGS_FILE")"
+          trap 'rm -f "$IMDB_RATINGS_FILE.tmp"' EXIT
+          curl --fail --location --retry 3 --max-time 120 \
+            --output "$IMDB_RATINGS_FILE.tmp" \
+            https://datasets.imdbws.com/title.ratings.tsv.gz
+          gzip -t "$IMDB_RATINGS_FILE.tmp"
+          mv "$IMDB_RATINGS_FILE.tmp" "$IMDB_RATINGS_FILE"
 
       - name: 🎬 Scrape movie data
         run: bun scrape

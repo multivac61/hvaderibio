@@ -4,6 +4,7 @@ import path from "path";
 import { parseHTML } from "linkedom";
 import sharp from "sharp";
 import { fetch_page, map_concurrent } from "./scrape-requests";
+import { fetch_imdb_ratings } from "./imdb";
 
 import type { Movie, Showtime } from "$lib/schemas";
 import {
@@ -15,7 +16,6 @@ import {
   scrape_rotten_tomatoes,
   scrape_metacritic,
   scrape_letterboxd,
-  fetch_imdb_ratings,
   type HallInfo,
 } from "$lib/parse";
 
