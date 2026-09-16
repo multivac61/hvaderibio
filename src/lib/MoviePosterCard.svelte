@@ -3,6 +3,7 @@
   import { resolve } from "$app/paths";
 
   import { movie_path_segment } from "$lib/movie-path";
+  import { poster_images } from "$lib/poster-images";
   import type { Movie } from "$lib/schemas";
 
   type Props = {
@@ -13,6 +14,12 @@
 
   const { movie, catalog, index }: Props = $props();
   const movieHref = $derived(resolve(`/movie/${movie_path_segment(movie, catalog)}`));
+  const posters = $derived(poster_images(movie));
+
+  // Match the auto-fill grid: 9rem cards / 1rem gaps on mobile,
+  // 20rem cards / 1.5rem gaps from the sm breakpoint.
+  const gridSizes =
+    "(max-width: 327px) calc(100vw - 24px), (max-width: 487px) calc((100vw - 40px) / 2), (max-width: 639px) calc((100vw - 56px) / 3), (max-width: 695px) calc(100vw - 32px), (max-width: 1039px) calc((100vw - 56px) / 2), (max-width: 1383px) calc((100vw - 80px) / 3), (max-width: 1727px) calc((100vw - 104px) / 4), (max-width: 2071px) calc((100vw - 128px) / 5), 360px";
 
   let touchStart: { x: number; y: number } | null = null;
 
@@ -50,13 +57,13 @@
   <picture>
     <source
       type="image/webp"
-      srcset="/{movie.id}-360w.webp 360w, /{movie.id}.webp 720w, /{movie.id}-1080w.webp 1080w"
-      sizes="(max-width: 640px) calc(50vw - 2rem), 360px" />
+      srcset="{posters.small} 360w, {posters.medium} 720w, {posters.large} 1080w"
+      sizes={index < 4 ? gridSizes : `auto, ${gridSizes}`} />
     <img
-      src="/{movie.id}.webp"
+      src={posters.medium}
       alt={movie.title}
       fetchpriority={index < 4 ? "high" : "auto"}
-      loading="eager"
+      loading={index < 4 ? "eager" : "lazy"}
       decoding="async"
       width="720"
       height="1080"

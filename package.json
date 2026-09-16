@@ -15,7 +15,7 @@
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
     "scrape": "svelte-kit sync && bun src/scrape.ts",
-    "clean": "rm -rf static/*.webp static/movies.json .svelte-kit build"
+    "clean": "rm -rf static/*.webp static/posters static/movies.json .svelte-kit build"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

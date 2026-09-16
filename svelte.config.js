@@ -7,7 +7,7 @@ const getAdapter = async () => {
     return adapterCloudflare({
       routes: {
         include: ["/*"],
-        exclude: ["/_app/*", "/*.webp", "/*.json", "/*.txt", "/*.ico", "/*.xml", "/movie/*"],
+        exclude: ["/_app/*", "/posters/*", "/*.webp", "/*.json", "/*.txt", "/*.ico", "/*.xml", "/movie/*"],
       },
     });
   } else {

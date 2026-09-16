@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 
 import { parseHTML } from "linkedom";
-import sharp from "sharp";
+import { process_movie_poster } from "./poster-cache";
 import { fetch_page, map_concurrent } from "./scrape-requests";
 import { fetch_imdb_ratings } from "./imdb";
 
@@ -37,14 +37,6 @@ const headers = {
   "upgrade-insecure-requests": "1",
   "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36",
 } as const;
-
-// --- Determine Target Image Size for High-Density Displays ---
-// Base display width is 360px. For 2x DPR screens, we need 2 * 360 = 720px.
-const baseWidth = 360;
-const targetWidth = baseWidth * 2; // 720
-const targetHeight = Math.round(targetWidth * (3 / 2)); // Calculate height for 2:3 aspect ratio (1080)
-
-console.log(`Targeting image dimensions: ${targetWidth}w x ${targetHeight}h`);
 
 async function scrapeMovie(id: number): Promise<Movie | null> {
   try {
@@ -91,48 +83,13 @@ async function scrapeMovie(id: number): Promise<Movie | null> {
 
 async function processMoviePoster(movie: Movie): Promise<Movie> {
   try {
-    const res = await fetch(movie.poster_url, { headers });
-    if (!res.ok) {
-      throw new Error(`Failed to fetch poster ${movie.poster_url}: ${res.statusText}`);
-    }
-    const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
-
-    const webpPath = path.resolve(staticDirectory, `${movie.id}.webp`);
-    const jpgPath = path.resolve(staticDirectory, `${movie.id}.jpg`);
-
-    // Clean up any old JPG files
-    try {
-      await fs.unlink(jpgPath);
-    } catch {
-      // Ignore if file doesn't exist
-    }
-
-    // Generate multiple sizes for responsive images
-    const image = sharp(buffer);
-
-    // Small size for mobile (360w for 1x displays) - aggressive compression
-    const img360 = image.clone().resize(360, 540, { fit: "cover" });
-    await img360
-      .clone()
-      .webp({ quality: 70, effort: 6, nearLossless: false, smartSubsample: true })
-      .toFile(path.resolve(staticDirectory, `${movie.id}-360w.webp`));
-
-    // Medium size for mobile retina (720w for 2x displays)
-    const img720 = image.clone().resize(targetWidth, targetHeight, { fit: "cover" });
-    await img720.clone().webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true }).toFile(webpPath);
-
-    // Large size for desktop (1080w for larger screens)
-    const img1080 = image.clone().resize(1080, 1620, { fit: "cover" });
-    await img1080
-      .clone()
-      .webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true })
-      .toFile(path.resolve(staticDirectory, `${movie.id}-1080w.webp`));
-
-    return movie;
+    return { ...movie, poster_images: await process_movie_poster(movie, { staticDirectory, headers }) };
   } catch (error) {
     console.error(`Failed to process poster for movie ID ${movie.id} (${movie.title}):`, error);
-    // Still return movie data if poster fails
-    return movie;
+    return {
+      ...movie,
+      poster_images: { small: movie.poster_url, medium: movie.poster_url, large: movie.poster_url },
+    };
   }
 }
 
