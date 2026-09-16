@@ -1,3 +1,4 @@
+import { fetch_page } from "./scrape-requests";
 import { movie_schema, cinema_showtimes_schema, type CinemaShowtimes, type ShowtimesByDay } from "./schemas";
 
 function combineDateWithTime(hour_minute: string, dayOffset: number = 0): string {
@@ -253,7 +254,7 @@ export function parse_showtimes_by_day(document: Document): ShowtimesByDay {
 // Function to extract direct cinema URL from redirect page
 export async function extract_direct_url(redirect_url: string): Promise<string> {
   try {
-    const response = await fetch(redirect_url);
+    const response = await fetch_page(redirect_url);
     const html = await response.text();
 
     // Look for the window.location.href pattern in the JavaScript
@@ -342,43 +343,6 @@ export function parse_hall_info_from_listing(document: Document): Map<string, Ha
   return hallInfoMap;
 }
 
-export type ImdbRating = { star: number; votes: number };
-
-// Fetch IMDb ratings from IMDb's public dataset. This avoids relying on the
-// kvikmyndir.is rating widget, which can be stale or missing and previously
-// caused us to persist placeholder 0 ratings from IMDb links.
-export async function fetch_imdb_ratings(imdbIds: readonly string[]): Promise<Map<string, ImdbRating>> {
-  const ids = new Set(imdbIds);
-  const ratings = new Map<string, ImdbRating>();
-  if (ids.size === 0) return ratings;
-
-  const response = await fetch("https://datasets.imdbws.com/title.ratings.tsv.gz", {
-    headers: { "User-Agent": "hvaderibio/1.0" },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch IMDb ratings dataset: ${response.status} ${response.statusText}`);
-  }
-
-  const { gunzipSync } = await import("node:zlib");
-  const tsv = gunzipSync(Buffer.from(await response.arrayBuffer())).toString("utf8");
-
-  for (const line of tsv.split("\n").slice(1)) {
-    if (ratings.size === ids.size) break;
-
-    const [id, averageRating, numVotes] = line.split("\t");
-    if (!ids.has(id)) continue;
-
-    const star = parseFloat(averageRating);
-    const votes = parseInt(numVotes);
-    if (Number.isFinite(star) && star > 0 && Number.isFinite(votes)) {
-      ratings.set(id, { star, votes });
-    }
-  }
-
-  return ratings;
-}
-
 // Fetch RT, Metacritic, and Letterboxd URLs from Wikidata using IMDb ID
 export async function fetch_external_urls(imdbId: string): Promise<{ rtUrl?: string; mcUrl?: string; letterboxdUrl?: string }> {
   try {
@@ -390,7 +354,7 @@ export async function fetch_external_urls(imdbId: string): Promise<{ rtUrl?: str
         OPTIONAL { ?movie wdt:P6127 ?lbId . }
       }`;
 
-    const response = await fetch("https://query.wikidata.org/sparql?" + new URLSearchParams({ query: sparql, format: "json" }), {
+    const response = await fetch_page("https://query.wikidata.org/sparql?" + new URLSearchParams({ query: sparql, format: "json" }), {
       headers: { "User-Agent": "hvaderibio/1.0" },
     });
 
@@ -411,7 +375,7 @@ export async function fetch_external_urls(imdbId: string): Promise<{ rtUrl?: str
 // Scrape Rotten Tomatoes scores from RT page
 export async function scrape_rotten_tomatoes(url: string): Promise<{ score?: number; audience_score?: number } | null> {
   try {
-    const response = await fetch(url, {
+    const response = await fetch_page(url, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -472,7 +436,7 @@ export async function scrape_rotten_tomatoes(url: string): Promise<{ score?: num
 // Scrape Metacritic scores from MC page
 export async function scrape_metacritic(url: string): Promise<{ score?: number; user_score?: number } | null> {
   try {
-    const response = await fetch(url, {
+    const response = await fetch_page(url, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -516,7 +480,7 @@ export async function scrape_metacritic(url: string): Promise<{ score?: number; 
 // Scrape Letterboxd score from Letterboxd page
 export async function scrape_letterboxd(url: string): Promise<{ score?: number } | null> {
   try {
-    const response = await fetch(url, {
+    const response = await fetch_page(url, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",

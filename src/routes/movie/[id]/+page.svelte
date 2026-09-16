@@ -1,6 +1,7 @@
 <script lang="ts">
   import { get_showtime_window } from "$lib/showtimes";
   import { get_movie_programme } from "$lib/programme";
+  import { poster_images } from "$lib/poster-images";
   import { get_youtube_id, is_mobile_user_agent } from "$lib/video";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "$lib/cinema-state.svelte";
   import { dayState } from "$lib/day-state.svelte";
@@ -11,6 +12,7 @@
 
   const { data } = $props();
   const movie = $derived(data.movie);
+  const posters = $derived(poster_images(movie));
   const cinema_options = $derived(data.cinema_options);
 
   // Extract YouTube video ID from trailer URL
@@ -42,10 +44,6 @@
 
   const visible_showtimes = $derived(get_movie_programme(movie, selected_day, selected_cinemas, { from, to }));
 </script>
-
-<svelte:head>
-  <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />
-</svelte:head>
 
 <div class="relative">
   <div in:fade={{ duration: 220 }} class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
@@ -97,9 +95,12 @@
         {:else}
           <!-- Mobile fallback: poster if no trailer -->
           <picture class="block md:hidden">
-            <source type="image/webp" srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w`} sizes="100vw" />
+            <source
+              type="image/webp"
+              srcset={`${posters.small} 360w, ${posters.medium} 720w, ${posters.large} 1080w`}
+              sizes="calc(100vw - 32px)" />
             <img
-              src={`/${movie.id}.webp`}
+              src={posters.medium}
               title={movie.title}
               alt={movie.title}
               width="720"
@@ -114,12 +115,9 @@
         {/if}
         <!-- Desktop: Always show poster -->
         <picture in:fade={{ duration: 260 }} class="hidden md:block">
-          <source
-            type="image/webp"
-            srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w`}
-            sizes="(max-width: 768px) 192px, 320px" />
+          <source type="image/webp" srcset={`${posters.small} 360w, ${posters.medium} 720w`} sizes="(max-width: 768px) 192px, 320px" />
           <img
-            src={`/${movie.id}.webp`}
+            src={posters.medium}
             title={movie.title}
             alt={movie.title}
             width="720"

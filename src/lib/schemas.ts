@@ -23,12 +23,20 @@ export type ShowtimesByDay = z.infer<typeof showtimes_by_day_schema>;
 export type Movie = z.infer<typeof movie_schema>;
 export type Showtime = z.infer<typeof showtime_schema>;
 
+export const poster_images_schema = z.object({
+  small: z.string(),
+  medium: z.string(),
+  large: z.string(),
+});
+export type PosterImages = z.infer<typeof poster_images_schema>;
+
 export const movie_schema = z.object({
   title: z.string(),
   id: z.number(),
   alt_title: z.optional(z.string()),
   release_year: z.number(),
   poster_url: z.url(),
+  poster_images: z.optional(poster_images_schema),
   rating_urls: z.optional(z.array(z.url())),
   content_rating: z.optional(z.string()),
   description: z.string(),

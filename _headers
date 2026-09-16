@@ -1,5 +1,9 @@
 # Cache static assets
 /*.webp
+  Cache-Control: public, max-age=0, must-revalidate
+
+/posters/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /*.ico

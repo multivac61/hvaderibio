@@ -6,10 +6,16 @@ on:
   schedule:
     - cron: "0 * * * *" # Run every hour
 name: Deploy
+concurrency:
+  group: deploy
+  cancel-in-progress: false
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
+    env:
+      XDG_CACHE_HOME: ${{ github.workspace }}/.cache
+      IMDB_RATINGS_FILE: ${{ github.workspace }}/.cache/hvaderibio/imdb/ratings.tsv.gz
     steps:
       - uses: actions/checkout@main
       - uses: oven-sh/setup-bun@main
@@ -36,8 +42,48 @@ jobs:
           restore-keys: |
             showtime-metadata-
 
+      - name: Determine daily cache key
+        id: cache-date
+        run: echo "day=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore today's posters
+        uses: actions/cache/restore@main
+        with:
+          path: |
+            .cache/hvaderibio/posters
+            static/posters
+          key: posters-v1-${{ runner.os }}-${{ steps.cache-date.outputs.day }}-${{ hashFiles('src/lib/poster-cache.ts', 'bun.lock') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            posters-v1-${{ runner.os }}-${{ steps.cache-date.outputs.day }}-${{ hashFiles('src/lib/poster-cache.ts', 'bun.lock') }}-
+
+      - name: Restore today's IMDb dataset
+        id: imdb-cache
+        uses: actions/cache@main
+        with:
+          path: .cache/hvaderibio/imdb/ratings.tsv.gz
+          key: imdb-ratings-v1-${{ steps.cache-date.outputs.day }}
+
+      - name: Download IMDb dataset on cache miss
+        if: steps.imdb-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$(dirname "$IMDB_RATINGS_FILE")"
+          trap 'rm -f "$IMDB_RATINGS_FILE.tmp"' EXIT
+          curl --fail --location --retry 3 --max-time 120 \
+            --output "$IMDB_RATINGS_FILE.tmp" \
+            https://datasets.imdbws.com/title.ratings.tsv.gz
+          gzip -t "$IMDB_RATINGS_FILE.tmp"
+          mv "$IMDB_RATINGS_FILE.tmp" "$IMDB_RATINGS_FILE"
+
       - name: 🎬 Scrape movie data
         run: bun scrape
+
+      - name: Save today's posters
+        uses: actions/cache/save@main
+        with:
+          path: |
+            .cache/hvaderibio/posters
+            static/posters
+          key: posters-v1-${{ runner.os }}-${{ steps.cache-date.outputs.day }}-${{ hashFiles('src/lib/poster-cache.ts', 'bun.lock') }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: 💾 Save showtime metadata cache
         uses: actions/cache/save@main

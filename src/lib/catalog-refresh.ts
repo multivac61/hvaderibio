@@ -2,7 +2,9 @@ import fs from "fs/promises";
 import path from "path";
 
 import { parseHTML } from "linkedom";
-import sharp from "sharp";
+import { process_movie_poster } from "./poster-cache";
+import { fetch_page, map_concurrent } from "./scrape-requests";
+import { fetch_imdb_ratings } from "./imdb";
 
 import type { Movie, Showtime } from "$lib/schemas";
 import {
@@ -14,7 +16,6 @@ import {
   scrape_rotten_tomatoes,
   scrape_metacritic,
   scrape_letterboxd,
-  fetch_imdb_ratings,
   type HallInfo,
 } from "$lib/parse";
 
@@ -37,19 +38,9 @@ const headers = {
   "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36",
 } as const;
 
-// --- Determine Target Image Size for High-Density Displays ---
-// Base display width is 360px. For 2x DPR screens, we need 2 * 360 = 720px.
-const baseWidth = 360;
-const targetWidth = baseWidth * 2; // 720
-const targetHeight = Math.round(targetWidth * (3 / 2)); // Calculate height for 2:3 aspect ratio (1080)
-
-console.log(`Targeting image dimensions: ${targetWidth}w x ${targetHeight}h`);
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 async function scrapeMovie(id: number): Promise<Movie | null> {
   try {
-    const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
+    const movie = await fetch_page(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
     const { document: movie_document } = parseHTML(await movie.text());
     const parsed_movie = parse_movie(movie_document, id);
 
@@ -92,48 +83,13 @@ async function scrapeMovie(id: number): Promise<Movie | null> {
 
 async function processMoviePoster(movie: Movie): Promise<Movie> {
   try {
-    const res = await fetch(movie.poster_url, { headers });
-    if (!res.ok) {
-      throw new Error(`Failed to fetch poster ${movie.poster_url}: ${res.statusText}`);
-    }
-    const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
-
-    const webpPath = path.resolve(staticDirectory, `${movie.id}.webp`);
-    const jpgPath = path.resolve(staticDirectory, `${movie.id}.jpg`);
-
-    // Clean up any old JPG files
-    try {
-      await fs.unlink(jpgPath);
-    } catch {
-      // Ignore if file doesn't exist
-    }
-
-    // Generate multiple sizes for responsive images
-    const image = sharp(buffer);
-
-    // Small size for mobile (360w for 1x displays) - aggressive compression
-    const img360 = image.clone().resize(360, 540, { fit: "cover" });
-    await img360
-      .clone()
-      .webp({ quality: 70, effort: 6, nearLossless: false, smartSubsample: true })
-      .toFile(path.resolve(staticDirectory, `${movie.id}-360w.webp`));
-
-    // Medium size for mobile retina (720w for 2x displays)
-    const img720 = image.clone().resize(targetWidth, targetHeight, { fit: "cover" });
-    await img720.clone().webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true }).toFile(webpPath);
-
-    // Large size for desktop (1080w for larger screens)
-    const img1080 = image.clone().resize(1080, 1620, { fit: "cover" });
-    await img1080
-      .clone()
-      .webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true })
-      .toFile(path.resolve(staticDirectory, `${movie.id}-1080w.webp`));
-
-    return movie;
+    return { ...movie, poster_images: await process_movie_poster(movie, { staticDirectory, headers }) };
   } catch (error) {
     console.error(`Failed to process poster for movie ID ${movie.id} (${movie.title}):`, error);
-    // Still return movie data if poster fails
-    return movie;
+    return {
+      ...movie,
+      poster_images: { small: movie.poster_url, medium: movie.poster_url, large: movie.poster_url },
+    };
   }
 }
 
@@ -219,9 +175,8 @@ async function enrich_sambio_bookings(movies: readonly Movie[], hallInfoMap: Map
     if (url in cache) {
       cacheHits++;
     } else {
-      await delay(100);
       try {
-        const response = await fetch(url, { headers });
+        const response = await fetch_page(url, { headers });
         if (response.ok) {
           cache[url] = parse_sambio_booking(parseHTML(await response.text()).document);
         }
@@ -243,7 +198,7 @@ async function enrich_sambio_bookings(movies: readonly Movie[], hallInfoMap: Map
 }
 
 export async function refresh_movie_catalog() {
-  const showtimesResponse = await fetch("https://www.kvikmyndir.is/bio/syningatimar", { headers });
+  const showtimesResponse = await fetch_page("https://www.kvikmyndir.is/bio/syningatimar", { headers });
   const html = await showtimesResponse.text();
   const { document } = parseHTML(html);
 
@@ -254,13 +209,7 @@ export async function refresh_movie_catalog() {
   const movieIds = parse_movie_ids(document);
   console.log(`Found ${movieIds.length} movies to scrape`);
 
-  // Process movies sequentially with rate limiting to avoid overwhelming the server
-  const movies: Movie[] = [];
-  for (const id of movieIds) {
-    await delay(100); // 100ms delay between requests
-    const movie = await scrapeMovie(id);
-    if (movie) movies.push(movie);
-  }
+  const movies = (await map_concurrent(movieIds, 4, scrapeMovie)).filter((movie): movie is Movie => movie !== null);
 
   await enrich_sambio_bookings(movies, hallInfoMap);
   const moviesWithHallInfo = movies.map((movie) => apply_hall_info(movie, hallInfoMap));
@@ -272,87 +221,81 @@ export async function refresh_movie_catalog() {
   console.log(`Fetched ${imdbRatings.size} IMDb ratings. Fetching external URLs and scores...`);
 
   // Fetch RT, Metacritic, and Letterboxd URLs from Wikidata, then scrape scores
-  const moviesWithUrls = await Promise.all(
-    moviesWithHallInfo.map(async (movie) => {
-      if (!movie.imdb?.link) return movie;
+  const moviesWithUrls = await map_concurrent(moviesWithHallInfo, 4, async (movie) => {
+    if (!movie.imdb?.link) return movie;
 
-      const imdbId = movie.imdb.link.match(/tt\d+/)?.[0];
-      if (!imdbId) return movie;
+    const imdbId = movie.imdb.link.match(/tt\d+/)?.[0];
+    if (!imdbId) return movie;
 
-      const imdbRating = imdbRatings.get(imdbId);
-      const imdb = imdbRating ? { ...movie.imdb, star: imdbRating.star } : movie.imdb?.star ? movie.imdb : undefined;
+    const imdbRating = imdbRatings.get(imdbId);
+    const imdb = imdbRating ? { ...movie.imdb, star: imdbRating.star } : movie.imdb?.star ? movie.imdb : undefined;
 
-      await delay(100); // Rate limit Wikidata requests
-      const { rtUrl, mcUrl, letterboxdUrl } = await fetch_external_urls(imdbId);
+    const { rtUrl, mcUrl, letterboxdUrl } = await fetch_external_urls(imdbId);
 
-      let rotten_tomatoes = movie.rotten_tomatoes;
-      let metacritic = movie.metacritic;
-      let letterboxd: { score?: number; url?: string } | undefined;
+    let rotten_tomatoes = movie.rotten_tomatoes;
+    let metacritic = movie.metacritic;
+    let letterboxd: { score?: number; url?: string } | undefined;
 
-      // Scrape RT scores if we have a URL
-      if (rtUrl) {
-        await delay(200);
-        const rtScores = await scrape_rotten_tomatoes(rtUrl);
-        if (rtScores?.score !== undefined) {
-          rotten_tomatoes = {
-            score: rtScores.score,
-            audience_score: rtScores.audience_score,
-            url: rtUrl,
-          };
-          console.log(`  RT scores for ${movie.title}: ${rtScores.score}% (audience: ${rtScores.audience_score ?? "N/A"}%)`);
-        } else if (movie.rotten_tomatoes) {
-          // Keep kvikmyndir.is score but add URL
-          rotten_tomatoes = { ...movie.rotten_tomatoes, url: rtUrl };
-        }
+    // Scrape RT scores if we have a URL
+    if (rtUrl) {
+      const rtScores = await scrape_rotten_tomatoes(rtUrl);
+      if (rtScores?.score !== undefined) {
+        rotten_tomatoes = {
+          score: rtScores.score,
+          audience_score: rtScores.audience_score,
+          url: rtUrl,
+        };
+        console.log(`  RT scores for ${movie.title}: ${rtScores.score}% (audience: ${rtScores.audience_score ?? "N/A"}%)`);
+      } else if (movie.rotten_tomatoes) {
+        // Keep kvikmyndir.is score but add URL
+        rotten_tomatoes = { ...movie.rotten_tomatoes, url: rtUrl };
       }
+    }
 
-      // Scrape MC scores if we have a URL
-      if (mcUrl) {
-        await delay(200);
-        const mcScores = await scrape_metacritic(mcUrl);
-        if (mcScores?.score !== undefined) {
-          metacritic = {
-            score: mcScores.score,
-            user_score: mcScores.user_score,
-            url: mcUrl,
-          };
-          console.log(`  MC scores for ${movie.title}: ${mcScores.score} (user: ${mcScores.user_score ?? "N/A"})`);
-        } else if (movie.metacritic) {
-          // Keep kvikmyndir.is score but add URL
-          metacritic = { ...movie.metacritic, url: mcUrl };
-        }
+    // Scrape MC scores if we have a URL
+    if (mcUrl) {
+      const mcScores = await scrape_metacritic(mcUrl);
+      if (mcScores?.score !== undefined) {
+        metacritic = {
+          score: mcScores.score,
+          user_score: mcScores.user_score,
+          url: mcUrl,
+        };
+        console.log(`  MC scores for ${movie.title}: ${mcScores.score} (user: ${mcScores.user_score ?? "N/A"})`);
+      } else if (movie.metacritic) {
+        // Keep kvikmyndir.is score but add URL
+        metacritic = { ...movie.metacritic, url: mcUrl };
       }
+    }
 
-      // Scrape Letterboxd score if we have a URL
-      if (letterboxdUrl) {
-        await delay(200);
-        const lbScore = await scrape_letterboxd(letterboxdUrl);
-        if (lbScore?.score !== undefined) {
-          letterboxd = {
-            score: lbScore.score,
-            url: letterboxdUrl,
-          };
-          console.log(`  Letterboxd score for ${movie.title}: ${lbScore.score}/5`);
-        } else {
-          // Still include URL even without score
-          letterboxd = { url: letterboxdUrl };
-        }
+    // Scrape Letterboxd score if we have a URL
+    if (letterboxdUrl) {
+      const lbScore = await scrape_letterboxd(letterboxdUrl);
+      if (lbScore?.score !== undefined) {
+        letterboxd = {
+          score: lbScore.score,
+          url: letterboxdUrl,
+        };
+        console.log(`  Letterboxd score for ${movie.title}: ${lbScore.score}/5`);
+      } else {
+        // Still include URL even without score
+        letterboxd = { url: letterboxdUrl };
       }
+    }
 
-      return {
-        ...movie,
-        imdb,
-        rotten_tomatoes,
-        metacritic,
-        letterboxd,
-      };
-    })
-  );
+    return {
+      ...movie,
+      imdb,
+      rotten_tomatoes,
+      metacritic,
+      letterboxd,
+    };
+  });
 
   console.log(`Fetched external URLs. Processing posters...`);
 
-  // Process posters (can be done in parallel since they're different URLs)
-  const moviesWithPosters = await Promise.all(moviesWithUrls.map(processMoviePoster));
+  // Limit simultaneous downloads and native image encoders.
+  const moviesWithPosters = await map_concurrent(moviesWithUrls, 2, processMoviePoster);
 
   console.log(`Processed ${moviesWithPosters.length} movies. Writing movies.json...`);
   await fs.writeFile(path.resolve(staticDirectory, "movies.json"), JSON.stringify(moviesWithPosters, null, 2));
