@@ -450,7 +450,7 @@
 
     "esquery": ["esquery@1.7.0", "", { "dependencies": { "estraverse": "^5.1.0" } }, "sha512-Ap6G0WQwcU/LHsvLwON1fAQX9Zp0A2Y6Y/cJBl9r/JbW90Zyg4/zbG6zzKa2OTALELarYHmKu0GhpM5EO+7T0g=="],
 
-    "esrap": ["esrap@2.3.14", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.4.15" }, "peerDependencies": { "@typescript-eslint/types": "^8.2.0" }, "optionalPeers": ["@typescript-eslint/types"] }, "sha512-Bj/f1mOb6SnJ5f+5wOF/eqOKfvY+g+nJIKLQRqrEFOJ2mrMVORqQ6Ot7RTL1GhFctr0o+i0o1xfsNLeuA+mu4A=="],
+    "esrap": ["esrap@2.4.0", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.4.15" }, "peerDependencies": { "@typescript-eslint/types": "^8.2.0" }, "optionalPeers": ["@typescript-eslint/types"] }, "sha512-CQPcneEHw/czj32uwQC52nYnax8H4SXt25FCM+LIwGZ49cMIxpOj3bP8wmzcI+Z0HIy5KkClaPhRLfCySzwHPA=="],
 
     "esrecurse": ["esrecurse@4.3.0", "", { "dependencies": { "estraverse": "^5.2.0" } }, "sha512-KmfKL3b6G+RXvP8N1vr3Tq1kL/oCFgn2NYXEtqP8/L3pKapUA4G8cFVaoF3SU323CD4XypR/ffioHmkti6/Tag=="],
 
