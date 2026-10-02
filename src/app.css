@@ -15,8 +15,9 @@
   }
 
   /* A visible keyboard focus ring everywhere; the browser default is a faint
-     hairline against the dark posters. Components with their own ring
-     (cinema tabs and select) opt out with focus:outline-none. */
+     hairline against the dark posters. Pills inside clipping rows (cinema tabs,
+     day picker) draw an inset box-shadow ring instead, which follows their
+     rounded corners exactly. */
   :focus-visible {
     outline: 2px solid white;
     outline-offset: 3px;

@@ -44,7 +44,7 @@
       bind:this={day_buttons[i]}
       type="button"
       onclick={() => onSelect(day)}
-      class="relative z-10 rounded-full px-2.5 text-[13px] leading-4 font-medium transition-colors duration-200 {buttonSizeClass} {selectedDay ===
+      class="relative z-10 rounded-full px-2.5 text-[13px] leading-4 font-medium transition-colors duration-200 focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none focus-visible:ring-inset {buttonSizeClass} {selectedDay ===
       day
         ? 'text-white'
         : 'text-neutral-400 hover:text-neutral-200'}">
