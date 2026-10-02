@@ -78,7 +78,7 @@
   }
 
   .movie-poster-card:focus-visible .movie-poster-image {
-    outline: 2px solid white;
+    outline: 1px solid white;
     outline-offset: 3px;
     transform: scale(1.02);
     filter: brightness(1.1);

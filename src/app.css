@@ -14,12 +14,12 @@
     scroll-behavior: auto !important;
   }
 
-  /* A visible keyboard focus ring everywhere; the browser default is a faint
-     hairline against the dark posters. Pills inside clipping rows (cinema tabs,
-     day picker) draw an inset box-shadow ring instead, which follows their
-     rounded corners exactly. */
+  /* A visible 1px keyboard focus ring everywhere; the browser default is a
+     faint hairline against the dark posters. Pills inside clipping rows draw
+     theirs inside instead: the cinema tabs whiten their border, the day
+     picker uses an inset box-shadow ring that follows its rounded corners. */
   :focus-visible {
-    outline: 2px solid white;
+    outline: 1px solid white;
     outline-offset: 3px;
   }
 
