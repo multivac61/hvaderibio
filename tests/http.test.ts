@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { fetch_text } from "../src/lib/http";
-import { fetch_imdb_ratings } from "../src/lib/parse";
+import { prefetch_imdb_ratings } from "../src/lib/parse";
 
 let server: ReturnType<typeof Bun.serve>;
 beforeAll(() => {
@@ -24,9 +24,9 @@ describe("fetch_text", () => {
   });
 });
 
-describe("fetch_imdb_ratings", () => {
+describe("prefetch_imdb_ratings", () => {
   test("treats an unavailable ratings dataset as no ratings", async () => {
-    const ratings = await fetch_imdb_ratings(["tt0111161"], new URL("/down", server.url).href);
+    const ratings = await prefetch_imdb_ratings(new URL("/down", server.url).href)(["tt0111161"]);
     expect(ratings.size).toBe(0);
   });
 });

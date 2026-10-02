@@ -354,45 +354,51 @@ export function parse_hall_info_from_listing(document: Document): Map<string, Ha
 
 export type ImdbRating = { star: number; votes: number };
 
-// Fetch IMDb ratings from IMDb's public dataset. This avoids relying on the
+// Read IMDb ratings from IMDb's public dataset. This avoids relying on the
 // kvikmyndir.is rating widget, which can be stale or missing and previously
 // caused us to persist placeholder 0 ratings from IMDb links. Ratings are an
 // optional extra, so an unavailable dataset yields no ratings rather than
 // blocking the deploy; callers fall back to the kvikmyndir.is rating.
-export async function fetch_imdb_ratings(
-  imdbIds: readonly string[],
-  dataset_url = "https://datasets.imdbws.com/title.ratings.tsv.gz"
-): Promise<Map<string, ImdbRating>> {
-  const ids = new Set(imdbIds);
-  const ratings = new Map<string, ImdbRating>();
-  if (ids.size === 0) return ratings;
-
-  const response = await fetch(dataset_url, {
-    headers: { "User-Agent": "hvaderibio/1.0" },
-  });
-
-  if (!response.ok) {
-    console.error(`Skipping IMDb ratings, dataset unavailable: ${response.status} ${response.statusText}`);
-    return ratings;
+async function download_imdb_dataset(dataset_url: string): Promise<string | null> {
+  try {
+    const response = await fetch(dataset_url, { headers: { "User-Agent": "hvaderibio/1.0" } });
+    if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+    return new TextDecoder().decode(Bun.gunzipSync(new Uint8Array(await response.arrayBuffer())));
+  } catch (error) {
+    console.error("Skipping IMDb ratings, dataset unavailable:", error);
+    return null;
   }
+}
 
-  const { gunzipSync } = await import("node:zlib");
-  const tsv = gunzipSync(Buffer.from(await response.arrayBuffer())).toString("utf8");
+/**
+ * Start downloading the ratings dataset now and return a lookup that waits
+ * for it. The download does not depend on which movies are showing, so it
+ * can overlap with scraping them.
+ */
+export function prefetch_imdb_ratings(dataset_url = "https://datasets.imdbws.com/title.ratings.tsv.gz") {
+  const dataset = download_imdb_dataset(dataset_url);
 
-  for (const line of tsv.split("\n").slice(1)) {
-    if (ratings.size === ids.size) break;
+  return async (imdbIds: readonly string[]): Promise<Map<string, ImdbRating>> => {
+    const ids = new Set(imdbIds);
+    const ratings = new Map<string, ImdbRating>();
+    const tsv = await dataset;
+    if (!tsv) return ratings;
 
-    const [id, averageRating, numVotes] = line.split("\t");
-    if (!ids.has(id)) continue;
+    for (const line of tsv.split("\n").slice(1)) {
+      if (ratings.size === ids.size) break;
 
-    const star = parseFloat(averageRating);
-    const votes = parseInt(numVotes);
-    if (Number.isFinite(star) && star > 0 && Number.isFinite(votes)) {
-      ratings.set(id, { star, votes });
+      const [id, averageRating, numVotes] = line.split("\t");
+      if (!ids.has(id)) continue;
+
+      const star = parseFloat(averageRating);
+      const votes = parseInt(numVotes);
+      if (Number.isFinite(star) && star > 0 && Number.isFinite(votes)) {
+        ratings.set(id, { star, votes });
+      }
     }
-  }
 
-  return ratings;
+    return ratings;
+  };
 }
 
 export type ExternalUrls = { rtUrl?: string; mcUrl?: string; letterboxdUrl?: string };
