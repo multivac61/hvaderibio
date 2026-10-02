@@ -20,6 +20,25 @@
     now = new Date();
   });
 
+  // Return keyboard focus to the poster a visitor opened when they come back
+  // to this page through history, so the next Tab continues from there
+  // instead of the top. Scroll position is already restored by SvelteKit.
+  let poster_to_refocus = $state<string | null>(null);
+
+  export const snapshot = {
+    capture: () => (document.activeElement instanceof HTMLElement ? (document.activeElement.dataset.movieId ?? null) : null),
+    restore: (movie_id: string | null) => {
+      poster_to_refocus = movie_id;
+    },
+  };
+
+  $effect(() => {
+    // The grid renders after mount, so wait for it before focusing.
+    if (!now || poster_to_refocus === null) return;
+    document.querySelector<HTMLElement>(`a[data-movie-id="${CSS.escape(poster_to_refocus)}"]`)?.focus({ preventScroll: true });
+    poster_to_refocus = null;
+  });
+
   // Read cinema and day from shared state
   const selected_choice = $derived(cinemaState.value ?? DEFAULT_CINEMA_CHOICE);
   const selected_cinemas = $derived(get_cinemas_for_choice(selected_choice, cinema_options));
