@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { get_movie_programme, get_programme_movies } from "../src/lib/programme";
+import { get_movie_programme, get_programme_movies, to_programme_entry } from "../src/lib/programme";
 import { movie_schema, type Showtime } from "../src/lib/schemas";
 
 const showtime = (time: string, purchase_url: string): Showtime => ({
@@ -50,7 +50,24 @@ describe("programme", () => {
       }),
     ];
 
-    expect(get_programme_movies(movies, "0", ["Cinema"], evening).map(({ id }) => id)).toEqual([2, 1]);
+    const entries = movies.map((m) => to_programme_entry(m, movies));
+
+    expect(get_programme_movies(entries, "0", ["Cinema"], evening).map(({ id }) => id)).toEqual([2, 1]);
+  });
+
+  test("reduces a movie to what the programme grid needs", () => {
+    const selected = movie(7, {
+      "0": [showtime("2026-09-03T20:00:00.000Z", "https://example.com/a"), showtime("2026-09-03T20:00:00.000Z", "https://example.com/a")],
+      "1": [showtime("2026-09-04T20:00:00.000Z", "https://example.com/b"), showtime("2026-09-04T20:00:00.000Z", "https://example.com/c")],
+    });
+
+    expect(to_programme_entry(selected, [selected])).toEqual({
+      id: 7,
+      title: "Movie 7",
+      path: "movie-7",
+      // Duplicate listings collapse; distinct screenings at the same time stay.
+      times: { Cinema: ["2026-09-03T20:00:00.000Z", "2026-09-04T20:00:00.000Z", "2026-09-04T20:00:00.000Z"] },
+    });
   });
 
   test("hides today's showtimes that started before the current Reykjavik hour", () => {

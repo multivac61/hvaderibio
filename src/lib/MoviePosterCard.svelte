@@ -2,17 +2,15 @@
   import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
 
-  import { movie_path_segment } from "#lib/movie-path.js";
-  import type { Movie } from "#lib/schemas.js";
+  import type { ProgrammeEntry } from "#lib/programme.js";
 
   type Props = {
-    movie: Movie;
-    catalog: readonly Movie[];
+    movie: Pick<ProgrammeEntry, "id" | "title" | "path">;
     index: number;
   };
 
-  const { movie, catalog, index }: Props = $props();
-  const movieHref = $derived(resolve(`movie/${movie_path_segment(movie, catalog)}`));
+  const { movie, index }: Props = $props();
+  const movieHref = $derived(resolve(`movie/${movie.path}`));
 
   let touchStart: { x: number; y: number } | null = null;
 
