@@ -11,6 +11,7 @@
   import { resolve } from "$app/paths";
   import { is_keyboard_navigation } from "#lib/input-modality.js";
   import { open_on_space } from "#lib/open-on-space.js";
+  import { count_label } from "#lib/accessible-labels.js";
   import { fade } from "svelte/transition";
 
   const { data } = $props();
@@ -229,6 +230,16 @@
           </div>
 
           <!-- eslint-disable svelte/no-navigation-without-resolve -->
+          <!-- Announces the result of changing the day or cinema to screen readers. -->
+          <p role="status" class="sr-only">
+            {visible_showtimes.length > 0
+              ? count_label(
+                  visible_showtimes.reduce((n, row) => n + row.showtimes.length, 0),
+                  "sýning",
+                  "sýningar"
+                )
+              : "Engar sýningar fundust"}
+          </p>
           {#key `${selected_day}-${selected_choice}`}
             {#if visible_showtimes.length > 0}
               <div in:fade={{ duration: 160 }} class="space-y-3">

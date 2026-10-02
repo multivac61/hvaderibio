@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { rating_labels, showtime_label } from "../src/lib/accessible-labels";
+import { count_label, rating_labels, showtime_label } from "../src/lib/accessible-labels";
 
 describe("showtime_label", () => {
   test("reads the time, hall and formats, and says the ticket page opens in a new tab", () => {
@@ -36,5 +36,14 @@ describe("rating_labels", () => {
       metacritic: "Metacritic 46 af 100, notendur 79 af 100 (opnast í nýjum flipa)",
       letterboxd: "Letterboxd 3,7 af 5 (opnast í nýjum flipa)",
     });
+  });
+});
+
+describe("count_label", () => {
+  test("uses the Icelandic singular for counts ending in 1, except 11", () => {
+    expect(count_label(1, "mynd", "myndir")).toBe("1 mynd");
+    expect(count_label(21, "mynd", "myndir")).toBe("21 mynd");
+    expect(count_label(11, "mynd", "myndir")).toBe("11 myndir");
+    expect(count_label(5, "sýning", "sýningar")).toBe("5 sýningar");
   });
 });

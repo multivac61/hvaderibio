@@ -5,6 +5,7 @@
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
+  import { count_label } from "#lib/accessible-labels.js";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
@@ -93,6 +94,13 @@
         presentation="floating" />
     </div>
   </div>
+
+  <!-- Announces the result of changing the day or cinema to screen readers. -->
+  <p role="status" class="sr-only">
+    {#if now}{filtered_cinemas_showtimes.length > 0
+        ? count_label(filtered_cinemas_showtimes.length, "mynd", "myndir")
+        : "Engar sýningar fundust"}{/if}
+  </p>
 
   {#if now}
     {#key `${selected_day}-${selected_choice}`}

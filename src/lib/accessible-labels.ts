@@ -38,3 +38,6 @@ export function rating_labels({ imdb, rotten_tomatoes, metacritic, letterboxd }:
 }
 
 export const external_link_label = (name: string) => `${name}${NEW_TAB}`;
+
+/** "1 mynd", "21 mynd", "11 myndir": Icelandic uses the singular after numbers ending in 1, except 11. */
+export const count_label = (n: number, singular: string, plural: string) => `${n} ${n % 10 === 1 && n % 100 !== 11 ? singular : plural}`;
