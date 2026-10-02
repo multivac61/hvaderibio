@@ -63,18 +63,33 @@
 </a>
 
 <style>
+  .movie-poster-image {
+    transition:
+      transform 300ms ease-out,
+      filter 300ms ease-out,
+      box-shadow 300ms ease-out;
+  }
+
+  /* Keyboard focus gets the hover zoom, with the ring drawn on the image so
+     it scales along with it. */
+  .movie-poster-card:focus-visible {
+    z-index: 50;
+    outline: none;
+  }
+
+  .movie-poster-card:focus-visible .movie-poster-image {
+    outline: 2px solid white;
+    outline-offset: 3px;
+    transform: scale(1.02);
+    filter: brightness(1.1);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  }
+
   /* iOS Safari can turn a touch into a sticky :hover and require a second tap.
      Keep hover selectors entirely outside coarse-pointer devices. */
   @media (hover: hover) and (pointer: fine) {
     .movie-poster-card:hover {
       z-index: 50;
-    }
-
-    .movie-poster-image {
-      transition:
-        transform 300ms ease-out,
-        filter 300ms ease-out,
-        box-shadow 300ms ease-out;
     }
 
     .movie-poster-card:hover .movie-poster-image {

@@ -18,7 +18,7 @@
      hairline against the dark posters. Components with their own ring
      (cinema tabs and select) opt out with focus:outline-none. */
   :focus-visible {
-    outline: 3px solid white;
+    outline: 2px solid white;
     outline-offset: 3px;
   }
 
