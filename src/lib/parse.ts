@@ -1,4 +1,5 @@
 import { movie_schema, cinema_showtimes_schema, type CinemaShowtimes, type ShowtimesByDay } from "./schemas";
+import { DAYS_SHOWN } from "./constants";
 import { fetch_text } from "./http";
 import { reykjavik_date, reykjavik_date_after } from "./reykjavik";
 
@@ -236,8 +237,7 @@ function filter_hidden_showtimes(showtimes_by_day: ShowtimesByDay, cinemas_to_fi
 export function parse_showtimes_by_day(document: Document): ShowtimesByDay {
   const showtimes_by_day: ShowtimesByDay = {};
 
-  // Parse days 0-3 (today through 3 days from now)
-  for (let day = 0; day <= 3; day++) {
+  for (let day = 0; day < DAYS_SHOWN; day++) {
     const day_showtimes = parse_showtimes_for_day(document, day);
     // Only include days that have showtimes
     if (Object.keys(day_showtimes).length > 0) {
@@ -294,6 +294,18 @@ export interface HallInfo {
   is_max?: boolean;
   is_flauel?: boolean;
   is_3d?: boolean;
+}
+
+/**
+ * Merge the showtimes listing for each day. The listing is the only source
+ * of hall names and most format labels, and the only index of which movies
+ * are showing, so every day the site offers must be read, not just today.
+ */
+export function parse_listings(documents: readonly Document[]): { movieIds: number[]; hallInfo: Map<string, HallInfo> } {
+  return {
+    movieIds: [...new Set(documents.flatMap(parse_movie_ids))],
+    hallInfo: new Map(documents.flatMap((document) => [...parse_hall_info_from_listing(document)])),
+  };
 }
 
 export function parse_hall_info_from_listing(document: Document): Map<string, HallInfo> {
