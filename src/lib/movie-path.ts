@@ -1,4 +1,4 @@
-import type { Movie } from "$lib/schemas";
+import type { Movie } from "#lib/schemas.js";
 
 type MovieIdentity = Pick<Movie, "id" | "title">;
 

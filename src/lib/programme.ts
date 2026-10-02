@@ -1,5 +1,5 @@
-import type { Movie, Showtime } from "$lib/schemas";
-import { get_valid_showtimes } from "$lib/showtimes";
+import type { Movie, Showtime } from "#lib/schemas.js";
+import { get_valid_showtimes } from "#lib/showtimes.js";
 
 export type ShowtimeWindow = Readonly<{ from: number; to: number }>;
 

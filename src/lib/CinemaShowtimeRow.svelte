@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { CINEMA_DISPLAY_NAMES, CINEMA_URLS } from "$lib/constants";
-  import type { Showtime } from "$lib/schemas";
-  import ShowtimeBadges from "$lib/ShowtimeBadges.svelte";
+  import { CINEMA_DISPLAY_NAMES, CINEMA_URLS } from "#lib/constants.js";
+  import type { Showtime } from "#lib/schemas.js";
+  import ShowtimeBadges from "#lib/ShowtimeBadges.svelte";
 
   type Props = {
     cinema: string;

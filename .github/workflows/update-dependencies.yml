@@ -44,12 +44,10 @@ jobs:
           bun install --frozen-lockfile
           mkdir -p static
           echo '[]' > static/movies.json
-          # check runs svelte-kit sync, generating the $lib alias for Bun tests.
           bun run check
           bun test
           bun run build
         env:
-          ADAPTER: cloudflare
           NODE_ENV: production
 
       - uses: peter-evans/create-pull-request@v8

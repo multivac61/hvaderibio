@@ -1,5 +1,5 @@
-import type { Movie, Showtime } from "$lib/schemas";
-import { in_range, to_float } from "$lib/util";
+import type { Movie, Showtime } from "#lib/schemas.js";
+import { in_range, to_float } from "#lib/util.js";
 
 export const get_showtime_window = () => ({
   from: Math.min(21, new Date().getHours()),

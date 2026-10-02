@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Movie } from "$lib/schemas";
+  import type { Movie } from "#lib/schemas.js";
 
   type Props = {
     movie: Movie;

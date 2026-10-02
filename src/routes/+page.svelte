@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { get_showtime_window } from "$lib/showtimes";
-  import { get_programme_movies } from "$lib/programme";
-  import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "$lib/cinema-state.svelte";
-  import { dayState } from "$lib/day-state.svelte";
-  import ProgrammeControls from "$lib/ProgrammeControls.svelte";
-  import MoviePosterCard from "$lib/MoviePosterCard.svelte";
+  import { get_showtime_window } from "#lib/showtimes.js";
+  import { get_programme_movies } from "#lib/programme.js";
+  import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
+  import { dayState } from "#lib/day-state.svelte.js";
+  import ProgrammeControls from "#lib/ProgrammeControls.svelte";
+  import MoviePosterCard from "#lib/MoviePosterCard.svelte";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
 

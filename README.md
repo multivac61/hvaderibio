@@ -17,5 +17,4 @@ provides the movie data required by the app; for checks without live data, creat
 `static/movies.json` containing `[]`.
 
 Sharp remains necessary for the posters' centered `cover` cropping and WebP
-encoding options, which Bun.Image does not yet support. Svelte Check's `--tsgo`
-mode needs both TypeScript 6 and the TypeScript 7 alias in `package.json`.
+encoding options, which Bun.Image does not yet support.

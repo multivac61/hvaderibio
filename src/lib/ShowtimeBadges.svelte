@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Showtime } from "$lib/schemas";
+  import type { Showtime } from "#lib/schemas.js";
 
   type Props = {
     showtime: Showtime;
