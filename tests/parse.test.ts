@@ -1,8 +1,9 @@
-import { describe, expect, setSystemTime, test } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { parseHTML } from "linkedom";
-import { parse_movie, parse_movie_ids, parse_showtimes_by_day } from "../src/lib/parse";
+import { assemble_movie, parse_movie_details, parse_movie_ids, type MovieDetails } from "../src/lib/parse";
+import type { Showtime } from "../src/lib/schemas";
 
 // Snapshot test using saved HTML fixture from kvikmyndir.is
 // Fixture: movie 17825 (Project Hail Mary) with future premiere "19. mars 2026"
@@ -23,23 +24,14 @@ describe("premiere filtering (fixture)", () => {
     expect(premiereDate!.textContent).toMatch(/\d{1,2}\.\s*\S+\s+\d{4}/);
   });
 
-  test("filters Smárabíó showtimes for movie with future premiere", () => {
-    setSystemTime(new Date("2026-03-11T12:00:00Z"));
+  test("reads the premiere date from the movie page", () => {
+    const { document } = parseHTML(html);
+    const details = parse_movie_details(document, 17825);
 
-    try {
-      const { document } = parseHTML(html);
-      const movie = parse_movie(document, 17825);
-
-      expect(movie).not.toBeNull();
-      expect(movie!.title).toBe("Project Hail Mary");
-
-      // Smárabíó should have no showtimes (filtered as hidden preview)
-      for (const [, cinemas] of Object.entries(movie!.showtimes_by_day)) {
-        expect(cinemas["Smárabíó"]).toBeUndefined();
-      }
-    } finally {
-      setSystemTime();
-    }
+    expect(details).not.toBeNull();
+    expect(details!.title).toBe("Project Hail Mary");
+    expect(details!.premiere_date).toBe("2026-03-19");
+    expect("showtimes_by_day" in details!).toBe(false);
   });
 });
 
@@ -83,226 +75,42 @@ describe("parse_movie_ids", () => {
   });
 });
 
-describe("parse_movie premiere filtering", () => {
-  test("filters Smárabíó showtimes when movie has future premiere date", () => {
-    // Set premiere to a date far in the future
-    const html = `
-      <html><body>
-        <h1 class="mp-hero__title">Test Movie <span class="mp-hero__year">(2030)</span></h1>
-        <div class="mp-hero__poster"><img src="https://example.com/poster.jpg" /></div>
-        <p class="mp-hero__tagline">A great movie</p>
-        <div class="mp-hero__premiere-badge">
-          <span class="mp-hero__premiere-label">Væntanleg í bíó:</span>
-          <span class="mp-hero__premiere-date">1.  janúar  2030</span>
-        </div>
-        <div class="mp-showtimes__day" data-date="0">
-          <div class="mp-showtimes__cinema">
-            <span class="mp-showtimes__cinema-name">Smárabíó</span>
-            <a class="mp-showtimes__time" href="https://eu.internet-ticketing.com/sales/SMAICE/book?perfcode=99999">
-              <span class="mp-showtimes__time-value">17:30</span>
-            </a>
-          </div>
-          <div class="mp-showtimes__cinema">
-            <span class="mp-showtimes__cinema-name">Háskólabíó</span>
-            <a class="mp-showtimes__time" href="https://tickets.example.com/show1">
-              <span class="mp-showtimes__time-value">20:00</span>
-            </a>
-          </div>
-        </div>
-      </body></html>
-    `;
-    const { document } = parseHTML(html);
-    const movie = parse_movie(document, 99999);
-
-    expect(movie).not.toBeNull();
-    // Smárabíó showtimes should be filtered out
-    expect(movie!.showtimes_by_day["0"]?.["Smárabíó"]).toBeUndefined();
-    // Other cinemas should remain
-    expect(movie!.showtimes_by_day["0"]?.["Háskólabíó"]).toBeDefined();
-    expect(movie!.showtimes_by_day["0"]["Háskólabíó"].length).toBe(1);
-  });
-
-  test("keeps Smárabíó showtimes when movie has no premiere badge", () => {
-    const html = `
-      <html><body>
-        <h1 class="mp-hero__title">Regular Movie <span class="mp-hero__year">(2026)</span></h1>
-        <div class="mp-hero__poster"><img src="https://example.com/poster.jpg" /></div>
-        <p class="mp-hero__tagline">A regular movie</p>
-        <div class="mp-showtimes__day" data-date="0">
-          <div class="mp-showtimes__cinema">
-            <span class="mp-showtimes__cinema-name">Smárabíó</span>
-            <a class="mp-showtimes__time" href="https://eu.internet-ticketing.com/sales/SMAICE/book?perfcode=11111">
-              <span class="mp-showtimes__time-value">19:00</span>
-            </a>
-          </div>
-        </div>
-      </body></html>
-    `;
-    const { document } = parseHTML(html);
-    const movie = parse_movie(document, 11111);
-
-    expect(movie).not.toBeNull();
-    // Smárabíó showtimes should be kept
-    expect(movie!.showtimes_by_day["0"]?.["Smárabíó"]).toBeDefined();
-    expect(movie!.showtimes_by_day["0"]["Smárabíó"].length).toBe(1);
-  });
-
-  test("removes movie entirely if only Smárabíó had showtimes for a future premiere", () => {
-    const html = `
-      <html><body>
-        <h1 class="mp-hero__title">Smárabíó Only <span class="mp-hero__year">(2030)</span></h1>
-        <div class="mp-hero__poster"><img src="https://example.com/poster.jpg" /></div>
-        <p class="mp-hero__tagline">Only at Smárabíó</p>
-        <div class="mp-hero__premiere-badge">
-          <span class="mp-hero__premiere-label">Væntanleg í bíó:</span>
-          <span class="mp-hero__premiere-date">1.  desember  2030</span>
-        </div>
-        <div class="mp-showtimes__day" data-date="0">
-          <div class="mp-showtimes__cinema">
-            <span class="mp-showtimes__cinema-name">Smárabíó</span>
-            <a class="mp-showtimes__time" href="https://eu.internet-ticketing.com/sales/SMAICE/book?perfcode=22222">
-              <span class="mp-showtimes__time-value">20:00</span>
-            </a>
-          </div>
-        </div>
-      </body></html>
-    `;
-    const { document } = parseHTML(html);
-    const movie = parse_movie(document, 22222);
-
-    expect(movie).not.toBeNull();
-    // All showtimes should be empty after filtering
-    expect(Object.keys(movie!.showtimes_by_day)).toHaveLength(0);
-  });
+const details = (premiere_date?: string): MovieDetails => ({
+  id: 99999,
+  title: "Test Movie",
+  release_year: 2030,
+  poster_url: "https://example.com/poster.jpg",
+  description: "A great movie",
+  genres: [],
+  duration_in_mins: 0,
+  language: [],
+  premiere_date,
 });
 
-describe("parse_showtimes_by_day", () => {
-  test("extracts showtimes from cinema divs", () => {
-    const html = `
-      <html>
-        <body>
-          <div class="mp-showtimes__day" data-date="0">
-            <div class="mp-showtimes__cinema">
-              <span class="mp-showtimes__cinema-name">Test Cinema</span>
-              <a class="mp-showtimes__time" href="https://tickets.example.com/show1">
-                <span class="mp-showtimes__time-value">20:30</span>
-              </a>
-              <a class="mp-showtimes__time" href="https://tickets.example.com/show2">
-                <span class="mp-showtimes__time-value">22:00</span>
-              </a>
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
-    const { document } = parseHTML(html);
-    const showtimes_by_day = parse_showtimes_by_day(document);
+const at = (time: string, purchase_url: string): Showtime => ({ time, purchase_url, hall: "Salur 1" });
 
-    expect(showtimes_by_day["0"]).toBeDefined();
-    expect(showtimes_by_day["0"]["Test Cinema"]).toBeDefined();
-    expect(showtimes_by_day["0"]["Test Cinema"].length).toBe(2);
-    expect(showtimes_by_day["0"]["Test Cinema"][0].purchase_url).toBe("https://tickets.example.com/show1");
+describe("assemble_movie", () => {
+  const showtimes_by_day = {
+    "0": {
+      Smárabíó: [at("2026-10-02T17:30:00.000Z", "https://eu.internet-ticketing.com/sales/SMAICE/book?perfcode=99999")],
+      Háskólabíó: [at("2026-10-02T20:00:00.000Z", "https://tickets.example.com/show1")],
+    },
+  };
+
+  test("hides Smárabíó's preview screenings before a future premiere", () => {
+    const movie = assemble_movie(details("2030-01-01"), showtimes_by_day, "2026-10-02");
+
+    expect(movie!.showtimes_by_day["0"]["Smárabíó"]).toBeUndefined();
+    expect(movie!.showtimes_by_day["0"]["Háskólabíó"]).toHaveLength(1);
   });
 
-  test("returns empty object when no showtimes found", () => {
-    const html = `<html><body><p>No showtimes</p></body></html>`;
-    const { document } = parseHTML(html);
-    const showtimes_by_day = parse_showtimes_by_day(document);
-    expect(showtimes_by_day).toEqual({});
+  test("keeps Smárabíó screenings once the movie has premiered or has no premiere badge", () => {
+    expect(assemble_movie(details("2026-10-01"), showtimes_by_day, "2026-10-02")!.showtimes_by_day["0"]["Smárabíó"]).toHaveLength(1);
+    expect(assemble_movie(details(), showtimes_by_day, "2026-10-02")!.showtimes_by_day["0"]["Smárabíó"]).toHaveLength(1);
   });
 
-  test("handles multiple cinemas", () => {
-    const html = `
-      <html>
-        <body>
-          <div class="mp-showtimes__day" data-date="0">
-            <div class="mp-showtimes__cinema">
-              <span class="mp-showtimes__cinema-name">Cinema A</span>
-              <a class="mp-showtimes__time" href="https://tickets.example.com/a1">
-                <span class="mp-showtimes__time-value">18:00</span>
-              </a>
-            </div>
-            <div class="mp-showtimes__cinema">
-              <span class="mp-showtimes__cinema-name">Cinema B</span>
-              <a class="mp-showtimes__time" href="https://tickets.example.com/b1">
-                <span class="mp-showtimes__time-value">19:00</span>
-              </a>
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
-    const { document } = parseHTML(html);
-    const showtimes_by_day = parse_showtimes_by_day(document);
-
-    expect(showtimes_by_day["0"]).toBeDefined();
-    expect(Object.keys(showtimes_by_day["0"])).toHaveLength(2);
-    expect(showtimes_by_day["0"]["Cinema A"]).toBeDefined();
-    expect(showtimes_by_day["0"]["Cinema B"]).toBeDefined();
-  });
-
-  test("parses multiple days", () => {
-    const html = `
-      <html>
-        <body>
-          <div class="mp-showtimes__day" data-date="0">
-            <div class="mp-showtimes__cinema">
-              <span class="mp-showtimes__cinema-name">Cinema A</span>
-              <a class="mp-showtimes__time" href="https://tickets.example.com/a1">
-                <span class="mp-showtimes__time-value">18:00</span>
-              </a>
-            </div>
-          </div>
-          <div class="mp-showtimes__day" data-date="1">
-            <div class="mp-showtimes__cinema">
-              <span class="mp-showtimes__cinema-name">Cinema A</span>
-              <a class="mp-showtimes__time" href="https://tickets.example.com/a2">
-                <span class="mp-showtimes__time-value">19:00</span>
-              </a>
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
-    const { document } = parseHTML(html);
-    const showtimes_by_day = parse_showtimes_by_day(document);
-
-    expect(Object.keys(showtimes_by_day)).toHaveLength(2);
-    expect(showtimes_by_day["0"]).toBeDefined();
-    expect(showtimes_by_day["1"]).toBeDefined();
-  });
-});
-
-describe("parse_showtimes_by_day timezone", () => {
-  test("stores Icelandic showtimes as Reykjavik instants regardless of the machine's zone", () => {
-    const original_tz = process.env.TZ;
-    process.env.TZ = "America/New_York";
-    // 23:30 in Reykjavik is still 2 September in New York.
-    setSystemTime(new Date("2026-09-02T23:30:00Z"));
-
-    try {
-      const { document } = parseHTML(`
-        <div class="mp-showtimes__day" data-date="0">
-          <div class="mp-showtimes__cinema">
-            <span class="mp-showtimes__cinema-name">Bíó Paradís</span>
-            <a class="mp-showtimes__time" href="https://tickets.example.com/a"><span class="mp-showtimes__time-value">20:20</span></a>
-          </div>
-        </div>
-        <div class="mp-showtimes__day" data-date="1">
-          <div class="mp-showtimes__cinema">
-            <span class="mp-showtimes__cinema-name">Bíó Paradís</span>
-            <a class="mp-showtimes__time" href="https://tickets.example.com/b"><span class="mp-showtimes__time-value">17.45</span></a>
-          </div>
-        </div>
-      `);
-
-      const showtimes = parse_showtimes_by_day(document);
-
-      expect(showtimes["0"]["Bíó Paradís"][0].time).toBe("2026-09-02T20:20:00.000Z");
-      expect(showtimes["1"]["Bíó Paradís"][0].time).toBe("2026-09-03T17:45:00.000Z");
-    } finally {
-      setSystemTime();
-      process.env.TZ = original_tz;
-    }
+  test("drops a movie whose only screenings are hidden previews", () => {
+    const only_smarabio = { "0": { Smárabíó: showtimes_by_day["0"]["Smárabíó"] } };
+    expect(assemble_movie(details("2030-12-01"), only_smarabio, "2026-10-02")).toBeNull();
   });
 });

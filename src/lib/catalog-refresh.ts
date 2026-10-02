@@ -7,11 +7,13 @@ import { map_concurrent } from "#lib/concurrency.js";
 import { DAYS_SHOWN } from "#lib/constants.js";
 import { fetch_text } from "#lib/http.js";
 import { refresh_posters } from "#lib/posters.js";
-import type { Movie, Showtime } from "#lib/schemas.js";
+import { load_movie_details } from "#lib/movie-details-cache.js";
+import { reykjavik_date } from "#lib/reykjavik.js";
+import type { Movie } from "#lib/schemas.js";
 import {
-  parse_movie,
+  assemble_movie,
+  parse_movie_details,
   parse_listings,
-  extract_direct_url,
   fetch_external_urls,
   scrape_rotten_tomatoes,
   scrape_metacritic,
@@ -19,7 +21,6 @@ import {
   prefetch_imdb_ratings,
   type ExternalUrls,
   type ImdbRating,
-  type HallInfo,
 } from "#lib/parse.js";
 
 const staticDirectory = path.resolve(process.cwd(), "static");
@@ -47,146 +48,16 @@ const headers = {
 // hammering the small sites we scrape.
 const CONCURRENCY = 4;
 
-async function scrapeMovie(id: number): Promise<Movie | null> {
+// Movie pages are slow to generate and rarely change; refresh them daily.
+const MOVIE_DETAILS_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+
+async function fetch_movie_details(id: number) {
   try {
-    const { document: movie_document } = parseHTML(await fetch_text(`https://kvikmyndir.is/mynd/?id=${id}`, { headers }));
-    const parsed_movie = parse_movie(movie_document, id);
-
-    if (parsed_movie) {
-      // Extract direct URLs from redirect URLs for all days
-      const processed_showtimes_by_day: Record<string, Record<string, Showtime[]>> = {};
-
-      for (const [day, cinema_showtimes] of Object.entries(parsed_movie.showtimes_by_day)) {
-        processed_showtimes_by_day[day] = {};
-
-        for (const [cinema_name, showtimes] of Object.entries(cinema_showtimes)) {
-          processed_showtimes_by_day[day][cinema_name] = await Promise.all(
-            showtimes.map(async (showtime) => {
-              // Only process URLs that are redirect URLs
-              if (showtime.purchase_url.includes("showtime_redirect.php")) {
-                const direct_url = await extract_direct_url(showtime.purchase_url);
-                return {
-                  ...showtime,
-                  purchase_url: direct_url,
-                };
-              }
-              return showtime;
-            })
-          );
-        }
-      }
-
-      return {
-        ...parsed_movie,
-        showtimes_by_day: processed_showtimes_by_day,
-      };
-    }
-
-    return null;
+    return parse_movie_details(parseHTML(await fetch_text(`https://kvikmyndir.is/mynd/?id=${id}`, { headers })).document, id);
   } catch (error) {
     console.error(`Failed to fetch/parse movie ID ${id}:`, error);
     return null;
   }
-}
-
-// Enrich only exact showtime URL matches. A same-time screening on a later
-// day may use another hall, so labels are never inferred from the schedule.
-export function apply_hall_info(movie: Movie, hallInfoMap: ReadonlyMap<string, HallInfo>): Movie {
-  return {
-    ...movie,
-    showtimes_by_day: Object.fromEntries(
-      Object.entries(movie.showtimes_by_day).map(([day, cinemaShowtimes]) => [
-        day,
-        Object.fromEntries(
-          Object.entries(cinemaShowtimes).map(([cinemaName, showtimes]) => [
-            cinemaName,
-            showtimes.map((showtime) => {
-              const hallInfo = hallInfoMap.get(showtime.purchase_url);
-              if (!hallInfo) return showtime;
-
-              return {
-                ...showtime,
-                hall: hallInfo.hall || showtime.hall,
-                is_icelandic: hallInfo.is_icelandic || showtime.is_icelandic,
-                is_3d: hallInfo.is_3d || showtime.is_3d,
-                is_luxus: hallInfo.is_luxus || showtime.is_luxus,
-                is_vip: hallInfo.is_vip || showtime.is_vip,
-                is_atmos: hallInfo.is_atmos || showtime.is_atmos,
-                is_max: hallInfo.is_max || showtime.is_max,
-                is_flauel: hallInfo.is_flauel || showtime.is_flauel,
-              };
-            }),
-          ])
-        ),
-      ])
-    ),
-  };
-}
-
-export function parse_sambio_booking(document: Document): HallInfo | null {
-  const details = document.querySelector(".schedule-card__info-container");
-  const hall = details?.querySelector<HTMLParagraphElement>(".schedule-card__title-container > p.bold")?.textContent?.trim() ?? "";
-  if (!hall) return null;
-
-  const labels = details?.textContent?.toUpperCase() ?? "";
-  const hallLabel = hall.toUpperCase();
-  return {
-    hall,
-    is_icelandic: labels.includes("ÍSL TAL") || labels.includes("ÍSL.TAL") || undefined,
-    is_3d: labels.includes("3D") || undefined,
-    is_luxus: hallLabel.includes("LÚX") || hallLabel.includes("LUX") || undefined,
-    is_vip: hallLabel.includes("VIP") || undefined,
-    is_atmos: hallLabel.includes("ÁSBERG") || hallLabel.includes("ATMOS") || undefined,
-    is_max: hallLabel.includes("MAX") || undefined,
-    is_flauel: hallLabel.includes("FLAUEL") || undefined,
-  };
-}
-
-const bookingMetadataCachePath = path.resolve(cacheDirectory, "showtime-metadata.json");
-
-async function read_booking_metadata_cache(): Promise<Record<string, HallInfo | null>> {
-  try {
-    return JSON.parse(await fs.readFile(bookingMetadataCachePath, "utf8"));
-  } catch {
-    return {};
-  }
-}
-
-async function enrich_sambio_bookings(movies: readonly Movie[], hallInfoMap: Map<string, HallInfo>) {
-  const cache = await read_booking_metadata_cache();
-  const urls = new Set(
-    movies.flatMap((movie) =>
-      Object.values(movie.showtimes_by_day).flatMap((cinemas) =>
-        Object.values(cinemas)
-          .flat()
-          .map(({ purchase_url }) => purchase_url)
-          .filter((url) => new URL(url).hostname === "www.sambio.is" && !hallInfoMap.has(url))
-      )
-    )
-  );
-
-  const uncached = [...urls].filter((url) => !(url in cache));
-  await map_concurrent(uncached, CONCURRENCY, async (url) => {
-    try {
-      cache[url] = parse_sambio_booking(parseHTML(await fetch_text(url, { headers })).document);
-    } catch {
-      // Do not persist transient failures; a later refresh should retry them.
-    }
-  });
-  const fetched = uncached.length;
-  const cacheHits = urls.size - fetched;
-
-  for (const url of urls) {
-    const hallInfo = cache[url];
-    if (hallInfo) hallInfoMap.set(url, hallInfo);
-  }
-
-  // Booking IDs are immutable. Retain only performances still in the displayed
-  // window so the restored CI cache stays small.
-  const currentCache = Object.fromEntries([...urls].filter((url) => url in cache).map((url) => [url, cache[url]]));
-  await fs.mkdir(cacheDirectory, { recursive: true });
-  await fs.writeFile(bookingMetadataCachePath, JSON.stringify(currentCache, null, 2));
-  console.log(`Enriched ${urls.size} Sambíóin showtimes (${fetched} fetched, ${cacheHits} cached)`);
 }
 
 const imdb_id = (movie: Movie) => movie.imdb?.link.match(/tt\d+/)?.[0];
@@ -242,33 +113,41 @@ export async function refresh_movie_catalog() {
     CONCURRENCY,
     async (day) => parseHTML(await fetch_text(`https://kvikmyndir.is/bio/syningatimar/?dagur=${day}`, { headers })).document
   );
-  // Hall names and formats (Flauel, Lúxus, VIP, Ásberg, MAX, ...) per showtime.
-  const { movieIds, hallInfo: hallInfoMap } = parse_listings(listings);
-  console.log(`Parsed hall info for ${hallInfoMap.size} showtimes`);
-  console.log(`Found ${movieIds.length} movies to scrape`);
+  const { movieIds, showtimes } = parse_listings(listings);
+  console.log(
+    `Found ${movieIds.length} movies with ${[...showtimes.values()].flatMap((days) => Object.values(days).flatMap(Object.values)).flat().length} showtimes`
+  );
 
-  const movies = (await map_concurrent(movieIds, CONCURRENCY, scrapeMovie)).filter((movie) => movie !== null);
+  const details = await load_movie_details(movieIds, fetch_movie_details, {
+    cache_path: path.resolve(cacheDirectory, "movie-details.json"),
+    max_age_ms: MOVIE_DETAILS_MAX_AGE_MS,
+    concurrency: CONCURRENCY,
+  });
+  const today = reykjavik_date(new Date());
+  const movies = movieIds.flatMap((id) => {
+    const movie_details = details.get(id);
+    const movie_showtimes = showtimes.get(id);
+    return (movie_details && movie_showtimes && assemble_movie(movie_details, movie_showtimes, today)) || [];
+  });
 
   // Exiting non-zero keeps the previous deploy live instead of publishing an
   // empty programme.
   if (movies.length === 0) {
-    throw new Error(`Scraped no movies from ${movieIds.length} listed ids`);
+    throw new Error(`Assembled no movies from ${movieIds.length} listed ids`);
   }
-  if (movies.length < movieIds.length) {
-    console.warn(`Dropped ${movieIds.length - movies.length} of ${movieIds.length} movies that failed to fetch or parse`);
+  const missing = movieIds.filter((id) => !details.has(id));
+  if (missing.length > 0) {
+    console.warn(`Dropped ${missing.length} of ${movieIds.length} movies whose page could not be fetched or parsed: ${missing.join(", ")}`);
   }
 
-  await enrich_sambio_bookings(movies, hallInfoMap);
-  const moviesWithHallInfo = movies.map((movie) => apply_hall_info(movie, hallInfoMap));
-
-  const imdbIds = moviesWithHallInfo.flatMap((movie) => imdb_id(movie) ?? []);
+  const imdbIds = movies.flatMap((movie) => imdb_id(movie) ?? []);
   console.log(`Scraped ${movies.length} valid movies. Fetching ratings for ${imdbIds.length} IMDb titles...`);
   const [imdbRatings, externalUrls] = await Promise.all([imdb_ratings_for(imdbIds), fetch_external_urls(imdbIds)]);
 
   // Ratings come from other hosts than the posters, so run both at once.
   const [moviesWithRatings] = await Promise.all([
-    map_concurrent(moviesWithHallInfo, CONCURRENCY, (movie) => with_ratings(movie, imdbRatings, externalUrls)),
-    refresh_posters(moviesWithHallInfo, staticDirectory, { manifest_path: path.resolve(cacheDirectory, "poster-sources.json"), headers }),
+    map_concurrent(movies, CONCURRENCY, (movie) => with_ratings(movie, imdbRatings, externalUrls)),
+    refresh_posters(movies, staticDirectory, { manifest_path: path.resolve(cacheDirectory, "poster-sources.json"), headers }),
   ]);
 
   console.log(`Processed ${moviesWithRatings.length} movies. Writing movies.json...`);

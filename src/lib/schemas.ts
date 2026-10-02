@@ -65,6 +65,9 @@ export const movie_schema = z.object({
   ),
 });
 
+// A movie without showtimes, as read from its kvikmyndir.is page.
+export const movie_details_schema = z.omit(movie_schema, { showtimes_by_day: true });
+
 export const movies_schema = z.array(movie_schema);
 
 export const imdb_movie = z.object({
