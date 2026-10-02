@@ -268,6 +268,7 @@ export async function refresh_movie_catalog() {
   const imdbRatings = await fetch_imdb_ratings(imdbIds);
 
   console.log(`Fetched ${imdbRatings.size} IMDb ratings. Fetching external URLs and scores...`);
+  const externalUrls = await fetch_external_urls(imdbIds);
 
   // Fetch RT, Metacritic, and Letterboxd URLs from Wikidata, then scrape scores
   const moviesWithUrls = await map_concurrent(moviesWithHallInfo, CONCURRENCY, async (movie) => {
@@ -279,7 +280,7 @@ export async function refresh_movie_catalog() {
     const imdbRating = imdbRatings.get(imdbId);
     const imdb = imdbRating ? { ...movie.imdb, star: imdbRating.star } : movie.imdb?.star ? movie.imdb : undefined;
 
-    const { rtUrl, mcUrl, letterboxdUrl } = await fetch_external_urls(imdbId);
+    const { rtUrl, mcUrl, letterboxdUrl } = externalUrls.get(imdbId) ?? {};
 
     let rotten_tomatoes = movie.rotten_tomatoes;
     let metacritic = movie.metacritic;

@@ -383,32 +383,45 @@ export async function fetch_imdb_ratings(
   return ratings;
 }
 
-// Fetch RT, Metacritic, and Letterboxd URLs from Wikidata using IMDb ID
-export async function fetch_external_urls(imdbId: string): Promise<{ rtUrl?: string; mcUrl?: string; letterboxdUrl?: string }> {
-  try {
-    const sparql = `
-      SELECT ?rtId ?mcId ?lbId WHERE {
-        ?movie wdt:P345 "${imdbId}" .
-        OPTIONAL { ?movie wdt:P1258 ?rtId . }
-        OPTIONAL { ?movie wdt:P1712 ?mcId . }
-        OPTIONAL { ?movie wdt:P6127 ?lbId . }
-      }`;
+export type ExternalUrls = { rtUrl?: string; mcUrl?: string; letterboxdUrl?: string };
 
-    const response = await fetch("https://query.wikidata.org/sparql?" + new URLSearchParams({ query: sparql, format: "json" }), {
+type WikidataBinding = Partial<Record<"imdb" | "rtId" | "mcId" | "lbId", { value: string }>>;
+
+export function parse_external_urls(response: { results?: { bindings?: WikidataBinding[] } }): Map<string, ExternalUrls> {
+  const urls = new Map<string, ExternalUrls>();
+  for (const { imdb, rtId, mcId, lbId } of response.results?.bindings ?? []) {
+    // An item with several ids for one site yields several rows; keep the first.
+    if (!imdb || urls.has(imdb.value)) continue;
+    urls.set(imdb.value, {
+      rtUrl: rtId ? `https://www.rottentomatoes.com/${rtId.value}` : undefined,
+      mcUrl: mcId ? `https://www.metacritic.com/${mcId.value}` : undefined,
+      letterboxdUrl: lbId ? `https://letterboxd.com/film/${lbId.value}/` : undefined,
+    });
+  }
+  return urls;
+}
+
+// Look up RT, Metacritic, and Letterboxd ids for every movie in one Wikidata
+// query; the query service throttles parallel requests per client.
+export async function fetch_external_urls(imdbIds: readonly string[]): Promise<Map<string, ExternalUrls>> {
+  if (imdbIds.length === 0) return new Map();
+  const sparql = `
+    SELECT ?imdb ?rtId ?mcId ?lbId WHERE {
+      VALUES ?imdb { ${imdbIds.map((id) => JSON.stringify(id)).join(" ")} }
+      ?movie wdt:P345 ?imdb .
+      OPTIONAL { ?movie wdt:P1258 ?rtId . }
+      OPTIONAL { ?movie wdt:P1712 ?mcId . }
+      OPTIONAL { ?movie wdt:P6127 ?lbId . }
+    }`;
+
+  try {
+    const body = await fetch_text("https://query.wikidata.org/sparql?" + new URLSearchParams({ query: sparql, format: "json" }), {
       headers: { "User-Agent": "hvaderibio/1.0" },
     });
-
-    const data = await response.json();
-    const result = data.results?.bindings?.[0];
-
-    return {
-      rtUrl: result?.rtId?.value ? `https://www.rottentomatoes.com/${result.rtId.value}` : undefined,
-      mcUrl: result?.mcId?.value ? `https://www.metacritic.com/${result.mcId.value}` : undefined,
-      letterboxdUrl: result?.lbId?.value ? `https://letterboxd.com/film/${result.lbId.value}/` : undefined,
-    };
+    return parse_external_urls(JSON.parse(body));
   } catch (error) {
-    console.error(`Failed to fetch external URLs for ${imdbId}:`, error);
-    return {};
+    console.error("Failed to fetch external URLs from Wikidata:", error);
+    return new Map();
   }
 }
 
