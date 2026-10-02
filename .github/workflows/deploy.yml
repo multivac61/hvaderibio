@@ -20,8 +20,8 @@ jobs:
       - name: 🔐 Trust TLS certificate chain for kvikmyndir.is
         run: |
           openssl s_client \
-            -connect www.kvikmyndir.is:443 \
-            -servername www.kvikmyndir.is \
+            -connect kvikmyndir.is:443 \
+            -servername kvikmyndir.is \
             -showcerts </dev/null 2>/dev/null \
             | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' \
             > "$RUNNER_TEMP/kvikmyndir-chain.pem"
