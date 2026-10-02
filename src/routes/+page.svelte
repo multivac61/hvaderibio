@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { get_showtime_window } from "#lib/showtimes.js";
   import { get_programme_movies } from "#lib/programme.js";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
   import { dayState } from "#lib/day-state.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
+  import PageMeta from "#lib/PageMeta.svelte";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
 
@@ -12,14 +12,12 @@
   const movies = $derived(data.movies);
   const cinema_options = $derived(data.cinema_options);
 
-  // Do not render the time-sensitive grid until the browser has calculated its
-  // current window. This prevents Safari from hydrating stale poster ordering.
-  let showtime_window = $state({ from: 0, to: 24 });
-  let client_ready = $state(false);
+  // Do not render the time-sensitive grid until the browser knows the current
+  // time. This prevents Safari from hydrating stale poster ordering.
+  let now = $state<Date | null>(null);
 
   onMount(() => {
-    showtime_window = get_showtime_window();
-    client_ready = true;
+    now = new Date();
   });
 
   // Read cinema and day from shared state
@@ -27,12 +25,21 @@
   const selected_cinemas = $derived(get_cinemas_for_choice(selected_choice, cinema_options));
   const selected_day = $derived(dayState.value ?? "0");
 
-  const filtered_cinemas_showtimes = $derived(get_programme_movies(movies, selected_day, selected_cinemas, showtime_window));
+  const filtered_cinemas_showtimes = $derived(now ? get_programme_movies(movies, selected_day, selected_cinemas, now) : []);
 </script>
 
+<PageMeta
+  title="Hvað er í bíó? - Bíódagskrá kvöldsins"
+  description="Fljótlegt yfirlit yfir bíódagskrá kvöldsins á öllu landinu. Skoðaðu sýningartíma og bókaðu miða."
+  path="/" />
+
 <svelte:head>
-  <title>Hvað er í bíó? - Bíódagskrá kvöldsins</title>
-  <meta name="description" content="Fljótlegt yfirlit yfir bíódagskrá kvöldsins á öllu landinu. Skoðaðu sýningartíma og bókaðu miða." />
+  <!-- Space Grotesk only sets the desktop heading, so load it here rather than
+       on every page, subset to the heading's glyphs. -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&text=Hva%C3%B0%20er%20%C3%AD%20b%C3%AD%C3%B3%3F&display=swap"
+    rel="stylesheet" />
 </svelte:head>
 
 <header class="relative hidden sm:mt-8 sm:mb-5 sm:block">
@@ -55,7 +62,7 @@
     </div>
   </div>
 
-  {#if client_ready}
+  {#if now}
     {#key `${selected_day}-${selected_choice}`}
       {#if filtered_cinemas_showtimes.length === 0}
         <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
@@ -64,9 +71,9 @@
         </div>
       {:else}
         <div
-          class="md:md-30 -mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
+          class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
           {#each filtered_cinemas_showtimes as movie, index (movie.id)}
-            <MoviePosterCard {movie} catalog={movies} {index} />
+            <MoviePosterCard {movie} {index} />
           {/each}
         </div>
       {/if}

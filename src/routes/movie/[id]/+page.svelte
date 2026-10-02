@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { get_showtime_window } from "#lib/showtimes.js";
   import { get_movie_programme } from "#lib/programme.js";
   import { get_youtube_id, is_mobile_user_agent } from "#lib/video.js";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
@@ -7,6 +6,9 @@
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import MovieRatings from "#lib/MovieRatings.svelte";
   import CinemaShowtimeRow from "#lib/CinemaShowtimeRow.svelte";
+  import PageMeta from "#lib/PageMeta.svelte";
+  import { afterNavigate } from "$app/navigation";
+  import { resolve } from "$app/paths";
   import { fade } from "svelte/transition";
 
   const { data } = $props();
@@ -16,7 +18,7 @@
   // Extract YouTube video ID from trailer URL
   const youtube_id = $derived(get_youtube_id(movie.trailer_url));
 
-  const { from, to } = get_showtime_window();
+  const now = new Date();
 
   // Read cinema from shared state
   const selected_choice = $derived(cinemaState.value ?? DEFAULT_CINEMA_CHOICE);
@@ -31,20 +33,49 @@
       window.open(`https://www.youtube.com/watch?v=${youtube_id}`, "_blank");
     } else {
       trailer_modal_open = true;
-      document.body.style.overflow = "hidden";
     }
   };
 
   const closeTrailerModal = () => {
     trailer_modal_open = false;
-    document.body.style.overflow = "";
   };
 
-  const visible_showtimes = $derived(get_movie_programme(movie, selected_day, selected_cinemas, { from, to }));
+  // Lock page scroll while the trailer is open, and release it even when the
+  // visitor navigates away with the modal still open.
+  $effect(() => {
+    if (!trailer_modal_open) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  });
+
+  // Visitors arriving from a search engine or shared link have no in-site
+  // page to go back to; send them to the programme instead of off the site.
+  let came_from_site = $state(false);
+  afterNavigate(({ from }) => {
+    came_from_site = from !== null;
+  });
+
+  const goBack = (event: MouseEvent) => {
+    if (!came_from_site) return;
+    event.preventDefault();
+    history.back();
+  };
+
+  const visible_showtimes = $derived(get_movie_programme(movie, selected_day, selected_cinemas, now));
 </script>
 
+<PageMeta
+  title="{movie.title} - Hvað er í bíó?"
+  description={movie.description.length > 160 ? `${movie.description.slice(0, 157).trimEnd()}…` : movie.description}
+  path="/movie/{data.path}"
+  image="/{movie.id}.webp" />
+
 <svelte:head>
-  <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />
+  {#if youtube_id}
+    <link rel="preconnect" href="https://img.youtube.com" />
+  {/if}
 </svelte:head>
 
 <div class="relative">
@@ -60,15 +91,15 @@
   </div>
 
   <div class="container mx-auto max-w-7xl py-4 pb-28 md:px-8 md:py-8 lg:px-12 lg:py-10">
-    <button
-      type="button"
-      onclick={() => history.back()}
+    <a
+      href={resolve("/")}
+      onclick={goBack}
       class="mb-4 inline-flex cursor-pointer items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-white md:mb-6">
       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       Til baka
-    </button>
+    </a>
     <div class="grid gap-6 md:grid-cols-[320px_1fr] md:gap-8 lg:grid-cols-[400px_1fr] lg:gap-10 xl:grid-cols-[480px_1fr] xl:gap-12">
       <!-- Poster (desktop) / Trailer (mobile if available) -->
       <div class="w-full md:mx-0">
@@ -94,30 +125,17 @@
               </div>
             </button>
           </div>
-        {:else}
-          <!-- Mobile fallback: poster if no trailer -->
-          <picture class="block md:hidden">
-            <source type="image/webp" srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w`} sizes="100vw" />
-            <img
-              src={`/${movie.id}.webp`}
-              title={movie.title}
-              alt={movie.title}
-              width="720"
-              height="1080"
-              fetchpriority="high"
-              loading="eager"
-              decoding="async"
-              style:view-transition-name="poster-{movie.id}"
-              in:fade={{ duration: 260 }}
-              class="w-full rounded-md shadow-2xl" />
-          </picture>
         {/if}
-        <!-- Desktop: Always show poster -->
-        <picture in:fade={{ duration: 260 }} class="hidden md:block">
+        <!-- Poster: always on desktop, on mobile only when there is no trailer.
+             The blank source keeps hidden phones from downloading it. -->
+        <picture in:fade={{ duration: 260 }} class={youtube_id ? "hidden md:block" : "block"}>
+          {#if youtube_id}
+            <source media="(max-width: 767px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAACH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+          {/if}
           <source
             type="image/webp"
-            srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w`}
-            sizes="(max-width: 768px) 192px, 320px" />
+            srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w, /${movie.id}-1080w.webp 1080w`}
+            sizes="(min-width: 1280px) 480px, (min-width: 1024px) 400px, (min-width: 768px) 320px, 100vw" />
           <img
             src={`/${movie.id}.webp`}
             title={movie.title}
@@ -214,6 +232,8 @@
   </div>
 </div>
 
+<svelte:window onkeydown={(e) => trailer_modal_open && e.key === "Escape" && closeTrailerModal()} />
+
 <!-- Trailer Modal -->
 {#if trailer_modal_open && youtube_id}
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4" role="dialog" aria-modal="true" aria-label="Trailer">
@@ -226,8 +246,9 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <div class="absolute inset-0" onclick={closeTrailerModal} onkeydown={(e) => e.key === "Escape" && closeTrailerModal()}></div>
+    <!-- Backdrop click target; Escape and the close button cover keyboard users. -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <div class="absolute inset-0" onclick={closeTrailerModal}></div>
     <div class="relative aspect-video w-full max-w-5xl">
       <iframe
         src="https://www.youtube.com/embed/{youtube_id}?autoplay=1&rel=0&modestbranding=1"

@@ -1,0 +1,50 @@
+{
+  "head": {
+    "vars": [
+      "imdb",
+      "rtId",
+      "mcId",
+      "lbId"
+    ]
+  },
+  "results": {
+    "bindings": [
+      {
+        "imdb": {
+          "type": "literal",
+          "value": "tt0068646"
+        },
+        "rtId": {
+          "type": "literal",
+          "value": "m/the_godfather"
+        },
+        "mcId": {
+          "type": "literal",
+          "value": "movie/the-godfather"
+        },
+        "lbId": {
+          "type": "literal",
+          "value": "the-godfather"
+        }
+      },
+      {
+        "imdb": {
+          "type": "literal",
+          "value": "tt0111161"
+        },
+        "rtId": {
+          "type": "literal",
+          "value": "m/shawshank_redemption"
+        },
+        "mcId": {
+          "type": "literal",
+          "value": "movie/the-shawshank-redemption"
+        },
+        "lbId": {
+          "type": "literal",
+          "value": "the-shawshank-redemption"
+        }
+      }
+    ]
+  }
+}

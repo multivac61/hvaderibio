@@ -2,8 +2,10 @@ import fs from "fs/promises";
 import path from "path";
 
 import { parseHTML } from "linkedom";
-import sharp from "sharp";
 
+import { map_concurrent } from "#lib/concurrency.js";
+import { fetch_text } from "#lib/http.js";
+import { refresh_posters } from "#lib/posters.js";
 import type { Movie, Showtime } from "#lib/schemas.js";
 import {
   parse_movie,
@@ -19,6 +21,8 @@ import {
 } from "#lib/parse.js";
 
 const staticDirectory = path.resolve(process.cwd(), "static");
+// Scraper state restored between CI runs; kept out of static/ so it is not deployed.
+const cacheDirectory = path.resolve(process.cwd(), ".cache");
 
 const headers = {
   authority: "kvikmyndir.is/",
@@ -37,20 +41,13 @@ const headers = {
   "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36",
 } as const;
 
-// --- Determine Target Image Size for High-Density Displays ---
-// Base display width is 360px. For 2x DPR screens, we need 2 * 360 = 720px.
-const baseWidth = 360;
-const targetWidth = baseWidth * 2; // 720
-const targetHeight = Math.round(targetWidth * (3 / 2)); // Calculate height for 2:3 aspect ratio (1080)
-
-console.log(`Targeting image dimensions: ${targetWidth}w x ${targetHeight}h`);
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+// Requests in flight per host. Enough to overlap network latency without
+// hammering the small sites we scrape.
+const CONCURRENCY = 4;
 
 async function scrapeMovie(id: number): Promise<Movie | null> {
   try {
-    const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
-    const { document: movie_document } = parseHTML(await movie.text());
+    const { document: movie_document } = parseHTML(await fetch_text(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers }));
     const parsed_movie = parse_movie(movie_document, id);
 
     if (parsed_movie) {
@@ -87,53 +84,6 @@ async function scrapeMovie(id: number): Promise<Movie | null> {
   } catch (error) {
     console.error(`Failed to fetch/parse movie ID ${id}:`, error);
     return null;
-  }
-}
-
-async function processMoviePoster(movie: Movie): Promise<Movie> {
-  try {
-    const res = await fetch(movie.poster_url, { headers });
-    if (!res.ok) {
-      throw new Error(`Failed to fetch poster ${movie.poster_url}: ${res.statusText}`);
-    }
-    const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
-
-    const webpPath = path.resolve(staticDirectory, `${movie.id}.webp`);
-    const jpgPath = path.resolve(staticDirectory, `${movie.id}.jpg`);
-
-    // Clean up any old JPG files
-    try {
-      await fs.unlink(jpgPath);
-    } catch {
-      // Ignore if file doesn't exist
-    }
-
-    // Generate multiple sizes for responsive images
-    const image = sharp(buffer);
-
-    // Small size for mobile (360w for 1x displays) - aggressive compression
-    const img360 = image.clone().resize(360, 540, { fit: "cover" });
-    await img360
-      .clone()
-      .webp({ quality: 70, effort: 6, nearLossless: false, smartSubsample: true })
-      .toFile(path.resolve(staticDirectory, `${movie.id}-360w.webp`));
-
-    // Medium size for mobile retina (720w for 2x displays)
-    const img720 = image.clone().resize(targetWidth, targetHeight, { fit: "cover" });
-    await img720.clone().webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true }).toFile(webpPath);
-
-    // Large size for desktop (1080w for larger screens)
-    const img1080 = image.clone().resize(1080, 1620, { fit: "cover" });
-    await img1080
-      .clone()
-      .webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true })
-      .toFile(path.resolve(staticDirectory, `${movie.id}-1080w.webp`));
-
-    return movie;
-  } catch (error) {
-    console.error(`Failed to process poster for movie ID ${movie.id} (${movie.title}):`, error);
-    // Still return movie data if poster fails
-    return movie;
   }
 }
 
@@ -190,7 +140,7 @@ export function parse_sambio_booking(document: Document): HallInfo | null {
   };
 }
 
-const bookingMetadataCachePath = path.resolve(staticDirectory, "showtime-metadata-cache.json");
+const bookingMetadataCachePath = path.resolve(cacheDirectory, "showtime-metadata.json");
 
 async function read_booking_metadata_cache(): Promise<Record<string, HallInfo | null>> {
   try {
@@ -213,24 +163,18 @@ async function enrich_sambio_bookings(movies: readonly Movie[], hallInfoMap: Map
     )
   );
 
-  let fetched = 0;
-  let cacheHits = 0;
-  for (const url of urls) {
-    if (url in cache) {
-      cacheHits++;
-    } else {
-      await delay(100);
-      try {
-        const response = await fetch(url, { headers });
-        if (response.ok) {
-          cache[url] = parse_sambio_booking(parseHTML(await response.text()).document);
-        }
-      } catch {
-        // Do not persist transient failures; a later refresh should retry them.
-      }
-      fetched++;
+  const uncached = [...urls].filter((url) => !(url in cache));
+  await map_concurrent(uncached, CONCURRENCY, async (url) => {
+    try {
+      cache[url] = parse_sambio_booking(parseHTML(await fetch_text(url, { headers })).document);
+    } catch {
+      // Do not persist transient failures; a later refresh should retry them.
     }
+  });
+  const fetched = uncached.length;
+  const cacheHits = urls.size - fetched;
 
+  for (const url of urls) {
     const hallInfo = cache[url];
     if (hallInfo) hallInfoMap.set(url, hallInfo);
   }
@@ -238,14 +182,13 @@ async function enrich_sambio_bookings(movies: readonly Movie[], hallInfoMap: Map
   // Booking IDs are immutable. Retain only performances still in the displayed
   // window so the restored CI cache stays small.
   const currentCache = Object.fromEntries([...urls].filter((url) => url in cache).map((url) => [url, cache[url]]));
+  await fs.mkdir(cacheDirectory, { recursive: true });
   await fs.writeFile(bookingMetadataCachePath, JSON.stringify(currentCache, null, 2));
   console.log(`Enriched ${urls.size} Sambíóin showtimes (${fetched} fetched, ${cacheHits} cached)`);
 }
 
 export async function refresh_movie_catalog() {
-  const showtimesResponse = await fetch("https://www.kvikmyndir.is/bio/syningatimar", { headers });
-  const html = await showtimesResponse.text();
-  const { document } = parseHTML(html);
+  const { document } = parseHTML(await fetch_text("https://www.kvikmyndir.is/bio/syningatimar", { headers }));
 
   // Parse hall info from listing page (contains Flauel, Lúxus, VIP, Ásberg, etc.)
   const hallInfoMap = parse_hall_info_from_listing(document);
@@ -254,12 +197,15 @@ export async function refresh_movie_catalog() {
   const movieIds = parse_movie_ids(document);
   console.log(`Found ${movieIds.length} movies to scrape`);
 
-  // Process movies sequentially with rate limiting to avoid overwhelming the server
-  const movies: Movie[] = [];
-  for (const id of movieIds) {
-    await delay(100); // 100ms delay between requests
-    const movie = await scrapeMovie(id);
-    if (movie) movies.push(movie);
+  const movies = (await map_concurrent(movieIds, CONCURRENCY, scrapeMovie)).filter((movie) => movie !== null);
+
+  // Exiting non-zero keeps the previous deploy live instead of publishing an
+  // empty programme.
+  if (movies.length === 0) {
+    throw new Error(`Scraped no movies from ${movieIds.length} listed ids`);
+  }
+  if (movies.length < movieIds.length) {
+    console.warn(`Dropped ${movieIds.length - movies.length} of ${movieIds.length} movies that failed to fetch or parse`);
   }
 
   await enrich_sambio_bookings(movies, hallInfoMap);
@@ -270,91 +216,85 @@ export async function refresh_movie_catalog() {
   const imdbRatings = await fetch_imdb_ratings(imdbIds);
 
   console.log(`Fetched ${imdbRatings.size} IMDb ratings. Fetching external URLs and scores...`);
+  const externalUrls = await fetch_external_urls(imdbIds);
 
   // Fetch RT, Metacritic, and Letterboxd URLs from Wikidata, then scrape scores
-  const moviesWithUrls = await Promise.all(
-    moviesWithHallInfo.map(async (movie) => {
-      if (!movie.imdb?.link) return movie;
+  const moviesWithUrls = await map_concurrent(moviesWithHallInfo, CONCURRENCY, async (movie) => {
+    if (!movie.imdb?.link) return movie;
 
-      const imdbId = movie.imdb.link.match(/tt\d+/)?.[0];
-      if (!imdbId) return movie;
+    const imdbId = movie.imdb.link.match(/tt\d+/)?.[0];
+    if (!imdbId) return movie;
 
-      const imdbRating = imdbRatings.get(imdbId);
-      const imdb = imdbRating ? { ...movie.imdb, star: imdbRating.star } : movie.imdb?.star ? movie.imdb : undefined;
+    const imdbRating = imdbRatings.get(imdbId);
+    const imdb = imdbRating ? { ...movie.imdb, star: imdbRating.star } : movie.imdb?.star ? movie.imdb : undefined;
 
-      await delay(100); // Rate limit Wikidata requests
-      const { rtUrl, mcUrl, letterboxdUrl } = await fetch_external_urls(imdbId);
+    const { rtUrl, mcUrl, letterboxdUrl } = externalUrls.get(imdbId) ?? {};
 
-      let rotten_tomatoes = movie.rotten_tomatoes;
-      let metacritic = movie.metacritic;
-      let letterboxd: { score?: number; url?: string } | undefined;
+    let rotten_tomatoes = movie.rotten_tomatoes;
+    let metacritic = movie.metacritic;
+    let letterboxd: { score?: number; url?: string } | undefined;
 
-      // Scrape RT scores if we have a URL
-      if (rtUrl) {
-        await delay(200);
-        const rtScores = await scrape_rotten_tomatoes(rtUrl);
-        if (rtScores?.score !== undefined) {
-          rotten_tomatoes = {
-            score: rtScores.score,
-            audience_score: rtScores.audience_score,
-            url: rtUrl,
-          };
-          console.log(`  RT scores for ${movie.title}: ${rtScores.score}% (audience: ${rtScores.audience_score ?? "N/A"}%)`);
-        } else if (movie.rotten_tomatoes) {
-          // Keep kvikmyndir.is score but add URL
-          rotten_tomatoes = { ...movie.rotten_tomatoes, url: rtUrl };
-        }
+    // Scrape RT scores if we have a URL
+    if (rtUrl) {
+      const rtScores = await scrape_rotten_tomatoes(rtUrl);
+      if (rtScores?.score !== undefined) {
+        rotten_tomatoes = {
+          score: rtScores.score,
+          audience_score: rtScores.audience_score,
+          url: rtUrl,
+        };
+        console.log(`  RT scores for ${movie.title}: ${rtScores.score}% (audience: ${rtScores.audience_score ?? "N/A"}%)`);
+      } else if (movie.rotten_tomatoes) {
+        // Keep kvikmyndir.is score but add URL
+        rotten_tomatoes = { ...movie.rotten_tomatoes, url: rtUrl };
       }
+    }
 
-      // Scrape MC scores if we have a URL
-      if (mcUrl) {
-        await delay(200);
-        const mcScores = await scrape_metacritic(mcUrl);
-        if (mcScores?.score !== undefined) {
-          metacritic = {
-            score: mcScores.score,
-            user_score: mcScores.user_score,
-            url: mcUrl,
-          };
-          console.log(`  MC scores for ${movie.title}: ${mcScores.score} (user: ${mcScores.user_score ?? "N/A"})`);
-        } else if (movie.metacritic) {
-          // Keep kvikmyndir.is score but add URL
-          metacritic = { ...movie.metacritic, url: mcUrl };
-        }
+    // Scrape MC scores if we have a URL
+    if (mcUrl) {
+      const mcScores = await scrape_metacritic(mcUrl);
+      if (mcScores?.score !== undefined) {
+        metacritic = {
+          score: mcScores.score,
+          user_score: mcScores.user_score,
+          url: mcUrl,
+        };
+        console.log(`  MC scores for ${movie.title}: ${mcScores.score} (user: ${mcScores.user_score ?? "N/A"})`);
+      } else if (movie.metacritic) {
+        // Keep kvikmyndir.is score but add URL
+        metacritic = { ...movie.metacritic, url: mcUrl };
       }
+    }
 
-      // Scrape Letterboxd score if we have a URL
-      if (letterboxdUrl) {
-        await delay(200);
-        const lbScore = await scrape_letterboxd(letterboxdUrl);
-        if (lbScore?.score !== undefined) {
-          letterboxd = {
-            score: lbScore.score,
-            url: letterboxdUrl,
-          };
-          console.log(`  Letterboxd score for ${movie.title}: ${lbScore.score}/5`);
-        } else {
-          // Still include URL even without score
-          letterboxd = { url: letterboxdUrl };
-        }
+    // Scrape Letterboxd score if we have a URL
+    if (letterboxdUrl) {
+      const lbScore = await scrape_letterboxd(letterboxdUrl);
+      if (lbScore?.score !== undefined) {
+        letterboxd = {
+          score: lbScore.score,
+          url: letterboxdUrl,
+        };
+        console.log(`  Letterboxd score for ${movie.title}: ${lbScore.score}/5`);
+      } else {
+        // Still include URL even without score
+        letterboxd = { url: letterboxdUrl };
       }
+    }
 
-      return {
-        ...movie,
-        imdb,
-        rotten_tomatoes,
-        metacritic,
-        letterboxd,
-      };
-    })
-  );
+    return {
+      ...movie,
+      imdb,
+      rotten_tomatoes,
+      metacritic,
+      letterboxd,
+    };
+  });
 
   console.log(`Fetched external URLs. Processing posters...`);
 
-  // Process posters (can be done in parallel since they're different URLs)
-  const moviesWithPosters = await Promise.all(moviesWithUrls.map(processMoviePoster));
+  await refresh_posters(moviesWithUrls, staticDirectory, { manifest_path: path.resolve(cacheDirectory, "poster-sources.json"), headers });
 
-  console.log(`Processed ${moviesWithPosters.length} movies. Writing movies.json...`);
-  await fs.writeFile(path.resolve(staticDirectory, "movies.json"), JSON.stringify(moviesWithPosters, null, 2));
+  console.log(`Processed ${moviesWithUrls.length} movies. Writing movies.json...`);
+  await fs.writeFile(path.resolve(staticDirectory, "movies.json"), JSON.stringify(moviesWithUrls, null, 2));
   console.log("Finished writing movies.json.");
 }

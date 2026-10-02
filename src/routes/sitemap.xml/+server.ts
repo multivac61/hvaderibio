@@ -1,8 +1,7 @@
+import { SITE_URL as site_url } from "#lib/constants.js";
 import { movie_path_segment } from "#lib/movie-path.js";
 import { movies_schema } from "#lib/schemas.js";
 import movies_json from "../../../static/movies.json";
-
-const site_url = "https://hvaderibio.is";
 
 export const prerender = true;
 

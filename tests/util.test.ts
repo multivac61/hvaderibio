@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { group_by, in_range, to_hhmm, to_float } from "../src/lib/util";
+import { group_by, to_hhmm } from "../src/lib/util";
 
 describe("group_by", () => {
   test("groups objects by key", () => {
@@ -24,24 +24,6 @@ describe("group_by", () => {
   });
 });
 
-describe("in_range", () => {
-  test("returns true when value is in range", () => {
-    expect(in_range(5, 1, 10)).toBe(true);
-    expect(in_range(1, 1, 10)).toBe(true);
-    expect(in_range(10, 1, 10)).toBe(true);
-  });
-
-  test("returns false when value is outside range", () => {
-    expect(in_range(0, 1, 10)).toBe(false);
-    expect(in_range(11, 1, 10)).toBe(false);
-  });
-
-  test("handles time ranges correctly", () => {
-    expect(in_range(21.5, 21, 24)).toBe(true);
-    expect(in_range(20.5, 21, 24)).toBe(false);
-  });
-});
-
 describe("to_hhmm", () => {
   test("formats whole hours correctly", () => {
     expect(to_hhmm(14)).toBe("14:00");
@@ -62,28 +44,5 @@ describe("to_hhmm", () => {
   test("handles edge cases", () => {
     expect(to_hhmm(23.99)).toBe("23:59");
     expect(to_hhmm(0.5)).toBe("0:30");
-  });
-});
-
-describe("to_float", () => {
-  test("converts ISO date string to float time", () => {
-    const date = new Date();
-    date.setHours(14, 30, 0, 0);
-    const result = to_float(date.toISOString());
-    expect(result).toBe(14.5);
-  });
-
-  test("handles midnight", () => {
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-    const result = to_float(date.toISOString());
-    expect(result).toBe(0);
-  });
-
-  test("handles end of day", () => {
-    const date = new Date();
-    date.setHours(23, 59, 0, 0);
-    const result = to_float(date.toISOString());
-    expect(result).toBeCloseTo(23.983, 2);
   });
 });
