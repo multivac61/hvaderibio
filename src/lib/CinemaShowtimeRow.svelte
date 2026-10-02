@@ -22,7 +22,7 @@
         href={cinemaUrl}
         target="_blank"
         rel="external noopener noreferrer"
-        class="text-sm font-semibold text-neutral-200 transition-colors hover:text-white md:text-base">
+        class="-mx-1.5 rounded-md px-1.5 py-0.5 text-sm font-semibold text-neutral-200 transition-colors hover:text-white md:text-base">
         {cinemaName}
       </a>
     {:else}

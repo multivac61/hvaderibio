@@ -9,8 +9,8 @@
   const { movie, desktop = false }: Props = $props();
   const linkClass = $derived(
     desktop
-      ? "hidden items-center gap-1 text-neutral-500 hover:text-white md:inline-flex"
-      : "inline-flex items-center gap-1 text-neutral-500 hover:text-white"
+      ? "hidden -mx-1 items-center gap-1 rounded px-1 py-0.5 text-neutral-400 hover:text-white md:inline-flex"
+      : "-mx-1 inline-flex items-center gap-1 rounded px-1 py-0.5 text-neutral-400 hover:text-white"
   );
 </script>
 

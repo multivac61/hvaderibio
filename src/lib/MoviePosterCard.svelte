@@ -77,6 +77,7 @@
   .movie-poster-card:focus-visible {
     z-index: 50;
     outline: none;
+    box-shadow: none !important;
   }
 
   .movie-poster-card:focus-visible .movie-poster-image {

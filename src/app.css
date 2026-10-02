@@ -14,31 +14,24 @@
     scroll-behavior: auto !important;
   }
 
-  /* A visible keyboard focus ring everywhere; the browser default is a faint
-     hairline against the dark posters. A pure-white 1px curve shows its
-     pixel steps on 1x displays, so the ring is slightly translucent. Rounded
-     controls use .focus-pill instead. */
-  :focus-visible {
-    outline: 1px solid rgb(255 255 255 / 0.9);
-    outline-offset: 3px;
-  }
-
   /* Hide scrollbars */
   ::-webkit-scrollbar {
     display: none;
   }
 }
 
-@layer components {
-  /* Focus for rounded controls (cinema tabs, day picker, "Til baka"): drawn
-     inside, so rows that clip overflow cannot cut it, with a soft inner glow
-     that keeps the rounded edge smooth at 1x where a hard white hairline
-     looks pixelated. */
-  .focus-pill:focus-visible {
-    outline: none;
-    /* Overrides the selected tab's own shadow utility while focused. */
-    box-shadow:
-      inset 0 0 0 1px rgb(255 255 255 / 0.85),
-      inset 0 0 8px rgb(255 255 255 / 0.16) !important;
-  }
+/* Keyboard focus, everywhere: a ring drawn inside the element with a soft
+   inner glow. Inside, so rows that clip overflow cannot cut it off; soft,
+   because a hard white 1px curve shows its pixel steps on 1x displays.
+   Unlayered and !important so it wins over the elements' own shadow and
+   text utilities while focused. Targets that only receive focus from script
+   (tabindex="-1", like the poster grid) stay unmarked; posters draw their
+   own ring on the zoomed image
+   and the trailer thumbnails an outer ring, both 2px for large images. */
+:focus-visible:not([tabindex="-1"]) {
+  outline: none;
+  color: white !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.85),
+    inset 0 0 8px rgb(255 255 255 / 0.16) !important;
 }

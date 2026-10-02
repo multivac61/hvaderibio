@@ -16,7 +16,7 @@
       type="button"
       aria-pressed={label === selectedChoice}
       onclick={() => onSelect(label)}
-      class={`focus-pill shrink-0 rounded-xl border px-3.5 py-1.5 text-[15px] leading-5 font-medium whitespace-nowrap transition-all duration-200 ease-out focus-visible:text-white
+      class={`shrink-0 rounded-xl border px-3.5 py-1.5 text-[15px] leading-5 font-medium whitespace-nowrap transition-all duration-200 ease-out
                     ${
                       label === selectedChoice
                         ? "border-sky-200/20 bg-sky-500/65 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]"

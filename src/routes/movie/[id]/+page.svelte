@@ -102,7 +102,7 @@
       href={resolve("/")}
       onclick={goBack}
       onkeydown={open_on_space}
-      class="focus-pill -mx-2 mb-3 inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-500 transition-colors hover:text-white focus-visible:text-white md:mb-5">
+      class="-mx-2 mb-3 inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-500 transition-colors hover:text-white md:mb-5">
       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
@@ -113,7 +113,9 @@
       <div class="w-full md:mx-0">
         <!-- Mobile: Show trailer thumbnail if available, otherwise poster -->
         {#if youtube_id}
-          <div in:fade={{ duration: 260 }} class="aspect-video overflow-hidden rounded-md bg-neutral-900 md:hidden">
+          <div
+            in:fade={{ duration: 260 }}
+            class="aspect-video overflow-hidden rounded-md bg-neutral-900 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:hidden">
             <button type="button" onclick={openTrailer} class="group relative h-full w-full cursor-pointer">
               <img
                 src="https://img.youtube.com/vi/{youtube_id}/hqdefault.jpg"
@@ -188,7 +190,9 @@
 
         <!-- Trailer (desktop only - mobile shows in hero position) -->
         {#if youtube_id}
-          <div in:fade={{ duration: 260 }} class="hidden aspect-video overflow-hidden rounded-md bg-neutral-900 md:block">
+          <div
+            in:fade={{ duration: 260 }}
+            class="hidden aspect-video overflow-hidden rounded-md bg-neutral-900 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:block">
             <button type="button" onclick={openTrailer} class="group relative h-full w-full cursor-pointer">
               <img
                 src="https://img.youtube.com/vi/{youtube_id}/hqdefault.jpg"
