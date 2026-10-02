@@ -102,7 +102,7 @@
       href={resolve("/")}
       onclick={goBack}
       onkeydown={open_on_space}
-      class="-mx-2 mb-3 inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-500 transition-colors hover:text-white md:mb-5">
+      class="-mx-2 mb-3 inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-400 transition-colors hover:text-white md:mb-5">
       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
@@ -166,7 +166,7 @@
           <h1 class="text-2xl font-bold text-balance text-white md:text-3xl">{movie.title}</h1>
 
           <!-- Meta info: year, duration, genres + ratings on desktop -->
-          <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-500">
+          <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-400">
             <span>{movie.release_year}</span>
             <span>·</span>
             <span>{movie.duration_in_mins} mín</span>
@@ -180,7 +180,7 @@
 
           <!-- Ratings row - mobile only -->
           {#if movie.imdb?.star || movie.rotten_tomatoes || movie.metacritic || movie.letterboxd?.score}
-            <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-neutral-500 md:hidden">
+            <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-neutral-400 md:hidden">
               <MovieRatings {movie} />
             </div>
           {/if}

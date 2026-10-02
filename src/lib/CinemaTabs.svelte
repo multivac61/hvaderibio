@@ -20,7 +20,7 @@
                     ${
                       label === selectedChoice
                         ? "border-sky-200/20 bg-sky-500/65 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]"
-                        : "border-transparent bg-neutral-900/50 text-neutral-500 hover:bg-neutral-900/80 hover:text-neutral-200"
+                        : "border-transparent bg-neutral-900/50 text-neutral-400 hover:bg-neutral-900/80 hover:text-neutral-200"
                     }
                   `}>
       {label}

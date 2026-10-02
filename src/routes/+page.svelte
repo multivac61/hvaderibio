@@ -96,7 +96,7 @@
       {#if filtered_cinemas_showtimes.length === 0}
         <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
           <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
-          <p class="mt-1 text-sm text-neutral-500">Prófaðu að velja annan dag eða kvikmyndahús</p>
+          <p class="mt-1 text-sm text-neutral-400">Prófaðu að velja annan dag eða kvikmyndahús</p>
         </div>
       {:else}
         <div

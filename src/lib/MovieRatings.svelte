@@ -35,7 +35,7 @@
     <img src="/rotten-tomatoes.svg" alt="RT" width="14" height="14" />
     <span>{movie.rotten_tomatoes.score}%</span>
     {#if !desktop && movie.rotten_tomatoes.audience_score}
-      <span class="text-neutral-600">({movie.rotten_tomatoes.audience_score}%)</span>
+      <span class="text-neutral-400">({movie.rotten_tomatoes.audience_score}%)</span>
     {/if}
   </a>
 {/if}
@@ -50,7 +50,7 @@
     <img src="/metacritic.svg" alt="MC" width="14" height="14" />
     <span>{movie.metacritic.score}</span>
     {#if !desktop && movie.metacritic.user_score}
-      <span class="text-neutral-600">({movie.metacritic.user_score})</span>
+      <span class="text-neutral-400">({movie.metacritic.user_score})</span>
     {/if}
   </a>
 {/if}
