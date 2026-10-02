@@ -1,5 +1,6 @@
 <script lang="ts">
   import { CINEMA_DISPLAY_NAMES, CINEMA_URLS } from "#lib/constants.js";
+  import { external_link_label, showtime_label } from "#lib/accessible-labels.js";
   import { reykjavik_time } from "#lib/reykjavik.js";
   import type { Showtime } from "#lib/schemas.js";
   import ShowtimeBadges from "#lib/ShowtimeBadges.svelte";
@@ -22,6 +23,7 @@
         href={cinemaUrl}
         target="_blank"
         rel="external noopener noreferrer"
+        aria-label={external_link_label(cinemaName)}
         class="-mx-1.5 rounded-md px-1.5 py-0.5 text-sm font-semibold text-neutral-200 transition-colors hover:text-white md:text-base">
         {cinemaName}
       </a>
@@ -36,10 +38,12 @@
         href={showtime.purchase_url}
         target="_blank"
         rel="external noopener noreferrer"
+        aria-label={showtime_label(showtime)}
         class="group/time relative inline-flex items-center rounded bg-neutral-800 px-2 py-1.5 text-sm text-neutral-400 tabular-nums transition-[background-color,color,transform] duration-150 ease-out hover:bg-neutral-700 hover:text-white active:scale-95">
         <ShowtimeBadges {showtime} />
         <span>{reykjavik_time(showtime.time)}</span>
         <span
+          aria-hidden="true"
           class="pointer-events-none absolute bottom-full left-1/2 mb-1.5 hidden -translate-x-1/2 rounded bg-neutral-950/95 px-2 py-1 text-[10px] font-medium whitespace-nowrap text-neutral-300 opacity-0 shadow-lg transition-opacity group-hover/time:opacity-100 [@media(hover:hover)]:block">
           {showtime.hall ? `${showtime.hall} · ` : ""}Kaupa miða
         </span>

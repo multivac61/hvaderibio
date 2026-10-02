@@ -103,7 +103,7 @@
       onclick={goBack}
       onkeydown={open_on_space}
       class="-mx-2 mb-3 inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-400 transition-colors hover:text-white md:mb-5">
-      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <svg aria-hidden="true" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       Til baka
@@ -116,10 +116,10 @@
           <div
             in:fade={{ duration: 260 }}
             class="aspect-video overflow-hidden rounded-md bg-neutral-900 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:hidden">
-            <button type="button" onclick={openTrailer} class="group relative h-full w-full cursor-pointer">
+            <button type="button" onclick={openTrailer} aria-label="Spila stiklu" class="group relative h-full w-full cursor-pointer">
               <img
                 src="https://img.youtube.com/vi/{youtube_id}/hqdefault.jpg"
-                alt="Trailer"
+                alt=""
                 width="1280"
                 height="720"
                 fetchpriority="high"
@@ -128,7 +128,7 @@
                 class="h-full w-full object-cover" />
               <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
                 <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
-                  <svg class="ml-0.5 h-6 w-6 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" class="ml-0.5 h-6 w-6 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 </div>
@@ -148,8 +148,7 @@
             sizes="(min-width: 1280px) 480px, (min-width: 1024px) 400px, (min-width: 768px) 320px, 100vw" />
           <img
             src={`/${movie.id}.webp`}
-            title={movie.title}
-            alt={movie.title}
+            alt=""
             width="720"
             height="1080"
             fetchpriority="high"
@@ -193,10 +192,10 @@
           <div
             in:fade={{ duration: 260 }}
             class="hidden aspect-video overflow-hidden rounded-md bg-neutral-900 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:block">
-            <button type="button" onclick={openTrailer} class="group relative h-full w-full cursor-pointer">
+            <button type="button" onclick={openTrailer} aria-label="Spila stiklu" class="group relative h-full w-full cursor-pointer">
               <img
                 src="https://img.youtube.com/vi/{youtube_id}/hqdefault.jpg"
-                alt="Trailer"
+                alt=""
                 width="1280"
                 height="720"
                 loading="lazy"
@@ -204,7 +203,7 @@
                 class="h-full w-full object-cover" />
               <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
-                  <svg class="ml-0.5 h-5 w-5 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" class="ml-0.5 h-5 w-5 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 </div>
@@ -254,7 +253,7 @@
       onclick={closeTrailerModal}
       aria-label="Loka"
       class="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20">
-      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <svg aria-hidden="true" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
@@ -264,7 +263,7 @@
     <div class="relative aspect-video w-full max-w-5xl">
       <iframe
         src="https://www.youtube.com/embed/{youtube_id}?autoplay=1&rel=0&modestbranding=1"
-        title="Trailer"
+        title="Stikla: {movie.title}"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
