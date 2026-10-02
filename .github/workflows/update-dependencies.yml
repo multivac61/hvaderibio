@@ -49,7 +49,6 @@ jobs:
           bun test
           bun run build
         env:
-          ADAPTER: cloudflare
           NODE_ENV: production
 
       - uses: peter-evans/create-pull-request@v8

@@ -51,7 +51,6 @@ jobs:
       - name: 🔨 Build for Cloudflare
         run: bun run build
         env:
-          ADAPTER: cloudflare
           NODE_ENV: production
 
       - name: 🚀 Deploy to Cloudflare Pages

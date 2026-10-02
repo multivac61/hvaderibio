@@ -15,12 +15,11 @@
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
     "scrape": "svelte-kit sync && bun src/scrape.ts",
-    "clean": "rm -rf static/*.webp static/movies.json .svelte-kit build"
+    "clean": "rm -rf static/*.webp static/movies.json .svelte-kit"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@sveltejs/adapter-cloudflare": "^7.2.9",
-    "@sveltejs/adapter-static": "^3.0.10",
     "@sveltejs/kit": "^2.70.3",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/vite": "^4.3.3",
