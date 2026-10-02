@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { CinemaOption } from "$lib/cinemas";
+  import type { CinemaOption } from "#lib/cinemas.js";
 
   type Props = {
     cinemaOptions: readonly CinemaOption[];

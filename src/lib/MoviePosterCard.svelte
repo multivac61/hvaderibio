@@ -2,8 +2,8 @@
   import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
 
-  import { movie_path_segment } from "$lib/movie-path";
-  import type { Movie } from "$lib/schemas";
+  import { movie_path_segment } from "#lib/movie-path.js";
+  import type { Movie } from "#lib/schemas.js";
 
   type Props = {
     movie: Movie;
@@ -12,7 +12,7 @@
   };
 
   const { movie, catalog, index }: Props = $props();
-  const movieHref = $derived(resolve(`/movie/${movie_path_segment(movie, catalog)}`));
+  const movieHref = $derived(resolve(`movie/${movie_path_segment(movie, catalog)}`));
 
   let touchStart: { x: number; y: number } | null = null;
 
@@ -33,7 +33,6 @@
     // history navigation and consume the next synthetic click. Navigate from
     // the real touch event instead; preventDefault suppresses the later click.
     event.preventDefault();
-    // eslint-disable-next-line svelte/no-navigation-without-resolve
     void goto(movieHref);
   };
 </script>

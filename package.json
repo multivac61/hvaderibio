@@ -14,13 +14,13 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
-    "scrape": "svelte-kit sync && bun src/scrape.ts",
+    "scrape": "bun src/scrape.ts",
     "clean": "rm -rf static/*.webp static/movies.json .svelte-kit"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@sveltejs/adapter-cloudflare": "^7.2.9",
-    "@sveltejs/kit": "^2.70.3",
+    "@sveltejs/adapter-cloudflare": "^8.0.0",
+    "@sveltejs/kit": "^3.0.0",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/vite": "^4.3.3",
     "@types/bun": "^1.4.2",
@@ -39,5 +39,8 @@
     "vite": "^8.3.2",
     "wrangler": "^4.146.0",
     "zod": "^4.6.5"
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*"
   }
 }

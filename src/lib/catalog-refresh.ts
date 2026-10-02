@@ -4,7 +4,7 @@ import path from "path";
 import { parseHTML } from "linkedom";
 import sharp from "sharp";
 
-import type { Movie, Showtime } from "$lib/schemas";
+import type { Movie, Showtime } from "#lib/schemas.js";
 import {
   parse_movie,
   parse_movie_ids,
@@ -16,7 +16,7 @@ import {
   scrape_letterboxd,
   fetch_imdb_ratings,
   type HallInfo,
-} from "$lib/parse";
+} from "#lib/parse.js";
 
 const staticDirectory = path.resolve(process.cwd(), "static");
 
