@@ -24,7 +24,7 @@
     {id}
     name={id}
     aria-label="Veldu kvikmyndahús"
-    class="appearance-none rounded-full border border-white/10 bg-black/70 pr-8 pl-8 text-center font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_14px_rgba(0,0,0,0.26)] focus:border-sky-300/40 focus:ring-2 focus:ring-sky-300/15 focus:outline-none {sizeClass}">
+    class="appearance-none rounded-full border border-white/10 bg-neutral-950/65 pr-8 pl-8 text-center font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_22px_rgba(0,0,0,0.3)] backdrop-blur-xl {sizeClass}">
     {#each cinemaOptions as [label] (label)}
       <option
         value={label}
