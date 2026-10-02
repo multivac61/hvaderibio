@@ -272,3 +272,37 @@ describe("parse_showtimes_by_day", () => {
     expect(showtimes_by_day["1"]).toBeDefined();
   });
 });
+
+describe("parse_showtimes_by_day timezone", () => {
+  test("stores Icelandic showtimes as Reykjavik instants regardless of the machine's zone", () => {
+    const original_tz = process.env.TZ;
+    process.env.TZ = "America/New_York";
+    // 23:30 in Reykjavik is still 2 September in New York.
+    setSystemTime(new Date("2026-09-02T23:30:00Z"));
+
+    try {
+      const { document } = parseHTML(`
+        <div class="mp-showtimes__day" data-date="0">
+          <div class="mp-showtimes__cinema">
+            <span class="mp-showtimes__cinema-name">Bíó Paradís</span>
+            <a class="mp-showtimes__time" href="https://tickets.example.com/a"><span class="mp-showtimes__time-value">20:20</span></a>
+          </div>
+        </div>
+        <div class="mp-showtimes__day" data-date="1">
+          <div class="mp-showtimes__cinema">
+            <span class="mp-showtimes__cinema-name">Bíó Paradís</span>
+            <a class="mp-showtimes__time" href="https://tickets.example.com/b"><span class="mp-showtimes__time-value">17.45</span></a>
+          </div>
+        </div>
+      `);
+
+      const showtimes = parse_showtimes_by_day(document);
+
+      expect(showtimes["0"]["Bíó Paradís"][0].time).toBe("2026-09-02T20:20:00.000Z");
+      expect(showtimes["1"]["Bíó Paradís"][0].time).toBe("2026-09-03T17:45:00.000Z");
+    } finally {
+      setSystemTime();
+      process.env.TZ = original_tz;
+    }
+  });
+});

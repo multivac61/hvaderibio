@@ -1,18 +1,17 @@
 import { movie_schema, cinema_showtimes_schema, type CinemaShowtimes, type ShowtimesByDay } from "./schemas";
+import { reykjavik_date, reykjavik_date_after } from "./reykjavik";
 
+const pad = (n: number) => n.toString().padStart(2, "0");
+
+// Iceland is on UTC+0 all year, so a Reykjavik wall-clock time is that UTC time.
 function combineDateWithTime(hour_minute: string, dayOffset: number = 0): string {
   // Handle both "15:10" and "15.10" formats
-  const normalized = hour_minute.replace(".", ":");
-  const [hours, minutes] = normalized.split(":");
-
-  const date = new Date();
-  date.setDate(date.getDate() + dayOffset);
-  date.setHours(parseInt(hours), parseInt(minutes || "0"), 0, 0);
-  return date.toISOString();
+  const [hours, minutes = "0"] = hour_minute.replace(".", ":").split(":");
+  return `${reykjavik_date_after(new Date(), dayOffset)}T${pad(parseInt(hours))}:${pad(parseInt(minutes))}:00.000Z`;
 }
 
-// Parse Icelandic premiere date like "19.  mars  2026" into a Date object
-function parse_premiere_date(text: string): Date | null {
+// Parse Icelandic premiere date like "19.  mars  2026" into a YYYY-MM-DD date
+function parse_premiere_date(text: string): string | null {
   const months: Record<string, number> = {
     janúar: 0,
     febrúar: 1,
@@ -33,7 +32,7 @@ function parse_premiere_date(text: string): Date | null {
   const [, day, monthName, year] = match;
   const month = months[monthName.toLowerCase()];
   if (month === undefined) return null;
-  return new Date(parseInt(year), month, parseInt(day));
+  return `${year}-${pad(month + 1)}-${pad(parseInt(day))}`;
 }
 
 export function parse_movie(document: Document, id: number) {
@@ -127,9 +126,7 @@ export function parse_movie(document: Document, id: number) {
   if (premiereDateText && premiereLabel?.includes("Væntanleg")) {
     const premiereDate = parse_premiere_date(premiereDateText);
     if (premiereDate) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      has_future_premiere = premiereDate > today;
+      has_future_premiere = premiereDate > reykjavik_date(new Date());
       if (has_future_premiere) {
         console.log(`  Movie "${title}" (${id}) has future premiere: ${premiereDateText} - filtering Smárabíó preview showtimes`);
       }
