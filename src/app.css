@@ -1,13 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --container-9xl: 128rem;
+}
+
 @layer base {
-  :root {
-    font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-
-    /* Add new maxWidth */
-    max-width-9xl: 128rem; /* Corresponds to max-w-9xl */
-  }
-
   html,
   body {
     @apply h-full bg-black;
@@ -20,29 +17,5 @@
   /* Hide scrollbars */
   ::-webkit-scrollbar {
     display: none;
-  }
-
-  /* Specific styling for when dialog is open */
-  body.dialog-open {
-    @apply overflow-hidden;
-    /* Prevent background interactions */
-    touch-action: none;
-    user-select: none;
-    -webkit-overflow-scrolling: auto;
-  }
-
-  /* Remove search input decorations */
-  input[type="search"]::-webkit-search-decoration,
-  input[type="search"]::-webkit-search-cancel-button,
-  input[type="search"]::-webkit-search-results-button,
-  input[type="search"]::-webkit-search-results-decoration {
-    -webkit-appearance: none;
-  }
-}
-
-@layer utilities {
-  .screen-height {
-    max-height: calc(100vh - 52px);
-    max-height: calc(100dvh - 52px);
   }
 }

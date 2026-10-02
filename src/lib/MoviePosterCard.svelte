@@ -60,7 +60,7 @@
       width="720"
       height="1080"
       style:view-transition-name="poster-{movie.id}"
-      class="movie-poster-image shadow-5xl pointer-events-none h-full w-full rounded-lg object-fill" />
+      class="movie-poster-image pointer-events-none h-full w-full rounded-lg object-fill" />
   </picture>
 </a>
 
