@@ -47,7 +47,7 @@ const CONCURRENCY = 4;
 
 async function scrapeMovie(id: number): Promise<Movie | null> {
   try {
-    const { document: movie_document } = parseHTML(await fetch_text(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers }));
+    const { document: movie_document } = parseHTML(await fetch_text(`https://kvikmyndir.is/mynd/?id=${id}`, { headers }));
     const parsed_movie = parse_movie(movie_document, id);
 
     if (parsed_movie) {
@@ -191,7 +191,7 @@ export async function refresh_movie_catalog() {
   const listings = await map_concurrent(
     Array.from({ length: DAYS_SHOWN }, (_, day) => day),
     CONCURRENCY,
-    async (day) => parseHTML(await fetch_text(`https://www.kvikmyndir.is/bio/syningatimar/?dagur=${day}`, { headers })).document
+    async (day) => parseHTML(await fetch_text(`https://kvikmyndir.is/bio/syningatimar/?dagur=${day}`, { headers })).document
   );
   // Hall names and formats (Flauel, Lúxus, VIP, Ásberg, MAX, ...) per showtime.
   const { movieIds, hallInfo: hallInfoMap } = parse_listings(listings);
