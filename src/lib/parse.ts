@@ -1,4 +1,5 @@
 import { movie_schema, cinema_showtimes_schema, type CinemaShowtimes, type ShowtimesByDay } from "./schemas";
+import { fetch_text } from "./http";
 import { reykjavik_date, reykjavik_date_after } from "./reykjavik";
 
 const pad = (n: number) => n.toString().padStart(2, "0");
@@ -411,136 +412,60 @@ export async function fetch_external_urls(imdbId: string): Promise<{ rtUrl?: str
   }
 }
 
-// Scrape Rotten Tomatoes scores from RT page
-export async function scrape_rotten_tomatoes(url: string): Promise<{ score?: number; audience_score?: number } | null> {
+const browser_headers = {
+  "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+};
+
+// Rating sites publish schema.org JSON-LD, which is far steadier than their
+// markup. Letterboxd wraps it in /* <![CDATA[ */ comments.
+function json_ld_rating(html: string): number | undefined {
+  for (const [, body] of html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
+    try {
+      const rating = parseFloat(JSON.parse(body.replace(/\/\*[\s\S]*?\*\//g, ""))?.aggregateRating?.ratingValue);
+      if (Number.isFinite(rating)) return rating;
+    } catch {
+      // Not valid JSON; try the next block.
+    }
+  }
+}
+
+const parse_int = (text: string | undefined) => (text === undefined ? undefined : parseInt(text));
+
+export function parse_rotten_tomatoes_scores(html: string): { score: number; audience_score?: number } | null {
+  // The Tomatometer is already a percentage, even when below 10.
+  const score = json_ld_rating(html);
+  if (score === undefined) return null;
+
+  const audience_score = parse_int(html.match(/"audienceScore":\{[^}]*?"score":"(\d+)"/)?.[1]);
+  return { score: Math.round(score), audience_score };
+}
+
+export function parse_metacritic_scores(html: string): { score: number; user_score?: number } | null {
+  const score = json_ld_rating(html);
+  if (score === undefined) return null;
+
+  // The user score (0-10) only appears in the rendered score panel; the page's
+  // data payload uses indices that look like scores.
+  const user_score = html.match(/global-score-header">User score<[\s\S]*?global-score-value">([\d.]+)</i)?.[1];
+  return { score: Math.round(score), user_score: user_score === undefined ? undefined : Math.round(parseFloat(user_score) * 10) };
+}
+
+export function parse_letterboxd_score(html: string): { score: number } | null {
+  // Letterboxd's native 0-5 scale, to one decimal.
+  const rating = json_ld_rating(html);
+  return rating === undefined ? null : { score: Math.round(rating * 10) / 10 };
+}
+
+async function scrape<T>(url: string, parse: (html: string) => T | null, label: string): Promise<T | null> {
   try {
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      },
-    });
-
-    if (!response.ok) return null;
-    const html = await response.text();
-
-    // Extract tomatometer score from score-board or rt-text
-    let score: number | undefined;
-    let audience_score: number | undefined;
-
-    // Look for JSON-LD data first (most reliable)
-    const jsonLdMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
-    if (jsonLdMatch) {
-      try {
-        const jsonLd = JSON.parse(jsonLdMatch[1]);
-        if (jsonLd.aggregateRating?.ratingValue) {
-          // RT stores as percentage in some cases
-          const rating = parseFloat(jsonLd.aggregateRating.ratingValue);
-          if (rating <= 10) {
-            score = Math.round(rating * 10);
-          } else {
-            score = Math.round(rating);
-          }
-        }
-      } catch {
-        // JSON parse failed, try regex fallback
-      }
-    }
-
-    // Fallback: Look for tomatometer in HTML
-    if (!score) {
-      const tomatometerMatch = html.match(/tomatometer[^>]*>(\d+)%?</i) || html.match(/"tomatometerScore":(\d+)/);
-      if (tomatometerMatch) {
-        score = parseInt(tomatometerMatch[1]);
-      }
-    }
-
-    // Look for audience score
-    const audienceMatch = html.match(/audienceScore[^>]*>(\d+)%?</i) || html.match(/"audienceScore":(\d+)/);
-    if (audienceMatch) {
-      audience_score = parseInt(audienceMatch[1]);
-    }
-
-    if (score !== undefined) {
-      return { score, audience_score };
-    }
-    return null;
+    return parse(await fetch_text(url, { headers: browser_headers }));
   } catch (error) {
-    console.error(`Failed to scrape RT scores from ${url}:`, error);
+    console.error(`Failed to scrape ${label} from ${url}:`, error);
     return null;
   }
 }
 
-// Scrape Metacritic scores from MC page
-export async function scrape_metacritic(url: string): Promise<{ score?: number; user_score?: number } | null> {
-  try {
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      },
-    });
-
-    if (!response.ok) return null;
-    const html = await response.text();
-
-    let score: number | undefined;
-    let user_score: number | undefined;
-
-    // Look for metascore in JSON data or HTML
-    const metascoreMatch =
-      html.match(/"metaScore":(\d+)/) ||
-      html.match(/metascore[^>]*>(\d+)</i) ||
-      html.match(/<span[^>]*class="[^"]*metascore[^"]*"[^>]*>(\d+)</i);
-    if (metascoreMatch) {
-      score = parseInt(metascoreMatch[1]);
-    }
-
-    // Look for user score (usually as X.X format)
-    const userScoreMatch = html.match(/"userScore":([\d.]+)/) || html.match(/userscore[^>]*>([\d.]+)</i);
-    if (userScoreMatch) {
-      const rawScore = parseFloat(userScoreMatch[1]);
-      // Convert from 0-10 scale to 0-100
-      user_score = rawScore <= 10 ? Math.round(rawScore * 10) : Math.round(rawScore);
-    }
-
-    if (score !== undefined) {
-      return { score, user_score };
-    }
-    return null;
-  } catch (error) {
-    console.error(`Failed to scrape MC scores from ${url}:`, error);
-    return null;
-  }
-}
-
-// Scrape Letterboxd score from Letterboxd page
-export async function scrape_letterboxd(url: string): Promise<{ score?: number } | null> {
-  try {
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      },
-    });
-
-    if (!response.ok) return null;
-    const html = await response.text();
-
-    // Letterboxd shows rating as X.X out of 5
-    const ratingMatch = html.match(/"ratingValue":\s*([\d.]+)/) || html.match(/average rating of ([\d.]+)/i);
-    if (ratingMatch) {
-      const rating = parseFloat(ratingMatch[1]);
-      // Return as 0-5 scale (Letterboxd's native format)
-      return { score: Math.round(rating * 10) / 10 };
-    }
-
-    return null;
-  } catch (error) {
-    console.error(`Failed to scrape Letterboxd score from ${url}:`, error);
-    return null;
-  }
-}
+export const scrape_rotten_tomatoes = (url: string) => scrape(url, parse_rotten_tomatoes_scores, "RT scores");
+export const scrape_metacritic = (url: string) => scrape(url, parse_metacritic_scores, "MC scores");
+export const scrape_letterboxd = (url: string) => scrape(url, parse_letterboxd_score, "Letterboxd score");
