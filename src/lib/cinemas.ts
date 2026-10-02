@@ -1,5 +1,5 @@
-import { CAPITAL_REGION_CINEMAS, CINEMA_DISPLAY_NAMES } from "$lib/constants";
-import type { Movie } from "$lib/schemas";
+import { CAPITAL_REGION_CINEMAS, CINEMA_DISPLAY_NAMES } from "#lib/constants.js";
+import type { Movie } from "#lib/schemas.js";
 
 export type CinemaOption = readonly [string, readonly string[]];
 

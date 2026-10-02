@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { get_showtime_window } from "$lib/showtimes";
-  import { get_movie_programme } from "$lib/programme";
-  import { get_youtube_id, is_mobile_user_agent } from "$lib/video";
-  import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "$lib/cinema-state.svelte";
-  import { dayState } from "$lib/day-state.svelte";
-  import ProgrammeControls from "$lib/ProgrammeControls.svelte";
-  import MovieRatings from "$lib/MovieRatings.svelte";
-  import CinemaShowtimeRow from "$lib/CinemaShowtimeRow.svelte";
+  import { get_showtime_window } from "#lib/showtimes.js";
+  import { get_movie_programme } from "#lib/programme.js";
+  import { get_youtube_id, is_mobile_user_agent } from "#lib/video.js";
+  import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
+  import { dayState } from "#lib/day-state.svelte.js";
+  import ProgrammeControls from "#lib/ProgrammeControls.svelte";
+  import MovieRatings from "#lib/MovieRatings.svelte";
+  import CinemaShowtimeRow from "#lib/CinemaShowtimeRow.svelte";
   import { fade } from "svelte/transition";
 
   const { data } = $props();

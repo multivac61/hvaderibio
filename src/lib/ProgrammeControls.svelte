@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { CinemaOption } from "$lib/cinemas";
-  import { cinemaState } from "$lib/cinema-state.svelte";
-  import { dayState } from "$lib/day-state.svelte";
-  import CinemaSelect from "$lib/CinemaSelect.svelte";
-  import CinemaTabs from "$lib/CinemaTabs.svelte";
-  import DayPicker from "$lib/DayPicker.svelte";
+  import type { CinemaOption } from "#lib/cinemas.js";
+  import { cinemaState } from "#lib/cinema-state.svelte.js";
+  import { dayState } from "#lib/day-state.svelte.js";
+  import CinemaSelect from "#lib/CinemaSelect.svelte";
+  import CinemaTabs from "#lib/CinemaTabs.svelte";
+  import DayPicker from "#lib/DayPicker.svelte";
 
   type Props = {
     cinemaOptions: readonly CinemaOption[];

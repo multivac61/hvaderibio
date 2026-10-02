@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AVAILABLE_DAYS, get_day_label } from "$lib/day-picker";
+  import { AVAILABLE_DAYS, get_day_label } from "#lib/day-picker.js";
 
   type Props = {
     selectedDay: string;

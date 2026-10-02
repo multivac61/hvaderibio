@@ -1,5 +1,5 @@
-import { get_cinema_options } from "$lib/cinemas";
-import { readMovies } from "$lib/movies";
+import { get_cinema_options } from "#lib/cinemas.js";
+import { readMovies } from "#lib/movies.js";
 
 export const load = async () => {
   const { movies } = await readMovies();
