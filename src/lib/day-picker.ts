@@ -1,6 +1,7 @@
+import { DAYS_SHOWN } from "#lib/constants.js";
 import { reykjavik_date_after } from "#lib/reykjavik.js";
 
-export const AVAILABLE_DAYS = ["0", "1", "2", "3"];
+export const AVAILABLE_DAYS = Array.from({ length: DAYS_SHOWN }, (_, day) => String(day));
 
 const WEEKDAYS = ["sunnudag", "mánudag", "þriðjudag", "miðvikudag", "fimmtudag", "föstudag", "laugardag"];
 

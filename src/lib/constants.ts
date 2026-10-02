@@ -25,4 +25,7 @@ export const CINEMA_URLS: Record<string, string> = {
   Smárabíó: "https://smarabio.is/bio",
 };
 
+/** Days offered in the day picker, starting today; the scraper covers the same span. */
+export const DAYS_SHOWN = 4;
+
 export const SITE_URL = "https://hvaderibio.is";

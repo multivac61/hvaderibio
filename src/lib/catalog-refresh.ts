@@ -4,13 +4,13 @@ import path from "path";
 import { parseHTML } from "linkedom";
 
 import { map_concurrent } from "#lib/concurrency.js";
+import { DAYS_SHOWN } from "#lib/constants.js";
 import { fetch_text } from "#lib/http.js";
 import { refresh_posters } from "#lib/posters.js";
 import type { Movie, Showtime } from "#lib/schemas.js";
 import {
   parse_movie,
-  parse_movie_ids,
-  parse_hall_info_from_listing,
+  parse_listings,
   extract_direct_url,
   fetch_external_urls,
   scrape_rotten_tomatoes,
@@ -188,13 +188,14 @@ async function enrich_sambio_bookings(movies: readonly Movie[], hallInfoMap: Map
 }
 
 export async function refresh_movie_catalog() {
-  const { document } = parseHTML(await fetch_text("https://www.kvikmyndir.is/bio/syningatimar", { headers }));
-
-  // Parse hall info from listing page (contains Flauel, Lúxus, VIP, Ásberg, etc.)
-  const hallInfoMap = parse_hall_info_from_listing(document);
+  const listings = await map_concurrent(
+    Array.from({ length: DAYS_SHOWN }, (_, day) => day),
+    CONCURRENCY,
+    async (day) => parseHTML(await fetch_text(`https://www.kvikmyndir.is/bio/syningatimar/?dagur=${day}`, { headers })).document
+  );
+  // Hall names and formats (Flauel, Lúxus, VIP, Ásberg, MAX, ...) per showtime.
+  const { movieIds, hallInfo: hallInfoMap } = parse_listings(listings);
   console.log(`Parsed hall info for ${hallInfoMap.size} showtimes`);
-
-  const movieIds = parse_movie_ids(document);
   console.log(`Found ${movieIds.length} movies to scrape`);
 
   const movies = (await map_concurrent(movieIds, CONCURRENCY, scrapeMovie)).filter((movie) => movie !== null);
