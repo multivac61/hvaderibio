@@ -6,6 +6,7 @@
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import MovieRatings from "#lib/MovieRatings.svelte";
   import CinemaShowtimeRow from "#lib/CinemaShowtimeRow.svelte";
+  import PageMeta from "#lib/PageMeta.svelte";
   import { fade } from "svelte/transition";
 
   const { data } = $props();
@@ -41,6 +42,12 @@
 
   const visible_showtimes = $derived(get_movie_programme(movie, selected_day, selected_cinemas, now));
 </script>
+
+<PageMeta
+  title="{movie.title} - Hvað er í bíó?"
+  description={movie.description.length > 160 ? `${movie.description.slice(0, 157).trimEnd()}…` : movie.description}
+  path="/movie/{data.path}"
+  image="/{movie.id}.webp" />
 
 <svelte:head>
   <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />

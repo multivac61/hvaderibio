@@ -4,6 +4,7 @@
   import { dayState } from "#lib/day-state.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
+  import PageMeta from "#lib/PageMeta.svelte";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
 
@@ -27,10 +28,10 @@
   const filtered_cinemas_showtimes = $derived(now ? get_programme_movies(movies, selected_day, selected_cinemas, now) : []);
 </script>
 
-<svelte:head>
-  <title>Hvað er í bíó? - Bíódagskrá kvöldsins</title>
-  <meta name="description" content="Fljótlegt yfirlit yfir bíódagskrá kvöldsins á öllu landinu. Skoðaðu sýningartíma og bókaðu miða." />
-</svelte:head>
+<PageMeta
+  title="Hvað er í bíó? - Bíódagskrá kvöldsins"
+  description="Fljótlegt yfirlit yfir bíódagskrá kvöldsins á öllu landinu. Skoðaðu sýningartíma og bókaðu miða."
+  path="/" />
 
 <header class="relative hidden sm:mt-8 sm:mb-5 sm:block">
   <h1 class="mb-3 text-center text-5xl tracking-tight text-pretty text-white" style="font-family: 'Space Grotesk', sans-serif;">

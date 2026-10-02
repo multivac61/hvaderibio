@@ -24,3 +24,5 @@ export const CINEMA_URLS: Record<string, string> = {
   "Sambíóin Álfabakka": "https://www.sambio.is/showtimes",
   Smárabíó: "https://smarabio.is/bio",
 };
+
+export const SITE_URL = "https://hvaderibio.is";

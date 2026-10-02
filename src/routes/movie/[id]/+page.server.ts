@@ -22,6 +22,8 @@ export const load: PageServerLoad = async ({ params }) => {
 
   return {
     movie,
+    // Numeric and slug URLs both resolve; search engines should index the slug.
+    path: movie_path_segment(movie, movies),
     cinema_options,
   };
 };
