@@ -4,6 +4,7 @@ import path from "path";
 import { parseHTML } from "linkedom";
 import sharp from "sharp";
 
+import { fetch_text } from "#lib/http.js";
 import type { Movie, Showtime } from "#lib/schemas.js";
 import {
   parse_movie,
@@ -49,8 +50,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function scrapeMovie(id: number): Promise<Movie | null> {
   try {
-    const movie = await fetch(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers });
-    const { document: movie_document } = parseHTML(await movie.text());
+    const { document: movie_document } = parseHTML(await fetch_text(`https://www.kvikmyndir.is/mynd/?id=${id}`, { headers }));
     const parsed_movie = parse_movie(movie_document, id);
 
     if (parsed_movie) {
@@ -243,9 +243,7 @@ async function enrich_sambio_bookings(movies: readonly Movie[], hallInfoMap: Map
 }
 
 export async function refresh_movie_catalog() {
-  const showtimesResponse = await fetch("https://www.kvikmyndir.is/bio/syningatimar", { headers });
-  const html = await showtimesResponse.text();
-  const { document } = parseHTML(html);
+  const { document } = parseHTML(await fetch_text("https://www.kvikmyndir.is/bio/syningatimar", { headers }));
 
   // Parse hall info from listing page (contains Flauel, Lúxus, VIP, Ásberg, etc.)
   const hallInfoMap = parse_hall_info_from_listing(document);
@@ -260,6 +258,15 @@ export async function refresh_movie_catalog() {
     await delay(100); // 100ms delay between requests
     const movie = await scrapeMovie(id);
     if (movie) movies.push(movie);
+  }
+
+  // Exiting non-zero keeps the previous deploy live instead of publishing an
+  // empty programme.
+  if (movies.length === 0) {
+    throw new Error(`Scraped no movies from ${movieIds.length} listed ids`);
+  }
+  if (movies.length < movieIds.length) {
+    console.warn(`Dropped ${movieIds.length - movies.length} of ${movieIds.length} movies that failed to fetch or parse`);
   }
 
   await enrich_sambio_bookings(movies, hallInfoMap);

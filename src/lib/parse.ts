@@ -343,18 +343,24 @@ export type ImdbRating = { star: number; votes: number };
 
 // Fetch IMDb ratings from IMDb's public dataset. This avoids relying on the
 // kvikmyndir.is rating widget, which can be stale or missing and previously
-// caused us to persist placeholder 0 ratings from IMDb links.
-export async function fetch_imdb_ratings(imdbIds: readonly string[]): Promise<Map<string, ImdbRating>> {
+// caused us to persist placeholder 0 ratings from IMDb links. Ratings are an
+// optional extra, so an unavailable dataset yields no ratings rather than
+// blocking the deploy; callers fall back to the kvikmyndir.is rating.
+export async function fetch_imdb_ratings(
+  imdbIds: readonly string[],
+  dataset_url = "https://datasets.imdbws.com/title.ratings.tsv.gz"
+): Promise<Map<string, ImdbRating>> {
   const ids = new Set(imdbIds);
   const ratings = new Map<string, ImdbRating>();
   if (ids.size === 0) return ratings;
 
-  const response = await fetch("https://datasets.imdbws.com/title.ratings.tsv.gz", {
+  const response = await fetch(dataset_url, {
     headers: { "User-Agent": "hvaderibio/1.0" },
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch IMDb ratings dataset: ${response.status} ${response.statusText}`);
+    console.error(`Skipping IMDb ratings, dataset unavailable: ${response.status} ${response.statusText}`);
+    return ratings;
   }
 
   const { gunzipSync } = await import("node:zlib");
