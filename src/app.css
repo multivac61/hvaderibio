@@ -14,17 +14,31 @@
     scroll-behavior: auto !important;
   }
 
-  /* A visible 1px keyboard focus ring everywhere; the browser default is a
-     faint hairline against the dark posters. Pills inside clipping rows draw
-     theirs inside instead: the cinema tabs whiten their border, the day
-     picker uses an inset box-shadow ring that follows its rounded corners. */
+  /* A visible keyboard focus ring everywhere; the browser default is a faint
+     hairline against the dark posters. A pure-white 1px curve shows its
+     pixel steps on 1x displays, so the ring is slightly translucent. Rounded
+     controls use .focus-pill instead. */
   :focus-visible {
-    outline: 1px solid white;
+    outline: 1px solid rgb(255 255 255 / 0.9);
     outline-offset: 3px;
   }
 
   /* Hide scrollbars */
   ::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@layer components {
+  /* Focus for rounded controls (cinema tabs, day picker, "Til baka"): drawn
+     inside, so rows that clip overflow cannot cut it, with a soft inner glow
+     that keeps the rounded edge smooth at 1x where a hard white hairline
+     looks pixelated. */
+  .focus-pill:focus-visible {
+    outline: none;
+    /* Overrides the selected tab's own shadow utility while focused. */
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.85),
+      inset 0 0 8px rgb(255 255 255 / 0.16) !important;
   }
 }

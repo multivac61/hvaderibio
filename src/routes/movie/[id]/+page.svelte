@@ -100,7 +100,7 @@
       bind:this={back_link}
       href={resolve("/")}
       onclick={goBack}
-      class="-mx-2 mb-3 inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-500 transition-colors hover:text-white focus-visible:text-white focus-visible:outline-offset-0 md:mb-5">
+      class="focus-pill -mx-2 mb-3 inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-500 transition-colors hover:text-white focus-visible:text-white md:mb-5">
       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
