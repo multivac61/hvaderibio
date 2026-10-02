@@ -42,12 +42,17 @@
     trailer_modal_open = false;
   };
 
-  // Lock page scroll while the trailer is open, and release it even when the
-  // visitor navigates away with the modal still open.
+  let trailer_dialog: HTMLDialogElement | undefined = $state();
+
+  // Open the dialog modally and lock page scroll while the trailer plays,
+  // releasing both even when the visitor navigates away with it open.
   $effect(() => {
-    if (!trailer_modal_open) return;
+    if (!trailer_modal_open || !trailer_dialog) return;
+    const dialog = trailer_dialog;
+    dialog.showModal();
     document.body.style.overflow = "hidden";
     return () => {
+      if (dialog.open) dialog.close();
       document.body.style.overflow = "";
     };
   });
@@ -243,11 +248,14 @@
   </div>
 </div>
 
-<svelte:window onkeydown={(e) => trailer_modal_open && e.key === "Escape" && closeTrailerModal()} />
-
-<!-- Trailer Modal -->
-{#if trailer_modal_open && youtube_id}
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4" role="dialog" aria-modal="true" aria-label="Trailer">
+<!-- Trailer: a native modal dialog moves focus in, makes the page behind
+     inert, closes on Escape and returns focus to the trailer button. -->
+<dialog
+  bind:this={trailer_dialog}
+  onclose={closeTrailerModal}
+  aria-label="Stikla: {movie.title}"
+  class="fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none items-center justify-center bg-black/95 p-4 backdrop:bg-black/80 open:flex">
+  {#if trailer_modal_open && youtube_id}
     <button
       type="button"
       onclick={closeTrailerModal}
@@ -269,5 +277,5 @@
         allowfullscreen
         class="h-full w-full rounded-lg"></iframe>
     </div>
-  </div>
-{/if}
+  {/if}
+</dialog>
