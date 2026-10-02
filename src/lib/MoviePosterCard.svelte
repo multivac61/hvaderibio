@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
+  import { open_on_space } from "#lib/open-on-space.js";
 
   import type { ProgrammeEntry } from "#lib/programme.js";
 
@@ -39,6 +40,7 @@
 <a
   href={movieHref}
   data-movie-id={movie.id}
+  onkeydown={open_on_space}
   ontouchstart={handleTouchStart}
   ontouchend={handleTouchEnd}
   ontouchcancel={() => (touchStart = null)}
