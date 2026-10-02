@@ -22,10 +22,6 @@
 </script>
 
 <svelte:head>
-  <!-- Preconnect to external domains for faster loading -->
-  <link rel="preconnect" href="https://www.youtube.com" />
-  <link rel="preconnect" href="https://img.youtube.com" />
-  <link rel="preconnect" href="https://cdn.usefathom.com" />
   <!-- DNS prefetch for cinema ticket purchase domains -->
   <link rel="dns-prefetch" href="https://www.sambio.is" />
   <link rel="dns-prefetch" href="https://eu.internet-ticketing.com" />

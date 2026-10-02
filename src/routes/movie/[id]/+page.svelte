@@ -73,7 +73,9 @@
   image="/{movie.id}.webp" />
 
 <svelte:head>
-  <link rel="preload" as="image" href="/{movie.id}-360w.webp" fetchpriority="high" />
+  {#if youtube_id}
+    <link rel="preconnect" href="https://img.youtube.com" />
+  {/if}
 </svelte:head>
 
 <div class="relative">
@@ -123,30 +125,17 @@
               </div>
             </button>
           </div>
-        {:else}
-          <!-- Mobile fallback: poster if no trailer -->
-          <picture class="block md:hidden">
-            <source type="image/webp" srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w`} sizes="100vw" />
-            <img
-              src={`/${movie.id}.webp`}
-              title={movie.title}
-              alt={movie.title}
-              width="720"
-              height="1080"
-              fetchpriority="high"
-              loading="eager"
-              decoding="async"
-              style:view-transition-name="poster-{movie.id}"
-              in:fade={{ duration: 260 }}
-              class="w-full rounded-md shadow-2xl" />
-          </picture>
         {/if}
-        <!-- Desktop: Always show poster -->
-        <picture in:fade={{ duration: 260 }} class="hidden md:block">
+        <!-- Poster: always on desktop, on mobile only when there is no trailer.
+             The blank source keeps hidden phones from downloading it. -->
+        <picture in:fade={{ duration: 260 }} class={youtube_id ? "hidden md:block" : "block"}>
+          {#if youtube_id}
+            <source media="(max-width: 767px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAACH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+          {/if}
           <source
             type="image/webp"
-            srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w`}
-            sizes="(max-width: 768px) 192px, 320px" />
+            srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w, /${movie.id}-1080w.webp 1080w`}
+            sizes="(min-width: 1280px) 480px, (min-width: 1024px) 400px, (min-width: 768px) 320px, 100vw" />
           <img
             src={`/${movie.id}.webp`}
             title={movie.title}

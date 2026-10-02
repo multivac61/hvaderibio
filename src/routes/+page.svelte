@@ -33,6 +33,15 @@
   description="Fljótlegt yfirlit yfir bíódagskrá kvöldsins á öllu landinu. Skoðaðu sýningartíma og bókaðu miða."
   path="/" />
 
+<svelte:head>
+  <!-- Space Grotesk only sets the desktop heading, so load it here rather than
+       on every page, subset to the heading's glyphs. -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&text=Hva%C3%B0%20er%20%C3%AD%20b%C3%AD%C3%B3%3F&display=swap"
+    rel="stylesheet" />
+</svelte:head>
+
 <header class="relative hidden sm:mt-8 sm:mb-5 sm:block">
   <h1 class="mb-3 text-center text-5xl tracking-tight text-pretty text-white" style="font-family: 'Space Grotesk', sans-serif;">
     Hvað er í bíó?
