@@ -9,6 +9,7 @@
   import PageMeta from "#lib/PageMeta.svelte";
   import { afterNavigate } from "$app/navigation";
   import { resolve } from "$app/paths";
+  import { is_keyboard_navigation } from "#lib/input-modality.js";
   import { fade } from "svelte/transition";
 
   const { data } = $props();
@@ -53,8 +54,12 @@
   // Visitors arriving from a search engine or shared link have no in-site
   // page to go back to; send them to the programme instead of off the site.
   let came_from_site = $state(false);
+  let back_link: HTMLAnchorElement | undefined = $state();
   afterNavigate(({ from }) => {
     came_from_site = from !== null;
+    // SvelteKit moves focus to <body> after navigating. Keyboard visitors
+    // land on "Til baka" instead, so Enter returns them to their poster.
+    if (came_from_site && is_keyboard_navigation()) back_link?.focus();
   });
 
   const goBack = (event: MouseEvent) => {
@@ -92,6 +97,7 @@
 
   <div class="container mx-auto max-w-7xl py-4 pb-28 md:px-8 md:py-8 lg:px-12 lg:py-10">
     <a
+      bind:this={back_link}
       href={resolve("/")}
       onclick={goBack}
       class="mb-4 inline-flex cursor-pointer items-center gap-1 text-sm text-neutral-500 transition-colors hover:text-white md:mb-6">
