@@ -28,22 +28,27 @@ jobs:
 
           echo "NODE_EXTRA_CA_CERTS=$RUNNER_TEMP/kvikmyndir-chain.pem" >> "$GITHUB_ENV"
 
-      - name: ♻️ Restore showtime metadata cache
+      # Booking metadata and encoded posters, so unchanged ones are reused.
+      - name: ♻️ Restore scrape cache
         uses: actions/cache/restore@main
         with:
-          path: static/showtime-metadata-cache.json
-          key: showtime-metadata-${{ github.run_id }}
+          path: |
+            .cache
+            static/*.webp
+          key: scrape-${{ github.run_id }}
           restore-keys: |
-            showtime-metadata-
+            scrape-
 
       - name: 🎬 Scrape movie data
         run: bun scrape
 
-      - name: 💾 Save showtime metadata cache
+      - name: 💾 Save scrape cache
         uses: actions/cache/save@main
         with:
-          path: static/showtime-metadata-cache.json
-          key: showtime-metadata-${{ github.run_id }}
+          path: |
+            .cache
+            static/*.webp
+          key: scrape-${{ github.run_id }}
 
       - name: ☑️ Check svelte-kit, format and linting
         run: bun check

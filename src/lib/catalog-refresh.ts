@@ -2,10 +2,10 @@ import fs from "fs/promises";
 import path from "path";
 
 import { parseHTML } from "linkedom";
-import sharp from "sharp";
 
 import { map_concurrent } from "#lib/concurrency.js";
 import { fetch_text } from "#lib/http.js";
+import { refresh_posters } from "#lib/posters.js";
 import type { Movie, Showtime } from "#lib/schemas.js";
 import {
   parse_movie,
@@ -21,6 +21,8 @@ import {
 } from "#lib/parse.js";
 
 const staticDirectory = path.resolve(process.cwd(), "static");
+// Scraper state restored between CI runs; kept out of static/ so it is not deployed.
+const cacheDirectory = path.resolve(process.cwd(), ".cache");
 
 const headers = {
   authority: "kvikmyndir.is/",
@@ -38,14 +40,6 @@ const headers = {
   "upgrade-insecure-requests": "1",
   "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36",
 } as const;
-
-// --- Determine Target Image Size for High-Density Displays ---
-// Base display width is 360px. For 2x DPR screens, we need 2 * 360 = 720px.
-const baseWidth = 360;
-const targetWidth = baseWidth * 2; // 720
-const targetHeight = Math.round(targetWidth * (3 / 2)); // Calculate height for 2:3 aspect ratio (1080)
-
-console.log(`Targeting image dimensions: ${targetWidth}w x ${targetHeight}h`);
 
 // Requests in flight per host. Enough to overlap network latency without
 // hammering the small sites we scrape.
@@ -90,53 +84,6 @@ async function scrapeMovie(id: number): Promise<Movie | null> {
   } catch (error) {
     console.error(`Failed to fetch/parse movie ID ${id}:`, error);
     return null;
-  }
-}
-
-async function processMoviePoster(movie: Movie): Promise<Movie> {
-  try {
-    const res = await fetch(movie.poster_url, { headers });
-    if (!res.ok) {
-      throw new Error(`Failed to fetch poster ${movie.poster_url}: ${res.statusText}`);
-    }
-    const buffer = Buffer.from(new Uint8Array(await res.arrayBuffer()));
-
-    const webpPath = path.resolve(staticDirectory, `${movie.id}.webp`);
-    const jpgPath = path.resolve(staticDirectory, `${movie.id}.jpg`);
-
-    // Clean up any old JPG files
-    try {
-      await fs.unlink(jpgPath);
-    } catch {
-      // Ignore if file doesn't exist
-    }
-
-    // Generate multiple sizes for responsive images
-    const image = sharp(buffer);
-
-    // Small size for mobile (360w for 1x displays) - aggressive compression
-    const img360 = image.clone().resize(360, 540, { fit: "cover" });
-    await img360
-      .clone()
-      .webp({ quality: 70, effort: 6, nearLossless: false, smartSubsample: true })
-      .toFile(path.resolve(staticDirectory, `${movie.id}-360w.webp`));
-
-    // Medium size for mobile retina (720w for 2x displays)
-    const img720 = image.clone().resize(targetWidth, targetHeight, { fit: "cover" });
-    await img720.clone().webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true }).toFile(webpPath);
-
-    // Large size for desktop (1080w for larger screens)
-    const img1080 = image.clone().resize(1080, 1620, { fit: "cover" });
-    await img1080
-      .clone()
-      .webp({ quality: 72, effort: 6, nearLossless: false, smartSubsample: true })
-      .toFile(path.resolve(staticDirectory, `${movie.id}-1080w.webp`));
-
-    return movie;
-  } catch (error) {
-    console.error(`Failed to process poster for movie ID ${movie.id} (${movie.title}):`, error);
-    // Still return movie data if poster fails
-    return movie;
   }
 }
 
@@ -193,7 +140,7 @@ export function parse_sambio_booking(document: Document): HallInfo | null {
   };
 }
 
-const bookingMetadataCachePath = path.resolve(staticDirectory, "showtime-metadata-cache.json");
+const bookingMetadataCachePath = path.resolve(cacheDirectory, "showtime-metadata.json");
 
 async function read_booking_metadata_cache(): Promise<Record<string, HallInfo | null>> {
   try {
@@ -235,6 +182,7 @@ async function enrich_sambio_bookings(movies: readonly Movie[], hallInfoMap: Map
   // Booking IDs are immutable. Retain only performances still in the displayed
   // window so the restored CI cache stays small.
   const currentCache = Object.fromEntries([...urls].filter((url) => url in cache).map((url) => [url, cache[url]]));
+  await fs.mkdir(cacheDirectory, { recursive: true });
   await fs.writeFile(bookingMetadataCachePath, JSON.stringify(currentCache, null, 2));
   console.log(`Enriched ${urls.size} Sambíóin showtimes (${fetched} fetched, ${cacheHits} cached)`);
 }
@@ -344,10 +292,9 @@ export async function refresh_movie_catalog() {
 
   console.log(`Fetched external URLs. Processing posters...`);
 
-  // Process posters (can be done in parallel since they're different URLs)
-  const moviesWithPosters = await Promise.all(moviesWithUrls.map(processMoviePoster));
+  await refresh_posters(moviesWithUrls, staticDirectory, { manifest_path: path.resolve(cacheDirectory, "poster-sources.json"), headers });
 
-  console.log(`Processed ${moviesWithPosters.length} movies. Writing movies.json...`);
-  await fs.writeFile(path.resolve(staticDirectory, "movies.json"), JSON.stringify(moviesWithPosters, null, 2));
+  console.log(`Processed ${moviesWithUrls.length} movies. Writing movies.json...`);
+  await fs.writeFile(path.resolve(staticDirectory, "movies.json"), JSON.stringify(moviesWithUrls, null, 2));
   console.log("Finished writing movies.json.");
 }
