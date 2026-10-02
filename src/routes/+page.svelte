@@ -7,6 +7,7 @@
   import PageMeta from "#lib/PageMeta.svelte";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
+  import { afterNavigate } from "$app/navigation";
 
   const { data } = $props();
   const movies = $derived(data.movies);
@@ -20,23 +21,32 @@
     now = new Date();
   });
 
-  // Return keyboard focus to the poster a visitor opened when they come back
-  // to this page through history, so the next Tab continues from there
-  // instead of the top. Scroll position is already restored by SvelteKit.
-  let poster_to_refocus = $state<string | null>(null);
+  // Keyboard focus starts at the poster grid, so the first Tab lands on the
+  // first poster rather than the header controls (Shift+Tab reaches those).
+  // Coming back through history returns focus to the poster the visitor
+  // opened. Scroll position is restored by SvelteKit either way.
+  let grid: HTMLElement | undefined = $state();
+  let focus_request: { poster: string | null } | null = $state(null);
 
+  // History navigations restore the snapshot after afterNavigate has run.
   export const snapshot = {
     capture: () => (document.activeElement instanceof HTMLElement ? (document.activeElement.dataset.movieId ?? null) : null),
     restore: (movie_id: string | null) => {
-      poster_to_refocus = movie_id;
+      focus_request = { poster: movie_id };
     },
   };
 
+  afterNavigate(({ type }) => {
+    if (type !== "popstate") focus_request = { poster: null };
+  });
+
   $effect(() => {
     // The grid renders after mount, so wait for it before focusing.
-    if (!now || poster_to_refocus === null) return;
-    document.querySelector<HTMLElement>(`a[data-movie-id="${CSS.escape(poster_to_refocus)}"]`)?.focus({ preventScroll: true });
-    poster_to_refocus = null;
+    if (!focus_request || !grid) return;
+    const { poster } = focus_request;
+    const target = poster ? grid.querySelector<HTMLElement>(`a[data-movie-id="${CSS.escape(poster)}"]`) : null;
+    (target ?? grid).focus({ preventScroll: true });
+    focus_request = null;
   });
 
   // Read cinema and day from shared state
@@ -90,7 +100,9 @@
         </div>
       {:else}
         <div
-          class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
+          bind:this={grid}
+          tabindex="-1"
+          class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
           {#each filtered_cinemas_showtimes as movie, index (movie.id)}
             <MoviePosterCard {movie} {index} />
           {/each}
