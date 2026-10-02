@@ -34,6 +34,23 @@ describe("parse_listings", () => {
   });
 });
 
+describe("parse_listings labels", () => {
+  test("flags a Sambíó showing in the Ásberg hall", () => {
+    // kvikmyndir.is ?dagur=2 on 2026-10-02. Sambíó's own booking page names the
+    // hall "Glæsisalir" and shows Ásberg only as a side label, which the old
+    // booking-page enrichment dropped.
+    const { document } = parseHTML(`
+      <a href="/mynd/?id=18107" class="movie_title">Digger</a>
+      <a href="https://www.sambio.is/websales/show/428344" target="_blank" class="rate tooltip st-showtime-link" data-movie-id="18107"
+         data-movie-title="Digger" data-cinema-id="7" data-cinema="Sambíóin Kringlunni" data-time="21:20" data-feed-id="3394"
+         data-showtime="2026-10-04 21:20:00">21:20 <div class="tegund"></div><div class="salur">Ásberg</div> <div class="salur red"> </div></a>`);
+
+    expect(parse_listings([document]).showtimes.get(18107)?.["0"]?.["Sambíóin Kringlunni"]).toEqual([
+      { time: "2026-10-04T21:20:00.000Z", purchase_url: "https://www.sambio.is/websales/show/428344", hall: "Ásberg", is_atmos: true },
+    ]);
+  });
+});
+
 describe("parse_listings timezone", () => {
   let original_tz: string | undefined;
   beforeAll(() => {
