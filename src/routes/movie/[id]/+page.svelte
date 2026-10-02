@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { get_showtime_window } from "#lib/showtimes.js";
   import { get_movie_programme } from "#lib/programme.js";
   import { get_youtube_id, is_mobile_user_agent } from "#lib/video.js";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
@@ -16,7 +15,7 @@
   // Extract YouTube video ID from trailer URL
   const youtube_id = $derived(get_youtube_id(movie.trailer_url));
 
-  const { from, to } = get_showtime_window();
+  const now = new Date();
 
   // Read cinema from shared state
   const selected_choice = $derived(cinemaState.value ?? DEFAULT_CINEMA_CHOICE);
@@ -40,7 +39,7 @@
     document.body.style.overflow = "";
   };
 
-  const visible_showtimes = $derived(get_movie_programme(movie, selected_day, selected_cinemas, { from, to }));
+  const visible_showtimes = $derived(get_movie_programme(movie, selected_day, selected_cinemas, now));
 </script>
 
 <svelte:head>

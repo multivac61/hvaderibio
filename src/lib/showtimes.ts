@@ -1,23 +1,28 @@
-import type { Movie, Showtime } from "#lib/schemas.js";
-import { in_range, to_float } from "#lib/util.js";
+import type { Showtime } from "#lib/schemas.js";
+import { reykjavik_date, reykjavik_date_after, reykjavik_hours } from "#lib/reykjavik.js";
 
-export const get_showtime_window = () => ({
-  from: Math.min(21, new Date().getHours()),
-  to: 24,
-});
+// Late at night keep the evening's later showtimes listed rather than none.
+const LATEST_TODAY_CUTOFF_HOUR = 21;
 
-export const is_valid_showtime = (showtime: Showtime, selected_day: string, from: number, to: number) => {
+/**
+ * Whether a showtime belongs to the selected day, counted from `now` in
+ * Reykjavik. Days are matched by date rather than by the scraper's day buckets,
+ * which go stale when the catalog was scraped before midnight.
+ */
+export const is_visible_showtime = (showtime: Showtime, selected_day: string, now: Date) => {
+  if (reykjavik_date(showtime.time) !== reykjavik_date_after(now, Number(selected_day))) return false;
   if (selected_day !== "0") return true;
-  return Boolean(showtime.time && in_range(to_float(showtime.time), from, to));
+
+  return reykjavik_hours(showtime.time) >= Math.min(LATEST_TODAY_CUTOFF_HOUR, Math.floor(reykjavik_hours(now)));
 };
 
 const get_showtime_key = (showtime: Showtime) => `${showtime.time}-${showtime.purchase_url}`;
 
-export const get_valid_showtimes = (showtimes: readonly Showtime[], selected_day: string, from: number, to: number) => {
+export const get_visible_showtimes = (showtimes: readonly Showtime[], selected_day: string, now: Date) => {
   const seen = new Set<string>();
 
   return showtimes.filter((showtime) => {
-    if (!is_valid_showtime(showtime, selected_day, from, to)) return false;
+    if (!is_visible_showtime(showtime, selected_day, now)) return false;
 
     const key = get_showtime_key(showtime);
     if (seen.has(key)) return false;
@@ -25,18 +30,4 @@ export const get_valid_showtimes = (showtimes: readonly Showtime[], selected_day
     seen.add(key);
     return true;
   });
-};
-
-export const count_movie_showtimes = (
-  movie: Movie,
-  selected_day: string,
-  selected_cinemas: readonly string[],
-  from: number,
-  to: number
-) => {
-  const day_showtimes = movie.showtimes_by_day[selected_day] ?? {};
-
-  return Object.entries(day_showtimes)
-    .filter(([cinema]) => selected_cinemas.includes(cinema))
-    .reduce((total, [, showtimes]) => total + get_valid_showtimes(showtimes, selected_day, from, to).length, 0);
 };

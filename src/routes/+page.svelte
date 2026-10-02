@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { get_showtime_window } from "#lib/showtimes.js";
   import { get_programme_movies } from "#lib/programme.js";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
   import { dayState } from "#lib/day-state.svelte.js";
@@ -12,14 +11,12 @@
   const movies = $derived(data.movies);
   const cinema_options = $derived(data.cinema_options);
 
-  // Do not render the time-sensitive grid until the browser has calculated its
-  // current window. This prevents Safari from hydrating stale poster ordering.
-  let showtime_window = $state({ from: 0, to: 24 });
-  let client_ready = $state(false);
+  // Do not render the time-sensitive grid until the browser knows the current
+  // time. This prevents Safari from hydrating stale poster ordering.
+  let now = $state<Date | null>(null);
 
   onMount(() => {
-    showtime_window = get_showtime_window();
-    client_ready = true;
+    now = new Date();
   });
 
   // Read cinema and day from shared state
@@ -27,7 +24,7 @@
   const selected_cinemas = $derived(get_cinemas_for_choice(selected_choice, cinema_options));
   const selected_day = $derived(dayState.value ?? "0");
 
-  const filtered_cinemas_showtimes = $derived(get_programme_movies(movies, selected_day, selected_cinemas, showtime_window));
+  const filtered_cinemas_showtimes = $derived(now ? get_programme_movies(movies, selected_day, selected_cinemas, now) : []);
 </script>
 
 <svelte:head>
@@ -55,7 +52,7 @@
     </div>
   </div>
 
-  {#if client_ready}
+  {#if now}
     {#key `${selected_day}-${selected_choice}`}
       {#if filtered_cinemas_showtimes.length === 0}
         <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">

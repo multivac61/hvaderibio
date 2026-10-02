@@ -1,5 +1,6 @@
 <script lang="ts">
   import { CINEMA_DISPLAY_NAMES, CINEMA_URLS } from "#lib/constants.js";
+  import { reykjavik_time } from "#lib/reykjavik.js";
   import type { Showtime } from "#lib/schemas.js";
   import ShowtimeBadges from "#lib/ShowtimeBadges.svelte";
 
@@ -37,7 +38,7 @@
         rel="external noopener noreferrer"
         class="group/time relative inline-flex items-center rounded bg-neutral-800 px-2 py-1.5 text-sm text-neutral-400 tabular-nums transition-[background-color,color,transform] duration-150 ease-out hover:bg-neutral-700 hover:text-white active:scale-95">
         <ShowtimeBadges {showtime} />
-        <span>{new Date(showtime.time).toLocaleTimeString("is-IS", { timeStyle: "short", hour12: false })}</span>
+        <span>{reykjavik_time(showtime.time)}</span>
         <span
           class="pointer-events-none absolute bottom-full left-1/2 mb-1.5 hidden -translate-x-1/2 rounded bg-neutral-950/95 px-2 py-1 text-[10px] font-medium whitespace-nowrap text-neutral-300 opacity-0 shadow-lg transition-opacity group-hover/time:opacity-100 [@media(hover:hover)]:block">
           {showtime.hall ? `${showtime.hall} · ` : ""}Kaupa miða
