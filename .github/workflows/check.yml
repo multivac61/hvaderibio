@@ -15,6 +15,17 @@ jobs:
       - run: bun run check
       - run: bun test
 
+  # Layout rules that need a real engine, in phone-sized WebKit.
+  browser-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: oven-sh/setup-bun@main
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps webkit
+      - run: bun tests/fixtures/install.ts
+      - run: bun run test:e2e
+
   # Dispatched checks can be absent from the PR's required-check rollup.
   # Publish the actual test result on the same commit for branch protection.
   dependency-status:
