@@ -3,6 +3,7 @@
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
   import { dayState } from "#lib/day-state.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
+  import FloatingControls from "#lib/FloatingControls.svelte";
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import { count_label } from "#lib/accessible-labels.js";
@@ -85,15 +86,7 @@
 </header>
 
 <div class="relative">
-  <div in:fade={{ duration: 220 }} class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
-    <div class="flex w-full justify-center px-4 pb-3">
-      <ProgrammeControls
-        cinemaOptions={cinema_options}
-        selectedChoice={selected_choice}
-        selectedDay={selected_day}
-        presentation="floating" />
-    </div>
-  </div>
+  <FloatingControls cinemaOptions={cinema_options} selectedChoice={selected_choice} selectedDay={selected_day} />
 
   <!-- Announces the result of changing the day or cinema to screen readers. -->
   <p role="status" class="sr-only">
