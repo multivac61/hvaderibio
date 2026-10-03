@@ -5,12 +5,10 @@
 
   type Props = {
     cinemaOptions: readonly CinemaOption[];
-    selectedChoice: string;
-    selectedDay: string;
     id?: string;
   };
 
-  const { cinemaOptions, selectedChoice, selectedDay, id }: Props = $props();
+  const { cinemaOptions, id }: Props = $props();
 
   // The phone control bar floats over the content; slide it away while the
   // visitor scrolls down to read, and bring it back when they scroll up,
@@ -39,6 +37,6 @@
     class="flex w-full justify-center px-4 pb-3 transition-[translate,opacity] duration-300 ease-out motion-reduce:transition-none {hidden
       ? 'pointer-events-none translate-y-24 opacity-0'
       : ''}">
-    <ProgrammeControls {cinemaOptions} {selectedChoice} {selectedDay} presentation="floating" {id} />
+    <ProgrammeControls {cinemaOptions} presentation="floating" {id} />
   </div>
 </div>

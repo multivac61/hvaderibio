@@ -17,7 +17,6 @@ const movie = (id: number, showtimes_by_day: Record<string, Showtime[]>) =>
     description: "",
     genres: [],
     duration_in_mins: 90,
-    language: [],
     showtimes_by_day: Object.fromEntries(Object.entries(showtimes_by_day).map(([day, showtimes]) => [day, { Cinema: showtimes }])),
   });
 

@@ -6,6 +6,12 @@ on:
   schedule:
     - cron: "0 * * * *" # Run every hour
 name: Deploy
+# Deploys race otherwise: an hourly run and a push can overlap, and the one
+# that finishes last wins even if it scraped earlier. Queue them instead,
+# letting a running deploy finish rather than leaving a half-uploaded site.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest

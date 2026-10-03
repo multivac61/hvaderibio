@@ -1,7 +1,6 @@
 <script lang="ts">
   import { get_programme_movies } from "#lib/programme.js";
-  import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
-  import { dayState } from "#lib/day-state.svelte.js";
+  import { get_cinemas_for_choice, selection } from "#lib/selection.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import FloatingControls from "#lib/FloatingControls.svelte";
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
@@ -51,12 +50,9 @@
     focus_request = null;
   });
 
-  // Read cinema and day from shared state
-  const selected_choice = $derived(cinemaState.value ?? DEFAULT_CINEMA_CHOICE);
-  const selected_cinemas = $derived(get_cinemas_for_choice(selected_choice, cinema_options));
-  const selected_day = $derived(dayState.value ?? "0");
+  const selected_cinemas = $derived(get_cinemas_for_choice(selection.cinema, cinema_options));
 
-  const filtered_cinemas_showtimes = $derived(now ? get_programme_movies(movies, selected_day, selected_cinemas, now) : []);
+  const filtered_cinemas_showtimes = $derived(now ? get_programme_movies(movies, selection.day, selected_cinemas, now) : []);
 </script>
 
 <PageMeta
@@ -81,12 +77,12 @@
     Hvað er í bíó?
   </h1>
   <div class="mx-auto hidden sm:block md:max-w-none">
-    <ProgrammeControls cinemaOptions={cinema_options} selectedChoice={selected_choice} selectedDay={selected_day} presentation="tabs" />
+    <ProgrammeControls cinemaOptions={cinema_options} presentation="tabs" />
   </div>
 </header>
 
 <div class="relative">
-  <FloatingControls cinemaOptions={cinema_options} selectedChoice={selected_choice} selectedDay={selected_day} />
+  <FloatingControls cinemaOptions={cinema_options} />
 
   <!-- Announces the result of changing the day or cinema to screen readers. -->
   <p role="status" class="sr-only">
@@ -96,7 +92,7 @@
   </p>
 
   {#if now}
-    {#key `${selected_day}-${selected_choice}`}
+    {#key `${selection.day}-${selection.cinema}`}
       {#if filtered_cinemas_showtimes.length === 0}
         <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
           <p class="text-lg text-neutral-400">Engar sýningar fundust</p>

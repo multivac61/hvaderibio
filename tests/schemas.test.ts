@@ -34,7 +34,6 @@ describe("movie_schema", () => {
     description: "A test movie description",
     genres: ["Action", "Comedy"],
     duration_in_mins: 120,
-    language: ["English"],
     showtimes_by_day: {
       "0": {
         "Test Cinema": [{ time: "2024-01-01T20:30:00.000Z", purchase_url: "https://example.com/buy", hall: "Hall 1" }],
@@ -50,10 +49,7 @@ describe("movie_schema", () => {
   test("accepts optional fields", () => {
     const movieWithOptionals = {
       ...validMovie,
-      alt_title: "Alternative Title",
-      content_rating: "PG-13",
       trailer_url: "https://youtube.com/watch?v=abc123",
-      rating_urls: ["https://imdb.com/title/tt1234567"],
       imdb: { link: "https://imdb.com/title/tt1234567", star: 8.5 },
     };
     const result = movie_schema.safeParse(movieWithOptionals);

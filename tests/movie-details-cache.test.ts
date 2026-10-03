@@ -19,7 +19,6 @@ const details = (id: number, title = `Movie ${id}`): MovieDetails => ({
   description: "",
   genres: [],
   duration_in_mins: 90,
-  language: [],
 });
 
 describe("load_movie_details", () => {
@@ -64,5 +63,33 @@ describe("load_movie_details", () => {
 
     expect(result.get(1)?.title).toBe("Movie 1");
     expect(result.has(2)).toBe(false);
+  });
+});
+
+describe("load_movie_details cache validation", () => {
+  test("drops fields the schema no longer has and refetches entries that do not parse", async () => {
+    const cache_path = join(dir, "old-shape.json");
+    const now = new Date("2026-10-02T12:00:00Z");
+    await Bun.write(
+      cache_path,
+      JSON.stringify({
+        1: { fetched_at: now.toISOString(), details: { ...details(1), language: ["English"], premiere_date: "2030-01-01" } },
+        2: { fetched_at: now.toISOString(), details: { id: 2, title: "Missing required fields" } },
+      })
+    );
+    const fetched: number[] = [];
+
+    const result = await load_movie_details(
+      [1, 2],
+      async (id) => {
+        fetched.push(id);
+        return details(id);
+      },
+      { cache_path, now, max_age_ms: 24 * 60 * 60 * 1000 }
+    );
+
+    expect(fetched).toEqual([2]);
+    expect(result.get(1)).toEqual({ ...details(1), premiere_date: "2030-01-01" });
+    expect("language" in result.get(1)!).toBe(false);
   });
 });
