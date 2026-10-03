@@ -83,7 +83,6 @@ const details = (premiere_date?: string): MovieDetails => ({
   description: "A great movie",
   genres: [],
   duration_in_mins: 0,
-  language: [],
   premiere_date,
 });
 

@@ -2,16 +2,26 @@ import { mkdir } from "fs/promises";
 import { dirname } from "path";
 
 import { map_concurrent } from "#lib/concurrency.js";
-import type { MovieDetails } from "#lib/parse.js";
+import { movie_details_schema, type MovieDetails } from "#lib/schemas.js";
 
 type CacheEntry = { fetched_at: string; details: MovieDetails };
 
+// The cache outlives code changes, so re-validate every entry: fields the
+// schema no longer has are dropped, and entries that no longer parse are
+// treated as missing and fetched again.
 async function read_cache(path: string): Promise<Record<string, CacheEntry>> {
+  let raw: Record<string, { fetched_at?: unknown; details?: unknown }>;
   try {
-    return await Bun.file(path).json();
+    raw = await Bun.file(path).json();
   } catch {
     return {};
   }
+  const cache: Record<string, CacheEntry> = {};
+  for (const [id, entry] of Object.entries(raw)) {
+    const details = movie_details_schema.safeParse(entry?.details);
+    if (details.success && typeof entry.fetched_at === "string") cache[id] = { fetched_at: entry.fetched_at, details: details.data };
+  }
+  return cache;
 }
 
 /**

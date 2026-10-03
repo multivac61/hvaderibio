@@ -30,7 +30,7 @@
 {#if movie.rotten_tomatoes}
   {#if desktop}<span class="hidden md:inline">·</span>{/if}
   <a
-    href={movie.rotten_tomatoes.url ?? `https://www.rottentomatoes.com/search?search=${encodeURIComponent(movie.alt_title || movie.title)}`}
+    href={movie.rotten_tomatoes.url ?? `https://www.rottentomatoes.com/search?search=${encodeURIComponent(movie.title)}`}
     target="_blank"
     rel="external noopener noreferrer"
     aria-label={labels.rotten_tomatoes}
@@ -46,7 +46,7 @@
 {#if movie.metacritic}
   {#if desktop}<span class="hidden md:inline">·</span>{/if}
   <a
-    href={movie.metacritic.url ?? `https://www.metacritic.com/search/${encodeURIComponent(movie.alt_title || movie.title)}/`}
+    href={movie.metacritic.url ?? `https://www.metacritic.com/search/${encodeURIComponent(movie.title)}/`}
     target="_blank"
     rel="external noopener noreferrer"
     aria-label={labels.metacritic}
@@ -62,7 +62,7 @@
 {#if movie.letterboxd?.score}
   {#if desktop}<span class="hidden md:inline">·</span>{/if}
   <a
-    href={movie.letterboxd.url ?? `https://letterboxd.com/search/${encodeURIComponent(movie.alt_title || movie.title)}/`}
+    href={movie.letterboxd.url ?? `https://letterboxd.com/search/${encodeURIComponent(movie.title)}/`}
     target="_blank"
     rel="external noopener noreferrer"
     aria-label={labels.letterboxd}

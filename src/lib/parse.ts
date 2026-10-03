@@ -1,4 +1,6 @@
-import { movie_details_schema, type Movie, type ShowtimesByDay, type Showtime } from "./schemas";
+import { movie_details_schema, type Movie, type MovieDetails, type ShowtimesByDay, type Showtime } from "./schemas";
+
+export type { MovieDetails };
 import { fetch_text } from "./http";
 
 const pad = (n: number) => n.toString().padStart(2, "0");
@@ -27,12 +29,6 @@ function parse_premiere_date(text: string): string | null {
   if (month === undefined) return null;
   return `${year}-${pad(month + 1)}-${pad(parseInt(day))}`;
 }
-
-/** A movie's descriptive record; its showtimes come from the listings. */
-export type MovieDetails = Omit<Movie, "showtimes_by_day"> & {
-  /** YYYY-MM-DD of an announced future premiere ("Væntanleg í bíó"). */
-  premiere_date?: string;
-};
 
 export function parse_movie_details(document: Document, id: number): MovieDetails | null {
   // New structure uses mp-hero classes
@@ -125,27 +121,24 @@ export function parse_movie_details(document: Document, id: number): MovieDetail
 
   const parsed = movie_details_schema.safeParse({
     title,
-    alt_title: undefined, // Alt title not visible in new design
     release_year,
     poster_url,
-    rating_urls: [],
-    content_rating: undefined,
     description,
     genres,
     duration_in_mins,
-    language: [],
     trailer_url,
     id,
     imdb,
     rotten_tomatoes,
     metacritic,
+    premiere_date: premiere_date ?? undefined,
   });
 
   if (!parsed.success) {
     console.error(`Failed to parse movie ${id}:`, parsed.error.issues);
     return null;
   }
-  return premiere_date ? { ...parsed.data, premiere_date } : parsed.data;
+  return parsed.data;
 }
 
 // Smárabíó lists preview screenings before a movie's premiere that are not
@@ -223,7 +216,7 @@ export function parse_listings(documents: readonly Document[]): { movieIds: numb
   return { movieIds: [...new Set(documents.flatMap(parse_movie_ids))], showtimes };
 }
 
-export type ImdbRating = { star: number; votes: number };
+export type ImdbRating = { star: number };
 
 // Read IMDb ratings from IMDb's public dataset. This avoids relying on the
 // kvikmyndir.is rating widget, which can be stale or missing and previously
@@ -258,13 +251,12 @@ export function prefetch_imdb_ratings(dataset_url = "https://datasets.imdbws.com
     for (const line of tsv.split("\n").slice(1)) {
       if (ratings.size === ids.size) break;
 
-      const [id, averageRating, numVotes] = line.split("\t");
+      const [id, averageRating] = line.split("\t");
       if (!ids.has(id)) continue;
 
       const star = parseFloat(averageRating);
-      const votes = parseInt(numVotes);
-      if (Number.isFinite(star) && star > 0 && Number.isFinite(votes)) {
-        ratings.set(id, { star, votes });
+      if (Number.isFinite(star) && star > 0) {
+        ratings.set(id, { star });
       }
     }
 
