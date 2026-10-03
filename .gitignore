@@ -6,6 +6,8 @@ package/
 .svelte-kit/
 .cache/
 coverage/
+test-results/
+playwright-report/
 *.log
 vite.config.*.timestamp-*
 
