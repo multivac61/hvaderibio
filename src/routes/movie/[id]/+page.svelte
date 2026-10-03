@@ -242,12 +242,14 @@
 </div>
 
 <!-- Trailer: a native modal dialog moves focus in, makes the page behind
-     inert, closes on Escape and returns focus to the trailer button. -->
+     inert, closes on Escape and returns focus to the trailer button. Its
+     fixed, dark full-screen styles apply only while open: iOS Safari tints
+     its toolbar from dark fixed elements at the bottom edge. -->
 <dialog
   bind:this={trailer_dialog}
   onclose={closeTrailerModal}
   aria-label="Stikla: {movie.title}"
-  class="fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none items-center justify-center bg-black/95 p-4 backdrop:bg-black/80 open:flex">
+  class="m-0 h-dvh max-h-none w-screen max-w-none items-center justify-center p-4 backdrop:bg-black/80 open:fixed open:inset-0 open:flex open:bg-black/95">
   {#if trailer_modal_open && youtube_id}
     <button
       type="button"
