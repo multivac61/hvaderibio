@@ -1,8 +1,11 @@
 <script lang="ts">
   import "../app.css";
   import { onNavigate } from "$app/navigation";
+  import { track_input_modality } from "#lib/input-modality.js";
 
   let { children } = $props();
+
+  $effect(track_input_modality);
 
   // Detect mobile devices to disable view transitions (Safari butchers them)
   const isMobile = () => {

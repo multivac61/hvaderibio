@@ -19,7 +19,7 @@
 </script>
 
 {#if hasBadges}
-  <span class="absolute -top-1.5 -right-1.5 flex gap-0.5">
+  <span aria-hidden="true" class="absolute -top-1.5 -right-1.5 flex gap-0.5">
     {#if showtime.is_icelandic}
       <svg class="h-2.5 w-3" viewBox="0 0 25 18" fill="none">
         <rect width="25" height="18" fill="#003897" />

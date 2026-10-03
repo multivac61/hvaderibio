@@ -5,8 +5,10 @@
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
+  import { count_label } from "#lib/accessible-labels.js";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
+  import { afterNavigate } from "$app/navigation";
 
   const { data } = $props();
   const movies = $derived(data.movies);
@@ -18,6 +20,34 @@
 
   onMount(() => {
     now = new Date();
+  });
+
+  // Keyboard focus starts at the poster grid, so the first Tab lands on the
+  // first poster rather than the header controls (Shift+Tab reaches those).
+  // Coming back through history returns focus to the poster the visitor
+  // opened. Scroll position is restored by SvelteKit either way.
+  let grid: HTMLElement | undefined = $state();
+  let focus_request: { poster: string | null } | null = $state(null);
+
+  // History navigations restore the snapshot after afterNavigate has run.
+  export const snapshot = {
+    capture: () => (document.activeElement instanceof HTMLElement ? (document.activeElement.dataset.movieId ?? null) : null),
+    restore: (movie_id: string | null) => {
+      focus_request = { poster: movie_id };
+    },
+  };
+
+  afterNavigate(({ type }) => {
+    if (type !== "popstate") focus_request = { poster: null };
+  });
+
+  $effect(() => {
+    // The grid renders after mount, so wait for it before focusing.
+    if (!focus_request || !grid) return;
+    const { poster } = focus_request;
+    const target = poster ? grid.querySelector<HTMLElement>(`a[data-movie-id="${CSS.escape(poster)}"]`) : null;
+    (target ?? grid).focus({ preventScroll: true });
+    focus_request = null;
   });
 
   // Read cinema and day from shared state
@@ -42,11 +72,14 @@
     rel="stylesheet" />
 </svelte:head>
 
-<header class="relative hidden sm:mt-8 sm:mb-5 sm:block">
-  <h1 class="mb-3 text-center text-5xl tracking-tight text-pretty text-white" style="font-family: 'Space Grotesk', sans-serif;">
+<header class="relative sm:mt-8 sm:mb-5">
+  <!-- Phones hide the header visually but keep the page heading for screen readers. -->
+  <h1
+    class="sr-only mb-3 text-center text-5xl tracking-tight text-pretty text-white sm:not-sr-only"
+    style="font-family: 'Space Grotesk', sans-serif;">
     Hvað er í bíó?
   </h1>
-  <div class="mx-auto sm:block md:max-w-none">
+  <div class="mx-auto hidden sm:block md:max-w-none">
     <ProgrammeControls cinemaOptions={cinema_options} selectedChoice={selected_choice} selectedDay={selected_day} presentation="tabs" />
   </div>
 </header>
@@ -62,16 +95,25 @@
     </div>
   </div>
 
+  <!-- Announces the result of changing the day or cinema to screen readers. -->
+  <p role="status" class="sr-only">
+    {#if now}{filtered_cinemas_showtimes.length > 0
+        ? count_label(filtered_cinemas_showtimes.length, "mynd", "myndir")
+        : "Engar sýningar fundust"}{/if}
+  </p>
+
   {#if now}
     {#key `${selected_day}-${selected_choice}`}
       {#if filtered_cinemas_showtimes.length === 0}
         <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
           <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
-          <p class="mt-1 text-sm text-neutral-500">Prófaðu að velja annan dag eða kvikmyndahús</p>
+          <p class="mt-1 text-sm text-neutral-400">Prófaðu að velja annan dag eða kvikmyndahús</p>
         </div>
       {:else}
         <div
-          class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
+          bind:this={grid}
+          tabindex="-1"
+          class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
           {#each filtered_cinemas_showtimes as movie, index (movie.id)}
             <MoviePosterCard {movie} {index} />
           {/each}

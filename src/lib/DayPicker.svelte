@@ -43,6 +43,7 @@
     <button
       bind:this={day_buttons[i]}
       type="button"
+      aria-pressed={selectedDay === day}
       onclick={() => onSelect(day)}
       class="relative z-10 rounded-full px-2.5 text-[13px] leading-4 font-medium transition-colors duration-200 {buttonSizeClass} {selectedDay ===
       day
