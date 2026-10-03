@@ -50,7 +50,7 @@
     <source
       type="image/webp"
       srcset="/{movie.id}-360w.webp 360w, /{movie.id}.webp 720w, /{movie.id}-1080w.webp 1080w"
-      sizes="(max-width: 640px) calc(50vw - 2rem), 360px" />
+      sizes="(max-width: 640px) calc(50vw - 2rem), (max-width: 1024px) calc(33vw - 2rem), 360px" />
     <img
       src="/{movie.id}.webp"
       alt={movie.title}
