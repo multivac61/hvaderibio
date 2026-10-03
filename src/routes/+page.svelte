@@ -75,7 +75,7 @@
 <header class="relative sm:mt-8 sm:mb-5">
   <!-- Phones hide the header visually but keep the page heading for screen readers. -->
   <h1
-    class="sr-only mb-3 text-center text-5xl tracking-tight text-pretty text-white sm:not-sr-only"
+    class="mb-3 text-center text-5xl tracking-tight text-pretty text-white max-sm:sr-only"
     style="font-family: 'Space Grotesk', sans-serif;">
     Hvað er í bíó?
   </h1>
