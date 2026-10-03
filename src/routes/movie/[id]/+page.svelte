@@ -4,6 +4,7 @@
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
   import { dayState } from "#lib/day-state.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
+  import FloatingControls from "#lib/FloatingControls.svelte";
   import MovieRatings from "#lib/MovieRatings.svelte";
   import CinemaShowtimeRow from "#lib/CinemaShowtimeRow.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
@@ -91,16 +92,11 @@
 </svelte:head>
 
 <div class="relative">
-  <div in:fade={{ duration: 220 }} class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
-    <div class="flex w-full justify-center px-4 pb-3">
-      <ProgrammeControls
-        cinemaOptions={cinema_options}
-        selectedChoice={selected_choice}
-        selectedDay={selected_day}
-        presentation="floating"
-        id="select-cinemas-movie-mobile" />
-    </div>
-  </div>
+  <FloatingControls
+    cinemaOptions={cinema_options}
+    selectedChoice={selected_choice}
+    selectedDay={selected_day}
+    id="select-cinemas-movie-mobile" />
 
   <div class="container mx-auto max-w-7xl py-4 pb-28 md:px-8 md:py-8 lg:px-12 lg:py-10">
     <a

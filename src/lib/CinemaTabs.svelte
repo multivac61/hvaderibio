@@ -19,7 +19,7 @@
       class={`shrink-0 rounded-xl border px-3.5 py-1.5 text-[15px] leading-5 font-medium whitespace-nowrap transition-all duration-200 ease-out
                     ${
                       label === selectedChoice
-                        ? "border-sky-200/20 bg-sky-500/65 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]"
+                        ? "border-sky-300/35 bg-neutral-950/80 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_6px_18px_rgba(0,0,0,0.28)]"
                         : "border-transparent bg-neutral-900/50 text-neutral-400 hover:bg-neutral-900/80 hover:text-neutral-200"
                     }
                   `}>

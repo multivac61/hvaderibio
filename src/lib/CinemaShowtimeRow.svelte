@@ -32,7 +32,8 @@
     {/if}
   </div>
 
-  <div class="flex flex-wrap gap-2">
+  <!-- Format badges poke 6px above each time; leave room when rows wrap. -->
+  <div class="flex flex-wrap gap-x-2 gap-y-3.5">
     {#each showtimes as showtime, i (`${showtime.time}-${i}`)}
       <a
         href={showtime.purchase_url}

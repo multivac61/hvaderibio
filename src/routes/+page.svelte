@@ -3,6 +3,7 @@
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
   import { dayState } from "#lib/day-state.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
+  import FloatingControls from "#lib/FloatingControls.svelte";
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import { count_label } from "#lib/accessible-labels.js";
@@ -75,7 +76,7 @@
 <header class="relative sm:mt-8 sm:mb-5">
   <!-- Phones hide the header visually but keep the page heading for screen readers. -->
   <h1
-    class="sr-only mb-3 text-center text-5xl tracking-tight text-pretty text-white sm:not-sr-only"
+    class="mb-3 text-center text-5xl tracking-tight text-pretty text-white max-sm:sr-only"
     style="font-family: 'Space Grotesk', sans-serif;">
     Hvað er í bíó?
   </h1>
@@ -85,15 +86,7 @@
 </header>
 
 <div class="relative">
-  <div in:fade={{ duration: 220 }} class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
-    <div class="flex w-full justify-center px-4 pb-3">
-      <ProgrammeControls
-        cinemaOptions={cinema_options}
-        selectedChoice={selected_choice}
-        selectedDay={selected_day}
-        presentation="floating" />
-    </div>
-  </div>
+  <FloatingControls cinemaOptions={cinema_options} selectedChoice={selected_choice} selectedDay={selected_day} />
 
   <!-- Announces the result of changing the day or cinema to screen readers. -->
   <p role="status" class="sr-only">
@@ -113,7 +106,7 @@
         <div
           bind:this={grid}
           tabindex="-1"
-          class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))] sm:gap-6 sm:pt-2">
+          class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(13rem,100%),2fr))] sm:gap-6 sm:pt-2 lg:grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),2fr))] xl:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))]">
           {#each filtered_cinemas_showtimes as movie, index (movie.id)}
             <MoviePosterCard {movie} {index} />
           {/each}
