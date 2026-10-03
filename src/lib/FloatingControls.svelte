@@ -10,9 +10,12 @@
 
   const { cinemaOptions, id }: Props = $props();
 
-  // The phone control bar floats over the content; slide it away while the
+  // The phone control bar floats over the content; fade it out while the
   // visitor scrolls down to read, and bring it back when they scroll up,
-  // reach the top or bottom, or move keyboard focus into it.
+  // reach the top or bottom, or move keyboard focus into it. It must not
+  // move: iOS Safari tints its toolbar from whatever touches the bottom
+  // edge, so even a transparent bar nudged down onto it paints a black band
+  // behind the URL bar.
   let hidden = $state(false);
   let bar: HTMLElement | undefined = $state();
 
@@ -34,8 +37,8 @@
   <div
     bind:this={bar}
     onfocusin={() => (hidden = false)}
-    class="flex w-full justify-center px-4 pb-3 transition-[translate,opacity] duration-300 ease-out motion-reduce:transition-none {hidden
-      ? 'pointer-events-none translate-y-24 opacity-0'
+    class="flex w-full justify-center px-4 pb-3 transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none {hidden
+      ? 'pointer-events-none invisible opacity-0'
       : ''}">
     <ProgrammeControls {cinemaOptions} presentation="floating" {id} />
   </div>
