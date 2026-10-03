@@ -1,8 +1,7 @@
 <script lang="ts">
   import { get_movie_programme } from "#lib/programme.js";
   import { get_youtube_id, is_mobile_user_agent } from "#lib/video.js";
-  import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, cinemaState } from "#lib/cinema-state.svelte.js";
-  import { dayState } from "#lib/day-state.svelte.js";
+  import { get_cinemas_for_choice, selection } from "#lib/selection.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import FloatingControls from "#lib/FloatingControls.svelte";
   import MovieRatings from "#lib/MovieRatings.svelte";
@@ -24,12 +23,8 @@
 
   const now = new Date();
 
-  // Read cinema from shared state
-  const selected_choice = $derived(cinemaState.value ?? DEFAULT_CINEMA_CHOICE);
-  const selected_cinemas = $derived(get_cinemas_for_choice(selected_choice, cinema_options));
+  const selected_cinemas = $derived(get_cinemas_for_choice(selection.cinema, cinema_options));
 
-  // Day selection from shared state
-  const selected_day = $derived(dayState.value ?? "0");
   let trailer_modal_open = $state(false);
   const openTrailer = () => {
     // On mobile, open YouTube directly (autoplay doesn't work in iframe)
@@ -76,7 +71,7 @@
     history.back();
   };
 
-  const visible_showtimes = $derived(get_movie_programme(movie, selected_day, selected_cinemas, now));
+  const visible_showtimes = $derived(get_movie_programme(movie, selection.day, selected_cinemas, now));
 </script>
 
 <PageMeta
@@ -92,11 +87,7 @@
 </svelte:head>
 
 <div class="relative">
-  <FloatingControls
-    cinemaOptions={cinema_options}
-    selectedChoice={selected_choice}
-    selectedDay={selected_day}
-    id="select-cinemas-movie-mobile" />
+  <FloatingControls cinemaOptions={cinema_options} id="select-cinemas-movie-mobile" />
 
   <div class="container mx-auto max-w-7xl py-4 pb-28 md:px-8 md:py-8 lg:px-12 lg:py-10">
     <a
@@ -217,12 +208,7 @@
         <!-- Showtimes -->
         <div class="pt-2 md:max-w-3xl">
           <div class="mb-5 hidden sm:block">
-            <ProgrammeControls
-              cinemaOptions={cinema_options}
-              selectedChoice={selected_choice}
-              selectedDay={selected_day}
-              presentation="inline"
-              id="select-cinemas-movie-desktop" />
+            <ProgrammeControls cinemaOptions={cinema_options} presentation="inline" id="select-cinemas-movie-desktop" />
           </div>
 
           <!-- eslint-disable svelte/no-navigation-without-resolve -->
@@ -236,7 +222,7 @@
                 )
               : "Engar sýningar fundust"}
           </p>
-          {#key `${selected_day}-${selected_choice}`}
+          {#key `${selection.day}-${selection.cinema}`}
             {#if visible_showtimes.length > 0}
               <div in:fade={{ duration: 160 }} class="space-y-3">
                 {#each visible_showtimes as { cinema, showtimes } (cinema)}
