@@ -106,12 +106,15 @@
     }
   }
 
-  /* Pressed from the tap until the movie page arrives, so a tap is
-     acknowledged at once even when the network is slow. Not :active, which
-     also dims a poster a scroll starts on. Last, so it wins over hover. */
-  .movie-poster-card.opening .movie-poster-image {
-    transform: scale(0.97);
-    filter: brightness(0.8);
-    transition-duration: 120ms;
+  /* Pressed from the click until the movie page arrives, so it is
+     acknowledged at once even when the network is slow. Mouse users only:
+     on phones the shrinking poster read as an unwanted animation. Last, so
+     it wins over hover. */
+  @media (hover: hover) and (pointer: fine) {
+    .movie-poster-card.opening .movie-poster-image {
+      transform: scale(0.97);
+      filter: brightness(0.8);
+      transition-duration: 120ms;
+    }
   }
 </style>

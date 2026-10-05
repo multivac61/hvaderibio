@@ -97,9 +97,9 @@ test("a client-side visit to the home page shows the live grid at once", async (
   expect(await arrival).toEqual({ count: live, faded: 0 });
 });
 
-// Opening a movie waits on the network; the tapped poster shows it was
-// pressed until the movie page arrives, instead of nothing happening.
-test("a tapped poster looks pressed while its movie loads", async ({ page }) => {
+// The pressed look while a movie loads is for mouse users; on a phone the
+// shrinking poster felt like an unwanted animation.
+test("a tapped poster stays still on phones while its movie loads", async ({ page }) => {
   await goto_hydrated_home(page);
   await page.route("**/__data.json*", async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 600));
@@ -116,5 +116,5 @@ test("a tapped poster looks pressed while its movie loads", async ({ page }) => 
 
   expect(new URL(page.url()).pathname).toBe("/");
   const image = page.locator(`[data-movie-id="${id}"] img`);
-  expect(await image.evaluate((img) => getComputedStyle(img).transform)).not.toBe("none");
+  expect(await image.evaluate((img) => getComputedStyle(img).transform)).toBe("none");
 });
