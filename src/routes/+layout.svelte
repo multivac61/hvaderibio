@@ -33,6 +33,9 @@
 </script>
 
 <svelte:head>
+  <!-- Movie pages show the trailer thumbnail first on phones. Connecting here,
+       before a poster is tapped, saves the handshake on arrival. -->
+  <link rel="preconnect" href="https://img.youtube.com" />
   <!-- DNS prefetch for cinema ticket purchase domains -->
   <link rel="dns-prefetch" href="https://www.sambio.is" />
   <link rel="dns-prefetch" href="https://eu.internet-ticketing.com" />

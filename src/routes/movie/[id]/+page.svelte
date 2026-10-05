@@ -80,12 +80,6 @@
   path="/movie/{data.path}"
   image="/{movie.id}.webp" />
 
-<svelte:head>
-  {#if youtube_id}
-    <link rel="preconnect" href="https://img.youtube.com" />
-  {/if}
-</svelte:head>
-
 <div class="relative">
   <FloatingControls cinemaOptions={cinema_options} id="select-cinemas-movie-mobile" />
 
