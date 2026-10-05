@@ -1,11 +1,18 @@
 <script lang="ts">
   import "../app.css";
   import { afterNavigate, onNavigate, preloadData } from "$app/navigation";
+  import { onMount } from "svelte";
+  import { app } from "#lib/app-state.js";
   import { track_input_modality } from "#lib/input-modality.js";
 
   let { children } = $props();
 
   $effect(track_input_modality);
+
+  // The layout mounts after the first page, once hydration is done.
+  onMount(() => {
+    app.hydrated = true;
+  });
 
   // Detect mobile devices to disable view transitions (Safari butchers them)
   const isMobile = () => {

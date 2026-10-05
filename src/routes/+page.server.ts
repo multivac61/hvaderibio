@@ -10,5 +10,7 @@ export const load = async () => {
     // catalog inlined it twice into every homepage load.
     movies: movies.map((movie) => to_programme_entry(movie, movies)),
     cinema_options: get_cinema_options(movies),
+    // The page is prerendered, so this is when the HTML's poster grid was cut.
+    built_at: Date.now(),
   };
 };

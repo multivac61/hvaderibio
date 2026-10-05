@@ -44,7 +44,7 @@
   ontouchstart={handleTouchStart}
   ontouchend={handleTouchEnd}
   ontouchcancel={() => (touchStart = null)}
-  class="movie-poster-card block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900"
+  class="movie-poster-card relative block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900"
   style="-webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <picture>
     <source

@@ -64,3 +64,34 @@ test("the floating controls stay visible across navigations", async ({ page }) =
   await page.goBack();
   expect(await back_home).toBe(1);
 });
+
+// Only hydration renders the build-time grid; a client-side visit to the home
+// page starts on the visitor's clock, so nothing fades out on arrival.
+test("a client-side visit to the home page shows the live grid at once", async ({ page }) => {
+  await page.clock.setSystemTime(Date.now() + 9 * 3600_000);
+  await page.goto("/");
+  await expect(page.locator("[data-movie-id]").first()).toBeVisible();
+  await page.waitForTimeout(500);
+  const live = await page.locator("[data-movie-id]").count();
+
+  await page.locator('a[href^="/movie/"]').first().click();
+  await page.waitForURL(/\/movie\//);
+  const arrival = page.evaluate(
+    () =>
+      new Promise<{ count: number; faded: number }>((resolve) => {
+        const check = () => {
+          const cards = [...document.querySelectorAll("[data-movie-id]")];
+          if (cards.length === 0) return void requestAnimationFrame(check);
+          const opacity = (el: Element) => {
+            let o = 1;
+            for (let n: Element | null = el; n; n = n.parentElement) o *= Number(getComputedStyle(n).opacity);
+            return o;
+          };
+          resolve({ count: cards.length, faded: cards.filter((c) => opacity(c) < 1).length });
+        };
+        requestAnimationFrame(check);
+      })
+  );
+  await page.locator("a", { hasText: "Til baka" }).click();
+  expect(await arrival).toEqual({ count: live, faded: 0 });
+});
