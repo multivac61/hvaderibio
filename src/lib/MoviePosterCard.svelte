@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { navigating } from "$app/state";
   import { resolve } from "$app/paths";
   import { open_on_space } from "#lib/open-on-space.js";
 
@@ -12,6 +13,8 @@
 
   const { movie, index }: Props = $props();
   const movieHref = $derived(resolve(`movie/${movie.path}`));
+  // Opening a movie waits on the network; stay pressed until it arrives.
+  const opening = $derived(navigating.to?.url.pathname === movieHref);
 
   let touchStart: { x: number; y: number } | null = null;
 
@@ -44,6 +47,7 @@
   ontouchstart={handleTouchStart}
   ontouchend={handleTouchEnd}
   ontouchcancel={() => (touchStart = null)}
+  class:opening
   class="movie-poster-card relative block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900"
   style="-webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <picture>
@@ -100,5 +104,14 @@
       filter: brightness(1.1);
       box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
     }
+  }
+
+  /* Pressed from the tap until the movie page arrives, so a tap is
+     acknowledged at once even when the network is slow. Not :active, which
+     also dims a poster a scroll starts on. Last, so it wins over hover. */
+  .movie-poster-card.opening .movie-poster-image {
+    transform: scale(0.97);
+    filter: brightness(0.8);
+    transition-duration: 120ms;
   }
 </style>

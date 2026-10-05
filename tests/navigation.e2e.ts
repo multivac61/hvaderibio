@@ -95,3 +95,25 @@ test("a client-side visit to the home page shows the live grid at once", async (
   await page.locator("a", { hasText: "Til baka" }).click();
   expect(await arrival).toEqual({ count: live, faded: 0 });
 });
+
+// Opening a movie waits on the network; the tapped poster shows it was
+// pressed until the movie page arrives, instead of nothing happening.
+test("a tapped poster looks pressed while its movie loads", async ({ page }) => {
+  await page.goto("/");
+  await page.route("**/__data.json*", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    await route.continue();
+  });
+  const viewport = page.viewportSize()!;
+  const point = { x: viewport.width / 4, y: viewport.height / 2 };
+  const id = await page.evaluate(
+    ({ x, y }) => document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-movie-id]")?.dataset.movieId,
+    point
+  );
+  await page.touchscreen.tap(point.x, point.y);
+  await page.waitForTimeout(150);
+
+  expect(new URL(page.url()).pathname).toBe("/");
+  const image = page.locator(`[data-movie-id="${id}"] img`);
+  expect(await image.evaluate((img) => getComputedStyle(img).transform)).not.toBe("none");
+});
