@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { CinemaOption } from "#lib/cinemas.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
-  import { fade } from "svelte/transition";
 
   type Props = {
     cinemaOptions: readonly CinemaOption[];
@@ -33,7 +32,9 @@
   });
 </script>
 
-<div in:fade={{ duration: 220 }} class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
+<!-- No intro transition: Svelte skips intros on the first load, so one would
+     only play on navigations, blinking out a bar that is on every page. -->
+<div class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
   <div
     bind:this={bar}
     onfocusin={() => (hidden = false)}

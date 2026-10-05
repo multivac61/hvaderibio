@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 // An edge swipe back in iOS Safari animates to a screenshot of the previous
 // page, then hands over to SvelteKit. If SvelteKit still has to fetch that
@@ -31,4 +31,36 @@ test("going back from a movie shows the home page without waiting on the network
       })
   );
   expect(shown_after).toBeLessThan(100);
+});
+
+// The bar's opacity, ancestors included, in the first frame it shows up in.
+const opacity_on_arrival = (page: Page, selector: string) =>
+  page.evaluate(
+    (selector) =>
+      new Promise<number>((resolve) => {
+        const check = () => {
+          const bar = document.querySelector(selector);
+          if (!bar) return void requestAnimationFrame(check);
+          let opacity = 1;
+          for (let node: Element | null = bar; node; node = node.parentElement) opacity *= Number(getComputedStyle(node).opacity);
+          resolve(opacity);
+        };
+        requestAnimationFrame(check);
+      }),
+    selector
+  );
+
+// The floating day and cinema bar is the same control on every page; it
+// should stay put across a navigation rather than blink out and fade in.
+test("the floating controls stay visible across navigations", async ({ page }) => {
+  await page.goto("/");
+  const viewport = page.viewportSize()!;
+
+  const on_movie = opacity_on_arrival(page, "#select-cinemas-movie-mobile");
+  await page.touchscreen.tap(viewport.width / 4, viewport.height / 2);
+  expect(await on_movie).toBe(1);
+
+  const back_home = opacity_on_arrival(page, "#select-cinemas");
+  await page.goBack();
+  expect(await back_home).toBe(1);
 });
