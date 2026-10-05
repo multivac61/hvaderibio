@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { goto_hydrated_home } from "./home";
 
 // An edge swipe back in iOS Safari animates to a screenshot of the previous
 // page, then hands over to SvelteKit. If SvelteKit still has to fetch that
@@ -10,7 +11,7 @@ test("going back from a movie shows the home page without waiting on the network
     await route.continue();
   });
 
-  await page.goto("/");
+  await goto_hydrated_home(page);
   // Tap a poster where it is; a locator tap would scroll it into view first.
   const viewport = page.viewportSize()!;
   await page.touchscreen.tap(viewport.width / 4, viewport.height / 2);
@@ -53,7 +54,7 @@ const opacity_on_arrival = (page: Page, selector: string) =>
 // The floating day and cinema bar is the same control on every page; it
 // should stay put across a navigation rather than blink out and fade in.
 test("the floating controls stay visible across navigations", async ({ page }) => {
-  await page.goto("/");
+  await goto_hydrated_home(page);
   const viewport = page.viewportSize()!;
 
   const on_movie = opacity_on_arrival(page, "#select-cinemas-movie-mobile");
@@ -69,7 +70,7 @@ test("the floating controls stay visible across navigations", async ({ page }) =
 // page starts on the visitor's clock, so nothing fades out on arrival.
 test("a client-side visit to the home page shows the live grid at once", async ({ page }) => {
   await page.clock.setSystemTime(Date.now() + 9 * 3600_000);
-  await page.goto("/");
+  await goto_hydrated_home(page);
   await expect(page.locator("[data-movie-id]").first()).toBeVisible();
   await page.waitForTimeout(500);
   const live = await page.locator("[data-movie-id]").count();
@@ -99,7 +100,7 @@ test("a client-side visit to the home page shows the live grid at once", async (
 // Opening a movie waits on the network; the tapped poster shows it was
 // pressed until the movie page arrives, instead of nothing happening.
 test("a tapped poster looks pressed while its movie loads", async ({ page }) => {
-  await page.goto("/");
+  await goto_hydrated_home(page);
   await page.route("**/__data.json*", async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 600));
     await route.continue();

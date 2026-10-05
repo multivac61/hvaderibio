@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { goto_hydrated_home } from "./home";
 
 // iOS Safari tints its toolbar from fixed and sticky elements at the bottom
 // edge of the viewport, painting a solid band behind the URL bar instead of
@@ -52,7 +53,7 @@ for (const { name, path, controls } of [
   { name: "movie", path: null, controls: "#select-cinemas-movie-mobile" },
 ]) {
   test(`${name} page keeps fixed and sticky elements off the bottom edge`, async ({ page }) => {
-    await page.goto("/");
+    await goto_hydrated_home(page);
     if (path === null) {
       await page.locator('a[href^="/movie/"]').first().click();
       await page.waitForURL(/\/movie\//);
