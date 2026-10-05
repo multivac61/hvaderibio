@@ -6,6 +6,12 @@ on:
   schedule:
     - cron: "0 * * * *" # Run every hour
 name: Deploy
+# Showtimes are Icelandic wall-clock times and the home page is cut at
+# build time, so build and scrape on Icelandic time (GMT all year) rather
+# than whatever zone the runner happens to use.
+env:
+  TZ: GMT
+
 # Deploys race otherwise: an hourly run and a push can overlap, and the one
 # that finishes last wins even if it scraped earlier. Queue them instead,
 # letting a running deploy finish rather than leaving a half-uploaded site.

@@ -4,6 +4,12 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Showtimes are Icelandic wall-clock times and the home page is cut at
+# build time, so build and scrape on Icelandic time (GMT all year) rather
+# than whatever zone the runner happens to use.
+env:
+  TZ: GMT
+
 jobs:
   bun-check:
     runs-on: ubuntu-latest
