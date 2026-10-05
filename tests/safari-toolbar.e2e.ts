@@ -66,3 +66,12 @@ for (const { name, path, controls } of [
     expect(await bottom_edge_offenders(page)).toEqual([]);
   });
 }
+
+// Safari picks light or dark toolbar text from what is behind it. Where it
+// has nothing painted, such as mid-swipe between pages, it falls back to the
+// page's color scheme, and the light default can flash the URL text black.
+test("pages declare a dark color scheme", async ({ page }) => {
+  await page.goto("/");
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("dark");
+  await expect(page.locator('meta[name="color-scheme"]')).toHaveAttribute("content", "dark");
+});
