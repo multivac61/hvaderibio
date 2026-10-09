@@ -12,6 +12,15 @@ npm run scrape
 npm run dev
 ```
 
-Run `npm run check`, `npm test`, and `npm run build` to validate changes.
-Scraping provides the movie data required by the app; for checks without live
-data, create `static/movies.json` containing `[]`.
+Run `npm run check` and `npm test` while iterating; `nix flake check` runs both
+plus the site build, as CI does. Scraping provides the movie data required by the
+app; for checks without live data, create `static/movies.json` containing `[]`.
+
+`nix build` produces the Cloudflare Pages output with an empty catalog, since the
+scraped `static/movies.json` and posters are gitignored and invisible to the
+flake. To build with them, pass the catalog directory explicitly:
+
+```sh
+nix build --impure --expr \
+  "(builtins.getFlake \"git+file://$PWD\").packages.x86_64-linux.default.override { catalog = $PWD/static; }"
+```

@@ -5,26 +5,28 @@ on:
   workflow_dispatch:
 
 jobs:
-  bun-check:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
-      - uses: oven-sh/setup-bun@main
-      - run: bun install --frozen-lockfile
-      - run: mkdir -p static && echo '[]' > static/movies.json
-      - run: bun run check
-      - run: bun test
+      - uses: cachix/install-nix-action@v31
+      - run: nix flake check -L
 
   # Layout rules that need a real engine, in phone-sized WebKit.
   browser-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
-      - uses: oven-sh/setup-bun@main
-      - run: bun install --frozen-lockfile
-      - run: bunx playwright install --with-deps webkit
-      - run: bun tests/fixtures/install.ts
-      - run: bun run test:e2e
+      - uses: cachix/install-nix-action@v31
+      # Only Node comes from the flake: inside the devshell, Nix glibc's ldd
+      # cannot see the apt-installed libraries Playwright's WebKit links to.
+      - run: |
+          node=$(nix build --inputs-from . nixpkgs#nodejs_24 --no-link --print-out-paths)
+          echo "$node/bin" >> "$GITHUB_PATH"
+      - run: npm ci
+      - run: npx playwright install --with-deps webkit
+      - run: npx tsx tests/fixtures/install.ts
+      - run: npm run test:e2e
 
   # Dispatched checks can be absent from the PR's required-check rollup.
   # Publish the actual test result on the same commit for branch protection.
@@ -32,7 +34,7 @@ jobs:
     if: >-
       always() && github.event_name == 'workflow_dispatch' &&
       github.ref == 'refs/heads/automation/nightly-dependencies'
-    needs: bun-check
+    needs: check
     runs-on: ubuntu-latest
     permissions:
       statuses: write
@@ -40,7 +42,7 @@ jobs:
       - name: Report dependency check result
         run: |
           gh api --method POST "repos/$GH_REPO/statuses/$CHECK_SHA" \
-            -f context=bun-check \
+            -f context=check \
             -f state="$CHECK_STATE" \
             -f description="Dependency checks: $CHECK_RESULT" \
             -f target_url="$CHECK_URL"
@@ -48,6 +50,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           CHECK_SHA: ${{ github.sha }}
-          CHECK_RESULT: ${{ needs.bun-check.result }}
-          CHECK_STATE: ${{ needs.bun-check.result == 'success' && 'success' || 'failure' }}
+          CHECK_RESULT: ${{ needs.check.result }}
+          CHECK_STATE: ${{ needs.check.result == 'success' && 'success' || 'failure' }}
           CHECK_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
