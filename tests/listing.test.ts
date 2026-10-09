@@ -1,13 +1,13 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { gunzipSync } from "zlib";
 import { parseHTML } from "linkedom";
-import { afterAll, beforeAll } from "bun:test";
 import { parse_listings } from "../src/lib/parse";
 
 // kvikmyndir.is/bio/syningatimar/?dagur=N, saved on 2026-10-02.
 const listing = (day: number) =>
-  parseHTML(new TextDecoder().decode(Bun.gunzipSync(readFileSync(join(__dirname, `fixtures/listing-2026-10-02-dagur-${day}.html.gz`)))))
+  parseHTML(new TextDecoder().decode(gunzipSync(readFileSync(join(__dirname, `fixtures/listing-2026-10-02-dagur-${day}.html.gz`)))))
     .document;
 
 describe("parse_listings", () => {

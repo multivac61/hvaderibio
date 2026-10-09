@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { get_day_label } from "../src/lib/day-picker";
 import { reykjavik_date, reykjavik_hours, reykjavik_time } from "../src/lib/reykjavik";
 

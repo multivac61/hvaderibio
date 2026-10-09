@@ -1,11 +1,12 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { gunzipSync } from "zlib";
 import { parse_external_urls, parse_letterboxd_score, parse_metacritic_scores, parse_rotten_tomatoes_scores } from "../src/lib/parse";
 
 // Full pages saved on 2026-10-02 for "Spider-Man: Brand New Day".
 const fixture = (site: string) =>
-  new TextDecoder().decode(Bun.gunzipSync(readFileSync(join(__dirname, `fixtures/${site}-spider-man-brand-new-day.html.gz`))));
+  new TextDecoder().decode(gunzipSync(readFileSync(join(__dirname, `fixtures/${site}-spider-man-brand-new-day.html.gz`))));
 
 describe("rating pages", () => {
   test("reads the Tomatometer and Popcornmeter from Rotten Tomatoes", () => {

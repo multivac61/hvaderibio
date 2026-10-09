@@ -3,7 +3,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "strict": true,
-    "types": ["bun", "$app/types"]
+    "types": ["node", "$app/types"]
   },
-  "include": ["src", "tests", "vite.config.ts"]
+  "include": ["src", "tests", "vite.config.ts", "vitest.config.ts"]
 }

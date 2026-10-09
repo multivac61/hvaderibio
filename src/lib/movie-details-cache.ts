@@ -1,4 +1,4 @@
-import { mkdir } from "fs/promises";
+import { mkdir, readFile, writeFile } from "fs/promises";
 import { dirname } from "path";
 
 import { map_concurrent } from "#lib/concurrency.js";
@@ -12,7 +12,7 @@ type CacheEntry = { fetched_at: string; details: MovieDetails };
 async function read_cache(path: string): Promise<Record<string, CacheEntry>> {
   let raw: Record<string, { fetched_at?: unknown; details?: unknown }>;
   try {
-    raw = await Bun.file(path).json();
+    raw = JSON.parse(await readFile(path, "utf-8"));
   } catch {
     return {};
   }
@@ -55,7 +55,7 @@ export async function load_movie_details(
 
   const listed = ids.filter((id) => cache[id] !== undefined);
   await mkdir(dirname(cache_path), { recursive: true });
-  await Bun.write(cache_path, JSON.stringify(Object.fromEntries(listed.map((id) => [id, cache[id]])), null, 2));
+  await writeFile(cache_path, JSON.stringify(Object.fromEntries(listed.map((id) => [id, cache[id]])), null, 2));
 
   console.log(`Movie details: ${stale.length} fetched, ${ids.length - stale.length} cached`);
   return new Map(listed.map((id) => [id, cache[id].details]));

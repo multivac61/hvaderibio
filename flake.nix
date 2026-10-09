@@ -48,7 +48,7 @@
           checks.formatting = treefmtEval.config.build.check self;
           devshell.default = pkgs.mkShell {
             packages = with pkgs; [
-              bun
+              nodejs_24
             ];
           };
         }

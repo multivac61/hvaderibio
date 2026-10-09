@@ -8,7 +8,6 @@ node_modules
 !.env.example
 
 # Ignore lock files
-bun.lock
 package-lock.json
 yarn.lock
 

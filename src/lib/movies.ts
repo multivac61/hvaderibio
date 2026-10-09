@@ -1,4 +1,4 @@
-import { movies_schema } from "./schemas";
+import { movies_schema } from "#lib/schemas.js";
 import { readFile } from "fs/promises";
 import { join } from "path";
 

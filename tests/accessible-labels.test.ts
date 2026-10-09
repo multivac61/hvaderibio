@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { count_label, rating_labels, showtime_label } from "../src/lib/accessible-labels";
 
 describe("showtime_label", () => {

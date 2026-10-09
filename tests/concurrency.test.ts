@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
+import { setTimeout as sleep } from "timers/promises";
 import { map_concurrent } from "../src/lib/concurrency";
 
 describe("map_concurrent", () => {
@@ -10,7 +11,7 @@ describe("map_concurrent", () => {
     const result = await map_concurrent(delays, 2, async (ms, index) => {
       running++;
       peak = Math.max(peak, running);
-      await Bun.sleep(ms);
+      await sleep(ms);
       running--;
       return `${index}:${ms}`;
     });

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { parseHTML } from "linkedom";

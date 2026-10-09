@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { movie_schema, cinema_showtimes_schema } from "../src/lib/schemas";
 
 describe("cinema_showtimes_schema", () => {

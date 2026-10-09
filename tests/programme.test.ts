@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { get_movie_programme, get_programme_movies, to_programme_entry } from "../src/lib/programme";
 import { movie_schema, type Showtime } from "../src/lib/schemas";
 

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { CAPITAL_REGION_CINEMAS } from "../src/lib/constants";
 
 describe("CAPITAL_REGION_CINEMAS", () => {

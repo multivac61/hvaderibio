@@ -1,11 +1,12 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { mkdtemp, readdir, rm, stat } from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import sharp from "sharp";
 import { refresh_posters } from "../src/lib/posters";
+import { serve, type TestServer } from "./serve";
 
-let server: ReturnType<typeof Bun.serve>;
+let server: TestServer;
 let requests = 0;
 let dir: string;
 
@@ -13,17 +14,14 @@ beforeAll(async () => {
   const jpeg = await sharp({ create: { width: 400, height: 600, channels: 3, background: "#336699" } })
     .jpeg()
     .toBuffer();
-  server = Bun.serve({
-    port: 0,
-    fetch: () => {
-      requests++;
-      return new Response(jpeg, { headers: { "Content-Type": "image/jpeg" } });
-    },
+  server = await serve(() => {
+    requests++;
+    return new Response(jpeg, { headers: { "Content-Type": "image/jpeg" } });
   });
   dir = await mkdtemp(join(tmpdir(), "posters-"));
 });
 afterAll(async () => {
-  server.stop(true);
+  await server.close();
   await rm(dir, { recursive: true, force: true });
 });
 
