@@ -11,7 +11,6 @@
   };
 
   const { movie, index }: Props = $props();
-  const movieHref = $derived(resolve(`movie/${movie.path}`));
 
   let touchStart: { x: number; y: number } | null = null;
 
@@ -32,13 +31,12 @@
     // history navigation and consume the next synthetic click. Navigate from
     // the real touch event instead; preventDefault suppresses the later click.
     event.preventDefault();
-    void goto(movieHref);
+    void goto(resolve("/movie/[id]", { id: movie.path }));
   };
 </script>
 
-<!-- eslint-disable svelte/no-navigation-without-resolve -->
 <a
-  href={movieHref}
+  href={resolve("/movie/[id]", { id: movie.path })}
   data-movie-id={movie.id}
   onkeydown={open_on_space}
   ontouchstart={handleTouchStart}
