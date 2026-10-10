@@ -16,6 +16,10 @@
   // move: iOS Safari tints its toolbar from whatever touches the bottom
   // edge, so even a transparent bar nudged down onto it paints a black band
   // behind the URL bar.
+  //
+  // It is fixed rather than sticky: a sticky bar cannot leave its parent, so
+  // while the posters waited for the clock, or a choice left nothing to list,
+  // it sat near the top of a short page and then dropped to the bottom.
   let hidden = $state(false);
   let bar: HTMLElement | undefined = $state();
 
@@ -33,7 +37,7 @@
   });
 </script>
 
-<div in:fade={{ duration: 220 }} class="sticky top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
+<div in:fade={{ duration: 220 }} class="fixed inset-x-0 top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
   <div
     bind:this={bar}
     onfocusin={() => (hidden = false)}
