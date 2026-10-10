@@ -12,6 +12,9 @@ export default defineConfig({
       // which renders the error page in the browser.
       adapter: adapter({ fallback: "404.html" }),
       prerender: { handleUnseenRoutes: "warn" },
+      // Inline the stylesheets (about 8 KB compressed) so the first paint
+      // does not wait on a request after the HTML.
+      inlineStyleThreshold: 64 * 1024,
     }),
   ],
   build: {

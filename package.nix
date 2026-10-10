@@ -71,6 +71,12 @@ buildNpmPackage {
       test -f "$out/$page" || { echo "missing $page"; exit 1; }
     done
     if test -e "$out/_worker.js"; then echo "unexpected _worker.js"; exit 1; fi
+    # The styles are inlined so the first paint waits on no further request.
+    # SvelteKit keeps disabled links to the files for client-side navigation.
+    if grep -o '<link[^>]*rel="stylesheet"[^>]*>' "$out/index.html" | grep -qv disabled; then
+      echo "index.html links a stylesheet; raise inlineStyleThreshold in vite.config.ts"
+      exit 1
+    fi
     runHook postInstallCheck
   '';
 
