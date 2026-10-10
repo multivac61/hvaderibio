@@ -23,6 +23,7 @@ buildNpmPackage {
       ./src
       ./static/_headers
       ./static/favicon.ico
+      ./static/fonts
       ./static/letterboxd.svg
       ./static/metacritic.svg
       ./static/robots.txt

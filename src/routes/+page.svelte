@@ -65,12 +65,16 @@
   {#each data.lead_posters as id (id)}
     <link rel="preload" as="image" type="image/webp" imagesrcset={poster_srcset(id)} imagesizes={POSTER_SIZES} fetchpriority="high" />
   {/each}
-  <!-- Space Grotesk only sets the desktop heading, so load it here rather than
-       on every page, subset to the heading's glyphs. -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <!-- Space Grotesk only sets the desktop heading, subset to its glyphs and
+       served from this site: Google's stylesheet blocked the first paint on
+       a separate connection. Preloaded where the heading shows. -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&text=Hva%C3%B0%20er%20%C3%AD%20b%C3%AD%C3%B3%3F&display=swap"
-    rel="stylesheet" />
+    rel="preload"
+    as="font"
+    type="font/woff2"
+    href="/fonts/space-grotesk-500-heading.woff2"
+    crossorigin="anonymous"
+    media="(min-width: 640px)" />
 </svelte:head>
 
 <header class="relative sm:mt-8 sm:mb-5">
@@ -115,3 +119,15 @@
     {/key}
   {/if}
 </div>
+
+<style>
+  /* Subset by Google Fonts to "Hvað er í bíó?"; see static/fonts/OFL.txt. */
+  @font-face {
+    font-family: "Space Grotesk";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("/fonts/space-grotesk-500-heading.woff2") format("woff2");
+    unicode-range: U+20, U+3f, U+48, U+61-62, U+65, U+69, U+6f, U+72, U+76, U+e1, U+e9, U+ed, U+f0, U+f3, U+155, U+301;
+  }
+</style>
