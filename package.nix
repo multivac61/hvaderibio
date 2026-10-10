@@ -21,6 +21,7 @@ buildNpmPackage {
       ./vite.config.ts
       ./tsconfig.json
       ./src
+      ./static/_headers
       ./static/favicon.ico
       ./static/letterboxd.svg
       ./static/metacritic.svg
@@ -56,8 +57,20 @@ buildNpmPackage {
 
   installPhase = ''
     runHook preInstall
-    cp -r .svelte-kit/cloudflare $out
+    cp -r build $out
     runHook postInstall
+  '';
+
+  # Pages serves this directory as is: every page prerendered, unknown paths
+  # answered by 404.html, and no worker to bundle at upload time.
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    for page in index.html 404.html sitemap.xml _headers; do
+      test -f "$out/$page" || { echo "missing $page"; exit 1; }
+    done
+    if test -e "$out/_worker.js"; then echo "unexpected _worker.js"; exit 1; fi
+    runHook postInstallCheck
   '';
 
   meta = {

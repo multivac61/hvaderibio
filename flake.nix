@@ -62,6 +62,9 @@
                 runHook postBuild
               '';
               installPhase = "touch $out";
+              # The site's install check inspects the built pages; this
+              # derivation builds none.
+              doInstallCheck = false;
             };
           };
           packages.default = hvaderibio;
