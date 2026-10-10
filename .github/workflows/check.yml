@@ -25,7 +25,7 @@ jobs:
           echo "$node/bin" >> "$GITHUB_PATH"
       - run: npm ci
       - run: npx playwright install --with-deps webkit
-      - run: npx tsx tests/fixtures/install.ts
+      - run: node tests/fixtures/install.ts
       - run: npm run test:e2e
 
   # Dispatched checks can be absent from the PR's required-check rollup.
