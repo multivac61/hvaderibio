@@ -1,5 +1,5 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { mkdtemp, rm } from "fs/promises";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
+import { mkdtemp, rm, writeFile } from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { load_movie_details } from "../src/lib/movie-details-cache";
@@ -70,7 +70,7 @@ describe("load_movie_details cache validation", () => {
   test("drops fields the schema no longer has and refetches entries that do not parse", async () => {
     const cache_path = join(dir, "old-shape.json");
     const now = new Date("2026-10-02T12:00:00Z");
-    await Bun.write(
+    await writeFile(
       cache_path,
       JSON.stringify({
         1: { fetched_at: now.toISOString(), details: { ...details(1), language: ["English"], premiere_date: "2030-01-01" } },

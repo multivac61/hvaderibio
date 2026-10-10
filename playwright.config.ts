@@ -11,7 +11,7 @@ export default defineConfig({
   use: { baseURL: "http://localhost:4173" },
   projects: [{ name: "iphone", use: { ...devices["iPhone 15"] } }],
   webServer: {
-    command: "bun run build && bun run preview --port 4173 --strictPort",
+    command: "npm run build && npm run preview -- --port 4173 --strictPort",
     url: "http://localhost:4173",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

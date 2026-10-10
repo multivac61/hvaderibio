@@ -1,7 +1,8 @@
-import { movie_details_schema, type Movie, type MovieDetails, type ShowtimesByDay, type Showtime } from "./schemas";
+import { gunzipSync } from "node:zlib";
+import { movie_details_schema, type Movie, type MovieDetails, type ShowtimesByDay, type Showtime } from "#lib/schemas.js";
 
 export type { MovieDetails };
-import { fetch_text } from "./http";
+import { fetch_text } from "#lib/http.js";
 
 const pad = (n: number) => n.toString().padStart(2, "0");
 
@@ -227,7 +228,7 @@ async function download_imdb_dataset(dataset_url: string): Promise<string | null
   try {
     const response = await fetch(dataset_url, { headers: { "User-Agent": "hvaderibio/1.0" } });
     if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-    return new TextDecoder().decode(Bun.gunzipSync(new Uint8Array(await response.arrayBuffer())));
+    return new TextDecoder().decode(gunzipSync(await response.arrayBuffer()));
   } catch (error) {
     console.error("Skipping IMDb ratings, dataset unavailable:", error);
     return null;

@@ -47,6 +47,13 @@ async function effective_opacity(page: Page, selector: string): Promise<number> 
   });
 }
 
+// The grid only lists showtimes still ahead of the browser's clock, so pin it
+// to the morning the fixture catalogue was saved. Timers keep running for the
+// fade below.
+test.beforeEach(async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-10-03T09:00:00Z"));
+});
+
 for (const { name, path, controls } of [
   { name: "home", path: "/", controls: "#select-cinemas" },
   { name: "movie", path: null, controls: "#select-cinemas-movie-mobile" },

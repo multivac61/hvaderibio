@@ -1,23 +1,22 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { setTimeout as sleep } from "timers/promises";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { fetch_text } from "../src/lib/http";
 import { prefetch_imdb_ratings } from "../src/lib/parse";
+import { serve, type TestServer } from "./serve";
 
-let server: ReturnType<typeof Bun.serve>;
+let server: TestServer;
 const attempts = new Map<string, number>();
-beforeAll(() => {
-  server = Bun.serve({
-    port: 0,
-    fetch: (request) => {
-      const path = new URL(request.url).pathname;
-      const attempt = (attempts.get(path) ?? 0) + 1;
-      attempts.set(path, attempt);
-      if (path === "/ok" || (path === "/flaky" && attempt > 1)) return new Response("<html>ok</html>");
-      if (path === "/missing") return new Response("<html>Not Found</html>", { status: 404, statusText: "Not Found" });
-      return new Response("<html>Gateway Timeout</html>", { status: 504, statusText: "Gateway Timeout" });
-    },
+beforeAll(async () => {
+  server = await serve((request) => {
+    const path = new URL(request.url).pathname;
+    const attempt = (attempts.get(path) ?? 0) + 1;
+    attempts.set(path, attempt);
+    if (path === "/ok" || (path === "/flaky" && attempt > 1)) return new Response("<html>ok</html>");
+    if (path === "/missing") return new Response("<html>Not Found</html>", { status: 404, statusText: "Not Found" });
+    return new Response("<html>Gateway Timeout</html>", { status: 504, statusText: "Gateway Timeout" });
   });
 });
-afterAll(() => server.stop(true));
+afterAll(() => server.close());
 
 describe("fetch_text", () => {
   test("returns the body of a successful response", async () => {
@@ -25,7 +24,7 @@ describe("fetch_text", () => {
   });
 
   test("rejects error pages instead of returning them as content", async () => {
-    expect(fetch_text(new URL("/down", server.url).href, undefined, { retry_delay_ms: 1 })).rejects.toThrow("504");
+    await expect(fetch_text(new URL("/down", server.url).href, undefined, { retry_delay_ms: 1 })).rejects.toThrow("504");
   });
 
   test("retries a transient server error", async () => {
@@ -34,8 +33,8 @@ describe("fetch_text", () => {
   });
 
   test("does not retry client errors", async () => {
-    expect(fetch_text(new URL("/missing", server.url).href, undefined, { retry_delay_ms: 1 })).rejects.toThrow("404");
-    await Bun.sleep(10);
+    await expect(fetch_text(new URL("/missing", server.url).href, undefined, { retry_delay_ms: 1 })).rejects.toThrow("404");
+    await sleep(10);
     expect(attempts.get("/missing")).toBe(1);
   });
 });

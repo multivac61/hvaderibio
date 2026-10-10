@@ -1,0 +1,10 @@
+# Cloudflare Pages response headers, as @sveltejs/adapter-cloudflare wrote
+# them. Files under /_app/immutable carry a content hash in their name, so a
+# cached copy never goes stale; the rest of /_app must be revalidated.
+/_app/*
+  X-Robots-Tag: noindex
+  Cache-Control: no-cache
+
+/_app/immutable/*
+  ! Cache-Control
+  Cache-Control: public, immutable, max-age=31536000

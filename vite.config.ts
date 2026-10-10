@@ -1,4 +1,4 @@
-import adapter from "@sveltejs/adapter-cloudflare";
+import adapter from "@sveltejs/adapter-static";
 import tailwindcss from "@tailwindcss/vite";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
@@ -7,12 +7,10 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     sveltekit({
-      adapter: adapter({
-        routes: {
-          include: ["/*"],
-          exclude: ["/_app/*", "/*.webp", "/*.json", "/*.txt", "/*.ico", "/*.xml", "/movie/*"],
-        },
-      }),
+      // Every page is prerendered, so Pages serves the build as plain files.
+      // Paths with no page, such as a movie no longer showing, get 404.html,
+      // which renders the error page in the browser.
+      adapter: adapter({ fallback: "404.html" }),
       prerender: { handleUnseenRoutes: "warn" },
     }),
   ],

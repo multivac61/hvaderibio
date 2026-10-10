@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { find_movie_by_path, movie_path_segment } from "../src/lib/movie-path";
 
 const movies = [

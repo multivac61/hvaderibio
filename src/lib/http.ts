@@ -1,3 +1,5 @@
+import { setTimeout as sleep } from "node:timers/promises";
+
 /**
  * Fetch a page's text, rejecting non-2xx responses. Parsing an error page as
  * content would silently publish an empty or partial catalog.
@@ -18,6 +20,6 @@ export async function fetch_text(
     if (response.status < 500 || attempt >= retries) {
       throw new Error(`${response.status} ${response.statusText} from ${url}`);
     }
-    await Bun.sleep(retry_delay_ms * (attempt + 1));
+    await sleep(retry_delay_ms * (attempt + 1));
   }
 }

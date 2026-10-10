@@ -1,4 +1,4 @@
-import { mkdir, readdir, rm } from "fs/promises";
+import { mkdir, readFile, readdir, rm, writeFile } from "fs/promises";
 import { dirname, join } from "path";
 import sharp from "sharp";
 
@@ -17,7 +17,7 @@ const poster_file = /^(\d+)(?:-\d+w)?\.webp$/;
 
 async function read_manifest(path: string): Promise<Record<string, string>> {
   try {
-    return await Bun.file(path).json();
+    return JSON.parse(await readFile(path, "utf-8"));
   } catch {
     return {};
   }
@@ -79,7 +79,7 @@ export async function refresh_posters(
 
   const current = Object.fromEntries(Object.entries(manifest).filter(([id]) => showing.has(id)));
   await mkdir(dirname(manifest_path), { recursive: true });
-  await Bun.write(manifest_path, JSON.stringify(current, null, 2));
+  await writeFile(manifest_path, JSON.stringify(current, null, 2));
 
   console.log(`Posters: ${stale.length} encoded, ${movies.length - stale.length} reused`);
 }

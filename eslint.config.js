@@ -9,7 +9,7 @@ export default ts.config(
   ...svelte.configs["flat/prettier"],
   {
     // TypeScript and svelte-check already report undefined identifiers, with
-    // knowledge of browser, Node and Bun globals. See
+    // knowledge of browser and Node globals. See
     // https://typescript-eslint.io/troubleshooting/faqs/eslint#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
     rules: { "no-undef": "off" },
   },

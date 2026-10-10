@@ -31,12 +31,14 @@ vite.config.*.timestamp-*
 .wrangler/
 .cloudflare/
 
-# Bun is the package manager; keep bun.lock tracked
-package-lock.json
+# npm is the package manager; keep package-lock.json tracked
 yarn.lock
-bun.lockb
+bun.lock*
 
 # Generated movie data and posters
 static/*.jpg
 static/*.webp
 static/*.json
+/result
+/result-linux
+/result-catalog
