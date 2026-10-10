@@ -2,6 +2,8 @@
   import { goto } from "$app/navigation";
   import { resolve } from "$app/paths";
   import { open_on_space } from "#lib/open-on-space.js";
+  import { POSTER_SIZES, poster_srcset } from "#lib/poster-image.js";
+  import { LEAD_POSTER_COUNT } from "#lib/programme.js";
 
   import type { ProgrammeEntry } from "#lib/programme.js";
 
@@ -45,14 +47,11 @@
   class="movie-poster-card block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg bg-neutral-900"
   style="-webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <picture>
-    <source
-      type="image/webp"
-      srcset="/{movie.id}-360w.webp 360w, /{movie.id}.webp 720w, /{movie.id}-1080w.webp 1080w"
-      sizes="(max-width: 640px) calc(50vw - 2rem), (max-width: 1024px) calc(33vw - 2rem), 360px" />
+    <source type="image/webp" srcset={poster_srcset(movie.id)} sizes={POSTER_SIZES} />
     <img
       src="/{movie.id}.webp"
       alt={movie.title}
-      fetchpriority={index < 4 ? "high" : "auto"}
+      fetchpriority={index < LEAD_POSTER_COUNT ? "high" : "auto"}
       loading="eager"
       decoding="async"
       width="720"
