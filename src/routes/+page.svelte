@@ -6,6 +6,7 @@
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import { count_label } from "#lib/accessible-labels.js";
+  import { POSTER_SIZES, poster_srcset } from "#lib/poster-image.js";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
@@ -61,6 +62,9 @@
   path="/" />
 
 <svelte:head>
+  {#each data.lead_posters as id (id)}
+    <link rel="preload" as="image" type="image/webp" imagesrcset={poster_srcset(id)} imagesizes={POSTER_SIZES} fetchpriority="high" />
+  {/each}
   <!-- Space Grotesk only sets the desktop heading, so load it here rather than
        on every page, subset to the heading's glyphs. -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />

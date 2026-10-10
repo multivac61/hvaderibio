@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { get_movie_programme, get_programme_movies, to_programme_entry } from "../src/lib/programme";
+import { get_movie_programme, get_programme_movies, lead_posters, to_programme_entry } from "../src/lib/programme";
 import { movie_schema, type Showtime } from "../src/lib/schemas";
 
 const showtime = (time: string, purchase_url: string): Showtime => ({
@@ -52,6 +52,22 @@ describe("programme", () => {
     const entries = movies.map((m) => to_programme_entry(m, movies));
 
     expect(get_programme_movies(entries, "0", ["Cinema"], evening).map(({ id }) => id)).toEqual([2, 1]);
+  });
+
+  test("names the posters that lead today's grid, in grid order", () => {
+    // Movie n has n showings tonight, so the grid runs 6, 5, 4, ...
+    const movies = [1, 2, 3, 4, 5, 6].map((n) =>
+      movie(
+        n,
+        Object.fromEntries([
+          ["0", Array.from({ length: n }, (_, i) => showtime(`2026-09-03T20:${10 + i}:00.000Z`, `https://example.com/${n}-${i}`))],
+        ])
+      )
+    );
+    const entries = movies.map((m) => to_programme_entry(m, movies));
+
+    expect(lead_posters(entries, ["Cinema"], evening)).toEqual([6, 5, 4, 3]);
+    expect(lead_posters(entries, ["Elsewhere"], evening)).toEqual([]);
   });
 
   test("reduces a movie to what the programme grid needs", () => {

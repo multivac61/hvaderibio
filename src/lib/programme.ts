@@ -64,3 +64,15 @@ export const get_movie_programme = (movie: Movie, selectedDay: string, selectedC
     .filter(([cinema]) => selectedCinemas.includes(cinema))
     .map(([cinema, showtimes]) => ({ cinema, showtimes: get_visible_showtimes(showtimes, selectedDay, now) }))
     .filter(({ showtimes }) => showtimes.length > 0);
+
+/** How many posters lead the grid with high fetch priority. */
+export const LEAD_POSTER_COUNT = 4;
+
+/**
+ * Ids of the posters that lead today's grid, so the prerendered page can
+ * start fetching them before the grid itself renders in the browser.
+ */
+export const lead_posters = (entries: readonly ProgrammeEntry[], selectedCinemas: readonly string[], now: Date): number[] =>
+  get_programme_movies(entries, "0", selectedCinemas, now)
+    .slice(0, LEAD_POSTER_COUNT)
+    .map(({ id }) => id);
