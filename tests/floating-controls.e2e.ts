@@ -36,6 +36,22 @@ test.describe("before the app starts", () => {
     await page.goto(movie!);
     await expect_bar_at_bottom(page, "#select-cinemas-movie-mobile");
   });
+
+  test("the chosen day is highlighted", async ({ page }) => {
+    await page.goto("/");
+    // The slider that marks the day is measured by script; until then the
+    // first frame showed no day chosen, and the pill popped in after.
+    const highlighted = await page.locator('[aria-pressed="true"]:visible').evaluate((button) => {
+      const box = button.getBoundingClientRect();
+      const under = document.elementsFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+      return under.some((el) => {
+        if (el === button.parentElement || !button.parentElement?.contains(el)) return false;
+        const style = getComputedStyle(el);
+        return style.backgroundColor !== "rgba(0, 0, 0, 0)" && Number(style.opacity) > 0;
+      });
+    });
+    expect(highlighted).toBe(true);
+  });
 });
 
 test("home page keeps the bar in place as the posters arrive", async ({ page }) => {
