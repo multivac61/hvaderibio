@@ -1,6 +1,6 @@
 <script lang="ts">
   import { get_movie_programme } from "#lib/programme.js";
-  import { get_youtube_id, is_mobile_user_agent } from "#lib/video.js";
+  import { get_youtube_id } from "#lib/video.js";
   import { get_cinemas_for_choice, selection } from "#lib/selection.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import FloatingControls from "#lib/FloatingControls.svelte";
@@ -24,35 +24,6 @@
   const now = new Date();
 
   const selected_cinemas = $derived(get_cinemas_for_choice(selection.cinema, cinema_options));
-
-  let trailer_modal_open = $state(false);
-  const openTrailer = () => {
-    // On mobile, open YouTube directly (autoplay doesn't work in iframe)
-    if (is_mobile_user_agent() && youtube_id) {
-      window.open(`https://www.youtube.com/watch?v=${youtube_id}`, "_blank");
-    } else {
-      trailer_modal_open = true;
-    }
-  };
-
-  const closeTrailerModal = () => {
-    trailer_modal_open = false;
-  };
-
-  let trailer_dialog: HTMLDialogElement | undefined = $state();
-
-  // Open the dialog modally and lock page scroll while the trailer plays,
-  // releasing both even when the visitor navigates away with it open.
-  $effect(() => {
-    if (!trailer_modal_open || !trailer_dialog) return;
-    const dialog = trailer_dialog;
-    dialog.showModal();
-    document.body.style.overflow = "hidden";
-    return () => {
-      if (dialog.open) dialog.close();
-      document.body.style.overflow = "";
-    };
-  });
 
   // Visitors arriving from a search engine or shared link have no in-site
   // page to go back to; send them to the programme instead of off the site.
@@ -109,7 +80,9 @@
           <div
             in:fade={{ duration: 260 }}
             class="aspect-video overflow-hidden rounded-md bg-neutral-900 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:hidden">
-            <button type="button" onclick={openTrailer} aria-label="Spila stiklu" class="group relative h-full w-full cursor-pointer">
+            <!-- Phones hand the trailer to the YouTube app, which plays it best;
+                 in the same tab, so without the app back still returns here. -->
+            <a href="https://www.youtube.com/watch?v={youtube_id}" aria-label="Spila stiklu" class="group relative block h-full w-full">
               <img
                 src="https://img.youtube.com/vi/{youtube_id}/hqdefault.jpg"
                 alt=""
@@ -126,7 +99,7 @@
                   </svg>
                 </div>
               </div>
-            </button>
+            </a>
           </div>
         {/if}
         <!-- Poster: always on desktop, on mobile only when there is no trailer.
@@ -185,7 +158,11 @@
           <div
             in:fade={{ duration: 260 }}
             class="hidden aspect-video overflow-hidden rounded-md bg-neutral-900 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:block">
-            <button type="button" onclick={openTrailer} aria-label="Spila stiklu" class="group relative h-full w-full cursor-pointer">
+            <!-- The trailer plays on its own page, so back and forward step through it. -->
+            <a
+              href={resolve("/movie/[id]/trailer", { id: data.path })}
+              aria-label="Spila stiklu"
+              class="group relative block h-full w-full">
               <img
                 src="https://img.youtube.com/vi/{youtube_id}/hqdefault.jpg"
                 alt=""
@@ -201,7 +178,7 @@
                   </svg>
                 </div>
               </div>
-            </button>
+            </a>
           </div>
         {/if}
 
@@ -240,37 +217,3 @@
     </div>
   </div>
 </div>
-
-<!-- Trailer: a native modal dialog moves focus in, makes the page behind
-     inert, closes on Escape and returns focus to the trailer button. Its
-     fixed, dark full-screen styles apply only while open: iOS Safari tints
-     its toolbar from dark fixed elements at the bottom edge. -->
-<dialog
-  bind:this={trailer_dialog}
-  onclose={closeTrailerModal}
-  aria-label="Stikla: {movie.title}"
-  class="m-0 h-dvh max-h-none w-screen max-w-none items-center justify-center p-4 backdrop:bg-black/80 open:fixed open:inset-0 open:flex open:bg-black/95">
-  {#if trailer_modal_open && youtube_id}
-    <button
-      type="button"
-      onclick={closeTrailerModal}
-      aria-label="Loka"
-      class="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20">
-      <svg aria-hidden="true" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-    <!-- Backdrop click target; Escape and the close button cover keyboard users. -->
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <div class="absolute inset-0" onclick={closeTrailerModal}></div>
-    <div class="relative aspect-video w-full max-w-5xl">
-      <iframe
-        src="https://www.youtube.com/embed/{youtube_id}?autoplay=1&rel=0&modestbranding=1"
-        title="Stikla: {movie.title}"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        class="h-full w-full rounded-lg"></iframe>
-    </div>
-  {/if}
-</dialog>
