@@ -67,13 +67,18 @@ for (const viewport of [
         ratio: box.width / box.height,
         fills_width: Math.abs(box.width - content(document.querySelector("main")!).width) < 2,
         fills_height: Math.abs(box.bottom - content(player.parentElement!).bottom) < 2,
-        scrolls: document.documentElement.scrollHeight > innerHeight,
+        // Whatever reaches past the window, to name the culprit if it scrolls.
+        overflow: [...document.querySelectorAll("body *")]
+          .filter((el) => el.getBoundingClientRect().bottom > innerHeight || el.getBoundingClientRect().right > innerWidth)
+          .map((el) => `${el.tagName} ${JSON.stringify(el.getBoundingClientRect())}`),
+        page: { scroll: [document.documentElement.scrollWidth, document.documentElement.scrollHeight], window: [innerWidth, innerHeight] },
       };
     });
     await context.close();
 
     expect(fit.ratio).toBeCloseTo(16 / 9, 1);
     expect(fit.fills_width || fit.fills_height).toBe(true);
-    expect(fit.scrolls).toBe(false);
+    expect(fit.overflow).toEqual([]);
+    expect(fit.page.scroll).toEqual(fit.page.window);
   });
 }
