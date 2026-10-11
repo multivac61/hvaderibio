@@ -116,3 +116,40 @@ test("the grid only changes while it is blurred out of sight", async ({ page }) 
   expect(frames[first_changed]!.opacity).toBe(0);
   expect(frames.at(-1)!.opacity).toBe(1);
 });
+
+test("coming back from a movie shows the chosen day at once, without a blur", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  // Record the grid's opacity and posters every frame, across navigations.
+  await page.addInitScript(() => {
+    const frames: { opacity: number; posters: string }[] = [];
+    Object.assign(window, { grid_frames: frames });
+    const sample = () => {
+      const grid = document.querySelector("a[data-movie-id]")?.parentElement;
+      if (grid) {
+        const posters = [...grid.querySelectorAll("a[data-movie-id]")].map((a) => a.getAttribute("data-movie-id")).join();
+        frames.push({ opacity: Number(getComputedStyle(grid).opacity), posters });
+      }
+      requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  });
+  await page.goto("/");
+  await app_started(page);
+  await page.getByRole("button", { name: "þriðjudag" }).filter({ visible: true }).click();
+  const tuesday = await poster_titles(page);
+  await page.locator("a[data-movie-id]").first().click();
+  await page.waitForURL(/\/movie\//);
+  const mark = await page.evaluate(() => (window as unknown as { grid_frames: unknown[] }).grid_frames.length);
+  await page.goBack();
+  await expect.poll(() => poster_titles(page)).toEqual(tuesday);
+  await page.waitForTimeout(800);
+  const after = await page.evaluate(
+    (from) => (window as unknown as { grid_frames: { opacity: number; posters: string }[] }).grid_frames.slice(from),
+    mark
+  );
+  const settled = after.at(-1)!.posters;
+  expect(after.length).toBeGreaterThan(0);
+  // Every frame back on the home page shows Tuesday's posters, fully sharp.
+  expect(after.filter((f) => f.posters !== "").every((f) => f.posters === settled)).toBe(true);
+  expect(after.map((f) => f.opacity).filter((o) => o < 1)).toEqual([]);
+});
