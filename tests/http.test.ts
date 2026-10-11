@@ -1,3 +1,4 @@
+import { createServer, type AddressInfo } from "node:net";
 import { setTimeout as sleep } from "timers/promises";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { fetch_text } from "../src/lib/http";
@@ -30,6 +31,24 @@ describe("fetch_text", () => {
   test("retries a transient server error", async () => {
     expect(await fetch_text(new URL("/flaky", server.url).href, undefined, { retry_delay_ms: 1 })).toBe("<html>ok</html>");
     expect(attempts.get("/flaky")).toBe(2);
+  });
+
+  test("retries a dropped connection", async () => {
+    // A server that hangs up on the first connection, as a connect timeout
+    // or reset would, and answers the next one.
+    let connections = 0;
+    const flaky = createServer((socket) => {
+      if (++connections === 1) return socket.destroy();
+      socket.end("HTTP/1.1 200 OK\r\nContent-Length: 15\r\nConnection: close\r\n\r\n<html>ok</html>");
+    });
+    await new Promise<void>((resolve) => flaky.listen(0, "127.0.0.1", resolve));
+    try {
+      const { port } = flaky.address() as AddressInfo;
+      expect(await fetch_text(`http://127.0.0.1:${port}/`, undefined, { retry_delay_ms: 1 })).toBe("<html>ok</html>");
+      expect(connections).toBe(2);
+    } finally {
+      flaky.close();
+    }
   });
 
   test("does not retry client errors", async () => {
