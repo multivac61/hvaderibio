@@ -5,7 +5,6 @@
 </script>
 
 <script lang="ts">
-  import { blur_swap } from "#lib/blur-swap.js";
   import { get_programme_movies, keep_order } from "#lib/programme.js";
   import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, selection } from "#lib/selection.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
@@ -13,9 +12,8 @@
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import { count_label } from "#lib/accessible-labels.js";
-  import { prefersReducedMotion } from "svelte/motion";
   import { fade } from "svelte/transition";
-  import { onMount, tick } from "svelte";
+  import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
 
   const { data } = $props();
@@ -25,26 +23,13 @@
   // The page is prerendered with the grid as of the hourly build, and hydrates
   // with exactly that. Once mounted the browser's clock takes over, but the
   // posters keep the build's order: films that have ended since only drop
-  // out, and that happens behind a blur so no poster is seen jumping.
+  // out, so none of the others is seen jumping.
   const hydrating = !hydrated;
   let now = $state<Date | null>(hydrating ? null : new Date());
-  let held: typeof prerendered | null = $state(null);
 
   onMount(() => {
     hydrated = true;
-    if (!hydrating) return;
-    const at = new Date();
-    const ids = (list: readonly { id: number }[]) => list.map(({ id }) => id).join();
-    if (!grid || prefersReducedMotion.current || ids(programme_at(at)) === ids(prerendered)) {
-      now = at;
-      return;
-    }
-    held = prerendered;
-    now = at;
-    void blur_swap(grid, async () => {
-      held = null;
-      await tick();
-    });
+    if (hydrating) now = new Date();
   });
 
   // Keyboard focus starts at the poster grid, so the first Tab lands on the
@@ -86,7 +71,7 @@
     return is_prerendered_choice ? keep_order(data.prerendered, fresh) : fresh;
   };
 
-  const filtered_cinemas_showtimes = $derived(held && is_prerendered_choice ? held : now ? programme_at(now) : prerendered);
+  const filtered_cinemas_showtimes = $derived(now ? programme_at(now) : prerendered);
 </script>
 
 <PageMeta

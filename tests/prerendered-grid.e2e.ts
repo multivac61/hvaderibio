@@ -88,11 +88,11 @@ test("the app drops films that have ended since the build, keeping the order", a
   await expect.poll(() => poster_titles(page)).toEqual(prerendered.filter((title) => !ended.includes(title!)));
 });
 
-test("the grid only changes while it is blurred out of sight", async ({ page }) => {
+test("the grid stays sharp while films that have ended drop out", async ({ page }) => {
   await page.clock.setFixedTime(FIXTURE_AFTERNOON);
   // Sample every frame from the first paint, before the app starts.
   await page.addInitScript(() => {
-    const frames: { changed: boolean; opacity: number }[] = [];
+    const frames: { changed: boolean; opacity: number; filter: string }[] = [];
     Object.assign(window, { frames_seen: frames });
     let first: string | undefined;
     const sample = () => {
@@ -100,7 +100,8 @@ test("the grid only changes while it is blurred out of sight", async ({ page }) 
       if (grid) {
         const order = [...grid.querySelectorAll("a[data-movie-id]")].map((a) => a.getAttribute("data-movie-id")).join();
         first ??= order;
-        frames.push({ changed: order !== first, opacity: Number(getComputedStyle(grid).opacity) });
+        const style = getComputedStyle(grid);
+        frames.push({ changed: order !== first, opacity: Number(style.opacity), filter: style.filter });
       }
       requestAnimationFrame(sample);
     };
@@ -108,13 +109,12 @@ test("the grid only changes while it is blurred out of sight", async ({ page }) 
   });
   await page.goto("/");
   await app_started(page);
-  await page.waitForTimeout(1500);
-  const frames = await page.evaluate(() => (window as unknown as { frames_seen: { changed: boolean; opacity: number }[] }).frames_seen);
-  const first_changed = frames.findIndex((f) => f.changed);
-  expect(first_changed).toBeGreaterThan(0);
-  expect(frames[first_changed - 1]!.opacity).toBe(0);
-  expect(frames[first_changed]!.opacity).toBe(0);
-  expect(frames.at(-1)!.opacity).toBe(1);
+  await page.waitForTimeout(1000);
+  const frames = await page.evaluate(
+    () => (window as unknown as { frames_seen: { changed: boolean; opacity: number; filter: string }[] }).frames_seen
+  );
+  expect(frames.some((f) => f.changed)).toBe(true);
+  expect(frames.filter((f) => f.opacity < 1 || f.filter !== "none")).toEqual([]);
 });
 
 test("coming back from a movie shows the chosen day at once, without a blur", async ({ page }) => {
