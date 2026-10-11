@@ -3,7 +3,7 @@
   import { resolve } from "$app/paths";
   import { open_on_space } from "#lib/open-on-space.js";
   import { POSTER_SIZES, poster_srcset } from "#lib/poster-image.js";
-  import { LEAD_POSTER_COUNT } from "#lib/programme.js";
+  import { EAGER_POSTER_COUNT, LEAD_POSTER_COUNT } from "#lib/programme.js";
 
   import type { ProgrammeEntry } from "#lib/programme.js";
 
@@ -52,7 +52,7 @@
       src="/{movie.id}.webp"
       alt={movie.title}
       fetchpriority={index < LEAD_POSTER_COUNT ? "high" : "auto"}
-      loading="eager"
+      loading={index < EAGER_POSTER_COUNT ? "eager" : "lazy"}
       decoding="async"
       width="720"
       height="1080"

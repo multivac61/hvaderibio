@@ -69,6 +69,14 @@ export const get_movie_programme = (movie: Movie, selectedDay: string, selectedC
 export const LEAD_POSTER_COUNT = 4;
 
 /**
+ * How many posters load with the page: a phone's first screen (three rows of
+ * two) and the first two rows of a laptop's grid. The rest wait until
+ * scrolled near; on a wider screen the browser still fetches the lazy ones in
+ * view right after layout.
+ */
+export const EAGER_POSTER_COUNT = 6;
+
+/**
  * The movies on `fresh`, in the order `ordered` (ids) listed them. A poster
  * grid the visitor already sees then only loses films that have ended rather
  * than reshuffling; films it did not list follow in their own order.

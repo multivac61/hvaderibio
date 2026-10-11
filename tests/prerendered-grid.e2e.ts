@@ -1,4 +1,4 @@
-import { expect, test, type Browser, type Page } from "@playwright/test";
+import { devices, expect, test, type Browser, type Page } from "@playwright/test";
 
 // The home page arrives with today's posters already in it, ordered by the
 // build's clock (pinned to FIXTURE_MORNING in playwright.config.ts), so the
@@ -33,6 +33,32 @@ test.describe("before the app starts", () => {
     await expect(posters.nth(4)).toHaveAttribute("fetchpriority", "auto");
   });
 });
+
+// Posters on the first screen load with the page; the rest wait until
+// scrolled near, so they do not compete with the ones on screen. One cutoff
+// serves every grid width, so check it at both ends.
+for (const [screen, device] of [
+  ["phone", devices["iPhone 15"]],
+  ["desktop", devices["Desktop Safari"]],
+] as const) {
+  test(`${screen}: posters on the first screen load eagerly, the rest lazily`, async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ ...device, baseURL, javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto("/");
+    const posters = await page
+      .locator("a[data-movie-id] img")
+      .evaluateAll((imgs) => imgs.map((img) => ({ loading: img.getAttribute("loading"), top: img.getBoundingClientRect().top })));
+    await context.close();
+
+    const on_screen = posters.filter(({ top }) => top < device.viewport.height);
+    const below = posters.filter(({ top }) => top >= 2 * device.viewport.height);
+    expect(on_screen.length).toBeGreaterThan(0);
+    expect(on_screen.map(({ loading }) => loading)).toEqual(on_screen.map(() => "eager"));
+    // Two screens down nothing should be fetched up front.
+    expect(below.length).toBeGreaterThan(0);
+    expect(below.map(({ loading }) => loading)).toEqual(below.map(() => "lazy"));
+  });
+}
 
 test("posters stay put when the app starts at the build's time", async ({ page, browser }) => {
   const prerendered = await prerendered_titles(browser);

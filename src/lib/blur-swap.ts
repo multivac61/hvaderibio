@@ -1,3 +1,5 @@
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const sharp = { filter: "blur(0px)", opacity: 1 };
 const hidden = { filter: "blur(48px)", opacity: 0 };
 
@@ -15,9 +17,10 @@ export async function blur_swap(element: HTMLElement, swap: () => Promise<void>)
   await out.finished;
   await swap();
   // Give the screen a few frames to catch up with the finished blur, and let
-  // posters new to the grid decode so none pops in after it sharpens.
-  const decoded = [...element.querySelectorAll("img")].map((img) => img.decode().catch(() => {}));
-  await Promise.all([...decoded, new Promise((resolve) => setTimeout(resolve, 90))]);
+  // posters new to the grid decode so none pops in after it sharpens. Lazy
+  // posters off screen never load, so stop waiting after a moment.
+  const decoded = Promise.all([...element.querySelectorAll("img")].map((img) => img.decode().catch(() => {})));
+  await Promise.all([Promise.race([decoded, sleep(300)]), sleep(90)]);
   await new Promise((resolve) => requestAnimationFrame(resolve));
   const back = element.animate([hidden, { filter: "blur(24px)", opacity: 0.5, offset: 0.45 }, sharp], {
     duration: 420,
