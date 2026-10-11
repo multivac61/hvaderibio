@@ -1,3 +1,9 @@
+<script lang="ts" module>
+  // Only the first page load shows the prerendered grid; coming back to the
+  // page later renders in the browser, which already knows the time.
+  let hydrated = false;
+</script>
+
 <script lang="ts">
   import { blur_swap } from "#lib/blur-swap.js";
   import { get_programme_movies, keep_order } from "#lib/programme.js";
@@ -20,10 +26,13 @@
   // with exactly that. Once mounted the browser's clock takes over, but the
   // posters keep the build's order: films that have ended since only drop
   // out, and that happens behind a blur so no poster is seen jumping.
-  let now = $state<Date | null>(null);
+  const hydrating = !hydrated;
+  let now = $state<Date | null>(hydrating ? null : new Date());
   let held: typeof prerendered | null = $state(null);
 
   onMount(() => {
+    hydrated = true;
+    if (!hydrating) return;
     const at = new Date();
     const ids = (list: readonly { id: number }[]) => list.map(({ id }) => id).join();
     if (!grid || prefersReducedMotion.current || ids(programme_at(at)) === ids(prerendered)) {
