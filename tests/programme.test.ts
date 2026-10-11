@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { get_movie_programme, get_programme_movies, lead_posters, to_programme_entry } from "../src/lib/programme";
+import { get_movie_programme, get_programme_movies, keep_order, to_programme_entry } from "../src/lib/programme";
 import { movie_schema, type Showtime } from "../src/lib/schemas";
 
 const showtime = (time: string, purchase_url: string): Showtime => ({
@@ -54,20 +54,33 @@ describe("programme", () => {
     expect(get_programme_movies(entries, "0", ["Cinema"], evening).map(({ id }) => id)).toEqual([2, 1]);
   });
 
-  test("names the posters that lead today's grid, in grid order", () => {
-    // Movie n has n showings tonight, so the grid runs 6, 5, 4, ...
-    const movies = [1, 2, 3, 4, 5, 6].map((n) =>
-      movie(
-        n,
-        Object.fromEntries([
-          ["0", Array.from({ length: n }, (_, i) => showtime(`2026-09-03T20:${10 + i}:00.000Z`, `https://example.com/${n}-${i}`))],
-        ])
-      )
-    );
+  test("keeps the prerendered order, only dropping films that have ended", () => {
+    // Built at noon, 3 leads with three showings left. By the evening its
+    // matinées and all of 4's are over: a fresh sort would move every poster,
+    // while keeping the order only removes 4 from the end.
+    const at = (hh: number, n: number) => showtime(`2026-09-03T${hh}:00:00.000Z`, `https://example.com/${n}-${hh}`);
+    const movies = [
+      movie(1, { "0": [at(20, 1)] }),
+      movie(2, { "0": [at(19, 2), at(21, 2)] }),
+      movie(3, { "0": [at(13, 3), at(14, 3), at(22, 3)] }),
+      movie(4, { "0": [at(13, 4)] }),
+    ];
     const entries = movies.map((m) => to_programme_entry(m, movies));
+    const noon = new Date("2026-09-03T12:00:00.000Z");
+    const later = new Date("2026-09-03T18:00:00.000Z");
 
-    expect(lead_posters(entries, ["Cinema"], evening)).toEqual([6, 5, 4, 3]);
-    expect(lead_posters(entries, ["Elsewhere"], evening)).toEqual([]);
+    const built = get_programme_movies(entries, "0", ["Cinema"], noon).map(({ id }) => id);
+    expect(built).toEqual([3, 2, 1, 4]);
+    // A fresh sort would reshuffle to [2, 1, 3]; 4 has ended.
+    expect(get_programme_movies(entries, "0", ["Cinema"], later).map(({ id }) => id)).toEqual([2, 1, 3]);
+    expect(keep_order(built, get_programme_movies(entries, "0", ["Cinema"], later)).map(({ id }) => id)).toEqual([3, 2, 1]);
+  });
+
+  test("appends films the prerendered grid did not list, in their own order", () => {
+    // Past midnight "today" is a new day: none of the built grid is left.
+    const movies = [movie(1, { "0": [] }), movie(5, { "0": [] })];
+    const fresh = movies.map((m) => to_programme_entry(m, movies));
+    expect(keep_order([9, 1], fresh).map(({ id }) => id)).toEqual([1, 5]);
   });
 
   test("reduces a movie to what the programme grid needs", () => {

@@ -69,10 +69,13 @@ export const get_movie_programme = (movie: Movie, selectedDay: string, selectedC
 export const LEAD_POSTER_COUNT = 4;
 
 /**
- * Ids of the posters that lead today's grid, so the prerendered page can
- * start fetching them before the grid itself renders in the browser.
+ * The movies on `fresh`, in the order `ordered` (ids) listed them. A poster
+ * grid the visitor already sees then only loses films that have ended rather
+ * than reshuffling; films it did not list follow in their own order.
  */
-export const lead_posters = (entries: readonly ProgrammeEntry[], selectedCinemas: readonly string[], now: Date): number[] =>
-  get_programme_movies(entries, "0", selectedCinemas, now)
-    .slice(0, LEAD_POSTER_COUNT)
-    .map(({ id }) => id);
+export const keep_order = <T extends Pick<ProgrammeEntry, "id">>(ordered: readonly number[], fresh: readonly T[]): T[] => {
+  const by_id = new Map(fresh.map((entry) => [entry.id, entry]));
+  const kept = ordered.flatMap((id) => by_id.get(id) ?? []);
+  const kept_ids = new Set(kept.map(({ id }) => id));
+  return [...kept, ...fresh.filter(({ id }) => !kept_ids.has(id))];
+};

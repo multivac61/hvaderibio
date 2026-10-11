@@ -15,5 +15,8 @@ export default defineConfig({
     url: "http://localhost:4173",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    // The prerendered home page lists the programme as of the build; match
+    // the fixture's day so it has posters to list.
+    env: { PRERENDER_TIME: "2026-10-03T09:00:00Z" },
   },
 });
