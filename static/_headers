@@ -8,10 +8,3 @@
 /_app/immutable/*
   ! Cache-Control
   Cache-Control: public, immutable, max-age=31536000
-
-# Pages turns the page's modulepreload links into a Link header, which on
-# the custom domain becomes Early Hints: a dozen script downloads start
-# before the HTML arrives and compete with it and the first poster. The site
-# is static and answers at once, so there is no server wait to fill.
-/*
-  ! Link
