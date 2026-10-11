@@ -62,11 +62,13 @@
 </a>
 
 <style>
+  /* Quick to respond, then a soft landing: most of the zoom happens in the
+     first few frames. */
   .movie-poster-image {
     transition:
-      transform 300ms ease-out,
-      filter 300ms ease-out,
-      box-shadow 300ms ease-out;
+      transform 150ms cubic-bezier(0.2, 0, 0, 1),
+      filter 150ms cubic-bezier(0.2, 0, 0, 1),
+      box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   /* Keyboard focus gets the hover zoom, with the ring drawn on the image so
