@@ -1,26 +1,41 @@
 <script lang="ts">
-  import { get_programme_movies } from "#lib/programme.js";
-  import { get_cinemas_for_choice, selection } from "#lib/selection.svelte.js";
+  import { blur_swap } from "#lib/blur-swap.js";
+  import { get_programme_movies, keep_order } from "#lib/programme.js";
+  import { DEFAULT_CINEMA_CHOICE, get_cinemas_for_choice, selection } from "#lib/selection.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import FloatingControls from "#lib/FloatingControls.svelte";
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import { count_label } from "#lib/accessible-labels.js";
-  import { POSTER_SIZES, poster_srcset } from "#lib/poster-image.js";
+  import { prefersReducedMotion } from "svelte/motion";
   import { fade } from "svelte/transition";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import { afterNavigate } from "$app/navigation";
 
   const { data } = $props();
   const movies = $derived(data.movies);
   const cinema_options = $derived(data.cinema_options);
 
-  // Do not render the time-sensitive grid until the browser knows the current
-  // time. This prevents Safari from hydrating stale poster ordering.
+  // The page is prerendered with the grid as of the hourly build, and hydrates
+  // with exactly that. Once mounted the browser's clock takes over, but the
+  // posters keep the build's order: films that have ended since only drop
+  // out, and that happens behind a blur so no poster is seen jumping.
   let now = $state<Date | null>(null);
+  let held: typeof prerendered | null = $state(null);
 
   onMount(() => {
-    now = new Date();
+    const at = new Date();
+    const ids = (list: readonly { id: number }[]) => list.map(({ id }) => id).join();
+    if (!grid || prefersReducedMotion.current || ids(programme_at(at)) === ids(prerendered)) {
+      now = at;
+      return;
+    }
+    held = prerendered;
+    now = at;
+    void blur_swap(grid, async () => {
+      held = null;
+      await tick();
+    });
   });
 
   // Keyboard focus starts at the poster grid, so the first Tab lands on the
@@ -43,7 +58,7 @@
   });
 
   $effect(() => {
-    // The grid renders after mount, so wait for it before focusing.
+    // The grid is missing while nothing is showing, so wait for it.
     if (!focus_request || !grid) return;
     const { poster } = focus_request;
     const target = poster ? grid.querySelector<HTMLElement>(`a[data-movie-id="${CSS.escape(poster)}"]`) : null;
@@ -53,7 +68,16 @@
 
   const selected_cinemas = $derived(get_cinemas_for_choice(selection.cinema, cinema_options));
 
-  const filtered_cinemas_showtimes = $derived(now ? get_programme_movies(movies, selection.day, selected_cinemas, now) : []);
+  const prerendered = $derived(data.prerendered.flatMap((id) => movies.find((movie) => movie.id === id) ?? []));
+  // The selection the page was prerendered for.
+  const is_prerendered_choice = $derived(selection.day === "0" && selection.cinema === DEFAULT_CINEMA_CHOICE);
+
+  const programme_at = (at: Date) => {
+    const fresh = get_programme_movies(movies, selection.day, selected_cinemas, at);
+    return is_prerendered_choice ? keep_order(data.prerendered, fresh) : fresh;
+  };
+
+  const filtered_cinemas_showtimes = $derived(held && is_prerendered_choice ? held : now ? programme_at(now) : prerendered);
 </script>
 
 <PageMeta
@@ -62,9 +86,6 @@
   path="/" />
 
 <svelte:head>
-  {#each data.lead_posters as id (id)}
-    <link rel="preload" as="image" type="image/webp" imagesrcset={poster_srcset(id)} imagesizes={POSTER_SIZES} fetchpriority="high" />
-  {/each}
   <!-- Space Grotesk only sets the desktop heading, subset to its glyphs and
        served from this site: Google's stylesheet blocked the first paint on
        a separate connection. Preloaded where the heading shows. -->
@@ -99,25 +120,23 @@
         : "Engar sýningar fundust"}{/if}
   </p>
 
-  {#if now}
-    {#key `${selection.day}-${selection.cinema}`}
-      {#if filtered_cinemas_showtimes.length === 0}
-        <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
-          <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
-          <p class="mt-1 text-sm text-neutral-400">Prófaðu að velja annan dag eða kvikmyndahús</p>
-        </div>
-      {:else}
-        <div
-          bind:this={grid}
-          tabindex="-1"
-          class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(13rem,100%),2fr))] sm:gap-6 sm:pt-2 lg:grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),2fr))] xl:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))]">
-          {#each filtered_cinemas_showtimes as movie, index (movie.id)}
-            <MoviePosterCard {movie} {index} />
-          {/each}
-        </div>
-      {/if}
-    {/key}
-  {/if}
+  {#key `${selection.day}-${selection.cinema}`}
+    {#if filtered_cinemas_showtimes.length === 0}
+      <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
+        <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
+        <p class="mt-1 text-sm text-neutral-400">Prófaðu að velja annan dag eða kvikmyndahús</p>
+      </div>
+    {:else}
+      <div
+        bind:this={grid}
+        tabindex="-1"
+        class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(13rem,100%),2fr))] sm:gap-6 sm:pt-2 lg:grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),2fr))] xl:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))]">
+        {#each filtered_cinemas_showtimes as movie, index (movie.id)}
+          <MoviePosterCard {movie} {index} />
+        {/each}
+      </div>
+    {/if}
+  {/key}
 </div>
 
 <style>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { CinemaOption } from "#lib/cinemas.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
-  import { fade } from "svelte/transition";
+  import { onMount } from "svelte";
 
   type Props = {
     cinemaOptions: readonly CinemaOption[];
@@ -20,8 +20,18 @@
   // It is fixed rather than sticky: a sticky bar cannot leave its parent, so
   // while the posters waited for the clock, or a choice left nothing to list,
   // it sat near the top of a short page and then dropped to the bottom.
-  let hidden = $state(false);
+  //
+  // The page is prerendered with the bar hidden, and once the app runs it
+  // fades in the way it returns on scrolling up. Without scripts it shows
+  // from the start.
+  let hidden = $state(true);
   let bar: HTMLElement | undefined = $state();
+
+  onMount(() => {
+    // A frame first, so the hidden state is painted and the change fades.
+    const frame = requestAnimationFrame(() => (hidden = false));
+    return () => cancelAnimationFrame(frame);
+  });
 
   $effect(() => {
     let last = scrollY;
@@ -37,9 +47,22 @@
   });
 </script>
 
-<div in:fade={{ duration: 220 }} class="fixed inset-x-0 top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
+<svelte:head>
+  <noscript>
+    <style>
+      [data-floating-bar] {
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+    </style>
+  </noscript>
+</svelte:head>
+
+<div class="fixed inset-x-0 top-[calc(100dvh-5.5rem)] z-40 h-0 sm:hidden">
   <div
     bind:this={bar}
+    data-floating-bar
     onfocusin={() => (hidden = false)}
     class="flex w-full justify-center px-4 pb-3 transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none {hidden
       ? 'pointer-events-none invisible opacity-0'

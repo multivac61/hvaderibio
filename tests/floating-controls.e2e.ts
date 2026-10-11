@@ -67,3 +67,24 @@ test("home page keeps the bar at the bottom when nothing is showing", async ({ p
   await expect(page.getByText("Prófaðu að velja annan dag")).toBeVisible();
   await expect_bar_at_bottom(page, "#select-cinemas");
 });
+
+test("home page fades the bar in once the app starts, as scrolling up does", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  // Record the bar's opacity every frame from the first paint.
+  await page.addInitScript(() => {
+    const seen: number[] = [];
+    Object.assign(window, { bar_opacity: seen });
+    const sample = () => {
+      const bar = document.querySelector("#select-cinemas")?.closest("[data-floating-bar]");
+      if (bar) seen.push(Number(getComputedStyle(bar).opacity));
+      if (seen.length < 120) requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  });
+  await page.goto("/");
+  await expect.poll(() => page.evaluate(() => (window as unknown as { bar_opacity: number[] }).bar_opacity.at(-1))).toBe(1);
+  const seen = await page.evaluate(() => (window as unknown as { bar_opacity: number[] }).bar_opacity);
+  expect(seen[0]).toBe(0);
+  // Faded, not switched on: some frames fall in between.
+  expect(seen.some((opacity) => opacity > 0 && opacity < 1)).toBe(true);
+});

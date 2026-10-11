@@ -65,14 +65,29 @@ export const get_movie_programme = (movie: Movie, selectedDay: string, selectedC
     .map(([cinema, showtimes]) => ({ cinema, showtimes: get_visible_showtimes(showtimes, selectedDay, now) }))
     .filter(({ showtimes }) => showtimes.length > 0);
 
-/** How many posters lead the grid with high fetch priority. */
-export const LEAD_POSTER_COUNT = 4;
+/**
+ * How many posters lead the grid with high fetch priority. Only the first
+ * counts as the largest paint, since a poster of the same size painted later
+ * does not replace it, so the others give way to it.
+ */
+export const LEAD_POSTER_COUNT = 1;
 
 /**
- * Ids of the posters that lead today's grid, so the prerendered page can
- * start fetching them before the grid itself renders in the browser.
+ * How many posters load with the page: a phone's first screen (three rows of
+ * two) and the first two rows of a laptop's grid. The rest wait until
+ * scrolled near; on a wider screen the browser still fetches the lazy ones in
+ * view right after layout.
  */
-export const lead_posters = (entries: readonly ProgrammeEntry[], selectedCinemas: readonly string[], now: Date): number[] =>
-  get_programme_movies(entries, "0", selectedCinemas, now)
-    .slice(0, LEAD_POSTER_COUNT)
-    .map(({ id }) => id);
+export const EAGER_POSTER_COUNT = 6;
+
+/**
+ * The movies on `fresh`, in the order `ordered` (ids) listed them. A poster
+ * grid the visitor already sees then only loses films that have ended rather
+ * than reshuffling; films it did not list follow in their own order.
+ */
+export const keep_order = <T extends Pick<ProgrammeEntry, "id">>(ordered: readonly number[], fresh: readonly T[]): T[] => {
+  const by_id = new Map(fresh.map((entry) => [entry.id, entry]));
+  const kept = ordered.flatMap((id) => by_id.get(id) ?? []);
+  const kept_ids = new Set(kept.map(({ id }) => id));
+  return [...kept, ...fresh.filter(({ id }) => !kept_ids.has(id))];
+};
