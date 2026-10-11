@@ -29,8 +29,9 @@ test.describe("before the app starts", () => {
     await page.goto("/");
     const posters = page.locator("a[data-movie-id] img");
     await expect(posters).toHaveCount(12);
+    // The first poster is the largest paint; the rest give way to it.
     await expect(posters.first()).toHaveAttribute("fetchpriority", "high");
-    await expect(posters.nth(4)).toHaveAttribute("fetchpriority", "auto");
+    await expect(posters.nth(1)).toHaveAttribute("fetchpriority", "low");
   });
 });
 

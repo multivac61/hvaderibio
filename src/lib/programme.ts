@@ -65,8 +65,12 @@ export const get_movie_programme = (movie: Movie, selectedDay: string, selectedC
     .map(([cinema, showtimes]) => ({ cinema, showtimes: get_visible_showtimes(showtimes, selectedDay, now) }))
     .filter(({ showtimes }) => showtimes.length > 0);
 
-/** How many posters lead the grid with high fetch priority. */
-export const LEAD_POSTER_COUNT = 4;
+/**
+ * How many posters lead the grid with high fetch priority. Only the first
+ * counts as the largest paint, since a poster of the same size painted later
+ * does not replace it, so the others give way to it.
+ */
+export const LEAD_POSTER_COUNT = 1;
 
 /**
  * How many posters load with the page: a phone's first screen (three rows of

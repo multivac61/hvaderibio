@@ -51,7 +51,7 @@
     <img
       src="/{movie.id}.webp"
       alt={movie.title}
-      fetchpriority={index < LEAD_POSTER_COUNT ? "high" : "auto"}
+      fetchpriority={index < LEAD_POSTER_COUNT ? "high" : "low"}
       loading={index < EAGER_POSTER_COUNT ? "eager" : "lazy"}
       decoding="async"
       width="720"
