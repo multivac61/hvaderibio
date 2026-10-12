@@ -52,6 +52,10 @@ for (const viewport of [
     const page = await context.newPage();
     await page.route("https://www.youtube.com/**", (route) => route.fulfill({ body: "" }));
     await page.goto("/movie/verity/trailer");
+    // Fathom counts the visit with a 1×1 image appended to <body>, below
+    // <main>; whether it has arrived yet is up to the network. Add one now so
+    // the page is measured with it every time.
+    await page.evaluate(() => document.body.append(Object.assign(new Image(1, 1), { alt: "" })));
 
     const fit = await page.locator("iframe").evaluate((player) => {
       const content = (el: Element) => {
