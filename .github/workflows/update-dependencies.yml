@@ -66,6 +66,25 @@ jobs:
           GH_REPO: ${{ github.repository }}
           PR_BRANCH: ${{ steps.dependencies.outputs.pull-request-branch }}
 
+      # The pull_request run GitHub starts for a PR opened by this token waits
+      # for an approval nobody gives, then expires as a failure. The dispatched
+      # run above is the real check, so remove the stalled one.
+      - name: Remove the stalled pull_request check run
+        if: steps.dependencies.outputs.pull-request-number != ''
+        run: |
+          for _ in $(seq 12); do
+            stalled=$(gh run list --branch "$PR_BRANCH" --event pull_request --status action_required --json databaseId --jq '.[].databaseId')
+            if [ -n "$stalled" ]; then
+              for run in $stalled; do gh run delete "$run"; done
+              break
+            fi
+            sleep 5
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_BRANCH: ${{ steps.dependencies.outputs.pull-request-branch }}
+
       # GitHub's required checks on main decide when this PR may merge.
       - name: Enable auto-merge for dependency updates
         if: steps.dependencies.outputs.pull-request-number != ''

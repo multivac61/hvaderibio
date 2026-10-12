@@ -29,12 +29,14 @@ jobs:
       - run: npm run test:e2e
 
   # Dispatched checks can be absent from the PR's required-check rollup.
-  # Publish the actual test result on the same commit for branch protection.
+  # Publish the actual test result on the same commit for branch protection,
+  # covering the browser tests too: a dependency that breaks WebKit must not
+  # auto-merge.
   dependency-status:
     if: >-
       always() && github.event_name == 'workflow_dispatch' &&
       github.ref == 'refs/heads/automation/nightly-dependencies'
-    needs: check
+    needs: [check, browser-check]
     runs-on: ubuntu-latest
     permissions:
       statuses: write
@@ -50,6 +52,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           CHECK_SHA: ${{ github.sha }}
-          CHECK_RESULT: ${{ needs.check.result }}
-          CHECK_STATE: ${{ needs.check.result == 'success' && 'success' || 'failure' }}
+          CHECK_RESULT: nix ${{ needs.check.result }}, browser ${{ needs.browser-check.result }}
+          CHECK_STATE: ${{ needs.check.result == 'success' && needs.browser-check.result == 'success' && 'success' || 'failure' }}
           CHECK_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
