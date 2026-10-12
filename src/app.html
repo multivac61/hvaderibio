@@ -21,6 +21,13 @@
       ::-webkit-scrollbar {
         display: none;
       }
+      /* Fathom's 1×1 tracking image lands below <main>. Tucked into the
+         corner it cannot make a one-screen page scroll. */
+      body > img {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
     </style>
     <script src="https://cdn.usefathom.com/script.js" data-site="GFZYUASY" data-spa="auto" data-canonical="false" defer></script>
     %sveltekit.head%
