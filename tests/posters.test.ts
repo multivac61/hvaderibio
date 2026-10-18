@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { mkdtemp, readdir, rm, stat } from "fs/promises";
-import { tmpdir } from "os";
-import { join } from "path";
+import { mkdtemp, readdir, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import sharp from "sharp";
 import { refresh_posters } from "../src/lib/posters";
 import { serve, type TestServer } from "./serve";

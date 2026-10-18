@@ -1,5 +1,5 @@
-import { mkdir, readFile, writeFile } from "fs/promises";
-import { dirname } from "path";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 
 import { map_concurrent } from "#lib/concurrency.js";
 import { movie_details_schema, type MovieDetails } from "#lib/schemas.js";

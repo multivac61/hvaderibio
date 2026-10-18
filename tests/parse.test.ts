@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { readFileSync } from "fs";
-import { join } from "path";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { parseHTML } from "linkedom";
 import { assemble_movie, parse_movie_details, parse_movie_ids, type MovieDetails } from "../src/lib/parse";
 import type { Showtime } from "../src/lib/schemas";

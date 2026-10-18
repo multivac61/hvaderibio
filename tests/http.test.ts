@@ -1,5 +1,5 @@
 import { createServer, type AddressInfo } from "node:net";
-import { setTimeout as sleep } from "timers/promises";
+import { setTimeout as sleep } from "node:timers/promises";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { fetch_text } from "../src/lib/http";
 import { prefetch_imdb_ratings } from "../src/lib/parse";

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { readFileSync } from "fs";
-import { join } from "path";
-import { gunzipSync } from "zlib";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { gunzipSync } from "node:zlib";
 import { parse_external_urls, parse_letterboxd_score, parse_metacritic_scores, parse_rotten_tomatoes_scores } from "../src/lib/parse";
 
 // Full pages saved on 2026-10-02 for "Spider-Man: Brand New Day".

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { setTimeout as sleep } from "timers/promises";
+import { setTimeout as sleep } from "node:timers/promises";
 import { map_concurrent } from "../src/lib/concurrency";
 
 describe("map_concurrent", () => {
