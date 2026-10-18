@@ -7,6 +7,7 @@
   import MovieRatings from "#lib/MovieRatings.svelte";
   import CinemaShowtimeRow from "#lib/CinemaShowtimeRow.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
+  import PosterTilt, { poster_tilt } from "#lib/PosterTilt.svelte";
   import { afterNavigate } from "$app/navigation";
   import { resolve } from "$app/paths";
   import { is_keyboard_navigation } from "#lib/input-modality.js";
@@ -104,25 +105,32 @@
         {/if}
         <!-- Poster: always on desktop, on mobile only when there is no trailer.
              The blank source keeps hidden phones from downloading it. -->
-        <picture in:fade={{ duration: 260 }} class={youtube_id ? "hidden md:block" : "block"}>
-          {#if youtube_id}
-            <source media="(max-width: 767px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAACH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
-          {/if}
-          <source
-            type="image/webp"
-            srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w, /${movie.id}-1080w.webp 1080w`}
-            sizes="(min-width: 1280px) 480px, (min-width: 1024px) 400px, (min-width: 768px) 320px, 100vw" />
-          <img
-            src={`/${movie.id}.webp`}
-            alt=""
-            width="720"
-            height="1080"
-            fetchpriority="high"
-            loading="eager"
-            decoding="async"
-            style:view-transition-name="poster-{movie.id}"
-            class="w-full rounded-md shadow-2xl" />
-        </picture>
+        <div
+          in:fade={{ duration: 260 }}
+          {@attach poster_tilt}
+          class="poster-card relative rounded-md {youtube_id ? 'hidden md:block' : 'block'}">
+          <PosterTilt id={movie.id}>
+            <picture class="block">
+              {#if youtube_id}
+                <source media="(max-width: 767px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAACH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+              {/if}
+              <source
+                type="image/webp"
+                srcset={`/${movie.id}-360w.webp 360w, /${movie.id}.webp 720w, /${movie.id}-1080w.webp 1080w`}
+                sizes="(min-width: 1280px) 480px, (min-width: 1024px) 400px, (min-width: 768px) 320px, 100vw" />
+              <img
+                src={`/${movie.id}.webp`}
+                alt=""
+                width="720"
+                height="1080"
+                fetchpriority="high"
+                loading="eager"
+                decoding="async"
+                style:view-transition-name="poster-{movie.id}"
+                class="w-full rounded-md shadow-2xl" />
+            </picture>
+          </PosterTilt>
+        </div>
       </div>
 
       <!-- Content -->

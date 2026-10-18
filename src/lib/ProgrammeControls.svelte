@@ -4,6 +4,7 @@
   import CinemaSelect from "#lib/CinemaSelect.svelte";
   import CinemaTabs from "#lib/CinemaTabs.svelte";
   import DayPicker from "#lib/DayPicker.svelte";
+  import { with_view_transition } from "#lib/view-transition.js";
 
   type Props = {
     cinemaOptions: readonly CinemaOption[];
@@ -12,8 +13,10 @@
   };
 
   const { cinemaOptions, presentation, id }: Props = $props();
-  const select_cinema = (choice: string) => (selection.cinema = choice);
-  const select_day = (day: string) => (selection.day = day);
+  // The posters slide to their places in the new programme, rather than the
+  // whole grid being swapped in one frame.
+  const select_cinema = (choice: string) => with_view_transition(() => (selection.cinema = choice));
+  const select_day = (day: string) => with_view_transition(() => (selection.day = day));
 </script>
 
 {#if presentation === "tabs"}

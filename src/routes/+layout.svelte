@@ -2,19 +2,14 @@
   import "../app.css";
   import { onNavigate } from "$app/navigation";
   import { track_input_modality } from "#lib/input-modality.js";
+  import { can_view_transition } from "#lib/view-transition.js";
 
   let { children } = $props();
 
   $effect(track_input_modality);
 
-  // Detect mobile devices to disable view transitions (Safari butchers them)
-  const isMobile = () => {
-    if (typeof window === "undefined") return false;
-    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
-  };
-
   onNavigate((navigation) => {
-    if (!document.startViewTransition || isMobile()) return;
+    if (!can_view_transition()) return;
     return new Promise((resolve) => {
       document.startViewTransition(async () => {
         resolve();
