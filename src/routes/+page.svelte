@@ -10,6 +10,7 @@
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import FloatingControls from "#lib/FloatingControls.svelte";
   import MoviePosterCard from "#lib/MoviePosterCard.svelte";
+  import { poster_tilt } from "#lib/PosterTilt.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import { count_label } from "#lib/accessible-labels.js";
   import { fade } from "svelte/transition";
@@ -123,6 +124,7 @@
     {:else}
       <div
         bind:this={grid}
+        {@attach poster_tilt}
         tabindex="-1"
         class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(13rem,100%),2fr))] sm:gap-6 sm:pt-2 lg:grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),2fr))] xl:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))]">
         {#each filtered_cinemas_showtimes as movie, index (movie.id)}
