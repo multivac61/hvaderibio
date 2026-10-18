@@ -1,5 +1,5 @@
-import { createServer } from "http";
-import type { AddressInfo } from "net";
+import { createServer } from "node:http";
+import type { AddressInfo } from "node:net";
 
 export type TestServer = { url: URL; close: () => Promise<void> };
 

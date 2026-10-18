@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { readFileSync } from "fs";
-import { join } from "path";
-import { gunzipSync } from "zlib";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { gunzipSync } from "node:zlib";
 import { parseHTML } from "linkedom";
 import { parse_listings } from "../src/lib/parse";
 

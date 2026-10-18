@@ -1,9 +1,9 @@
 // Install the sample catalogue into static/ so the site builds and has posters
 // to scroll past without scraping. Replaces the local movies.json and posters;
 // meant for CI.
-import { copyFile, mkdir, mkdtemp, readFile } from "fs/promises";
-import { tmpdir } from "os";
-import { join } from "path";
+import { copyFile, mkdir, mkdtemp, readFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import sharp from "sharp";
 import { movies_schema } from "#lib/schemas.js";
 import { refresh_posters } from "#lib/posters.js";
