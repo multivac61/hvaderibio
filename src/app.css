@@ -1,13 +1,34 @@
 @import "tailwindcss";
 
+/* Tests hold selectors, not markup; scanned, they become bogus utilities
+   that break the parser SvelteKit runs over the inlined stylesheet. */
+@source not "../tests";
+
 @theme {
   --container-9xl: 128rem;
+}
+
+/* A still night sky behind every page, drawn by src/draw-stars.ts. It is the
+   page's own background rather than a fixed element: iOS Safari tints its
+   toolbar from fixed elements at the bottom edge. iOS also ignores the fixed
+   attachment, so there the stars scroll with the page. Unlayered, to win over
+   the plain black in app.html that shows until this stylesheet loads. */
+html {
+  background: #000 url("./lib/assets/stars.webp") 0 0 / 1600px repeat fixed;
+}
+
+/* Phones get a smaller tile: the large one takes about 40 MB once decoded. */
+@media (max-width: 767px) {
+  html {
+    background-image: url("./lib/assets/stars-small.webp");
+    background-size: 800px;
+  }
 }
 
 @layer base {
   html,
   body {
-    @apply h-full bg-black;
+    @apply h-full;
     scrollbar-width: none;
     /* Disable smooth scrolling on iOS for faster navigation */
     -webkit-overflow-scrolling: touch;
