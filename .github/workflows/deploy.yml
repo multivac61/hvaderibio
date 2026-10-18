@@ -61,8 +61,10 @@ jobs:
           nix build -L --impure --expr \
             "(builtins.getFlake \"git+file://$PWD\").packages.x86_64-linux.default.override { catalog = $PWD/static; }"
 
+      # Wrangler comes from nixpkgs rather than npm: with workerd it is most
+      # of node_modules, and only this step needs it.
       - name: 🚀 Deploy to Cloudflare Pages
-        run: nix develop -c npx wrangler pages deploy result --project-name=hvaderibio
+        run: nix run --inputs-from . nixpkgs#wrangler -- pages deploy result --project-name=hvaderibio
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
