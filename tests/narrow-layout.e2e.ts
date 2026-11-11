@@ -64,3 +64,12 @@ test.describe("768px tablet", () => {
     expect(tab_left).toBeGreaterThanOrEqual(strip_left);
   });
 });
+
+// The error page filled the screen inside <main>'s padding, so it was that
+// much taller than the screen and scrolled.
+test("the error page fits the screen", async ({ page }) => {
+  await page.goto("/movie/engin-slik-mynd");
+  await expect(page.getByRole("heading", { name: "404" })).toBeVisible();
+  const { content, screen } = await page.evaluate(() => ({ content: document.documentElement.scrollHeight, screen: innerHeight }));
+  expect(content).toBeLessThanOrEqual(screen);
+});

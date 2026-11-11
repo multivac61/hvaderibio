@@ -37,7 +37,9 @@
   <meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center bg-black text-neutral-100">
+<!-- One screen tall less <main>'s own padding (app.html), or the page would
+     scroll. No background of its own, so the stars show. -->
+<div class="flex min-h-[calc(100dvh-1.5rem)] items-center justify-center text-neutral-100 sm:min-h-[calc(100dvh-2rem)]">
   <div class="max-w-md px-4 text-center">
     <!-- Film reel -->
     <div class="mb-6 flex justify-center">
