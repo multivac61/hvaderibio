@@ -103,3 +103,32 @@ test("the error page fits the screen", async ({ page }) => {
   const { content, screen } = await page.evaluate(() => ({ content: document.documentElement.scrollHeight, screen: innerHeight }));
   expect(content).toBeLessThanOrEqual(screen);
 });
+
+// Small controls take a finger that lands a little outside them. Each must
+// answer a touch 4px below its drawn edge.
+test.describe("touch targets", () => {
+  const answers_below = (el: Element) => {
+    const box = el.getBoundingClientRect();
+    const under = document.elementFromPoint(box.left + box.width / 2, box.bottom + 4);
+    return under !== null && el.contains(under);
+  };
+
+  test("day buttons", async ({ page }) => {
+    await page.clock.setFixedTime(FIXTURE_MORNING);
+    await page.goto("/");
+    await expect(page.locator("[data-floating-bar]")).toHaveCSS("opacity", "1");
+    const days = page.locator("[data-floating-bar] button");
+    await expect(days).toHaveCount(4);
+    for (const day of await days.all()) expect(await day.evaluate(answers_below)).toBe(true);
+  });
+
+  test("showtimes and the way back", async ({ page }) => {
+    await page.clock.setFixedTime(FIXTURE_MORNING);
+    await page.goto("/movie/coyote-vs-acme");
+    expect(await page.getByRole("link", { name: "Til baka" }).evaluate(answers_below)).toBe(true);
+    const showtime = page.locator('a[aria-label*="Kaupa miða"]').first();
+    // Clear of the floating bar, which would take the touch itself.
+    await showtime.evaluate((el) => el.scrollIntoView({ block: "center" }));
+    expect(await showtime.evaluate(answers_below)).toBe(true);
+  });
+});
