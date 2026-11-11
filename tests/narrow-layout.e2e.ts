@@ -4,6 +4,9 @@ import { expect, test } from "@playwright/test";
 // tablet widths where the desktop header first shows, and fingers rather
 // than a mouse.
 const FIXTURE_MORNING = new Date("2026-10-03T09:00:00Z");
+// A Monday, so the picker carries its two longest labels, "miðvikudag" and
+// "fimmtudag".
+const FIXTURE_MONDAY = new Date("2026-10-05T09:00:00Z");
 
 test.describe("320px phone", () => {
   test.use({ viewport: { width: 320, height: 568 } });
@@ -18,5 +21,27 @@ test.describe("320px phone", () => {
     const [first, second] = await Promise.all([posters.nth(0).boundingBox(), posters.nth(1).boundingBox()]);
     expect(second!.y).toBe(first!.y);
     expect(second!.x).toBeGreaterThan(first!.x);
+  });
+
+  // The labels broke onto two lines, "á / morgun", doubling the bar's height.
+  test("day labels stay on one line, inside the screen", async ({ page }) => {
+    await page.clock.setFixedTime(FIXTURE_MONDAY);
+    await page.goto("/");
+    const days = page.locator("[data-floating-bar] button");
+    await expect(days.first()).toBeVisible();
+    const boxes = await days.evaluateAll((buttons) =>
+      buttons.map((button) => {
+        const range = document.createRange();
+        range.selectNodeContents(button);
+        const { left, right } = button.getBoundingClientRect();
+        return { lines: new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size, left, right };
+      })
+    );
+    expect(boxes).toHaveLength(4);
+    for (const { lines, left, right } of boxes) {
+      expect(lines).toBe(1);
+      expect(left).toBeGreaterThanOrEqual(0);
+      expect(right).toBeLessThanOrEqual(320);
+    }
   });
 });

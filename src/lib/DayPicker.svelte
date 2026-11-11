@@ -45,12 +45,14 @@
     style={slider_style}>
   </div>
   {#each days as day, i (day)}
+    <!-- One line each, with less padding where four labels would not fit
+         a 320px screen. -->
     <button
       bind:this={day_buttons[i]}
       type="button"
       aria-pressed={selectedDay === day}
       onclick={() => onSelect(day)}
-      class="relative z-10 rounded-full px-2.5 text-[13px] leading-4 font-medium transition-colors duration-200 {buttonSizeClass} {selectedDay ===
+      class="relative z-10 rounded-full px-2.5 text-[13px] leading-4 font-medium whitespace-nowrap transition-colors duration-200 max-[22.5rem]:px-1.5 {buttonSizeClass} {selectedDay ===
       day
         ? 'text-white'
         : 'text-neutral-400 hover:text-neutral-200'}">
