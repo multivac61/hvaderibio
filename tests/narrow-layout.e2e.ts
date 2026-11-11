@@ -63,6 +63,36 @@ test.describe("768px tablet", () => {
     });
     expect(tab_left).toBeGreaterThanOrEqual(strip_left);
   });
+
+  // A "·" separates the items of the movie page's meta row. Where the row
+  // wrapped, one was left at the end of a line, or at the start of the next.
+  for (const width of [768, 800, 844]) {
+    test(`${width}px: separators sit between items, never at a line's start or end`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 1024 });
+      await page.goto("/movie/coyote-vs-acme");
+      const row = page.locator("[data-meta-row]");
+      await expect(row).toBeVisible();
+      const items = await row.evaluate((row) => {
+        const shown = [...row.children].filter((child) => child.getClientRects().length > 0);
+        return shown.map((item) => {
+          const box = item.getBoundingClientRect();
+          const starts_line = !shown.some((other) => {
+            const b = other.getBoundingClientRect();
+            return b.right <= box.left && b.bottom > box.top && b.top < box.bottom;
+          });
+          // What is drawn in the middle of the gap to the item's left.
+          const in_gap = document.elementFromPoint(box.left - 10, box.top + box.height / 2);
+          return { text: item.textContent.trim(), starts_line, separated: in_gap !== null && item.contains(in_gap) };
+        });
+      });
+      expect(items.length).toBeGreaterThan(4);
+      expect(items.filter(({ starts_line }) => starts_line).length).toBeGreaterThan(1);
+      for (const { text, starts_line, separated } of items) {
+        expect(text).not.toBe("·");
+        expect(separated, text).toBe(!starts_line);
+      }
+    });
+  }
 });
 
 // The error page filled the screen inside <main>'s padding, so it was that
