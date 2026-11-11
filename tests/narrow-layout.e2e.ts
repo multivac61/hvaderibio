@@ -45,3 +45,22 @@ test.describe("320px phone", () => {
     }
   });
 });
+
+test.describe("768px tablet", () => {
+  test.use({ viewport: { width: 768, height: 1024 } });
+
+  // Centred in a row too narrow for them, the tabs overflowed both ways, and
+  // a scroller cannot reach what overflows to the left: "Allt" was cut off.
+  test("the first cinema tab can be reached", async ({ page }) => {
+    await page.clock.setFixedTime(FIXTURE_MORNING);
+    await page.goto("/");
+    const first_tab = page.getByRole("button", { name: "Allt", exact: true });
+    await expect(first_tab).toBeVisible();
+    const { tab_left, strip_left } = await first_tab.evaluate((tab) => {
+      const strip = tab.parentElement!;
+      strip.scrollLeft = 0;
+      return { tab_left: tab.getBoundingClientRect().left, strip_left: strip.getBoundingClientRect().left };
+    });
+    expect(tab_left).toBeGreaterThanOrEqual(strip_left);
+  });
+});
