@@ -39,18 +39,21 @@
 </script>
 
 <div
-  class="relative flex items-center overflow-hidden rounded-full border border-white/10 bg-neutral-950/65 p-0.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_22px_rgba(0,0,0,0.3)] backdrop-blur-xl {containerSizeClass}">
+  class="relative flex items-center rounded-full border border-white/10 bg-neutral-950/65 p-0.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_22px_rgba(0,0,0,0.3)] backdrop-blur-xl {containerSizeClass}">
   <div
     class="absolute h-[calc(100%-6px)] {pill_class} {slider_animated ? 'transition-all duration-300 ease-out' : ''}"
     style={slider_style}>
   </div>
   {#each days as day, i (day)}
+    <!-- One line each, with less padding where four labels would not fit
+         a 320px screen. The button answers touches 8px above and below what
+         it draws, so a finger need not land on a 26px strip. -->
     <button
       bind:this={day_buttons[i]}
       type="button"
       aria-pressed={selectedDay === day}
       onclick={() => onSelect(day)}
-      class="relative z-10 rounded-full px-2.5 text-[13px] leading-4 font-medium transition-colors duration-200 {buttonSizeClass} {selectedDay ===
+      class="relative z-10 rounded-full px-2.5 text-[13px] leading-4 font-medium whitespace-nowrap transition-colors duration-200 before:absolute before:inset-x-0 before:-inset-y-2 max-[22.5rem]:px-1.5 {buttonSizeClass} {selectedDay ===
       day
         ? 'text-white'
         : 'text-neutral-400 hover:text-neutral-200'}">

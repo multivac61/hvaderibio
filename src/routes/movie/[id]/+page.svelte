@@ -4,7 +4,7 @@
   import { get_cinemas_for_choice, selection } from "#lib/selection.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
   import FloatingControls from "#lib/FloatingControls.svelte";
-  import MovieRatings from "#lib/MovieRatings.svelte";
+  import MovieRatings, { META_SEPARATOR } from "#lib/MovieRatings.svelte";
   import CinemaShowtimeRow from "#lib/CinemaShowtimeRow.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import PosterTilt, { poster_tilt } from "#lib/PosterTilt.svelte";
@@ -67,7 +67,7 @@
       href={resolve("/")}
       onclick={goBack}
       onkeydown={open_on_space}
-      class="-mx-2 mb-3 inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-400 transition-colors hover:text-white md:mb-5">
+      class="relative -mx-2 mb-3 inline-flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-400 transition-colors before:absolute before:-inset-2 hover:text-white md:mb-5">
       <svg aria-hidden="true" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
@@ -138,14 +138,15 @@
         <div>
           <h1 class="text-2xl font-bold text-balance text-white md:text-3xl">{movie.title}</h1>
 
-          <!-- Meta info: year, duration, genres + ratings on desktop -->
-          <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-400">
+          <!-- Meta info: year, duration, genres + ratings on desktop. Each
+               item after the first draws a "·" in the gap to its left. Where
+               the row wraps, that falls outside the row and is clipped, so no
+               line starts or ends with a separator. -->
+          <div data-meta-row class="mt-1 -ml-1 flex flex-wrap items-center gap-x-5 gap-y-1 overflow-x-clip pl-1 text-sm text-neutral-400">
             <span>{movie.release_year}</span>
-            <span>·</span>
-            <span>{movie.duration_in_mins} mín</span>
+            <span class={META_SEPARATOR}>{movie.duration_in_mins} mín</span>
             {#if movie.genres.length > 0}
-              <span>·</span>
-              <span>{movie.genres.slice(0, 2).join(", ")}</span>
+              <span class={META_SEPARATOR}>{movie.genres.slice(0, 2).join(", ")}</span>
             {/if}
             <!-- eslint-disable svelte/no-navigation-without-resolve -->
             <MovieRatings {movie} desktop />

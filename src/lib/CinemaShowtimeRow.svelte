@@ -32,7 +32,8 @@
     {/if}
   </div>
 
-  <!-- Format badges poke 6px above each time; leave room when rows wrap. -->
+  <!-- Format badges poke 6px above each time; leave room when rows wrap.
+       Each time answers touches a little beyond its 32px box, within the gaps. -->
   <div class="flex flex-wrap gap-x-2 gap-y-3.5">
     {#each showtimes as showtime, i (`${showtime.time}-${i}`)}
       <a
@@ -40,7 +41,7 @@
         target="_blank"
         rel="external noopener noreferrer"
         aria-label={showtime_label(showtime)}
-        class="group/time relative inline-flex items-center rounded bg-neutral-800 px-2 py-1.5 text-sm text-neutral-400 tabular-nums transition-[background-color,color,transform] duration-150 ease-out hover:bg-neutral-700 hover:text-white active:scale-95">
+        class="group/time relative inline-flex items-center rounded bg-neutral-800 px-2 py-1.5 text-sm text-neutral-400 tabular-nums transition-[background-color,color,transform] duration-150 ease-out before:absolute before:-inset-x-1 before:-inset-y-1.5 hover:bg-neutral-700 hover:text-white active:scale-95">
         <ShowtimeBadges {showtime} />
         <span>{reykjavik_time(showtime.time)}</span>
         <span
