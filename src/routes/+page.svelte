@@ -122,11 +122,13 @@
         <p class="mt-1 text-sm text-neutral-400">Prófaðu að velja annan dag eða kvikmyndahús</p>
       </div>
     {:else}
+      <!-- 8.5rem keeps two posters to a row down to a 320px screen, and a
+           third from squeezing in on the widest phones (440px). -->
       <div
         bind:this={grid}
         {@attach poster_tilt}
         tabindex="-1"
-        class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(9rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(13rem,100%),2fr))] sm:gap-6 sm:pt-2 lg:grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),2fr))] xl:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))]">
+        class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(8.5rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(13rem,100%),2fr))] sm:gap-6 sm:pt-2 lg:grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),2fr))] xl:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))]">
         {#each filtered_cinemas_showtimes as movie, index (movie.id)}
           <MoviePosterCard {movie} {index} />
         {/each}
