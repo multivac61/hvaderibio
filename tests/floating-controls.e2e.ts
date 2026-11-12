@@ -70,14 +70,16 @@ test("home page keeps the bar at the bottom when nothing is showing", async ({ p
 
 test("home page fades the bar in once the app starts, as scrolling up does", async ({ page }) => {
   await page.clock.setFixedTime(FIXTURE_MORNING);
-  // Record the bar's opacity every frame from the first paint.
+  // Record the bar's opacity every frame from the first paint until the fade
+  // ends. A fixed frame budget ran out mid-fade when a slow runner started
+  // the app late, leaving the last sample short of 1 for good.
   await page.addInitScript(() => {
     const seen: number[] = [];
     Object.assign(window, { bar_opacity: seen });
     const sample = () => {
       const bar = document.querySelector("#select-cinemas")?.closest("[data-floating-bar]");
       if (bar) seen.push(Number(getComputedStyle(bar).opacity));
-      if (seen.length < 120) requestAnimationFrame(sample);
+      if (seen.at(-1) !== 1 && performance.now() < 20_000) requestAnimationFrame(sample);
     };
     requestAnimationFrame(sample);
   });
