@@ -392,6 +392,29 @@ test("phone: posters moved up by a new choice still show", async ({ page }) => {
   for (const image of await images.all()) await expect(image).toHaveCSS("opacity", "1");
 });
 
+// A double tap on the pill, or a second tap a moment late, must not land
+// on whatever row of the sheet is rising under the finger: it picked a
+// cinema (and closed the sheet) without the visitor seeing the choice.
+for (const gap of [80, 150, 300]) {
+  test(`phone: a second tap ${gap}ms after opening the sheet chooses nothing`, async ({ page }) => {
+    await page.clock.setFixedTime(FIXTURE_MORNING);
+    await page.goto("/");
+    await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+    const pill = page.locator("#select-cinemas");
+    await expect(pill).toHaveCSS("opacity", "1");
+    const box = (await pill.boundingBox())!;
+    const before = await pill.textContent();
+    await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+    await page.waitForTimeout(gap);
+    await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+    await page.waitForTimeout(600);
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    expect(await pill.textContent()).toBe(before);
+  });
+}
+
 // Let go past the point of closing, the sheet sets off down at once, in the
 // same task as the release: it used to wait two frames for the dialog's
 // ending style, standing still, and then leap. (Checked by what the release

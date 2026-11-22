@@ -172,9 +172,20 @@
     }
   };
 
+  // Until it has finished rising, the sheet takes no taps: a double tap on
+  // the pill, or a second tap a moment late, landed on whichever row was
+  // passing under the finger and chose it unseen. Keyboard presses, which
+  // click with no pointer (detail 0), still go through.
+  let risen = $state(false);
+
   // A drag that started on a button must not also press it. (A mouse sends
   // that click; a finger does not, so the next press clears it.)
   const on_click_capture = (event: MouseEvent) => {
+    if (!risen && event.detail > 0) {
+      event.stopPropagation();
+      event.preventDefault();
+      return;
+    }
     if (!suppress_click) return;
     suppress_click = false;
     event.stopPropagation();
@@ -182,7 +193,7 @@
   };
 </script>
 
-<Dialog.Root bind:open>
+<Dialog.Root bind:open onOpenChangeComplete={(now_open) => (risen = now_open)}>
   <Dialog.Trigger id={triggerId} class={triggerClass}>{@render trigger()}</Dialog.Trigger>
   <Dialog.Portal>
     <Dialog.Overlay
