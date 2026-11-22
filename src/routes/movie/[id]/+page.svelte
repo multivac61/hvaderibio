@@ -14,6 +14,7 @@
   import { open_on_space } from "#lib/open-on-space.js";
   import { count_label } from "#lib/accessible-labels.js";
   import { reveal_on_load } from "#lib/motion.js";
+  import { onMount } from "svelte";
 
   const { data } = $props();
   const movie = $derived(data.movie);
@@ -22,7 +23,14 @@
   // Extract YouTube video ID from trailer URL
   const youtube_id = $derived(get_youtube_id(movie.trailer_url));
 
-  const now = new Date();
+  // Hydrate with the build's clock so SSR and client match, then switch to
+  // the browser's clock on mount and on subsequent movie-to-movie navigations.
+  let now = $state<Date | null>(null);
+  const effective_now = $derived(now ?? new Date(data.built_at));
+
+  onMount(() => {
+    now = new Date();
+  });
 
   const selected_cinemas = $derived(get_cinemas_for_choice(selection.cinema, cinema_options));
 
@@ -31,6 +39,7 @@
   let came_from_site = $state(false);
   let back_link: HTMLAnchorElement | undefined = $state();
   afterNavigate(({ from }) => {
+    now = new Date();
     came_from_site = from !== null;
     // SvelteKit moves focus to <body> after navigating. Keyboard visitors
     // land on "Til baka" instead, so Enter returns them to their poster.
@@ -43,7 +52,7 @@
     history.back();
   };
 
-  const visible_showtimes = $derived(get_movie_programme(movie, selection.day, selected_cinemas, now));
+  const visible_showtimes = $derived(get_movie_programme(movie, selection.day, selected_cinemas, effective_now));
 </script>
 
 <PageMeta

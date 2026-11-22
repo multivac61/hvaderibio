@@ -19,11 +19,13 @@ export const load: PageServerLoad = async ({ params }) => {
   }
 
   const cinema_options = get_cinema_options(movies);
+  const built_at = process.env.PRERENDER_TIME ? new Date(process.env.PRERENDER_TIME) : new Date();
 
   return {
     movie,
     // Numeric and slug URLs both resolve; search engines should index the slug.
     path: movie_path_segment(movie, movies),
     cinema_options,
+    built_at: built_at.toISOString(),
   };
 };

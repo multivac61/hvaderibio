@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from "$app/paths";
   import { page } from "$app/state";
 
   const status = $derived(page.status);
@@ -37,17 +38,16 @@
     </div>
     <h1 class="mb-4 text-6xl font-bold text-neutral-400">{status}</h1>
     <h2 class="mb-8 text-2xl font-bold">{title}</h2>
-    <button
-      type="button"
-      onclick={() => (window.location.href = "/")}
+    <a
+      href={resolve("/")}
       class="group relative inline-flex items-center gap-2 rounded-md bg-linear-to-br from-neutral-800 to-neutral-900 px-4 py-2 text-base text-neutral-300 transition-[color,background-color,scale] duration-150 ease-out hover:bg-neutral-700 hover:text-white active:scale-[0.97]">
       <span
         class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity duration-200 group-hover:opacity-10"
       ></span>
-      <svg class="relative h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg aria-hidden="true" class="relative h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
       </svg>
       <span class="relative">Til baka á forsíðu</span>
-    </button>
+    </a>
   </div>
 </div>

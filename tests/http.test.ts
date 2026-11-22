@@ -56,6 +56,20 @@ describe("fetch_text", () => {
     await sleep(10);
     expect(attempts.get("/missing")).toBe(1);
   });
+
+  test("aborts stalled requests after timeout_ms and retries", async () => {
+    let requests = 0;
+    const stalled = await serve(async () => {
+      if (++requests === 1) await sleep(500);
+      return new Response("<html>ok</html>");
+    });
+    try {
+      expect(await fetch_text(stalled.url.href, undefined, { retry_delay_ms: 1, timeout_ms: 50 })).toBe("<html>ok</html>");
+      expect(requests).toBe(2);
+    } finally {
+      await stalled.close();
+    }
+  });
 });
 
 describe("prefetch_imdb_ratings", () => {
