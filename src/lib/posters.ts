@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 import sharp from "sharp";
 
 import { map_concurrent } from "#lib/concurrency.js";
+import { fetch_with_retry } from "#lib/http.js";
 
 type PosterSource = { id: number; title: string; poster_url: string };
 
@@ -24,8 +25,7 @@ async function read_manifest(path: string): Promise<Record<string, string>> {
 }
 
 async function encode_poster(movie: PosterSource, dir: string, headers?: HeadersInit) {
-  const response = await fetch(movie.poster_url, { headers });
-  if (!response.ok) throw new Error(`${response.status} ${response.statusText} from ${movie.poster_url}`);
+  const response = await fetch_with_retry(movie.poster_url, { headers });
 
   const image = sharp(await response.arrayBuffer());
   await Promise.all(
