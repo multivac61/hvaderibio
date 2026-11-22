@@ -13,8 +13,10 @@
   import { poster_tilt } from "#lib/PosterTilt.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import { count_label } from "#lib/accessible-labels.js";
+  import { to_top } from "#lib/sheet-stage.js";
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
+  import { resolve } from "$app/paths";
 
   const { data } = $props();
   const movies = $derived(data.movies);
@@ -72,6 +74,16 @@
   };
 
   const filtered_cinemas_showtimes = $derived(now ? programme_at(now) : prerendered);
+
+  // A new cinema is a new list: back to its top, rather than wherever the
+  // shorter list happens to end. Chosen in a phone's sheet, at once behind
+  // it, so the sheet leaves onto the top of the new list.
+  let shown_cinema = selection.cinema;
+  $effect(() => {
+    if (selection.cinema === shown_cinema) return;
+    shown_cinema = selection.cinema;
+    to_top();
+  });
 </script>
 
 <PageMeta
@@ -92,19 +104,22 @@
     media="(min-width: 640px)" />
 </svelte:head>
 
-<header class="relative sm:mt-8 sm:mb-5">
+<header class="relative sm:mt-10 sm:mb-10">
   <!-- Phones hide the header visually but keep the page heading for screen readers. -->
   <h1
-    class="mb-3 text-center text-5xl tracking-tight text-pretty text-white max-sm:sr-only"
+    class="mb-6 text-center text-5xl tracking-tight text-pretty text-white max-sm:sr-only"
     style="font-family: 'Space Grotesk', sans-serif;">
-    Hvað er í bíó?
+    <!-- The title leads to the page about the site. -->
+    <a href={resolve("/um")} class="rounded-lg transition-opacity hover:opacity-80">Hvað er í bíó?</a>
   </h1>
   <div class="mx-auto hidden sm:block md:max-w-none">
-    <ProgrammeControls cinemaOptions={cinema_options} presentation="tabs" />
+    <ProgrammeControls cinemaOptions={cinema_options} presentation="header" id="select-cinemas-desktop" />
   </div>
 </header>
 
-<div class="relative">
+<!-- On phones the floating bar returns at the end of the page; the room
+     below the last row lets those posters scroll clear of it. -->
+<div class="relative max-sm:pb-16">
   <FloatingControls cinemaOptions={cinema_options} />
 
   <!-- Announces the result of changing the day or cinema to screen readers. -->
@@ -114,27 +129,31 @@
         : "Engar sýningar fundust"}{/if}
   </p>
 
-  {#key `${selection.day}-${selection.cinema}`}
-    {#if filtered_cinemas_showtimes.length === 0}
-      <div class="fade-in flex flex-col items-center justify-center py-16 text-center">
-        <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
-        <p class="mt-1 text-sm text-neutral-400">Prófaðu að velja annan dag eða kvikmyndahús</p>
-      </div>
-    {:else}
-      <!-- 8.5rem keeps two posters to a row down to a 320px screen, and a
+  {#if filtered_cinemas_showtimes.length === 0}
+    <div class="fade-in flex flex-col items-center justify-center py-16 text-center">
+      <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
+      <p class="mt-1 text-sm text-neutral-400">Prófaðu að velja annan dag eða kvikmyndahús</p>
+    </div>
+  {:else}
+    <!-- 8.5rem keeps two posters to a row down to a 320px screen, and a
            third from squeezing in on the widest phones (440px). -->
-      <div
-        bind:this={grid}
-        {@attach poster_tilt}
-        tabindex="-1"
-        class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(8.5rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(13rem,100%),2fr))] sm:gap-6 sm:pt-2 lg:grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),2fr))] xl:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))]">
-        {#each filtered_cinemas_showtimes as movie, index (movie.id)}
-          <MoviePosterCard {movie} {index} />
-        {/each}
-      </div>
-    {/if}
-  {/key}
+    <div
+      bind:this={grid}
+      {@attach poster_tilt}
+      tabindex="-1"
+      class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(8.5rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(13rem,100%),2fr))] sm:gap-6 sm:pt-2 lg:grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),2fr))] xl:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))]">
+      {#each filtered_cinemas_showtimes as movie, index (movie.id)}
+        <MoviePosterCard {movie} {index} />
+      {/each}
+    </div>
+  {/if}
 </div>
+
+<!-- Phones hide the title, which is the way to the page about the site
+     elsewhere, so on phones the way there is here instead. -->
+<footer class="mt-10 mb-24 text-center text-sm sm:hidden">
+  <a href={resolve("/um")} class="text-neutral-500 transition-colors hover:text-white">Um síðuna</a>
+</footer>
 
 <style>
   /* Subset by Google Fonts to "Hvað er í bíó?"; see static/fonts/OFL.txt. */

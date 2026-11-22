@@ -81,8 +81,9 @@ test("phone: changing the day fades the showtimes in", async ({ page }) => {
   await watch_opacity(page, { programme: "[data-day-programme]" });
   await page.goto("/movie/verity");
   await page.waitForTimeout(300);
+  await page.locator("#select-cinemas-movie-mobile").tap();
   await forget_opacity(page);
-  await page.getByRole("radio", { name: "þriðjudag" }).filter({ visible: true }).click();
+  await page.getByRole("dialog").getByRole("radio", { name: "Þriðjudag" }).tap();
   await page.waitForTimeout(600);
   const { programme } = await lowest_opacity(page);
   expect(programme).toBeLessThan(1);
@@ -98,8 +99,9 @@ test("desktop: changing the day leaves the fade to the view transition", async (
   await watch_opacity(page, { programme: "[data-day-programme]" });
   await page.goto("/movie/verity");
   await page.waitForTimeout(300);
+  await page.locator("#select-cinemas-movie-desktop").click();
   await forget_opacity(page);
-  await page.getByRole("radio", { name: "þriðjudag" }).filter({ visible: true }).click();
+  await page.getByRole("radio", { name: "Þriðjudag" }).filter({ visible: true }).click();
   await page.waitForTimeout(600);
   const { programme } = await lowest_opacity(page);
   await context.close();
@@ -109,15 +111,16 @@ test("desktop: changing the day leaves the fade to the view transition", async (
 test.describe("asking for less motion", () => {
   test.use({ contextOptions: { reducedMotion: "reduce" } });
 
-  // The bar only fades, never moves, so it still fades.
+  // Asked for less motion, the bar's pill does not move, so it still
+  // fades. The pill fades itself, not the row around it (FloatingControls).
   test("the floating bar still fades in", async ({ page }) => {
     await page.clock.setFixedTime(FIXTURE_MORNING);
     await page.addInitScript(() => {
       const seen: number[] = [];
       Object.assign(window, { bar_opacity: seen });
       const sample = () => {
-        const bar = document.querySelector("#select-cinemas")?.closest("[data-floating-bar]");
-        if (bar) seen.push(Number(getComputedStyle(bar).opacity));
+        const pill = document.querySelector("#select-cinemas");
+        if (pill) seen.push(Number(getComputedStyle(pill).opacity));
         if (seen.at(-1) !== 1 && performance.now() < 20_000) requestAnimationFrame(sample);
       };
       requestAnimationFrame(sample);
@@ -135,7 +138,8 @@ test("the floating bar hides quicker than it shows", async ({ page }) => {
   await page.clock.setFixedTime(FIXTURE_MORNING);
   await page.goto("/");
   await app_started(page);
-  const bar = page.locator("[data-floating-bar]").filter({ has: page.locator("#select-cinemas") });
+  // The pill fades itself, not the row around it (FloatingControls).
+  const bar = page.locator("#select-cinemas");
   await expect(bar).toHaveCSS("opacity", "1");
   const showing = await bar.evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration));
   await page.evaluate(() => scrollBy(0, 600));

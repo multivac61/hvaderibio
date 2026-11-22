@@ -47,7 +47,7 @@
   ontouchend={handleTouchEnd}
   ontouchcancel={() => (touchStart = null)}
   class="movie-poster-card poster-card relative block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg"
-  style="-webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
+  style="touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <PosterTilt id={movie.id}>
     <!-- Posters further down wait in the dark box until loaded, then fade
          in whole (PosterTilt eases the opacity). The first screen shows at

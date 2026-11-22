@@ -14,6 +14,11 @@ export const GET = async () => {
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  <url>
+    <loc>${site_url}/um</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
   ${movies
     .map(
       (movie) => `  <url>

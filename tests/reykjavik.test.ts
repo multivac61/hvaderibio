@@ -32,9 +32,9 @@ describe("reykjavik time", () => {
   test("labels days by Icelandic weekday", () => {
     // Thursday 3 September in Reykjavik, already Friday in Auckland.
     const now = new Date("2026-09-03T20:00:00.000Z");
-    expect(get_day_label("0", now)).toBe("í dag");
-    expect(get_day_label("1", now)).toBe("á morgun");
-    expect(get_day_label("2", now)).toBe("laugardag");
-    expect(get_day_label("3", now)).toBe("sunnudag");
+    expect(get_day_label("0", now)).toBe("Í dag");
+    expect(get_day_label("1", now)).toBe("Á morgun");
+    expect(get_day_label("2", now)).toBe("Laugardag");
+    expect(get_day_label("3", now)).toBe("Sunnudag");
   });
 });
