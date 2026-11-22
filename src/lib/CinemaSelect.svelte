@@ -17,9 +17,10 @@
   };
 </script>
 
+<!-- The options mark the chosen cinema themselves; a value on the select
+     would only bring in Svelte's code for keeping the two in step. -->
 <div class="relative">
   <select
-    value={selectedChoice}
     onchange={handleChange}
     {id}
     name={id}
