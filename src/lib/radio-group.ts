@@ -23,7 +23,7 @@ export function next_radio(key: string, index: number, count: number): number | 
 }
 
 /**
- * Moves the choice, and focus with it, to a sibling `role="radio"` button in
+ * Moves the choice, and focus and the tab stop with it, to a sibling `role="radio"` button in
  * the same radiogroup. It steps from the focused button, not from the chosen
  * value: a choice runs as a view transition, so a second press can arrive
  * before the value has changed.
@@ -38,6 +38,11 @@ export function on_radio_keydown<T>(
   const next = next_radio(event.key, radios.indexOf(event.currentTarget), choices.length);
   if (next === undefined) return;
   event.preventDefault();
+  // The tab stop goes with focus now, not when the choice lands: a Tab in
+  // between would otherwise leave the group from the new button and come
+  // back to the old one. The chosen value sets the same tabindex once it
+  // arrives.
+  for (const [i, radio] of radios.entries()) radio.tabIndex = i === next ? 0 : -1;
   radios[next]?.focus();
   choose(choices[next]!);
 }
