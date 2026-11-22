@@ -1,27 +1,5 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { linear } from "svelte/easing";
-  import { Tween } from "svelte/motion";
-  import { onMount } from "svelte";
-
-  const rotation = new Tween(0, { duration: 4000, easing: linear });
-
-  onMount(() => {
-    let active = true;
-
-    const spin = async () => {
-      while (active) {
-        await rotation.set(360);
-        if (active) await rotation.set(0, { duration: 0 });
-      }
-    };
-
-    void spin();
-
-    return () => {
-      active = false;
-    };
-  });
 
   const status = $derived(page.status);
 
@@ -41,9 +19,14 @@
      scroll. No background of its own, so the stars show. -->
 <div class="flex min-h-[calc(100dvh-1.5rem)] items-center justify-center text-neutral-100 sm:min-h-[calc(100dvh-2rem)]">
   <div class="max-w-md px-4 text-center">
-    <!-- Film reel -->
+    <!-- Film reel, turning slowly in CSS so it runs off the main thread and
+         keeps turning while scripts are busy. Still for reduced motion. -->
     <div class="mb-6 flex justify-center">
-      <svg class="h-24 w-24 text-neutral-600" style:transform="rotate({rotation.current}deg)" fill="currentColor" viewBox="0 0 24 24">
+      <svg
+        aria-hidden="true"
+        class="h-24 w-24 animate-[spin_4s_linear_infinite] text-neutral-600 motion-reduce:animate-none"
+        fill="currentColor"
+        viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
         <circle cx="12" cy="12" r="3" fill="currentColor" />
         <circle cx="12" cy="5" r="1.5" fill="currentColor" />
