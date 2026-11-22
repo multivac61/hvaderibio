@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { afterNavigate } from "$app/navigation";
+  import { afterNavigate, goto } from "$app/navigation";
   import { resolve } from "$app/paths";
 
   const { data } = $props();
@@ -19,7 +19,12 @@
   };
 
   const leave_on_escape = (event: KeyboardEvent) => {
-    if (event.key === "Escape") leave(event);
+    if (event.key !== "Escape") return;
+    if (came_from_site) {
+      leave(event);
+    } else {
+      void goto(resolve("/movie/[id]", { id: data.path }));
+    }
   };
 </script>
 
