@@ -8,6 +8,14 @@
   --container-9xl: 128rem;
 }
 
+/* Motion curves, also behind Tailwind's ease-out and ease-in-out. The
+   built-in ones are too gentle to read as deliberate: these respond at
+   once and land softly. Static, so component styles can use them too. */
+@theme static {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
 /* A still night sky behind every page, drawn by src/draw-stars.ts. It is the
    page's own background rather than a fixed element: iOS Safari tints its
    toolbar from fixed elements at the bottom edge. iOS also ignores the fixed

@@ -132,7 +132,7 @@
      the first few frames. */
   .poster-tilt {
     transform: perspective(1400px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(var(--lift, 1));
-    transition: transform 150ms cubic-bezier(0.2, 0, 0, 1);
+    transition: transform 150ms var(--ease-out);
   }
 
   /* Under the mouse it follows almost at once; only settling back is eased. */
@@ -144,9 +144,9 @@
   .poster-glow,
   .poster-glare {
     transition:
-      opacity 200ms cubic-bezier(0.2, 0, 0, 1),
-      filter 150ms cubic-bezier(0.2, 0, 0, 1),
-      box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
+      opacity 200ms var(--ease-out),
+      filter 150ms var(--ease-out),
+      box-shadow 150ms var(--ease-out);
   }
 
   /* --glow runs from 0 (dark) to 1 (hovered). The image is only set once a
