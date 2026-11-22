@@ -26,8 +26,8 @@ test("desktop: posters slide to their places when the day changes", async ({ bro
     };
     watch();
   });
-  await page.getByRole("button", { name: "á morgun" }).filter({ visible: true }).click();
-  await expect(page.getByRole("button", { name: "á morgun" }).filter({ visible: true })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("radio", { name: "á morgun" }).filter({ visible: true }).click();
+  await expect(page.getByRole("radio", { name: "á morgun" }).filter({ visible: true })).toBeChecked();
 
   await expect
     .poll(() => page.evaluate(() => [...(window as unknown as { animated: Set<string> }).animated]))
