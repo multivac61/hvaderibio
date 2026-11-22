@@ -209,6 +209,13 @@
     }
   }
 
+  /* Pressing a poster that opens its film sinks it a little, on touch too,
+     so the tap shows it landed before the page changes. After the hover
+     lift, so it wins while both apply. */
+  :global(a.poster-card:active) {
+    --lift: 0.97;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .poster-tilt {
       transform: none;
