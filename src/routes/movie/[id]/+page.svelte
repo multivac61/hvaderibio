@@ -38,9 +38,12 @@
   // page to go back to; send them to the programme instead of off the site.
   let came_from_site = $state(false);
   let back_link: HTMLAnchorElement | undefined = $state();
-  afterNavigate(({ from }) => {
+  afterNavigate(({ from, type }) => {
     now = new Date();
-    came_from_site = from !== null;
+    // Come forward from this movie's trailer, the page behind is the
+    // trailer: going back would loop to it, and from a trailer opened by
+    // a shared link, on off the site.
+    came_from_site = from !== null && !(type !== "popstate" && from.route.id === "/movie/[id]/trailer");
     // SvelteKit moves focus to <body> after navigating. Keyboard visitors
     // land on "Til baka" instead, so Enter returns them to their poster.
     if (came_from_site && is_keyboard_navigation()) back_link?.focus();

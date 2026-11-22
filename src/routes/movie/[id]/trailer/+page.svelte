@@ -8,8 +8,10 @@
   // browser's back button would. Opened from a shared link, it goes to the
   // movie instead of off the site.
   let came_from_site = $state(false);
-  afterNavigate(({ from }) => {
-    came_from_site = from !== null;
+  afterNavigate(({ from, type }) => {
+    // Come back here from the movie, the page behind is whatever came
+    // before the trailer, perhaps not the site at all: leave by the movie.
+    came_from_site = from !== null && !(type === "popstate" && from.route.id === "/movie/[id]");
   });
 
   const leave = (event: Event) => {
