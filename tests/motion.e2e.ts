@@ -43,6 +43,44 @@ async function prerendered_ids(page: Page) {
   return ids;
 }
 
+test.describe("asking for less motion", () => {
+  test.use({ contextOptions: { reducedMotion: "reduce" } });
+
+  // The bar only fades, never moves, so it still fades.
+  test("the floating bar still fades in", async ({ page }) => {
+    await page.clock.setFixedTime(FIXTURE_MORNING);
+    await page.addInitScript(() => {
+      const seen: number[] = [];
+      Object.assign(window, { bar_opacity: seen });
+      const sample = () => {
+        const bar = document.querySelector("#select-cinemas")?.closest("[data-floating-bar]");
+        if (bar) seen.push(Number(getComputedStyle(bar).opacity));
+        if (seen.at(-1) !== 1 && performance.now() < 20_000) requestAnimationFrame(sample);
+      };
+      requestAnimationFrame(sample);
+    });
+    await page.goto("/");
+    await expect.poll(() => page.evaluate(() => (window as unknown as { bar_opacity: number[] }).bar_opacity.at(-1))).toBe(1);
+    const seen = await page.evaluate(() => (window as unknown as { bar_opacity: number[] }).bar_opacity);
+    expect(seen.some((opacity) => opacity > 0 && opacity < 1)).toBe(true);
+  });
+});
+
+// Scrolling down to read hides the bar promptly; bringing it back is the
+// visitor's choice and eases in at the usual pace.
+test("the floating bar hides quicker than it shows", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await app_started(page);
+  const bar = page.locator("[data-floating-bar]").filter({ has: page.locator("#select-cinemas") });
+  await expect(bar).toHaveCSS("opacity", "1");
+  const showing = await bar.evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration));
+  await page.evaluate(() => scrollBy(0, 600));
+  await expect(bar).toHaveCSS("opacity", "0");
+  const hiding = await bar.evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration));
+  expect(hiding).toBeLessThan(showing);
+});
+
 // Like the trailer thumbnail: a poster further down, still on its way,
 // waits in its dark box and fades in whole. Those on the first screen, and
 // any the browser already has, show at once.
