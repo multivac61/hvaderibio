@@ -207,13 +207,17 @@
   /* That layer cannot frost what is behind it either; it frosts the posters
      itself, at the panel's corners, where the browser allows. */
   :global(::view-transition-group(programme-panel)) {
-    backdrop-filter: var(--pick-panel-blur);
+    /* Safari's name first: the minifier takes the two for one property and
+       keeps only the last written, and Chromium reads only the standard one. */
     -webkit-backdrop-filter: var(--pick-panel-blur);
+    backdrop-filter: var(--pick-panel-blur);
     border-radius: 22px;
   }
   :global(.programme-panel-clip) {
-    backdrop-filter: var(--pick-panel-blur);
+    /* Safari's name first: the minifier takes the two for one property and
+       keeps only the last written, and Chromium reads only the standard one. */
     -webkit-backdrop-filter: var(--pick-panel-blur);
+    backdrop-filter: var(--pick-panel-blur);
   }
 
   /* The choices fade in once the shape has mostly grown, and out at once. */
