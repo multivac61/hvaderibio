@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { devices, expect, test, type Page } from "@playwright/test";
 
 // How the pages move: what fades in, and when, on phones and desktops.
 const FIXTURE_MORNING = new Date("2026-10-03T09:00:00Z");
@@ -42,6 +42,69 @@ async function prerendered_ids(page: Page) {
   await static_page.close();
   return ids;
 }
+
+test("phone: opening a movie fades its trailer in, as it does a poster", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await watch_opacity(page, { trailer: "a[aria-label='Spila stiklu']" });
+  await page.goto("/");
+  await app_started(page);
+  await page
+    .locator("a[data-movie-id]")
+    .filter({ has: page.getByAltText("Verity", { exact: true }) })
+    .tap();
+  await expect(page.getByRole("heading", { name: "Verity" })).toBeVisible();
+  await page.waitForTimeout(600);
+  const { trailer } = await lowest_opacity(page);
+  expect(trailer).toBeLessThan(1);
+});
+
+// A page opened directly arrives prerendered; nothing on it fades in again
+// once the app starts.
+for (const path of ["/movie/verity", "/"]) {
+  test(`phone: ${path} shows at once when opened directly`, async ({ page }) => {
+    await page.clock.setFixedTime(FIXTURE_MORNING);
+    await watch_opacity(page, {
+      trailer: "a[aria-label='Spila stiklu']",
+      poster: ".poster-card",
+      programme: "[data-day-programme]",
+    });
+    await page.goto(path);
+    await expect(page.getByRole("status")).not.toBeEmpty();
+    await page.waitForTimeout(600);
+    const lowest = await lowest_opacity(page);
+    expect(Object.values(lowest).filter((opacity) => opacity < 1)).toEqual([]);
+  });
+}
+
+test("phone: changing the day fades the showtimes in", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await watch_opacity(page, { programme: "[data-day-programme]" });
+  await page.goto("/movie/verity");
+  await page.waitForTimeout(300);
+  await forget_opacity(page);
+  await page.getByRole("radio", { name: "þriðjudag" }).filter({ visible: true }).click();
+  await page.waitForTimeout(600);
+  const { programme } = await lowest_opacity(page);
+  expect(programme).toBeLessThan(1);
+  await expect(page.locator("[data-day-programme]")).toHaveCSS("opacity", "1");
+});
+
+// Desktops already cross-fade the change as a view transition; a fade of
+// its own on top would leave the new showtimes faint as it ends.
+test("desktop: changing the day leaves the fade to the view transition", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Safari"], baseURL });
+  const page = await context.newPage();
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await watch_opacity(page, { programme: "[data-day-programme]" });
+  await page.goto("/movie/verity");
+  await page.waitForTimeout(300);
+  await forget_opacity(page);
+  await page.getByRole("radio", { name: "þriðjudag" }).filter({ visible: true }).click();
+  await page.waitForTimeout(600);
+  const { programme } = await lowest_opacity(page);
+  await context.close();
+  expect(programme ?? 1).toBe(1);
+});
 
 test.describe("asking for less motion", () => {
   test.use({ contextOptions: { reducedMotion: "reduce" } });

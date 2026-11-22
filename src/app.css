@@ -29,6 +29,28 @@
   animation-timing-function: var(--ease-out);
 }
 
+/* Content the app puts on the page fades in: a movie page opened from the
+   grid, the programme for another day. In CSS rather than Svelte
+   transitions, which cost the bundle their runtime. Only once the app has
+   started (data-started, set in +layout.svelte), so what was prerendered
+   shows at once; elements already there when it starts do not fade. Set
+   the length with --fade-in. */
+html[data-started] .fade-in {
+  transition: opacity var(--fade-in, 160ms) var(--ease-out);
+}
+
+@starting-style {
+  html[data-started] .fade-in {
+    opacity: 0;
+  }
+}
+
+/* A view transition already cross-fades the change; a second fade on top
+   would leave the new content faint as it ends. */
+html:active-view-transition .fade-in {
+  transition: none;
+}
+
 /* A still night sky behind every page, drawn by src/draw-stars.ts. It is the
    page's own background rather than a fixed element: iOS Safari tints its
    toolbar from fixed elements at the bottom edge. iOS also ignores the fixed
