@@ -4,6 +4,7 @@
   import { open_on_space } from "#lib/open-on-space.js";
   import { POSTER_SIZES, poster_srcset } from "#lib/poster-image.js";
   import { EAGER_POSTER_COUNT, LEAD_POSTER_COUNT } from "#lib/programme.js";
+  import { reveal_on_load } from "#lib/motion.js";
   import PosterTilt from "#lib/PosterTilt.svelte";
 
   import type { ProgrammeEntry } from "#lib/programme.js";
@@ -48,6 +49,9 @@
   class="movie-poster-card poster-card relative block aspect-2/3 w-full touch-manipulation overflow-visible rounded-lg"
   style="-webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;">
   <PosterTilt id={movie.id}>
+    <!-- Posters further down wait in the dark box until loaded, then fade
+         in whole (PosterTilt eases the opacity). The first screen shows at
+         once, as prerendered. -->
     <picture>
       <source type="image/webp" srcset={poster_srcset(movie.id)} sizes={POSTER_SIZES} />
       <img
@@ -59,7 +63,8 @@
         width="720"
         height="1080"
         style:view-transition-name="poster-{movie.id}"
-        class="movie-poster-image pointer-events-none relative h-full w-full rounded-lg object-fill" />
+        {@attach index >= EAGER_POSTER_COUNT && reveal_on_load}
+        class="movie-poster-image pointer-events-none relative h-full w-full rounded-lg object-fill data-loading:opacity-0" />
     </picture>
   </PosterTilt>
 </a>
