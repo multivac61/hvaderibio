@@ -156,3 +156,16 @@ test("coming back from a movie shows the chosen day at once, without a blur", as
   expect(after.filter((f) => f.posters !== "").every((f) => f.posters === settled)).toBe(true);
   expect(after.map((f) => f.opacity).filter((o) => o < 1)).toEqual([]);
 });
+
+// A phone tab is often opened again the next day. The programme must follow
+// the clock when the tab comes back, not stay as it was when it loaded:
+// it kept listing films as showing "Í dag" a day and a half later.
+test("a tab come back to later shows the programme as of then", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await app_started(page);
+  const before = await page.getByRole("status").textContent();
+  await page.clock.setFixedTime(new Date("2026-10-04T23:30:00Z"));
+  await page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
+  await expect(page.getByRole("status")).not.toHaveText(before!);
+});
