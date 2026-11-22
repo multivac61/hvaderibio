@@ -409,6 +409,9 @@ test("a sheet let go to close never stands still on its way down", async ({ page
 
 // Scroll down the way a reader does, in steps, stopping midway.
 async function read_down(page: Page) {
+  // The app must be running to see the scroll: the prerendered posters show
+  // before it starts, and on a busy runner the scrolling came first.
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
   const middle = await page.evaluate(() => (document.documentElement.scrollHeight - innerHeight) / 2);
   for (let y = 60; y <= middle; y += 60) {
     await page.evaluate((y) => scrollTo(0, y), y);
