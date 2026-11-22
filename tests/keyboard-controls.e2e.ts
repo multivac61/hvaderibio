@@ -42,6 +42,10 @@ test.describe("desktop header", () => {
     await page.keyboard.press("ArrowRight");
     await page.keyboard.press("ArrowRight");
     await expect(days.nth(2)).toBeFocused();
+    // The focused day is a tab stop at once. It used to wait for the choice,
+    // which lands a frame or more later as a view transition: a Tab in
+    // between left the group, and Shift+Tab came back to the old day.
+    expect(await days.nth(2).evaluate((radio) => radio.tabIndex)).toBe(0);
 
     await page.keyboard.press("Tab");
     expect(await group.evaluate((el) => el.contains(document.activeElement))).toBe(false);
