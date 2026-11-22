@@ -34,6 +34,23 @@
     if (hydrating) now = new Date();
   });
 
+  // The clock moves on while the page is open: a phone tab is often opened
+  // again the next day, and an evening's showtimes pass. Read it again when
+  // the tab comes back into view, and every few minutes while it is open.
+  $effect(() => {
+    const refresh = () => {
+      if (document.visibilityState === "visible") now = new Date();
+    };
+    document.addEventListener("visibilitychange", refresh);
+    addEventListener("pageshow", refresh);
+    const every = setInterval(refresh, 5 * 60_000);
+    return () => {
+      document.removeEventListener("visibilitychange", refresh);
+      removeEventListener("pageshow", refresh);
+      clearInterval(every);
+    };
+  });
+
   // Keyboard focus starts at the poster grid, so the first Tab lands on the
   // first poster rather than the header controls (Shift+Tab reaches those).
   // Coming back through history returns focus to the poster the visitor
