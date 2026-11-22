@@ -31,6 +31,26 @@ test("desktop: the trailer opens as a page that back and forward step through", 
   await context.close();
 });
 
+// A trailer opened from a shared link has nothing of the site behind it.
+// "Til baka" goes to its movie, and the movie's "Til baka" then goes on to
+// the programme: it went back to the trailer instead, and the trailer's
+// back left the site.
+test("desktop: Til baka from a trailer opened directly leads home, not round", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Safari"], baseURL });
+  const page = await context.newPage();
+  await page.route("https://www.youtube.com/**", (route) => route.fulfill({ body: "" }));
+  await page.clock.setFixedTime(new Date("2026-10-03T09:00:00Z"));
+  await page.goto("/movie/verity/trailer");
+  await expect(page.locator("iframe[title='Stikla: Verity']")).toBeVisible();
+  await page.getByRole("link", { name: "Til baka" }).click();
+  await expect(page).toHaveURL(/\/movie\/verity$/);
+  await expect(page.getByRole("heading", { name: "Verity" })).toBeVisible();
+  await page.getByRole("link", { name: "Til baka" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await context.close();
+});
+
 // Phones open the YouTube app, in the same tab so that without the app the
 // back button still returns to the movie.
 test("phone: the trailer goes to YouTube", async ({ page }) => {
