@@ -100,6 +100,9 @@ test("desktop: changing the day leaves the fade to the view transition", async (
   await page.goto("/movie/verity");
   await page.waitForTimeout(300);
   await page.locator("#select-cinemas-movie-desktop").click();
+  // A click lands only once the panel has grown out of the pill: until then
+  // its rows lie outside the growing clip, and a click there misses them.
+  await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
   await forget_opacity(page);
   await page.getByRole("radio", { name: "Þriðjudag" }).filter({ visible: true }).click();
   await page.waitForTimeout(600);

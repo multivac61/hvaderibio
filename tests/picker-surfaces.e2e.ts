@@ -42,6 +42,9 @@ test("desktop: the panel stays frosted while the day changes", async ({ browser,
   const page = await context.newPage();
   await open_home(page);
   await page.locator("#select-cinemas-desktop").click();
+  // A click lands only once the panel has grown out of the pill: until then
+  // its rows lie outside the growing clip, and a click there misses them.
+  await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
   await expect(page.locator(".programme-panel-clip")).toBeVisible();
   await page.evaluate(() => {
     const record = window as unknown as { during?: { name: string; blur: string; layers: string[] } };

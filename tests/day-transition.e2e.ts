@@ -29,6 +29,9 @@ test("desktop: posters slide to their places when the cinema changes", async ({ 
     watch();
   });
   await page.locator("#select-cinemas-desktop").click();
+  // A click lands only once the panel has grown out of the pill: until then
+  // its rows lie outside the growing clip, and a click there misses them.
+  await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
   await page.getByRole("radio", { name: "Öll", exact: true }).click();
   await expect(page.locator("#select-cinemas-desktop")).toContainText("Öll");
 
