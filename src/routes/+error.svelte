@@ -3,11 +3,7 @@
 
   const status = $derived(page.status);
 
-  const title = $derived(status === 404 ? "Síða fannst ekki" : status === 500 ? "Villa kom upp" : "Villa kom upp");
-
-  const description = $derived(
-    status === 404 ? "Þessi síða er ekki til. Kannski viltu fara aftur á forsíðuna?" : "Eitthvað fór úrskeiðis. Vinsamlegast reyndu aftur."
-  );
+  const title = $derived(status === 404 ? "Síða fannst ekki" : "Villa kom upp");
 </script>
 
 <svelte:head>
@@ -40,9 +36,7 @@
       </svg>
     </div>
     <h1 class="mb-4 text-6xl font-bold text-neutral-400">{status}</h1>
-    <h2 class="mb-2 text-2xl font-bold">{title}</h2>
-    <p class="mb-2 text-neutral-400">{description}</p>
-    <div class="mb-8"></div>
+    <h2 class="mb-8 text-2xl font-bold">{title}</h2>
     <button
       type="button"
       onclick={() => (window.location.href = "/")}
