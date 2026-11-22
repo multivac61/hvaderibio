@@ -27,6 +27,14 @@ jobs:
       - run: npx playwright install --with-deps webkit
       - run: node tests/fixtures/install.ts
       - run: npm run test:e2e
+      # What a failing browser test saw, frame by frame, for diagnosing it
+      # from here rather than guessing.
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7
 
   # Dispatched checks can be absent from the PR's required-check rollup.
   # Publish the actual test result on the same commit for branch protection,

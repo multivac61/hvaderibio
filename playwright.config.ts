@@ -8,7 +8,8 @@ export default defineConfig({
   testMatch: "*.e2e.ts",
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI ? "github" : "list",
-  use: { baseURL: "http://localhost:4173" },
+  // On CI, a failing test keeps its trace, uploaded by the workflow.
+  use: { baseURL: "http://localhost:4173", trace: process.env.CI ? "retain-on-failure" : "off" },
   projects: [{ name: "iphone", use: { ...devices["iPhone 15"] } }],
   webServer: {
     command: "npm run build && npm run preview -- --port 4173 --strictPort",
