@@ -41,7 +41,7 @@
         target="_blank"
         rel="external noopener noreferrer"
         aria-label={showtime_label(showtime)}
-        class="group/time relative inline-flex items-center rounded bg-neutral-800 px-2 py-1.5 text-sm text-neutral-400 tabular-nums transition-[background-color,color,transform] duration-150 ease-out before:absolute before:-inset-x-1 before:-inset-y-1.5 hover:bg-neutral-700 hover:text-white active:scale-95">
+        class="group/time relative inline-flex items-center rounded bg-neutral-800 px-2 py-1.5 text-sm text-neutral-400 tabular-nums transition-[background-color,color,scale] duration-150 ease-out before:absolute before:-inset-x-1 before:-inset-y-1.5 hover:bg-neutral-700 hover:text-white active:scale-[0.97]">
         <ShowtimeBadges {showtime} />
         <span>{reykjavik_time(showtime.time)}</span>
         <span
