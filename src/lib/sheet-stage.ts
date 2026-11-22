@@ -94,6 +94,26 @@ export function follow_stage(progress: number) {
   set(Math.min(1, Math.max(0, progress)));
 }
 
+/**
+ * The sheet itself is gone (its page left, browser back): hand the page
+ * back at once, as it was. Left stepped back, the page navigated to stayed
+ * shrunk, clipped to one screen and without its sky.
+ */
+export function drop_stage() {
+  if (!stage) return;
+  generation++;
+  let_go(stage.el);
+}
+
+// Hand the page back: its own styles again, and its sky.
+const let_go = (el: HTMLElement) => {
+  for (const property of ["scale", "translate", "clip-path", "min-height", "transform-origin", "transition"])
+    el.style.removeProperty(property);
+  if (!el.getAttribute("style")) el.removeAttribute("style");
+  delete document.documentElement.dataset.sheetPushed;
+  stage = null;
+};
+
 /** The sheet is going: bring the page back over `ms`, then let it go. */
 export function release_stage(ms = 300) {
   if (!stage) return;
@@ -105,10 +125,7 @@ export function release_stage(ms = 300) {
     // A sheet opened again in the meantime keeps the page.
     if (mine !== generation || !stage) return;
     el.removeEventListener("transitionend", on_end);
-    for (const property of ["scale", "translate", "clip-path", "min-height", "transform-origin", "transition"])
-      el.style.removeProperty(property);
-    delete document.documentElement.dataset.sheetPushed;
-    stage = null;
+    let_go(el);
   };
   const on_end = (event: TransitionEvent) => {
     if (event.target === el && event.propertyName === "scale") done();
