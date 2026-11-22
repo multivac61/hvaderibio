@@ -24,7 +24,7 @@
       tabindex={label === selectedChoice ? 0 : -1}
       onkeydown={(event) => on_radio_keydown(event, labels, onSelect)}
       onclick={() => onSelect(label)}
-      class={`shrink-0 rounded-xl border px-3.5 py-1.5 text-[15px] leading-5 font-medium whitespace-nowrap transition-all duration-200 ease-out first:ml-auto last:mr-auto
+      class={`shrink-0 rounded-xl border px-3.5 py-1.5 text-[15px] leading-5 font-medium whitespace-nowrap transition-[color,background-color,border-color,box-shadow,scale] duration-150 ease-out first:ml-auto last:mr-auto active:scale-[0.97]
                     ${
                       label === selectedChoice
                         ? "border-sky-300/35 bg-neutral-950/80 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_6px_18px_rgba(0,0,0,0.28)]"

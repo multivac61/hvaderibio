@@ -63,7 +63,7 @@
     <button
       type="button"
       onclick={() => (window.location.href = "/")}
-      class="group relative inline-flex items-center gap-2 rounded-md bg-linear-to-br from-neutral-800 to-neutral-900 px-4 py-2 text-base text-neutral-300 transition-all duration-200 ease-out hover:bg-neutral-700 hover:text-white">
+      class="group relative inline-flex items-center gap-2 rounded-md bg-linear-to-br from-neutral-800 to-neutral-900 px-4 py-2 text-base text-neutral-300 transition-[color,background-color,scale] duration-150 ease-out hover:bg-neutral-700 hover:text-white active:scale-[0.97]">
       <span
         class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity duration-200 group-hover:opacity-10"
       ></span>
