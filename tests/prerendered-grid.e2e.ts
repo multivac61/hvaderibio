@@ -135,7 +135,7 @@ test("coming back from a movie shows the chosen day at once, without a blur", as
   });
   await page.goto("/");
   await app_started(page);
-  await page.getByRole("button", { name: "þriðjudag" }).filter({ visible: true }).click();
+  await page.getByRole("radio", { name: "þriðjudag" }).filter({ visible: true }).click();
   const tuesday = await poster_titles(page);
   await page.locator("a[data-movie-id]").first().click();
   await page.waitForURL(/\/movie\//);

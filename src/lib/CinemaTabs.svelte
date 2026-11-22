@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { CinemaOption } from "#lib/cinemas.js";
+  import { on_radio_keydown } from "#lib/radio-group.js";
 
   type Props = {
     cinemaOptions: readonly CinemaOption[];
@@ -8,16 +9,20 @@
   };
 
   const { cinemaOptions, selectedChoice, onSelect }: Props = $props();
+  const labels = $derived(cinemaOptions.map(([label]) => label));
 </script>
 
 <!-- Centred by the outer tabs' margins rather than justify-center: when the
      row is too narrow, that overflows to the left as well, where a scroller
      cannot reach, and cut off the first tab. -->
-<div class="mb-3 flex flex-nowrap gap-1.5 overflow-x-auto px-2 md:gap-2">
+<div role="radiogroup" aria-label="Veldu kvikmyndahús" class="mb-3 flex flex-nowrap gap-1.5 overflow-x-auto px-2 md:gap-2">
   {#each cinemaOptions as [label] (label)}
     <button
       type="button"
-      aria-pressed={label === selectedChoice}
+      role="radio"
+      aria-checked={label === selectedChoice}
+      tabindex={label === selectedChoice ? 0 : -1}
+      onkeydown={(event) => on_radio_keydown(event, labels, onSelect)}
       onclick={() => onSelect(label)}
       class={`shrink-0 rounded-xl border px-3.5 py-1.5 text-[15px] leading-5 font-medium whitespace-nowrap transition-all duration-200 ease-out first:ml-auto last:mr-auto
                     ${

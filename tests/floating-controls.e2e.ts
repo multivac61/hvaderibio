@@ -41,7 +41,7 @@ test.describe("before the app starts", () => {
     await page.goto("/");
     // The slider that marks the day is measured by script; until then the
     // first frame showed no day chosen, and the pill popped in after.
-    const highlighted = await page.locator('[aria-pressed="true"]:visible').evaluate((button) => {
+    const highlighted = await page.locator('[role="radio"][aria-checked="true"]:visible').evaluate((button) => {
       const box = button.getBoundingClientRect();
       const under = document.elementsFromPoint(box.x + box.width / 2, box.y + box.height / 2);
       return under.some((el) => {

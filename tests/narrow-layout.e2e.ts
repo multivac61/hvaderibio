@@ -27,7 +27,7 @@ test.describe("320px phone", () => {
   test("day labels stay on one line, inside the screen", async ({ page }) => {
     await page.clock.setFixedTime(FIXTURE_MONDAY);
     await page.goto("/");
-    const days = page.locator("[data-floating-bar] button");
+    const days = page.locator("[data-floating-bar] [role=radio]");
     await expect(days.first()).toBeVisible();
     const boxes = await days.evaluateAll((buttons) =>
       buttons.map((button) => {
@@ -54,7 +54,7 @@ test.describe("768px tablet", () => {
   test("the first cinema tab can be reached", async ({ page }) => {
     await page.clock.setFixedTime(FIXTURE_MORNING);
     await page.goto("/");
-    const first_tab = page.getByRole("button", { name: "Allt", exact: true });
+    const first_tab = page.getByRole("radio", { name: "Allt", exact: true });
     await expect(first_tab).toBeVisible();
     const { tab_left, strip_left } = await first_tab.evaluate((tab) => {
       const strip = tab.parentElement!;
@@ -117,7 +117,7 @@ test.describe("touch targets", () => {
     await page.clock.setFixedTime(FIXTURE_MORNING);
     await page.goto("/");
     await expect(page.locator("[data-floating-bar]")).toHaveCSS("opacity", "1");
-    const days = page.locator("[data-floating-bar] button");
+    const days = page.locator("[data-floating-bar] [role=radio]");
     await expect(days).toHaveCount(4);
     for (const day of await days.all()) expect(await day.evaluate(answers_below)).toBe(true);
   });

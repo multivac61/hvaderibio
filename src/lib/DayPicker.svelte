@@ -1,5 +1,6 @@
 <script lang="ts">
   import { AVAILABLE_DAYS, get_day_label } from "#lib/day-picker.js";
+  import { on_radio_keydown } from "#lib/radio-group.js";
 
   type Props = {
     selectedDay: string;
@@ -39,6 +40,8 @@
 </script>
 
 <div
+  role="radiogroup"
+  aria-label="Veldu dag"
   class="relative flex items-center rounded-full border border-white/10 bg-neutral-950/65 p-0.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_22px_rgba(0,0,0,0.3)] backdrop-blur-xl {containerSizeClass}">
   <div
     class="absolute h-[calc(100%-6px)] {pill_class} {slider_animated ? 'transition-all duration-300 ease-out' : ''}"
@@ -51,7 +54,10 @@
     <button
       bind:this={day_buttons[i]}
       type="button"
-      aria-pressed={selectedDay === day}
+      role="radio"
+      aria-checked={selectedDay === day}
+      tabindex={selectedDay === day ? 0 : -1}
+      onkeydown={(event) => on_radio_keydown(event, days, onSelect)}
       onclick={() => onSelect(day)}
       class="relative z-10 rounded-full px-2.5 text-[13px] leading-4 font-medium whitespace-nowrap transition-colors duration-200 before:absolute before:inset-x-0 before:-inset-y-2 max-[22.5rem]:px-1.5 {buttonSizeClass} {selectedDay ===
       day
