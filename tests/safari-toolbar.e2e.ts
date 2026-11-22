@@ -33,8 +33,11 @@ async function bottom_edge_offenders(page: Page): Promise<string[]> {
 async function scroll_down(page: Page) {
   const middle = await page.evaluate(() => (document.documentElement.scrollHeight - innerHeight) / 2);
   for (let y = 60; y <= middle; y += 60) {
-    await page.evaluate((y) => scrollTo(0, y), y);
-    await page.waitForTimeout(30);
+    // Rendered before the next step, so each arrives as a scroll of its own.
+    await page.evaluate(async (y) => {
+      scrollTo(0, y);
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    }, y);
   }
 }
 

@@ -118,20 +118,17 @@ test.describe("asking for less motion", () => {
   // fades. The pill fades itself, not the row around it (FloatingControls).
   test("the floating bar still fades in", async ({ page }) => {
     await page.clock.setFixedTime(FIXTURE_MORNING);
+    // By the transition itself, not by catching a half-faded frame, which a
+    // runner drawing a few frames a second missed.
     await page.addInitScript(() => {
-      const seen: number[] = [];
-      Object.assign(window, { bar_opacity: seen });
-      const sample = () => {
-        const pill = document.querySelector("#select-cinemas");
-        if (pill) seen.push(Number(getComputedStyle(pill).opacity));
-        if (seen.at(-1) !== 1 && performance.now() < 20_000) requestAnimationFrame(sample);
-      };
-      requestAnimationFrame(sample);
+      Object.assign(window, { faded: false });
+      addEventListener("transitionrun", (event) => {
+        if ((event.target as Element).id === "select-cinemas" && event.propertyName === "opacity") Object.assign(window, { faded: true });
+      });
     });
     await page.goto("/");
-    await expect.poll(() => page.evaluate(() => (window as unknown as { bar_opacity: number[] }).bar_opacity.at(-1))).toBe(1);
-    const seen = await page.evaluate(() => (window as unknown as { bar_opacity: number[] }).bar_opacity);
-    expect(seen.some((opacity) => opacity > 0 && opacity < 1)).toBe(true);
+    await expect(page.locator("#select-cinemas")).toHaveCSS("opacity", "1");
+    expect(await page.evaluate(() => (window as unknown as { faded: boolean }).faded)).toBe(true);
   });
 });
 

@@ -63,25 +63,26 @@ test("home page keeps the bar at the bottom when nothing is showing", async ({ p
 
 test("home page fades the bar in once the app starts, as scrolling up does", async ({ page }) => {
   await page.clock.setFixedTime(FIXTURE_MORNING);
-  // Record the bar's opacity every frame from the first paint until the fade
-  // ends. A fixed frame budget ran out mid-fade when a slow runner started
-  // the app late, leaving the last sample short of 1 for good.
+  // Hidden at the first paint, then faded in: an opacity transition runs on
+  // the pill. (Checked by the transition itself rather than by catching a
+  // half-faded frame, which a runner drawing a few frames a second missed.)
   await page.addInitScript(() => {
-    const seen: number[] = [];
-    Object.assign(window, { bar_opacity: seen });
-    const sample = () => {
+    const record = window as unknown as { first?: number; faded: boolean };
+    record.faded = false;
+    const first = () => {
       const pill = document.querySelector("#select-cinemas");
-      if (pill) seen.push(Number(getComputedStyle(pill).opacity));
-      if (seen.at(-1) !== 1 && performance.now() < 20_000) requestAnimationFrame(sample);
+      if (pill) record.first ??= Number(getComputedStyle(pill).opacity);
+      else requestAnimationFrame(first);
     };
-    requestAnimationFrame(sample);
+    requestAnimationFrame(first);
+    addEventListener("transitionrun", (event) => {
+      if ((event.target as Element).id === "select-cinemas" && event.propertyName === "opacity") record.faded = true;
+    });
   });
   await page.goto("/");
-  await expect.poll(() => page.evaluate(() => (window as unknown as { bar_opacity: number[] }).bar_opacity.at(-1))).toBe(1);
-  const seen = await page.evaluate(() => (window as unknown as { bar_opacity: number[] }).bar_opacity);
-  expect(seen[0]).toBe(0);
-  // Faded, not switched on: some frames fall in between.
-  expect(seen.some((opacity) => opacity > 0 && opacity < 1)).toBe(true);
+  await expect(page.locator("#select-cinemas")).toHaveCSS("opacity", "1");
+  expect(await page.evaluate(() => (window as unknown as { first?: number }).first)).toBe(0);
+  expect(await page.evaluate(() => (window as unknown as { faded: boolean }).faded)).toBe(true);
 });
 
 // The pill opens a sheet holding both choices; a cinema finishes the choice
@@ -141,8 +142,7 @@ test("the page steps back behind the sheet and returns when it closes", async ({
   await read_down(page);
   const y = await page.evaluate(() => scrollY);
   for (const step of [20, 40, 60]) {
-    await page.evaluate((y) => scrollTo(0, y), y - step);
-    await page.waitForTimeout(30);
+    await scroll_step(page, y - step);
   }
   await expect(page.locator("#select-cinemas")).toHaveCSS("opacity", "1");
   const stage = page.locator("[data-sheet-stage]");
@@ -313,8 +313,7 @@ test("phone: choosing a cinema goes back to the top of the list behind the sheet
   await read_down(page);
   const y = await page.evaluate(() => scrollY);
   for (const step of [20, 40, 60]) {
-    await page.evaluate((y) => scrollTo(0, y), y - step);
-    await page.waitForTimeout(30);
+    await scroll_step(page, y - step);
   }
   await expect(page.locator("#select-cinemas")).toHaveCSS("opacity", "1");
   await page.locator("#select-cinemas").tap();
@@ -354,28 +353,26 @@ test("phone: a day chosen in the sheet changes the grid without gliding", async 
   expect(await page.evaluate(() => (window as unknown as { moved: number }).moved)).toBe(0);
 });
 
-// Let go past the point of closing, the sheet keeps moving: every frame
-// after the release finds it lower than the one before, until it is gone.
-// A frame where it stands still and then leaps reads as a stutter.
+// Let go past the point of closing, the sheet sets off down at once, in the
+// same task as the release: it used to wait two frames for the dialog's
+// ending style, standing still, and then leap. (Checked by what the release
+// sets off rather than by sampling frames, which a runner drawing a few
+// frames a second cannot do.)
 test("a sheet let go to close never stands still on its way down", async ({ page }) => {
   await page.clock.setFixedTime(FIXTURE_MORNING);
   await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
   await page.locator("#select-cinemas").tap();
   const sheet = page.getByRole("dialog");
   await expect.poll(() => sheet.evaluate((el) => el.getAnimations().length)).toBe(0);
   await sheet.evaluate((el) => {
-    const record = window as unknown as { tops: number[] };
-    record.tops = [];
+    const record = window as unknown as { on_release?: { transform: string; transition: string } };
     addEventListener(
       "pointerup",
-      () => {
-        const sample = () => {
-          if (!el.isConnected || record.tops.length >= 12) return;
-          record.tops.push(el.getBoundingClientRect().top);
-          requestAnimationFrame(sample);
-        };
-        sample();
-      },
+      () =>
+        setTimeout(() => {
+          record.on_release = { transform: el.style.transform, transition: el.style.transition };
+        }),
       { capture: true, once: true }
     );
   });
@@ -390,21 +387,12 @@ test("a sheet let go to close never stands still on its way down", async ({ page
   }
   await page.waitForTimeout(150);
   await page.mouse.up();
+  const on_release = await page.evaluate(
+    () => (window as unknown as { on_release?: { transform: string; transition: string } }).on_release
+  );
+  expect(on_release?.transform).toBe("translateY(100%)");
+  expect(on_release?.transition).toContain("transform");
   await expect(sheet).toHaveCount(0);
-  const tops = await page.evaluate(() => (window as unknown as { tops: number[] }).tops);
-  const onscreen = tops.filter((top) => top < 844);
-  expect(onscreen.length).toBeGreaterThan(2);
-  // Once it starts down, every frame is lower than the last, with no leap
-  // over a large part of the way at once. (A busy engine may hold a
-  // transition at its start for a frame or two; the stutter this guards
-  // against stood still, leapt half the way in one frame, then crept back
-  // up.)
-  const first_move = onscreen.findIndex((top) => top !== onscreen[0]);
-  const moving = onscreen.slice(Math.max(0, first_move - 1));
-  const distance = 844 - onscreen[0]!;
-  const steps = moving.slice(1).map((top, i) => top - moving[i]!);
-  expect(steps.filter((step) => step <= 0)).toEqual([]);
-  expect(steps.filter((step) => step > distance * 0.4)).toEqual([]);
 });
 
 // Scroll down the way a reader does, in steps, stopping midway.
@@ -414,8 +402,7 @@ async function read_down(page: Page) {
   await expect(page.getByRole("status")).toHaveText(/myndir?$/);
   const middle = await page.evaluate(() => (document.documentElement.scrollHeight - innerHeight) / 2);
   for (let y = 60; y <= middle; y += 60) {
-    await page.evaluate((y) => scrollTo(0, y), y);
-    await page.waitForTimeout(30);
+    await scroll_step(page, y);
   }
 }
 
@@ -444,8 +431,7 @@ test("home page brings the bar back only when scrolling up", async ({ page }) =>
   await expect(pill).toHaveCSS("opacity", "0");
   const bottom = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
   for (let y = Math.ceil(bottom / 2); y <= bottom; y += 60) {
-    await page.evaluate((y) => scrollTo(0, y), Math.min(y, bottom));
-    await page.waitForTimeout(30);
+    await scroll_step(page, Math.min(y, bottom));
   }
   await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
   await page.waitForTimeout(400);
@@ -457,8 +443,7 @@ test("home page brings the bar back only when scrolling up", async ({ page }) =>
   await expect(pill).toHaveCSS("opacity", "0");
 
   for (const step of [20, 40, 60]) {
-    await page.evaluate((y) => scrollTo(0, y), bottom - step);
-    await page.waitForTimeout(30);
+    await scroll_step(page, bottom - step);
   }
   await expect(pill).toHaveCSS("opacity", "1");
 
@@ -540,3 +525,13 @@ test("home page lets taps beside the bar's pill reach the posters", async ({ pag
   );
   expect(hit).toBe("A");
 });
+
+// Scroll to y and wait until the page has rendered it, so the page sees the
+// step as a scroll of its own. CI's WebKit renders a few frames a second,
+// and steps taken by the clock arrived merged, as one scroll the other way.
+async function scroll_step(page: Page, y: number) {
+  await page.evaluate(async (y) => {
+    scrollTo(0, y);
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  }, y);
+}
