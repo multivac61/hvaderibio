@@ -13,11 +13,7 @@
   import { poster_tilt } from "#lib/PosterTilt.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import { count_label } from "#lib/accessible-labels.js";
-  import { scale } from "svelte/transition";
-  import { flip } from "svelte/animate";
-  import { quintOut } from "svelte/easing";
-  import { can_view_transition } from "#lib/view-transition.js";
-  import { after_stage } from "#lib/sheet-stage.js";
+  import { to_top } from "#lib/sheet-stage.js";
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
   import { resolve } from "$app/paths";
@@ -80,31 +76,13 @@
   const filtered_cinemas_showtimes = $derived(now ? programme_at(now) : prerendered);
 
   // A new cinema is a new list: back to its top, rather than wherever the
-  // shorter list happens to end. On a phone, once the sheet it was chosen
-  // in has gone and the page is itself again.
+  // shorter list happens to end. Chosen in a phone's sheet, at once behind
+  // it, so the sheet leaves onto the top of the new list.
   let shown_cinema = selection.cinema;
   $effect(() => {
     if (selection.cinema === shown_cinema) return;
     shown_cinema = selection.cinema;
-    after_stage(scroll_to_top);
-  });
-
-  // After the sheet, bits-ui hands the page its scrolling back a moment
-  // later, and that hand-over stops a smooth scroll already under way.
-  const scroll_to_top = (frames = 60) => {
-    if (document.body.style.overflow === "hidden" && frames > 0) {
-      requestAnimationFrame(() => scroll_to_top(frames - 1));
-      return;
-    }
-    scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
-  };
-
-  // Whether the grid animates its own changes: where the page's view
-  // transition does not (phones), and the visitor has not asked for less
-  // motion. Read once the app runs; the prerendered grid does not move.
-  let grid_motion = $state(false);
-  onMount(() => {
-    grid_motion = !can_view_transition() && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    to_top();
   });
 </script>
 
@@ -164,16 +142,8 @@
       {@attach poster_tilt}
       tabindex="-1"
       class="-mx-1 grid grid-cols-[repeat(auto-fill,minmax(min(8.5rem,100%),2fr))] gap-4 focus:outline-none sm:mx-0 sm:mb-8 sm:grid-cols-[repeat(auto-fill,minmax(min(13rem,100%),2fr))] sm:gap-6 sm:pt-2 lg:grid-cols-[repeat(auto-fill,minmax(min(16rem,100%),2fr))] xl:grid-cols-[repeat(auto-fill,minmax(min(20rem,100%),2fr))]">
-      <!-- On a phone a new choice moves the grid: posters in both selections
-           glide to their new places, new ones fade in. Wide screens slide
-           them with the page's view transition instead, and visitors who
-           ask for less motion get the new grid at once. -->
       {#each filtered_cinemas_showtimes as movie, index (movie.id)}
-        <div
-          animate:flip={{ duration: grid_motion ? 300 : 0, easing: quintOut }}
-          in:scale={{ duration: grid_motion ? 250 : 0, start: 0.96, easing: quintOut }}>
-          <MoviePosterCard {movie} {index} />
-        </div>
+        <MoviePosterCard {movie} {index} />
       {/each}
     </div>
   {/if}

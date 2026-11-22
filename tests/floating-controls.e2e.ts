@@ -302,34 +302,11 @@ test("the stepped-back page keeps its shape when the page's length changes", asy
   expect(Math.abs((await card_bottom()) - before)).toBeLessThan(2);
 });
 
-// On a phone, a new choice moves the grid rather than swapping it in one
-// frame: posters in both selections glide to their new places, and new
-// ones fade in.
-test("phone: posters glide to their places when the choice changes", async ({ page }) => {
-  await page.clock.setFixedTime(FIXTURE_MORNING);
-  await page.goto("/");
-  await expect(page.locator('a[href^="/movie/"]').first()).toBeVisible();
-  await page.evaluate(() => {
-    const record = window as unknown as { moved: number };
-    record.moved = 0;
-    const watch = () => {
-      for (const animation of document.getAnimations()) {
-        const target = (animation.effect as KeyframeEffect | null)?.target;
-        // A grid item: holds one poster, and is not the page around them.
-        if (target instanceof Element && target.querySelectorAll("a[data-movie-id]").length === 1) record.moved++;
-      }
-      requestAnimationFrame(watch);
-    };
-    watch();
-  });
-  await page.locator("#select-cinemas").tap();
-  await page.getByRole("dialog").getByRole("radio", { name: "Bíó Paradís", exact: true }).tap();
-  await expect.poll(() => page.evaluate(() => (window as unknown as { moved: number }).moved)).toBeGreaterThan(0);
-});
-
-// A new cinema is a new list: once the sheet has gone, the page goes back to
-// its top, rather than leaving the reader wherever the shorter list ends.
-test("phone: choosing a cinema goes back to the top of the list", async ({ page }) => {
+// A new cinema is a new list, so the page goes back to its top. It does so
+// at once, behind the sheet, while the sheet still covers the page; the sheet
+// then leaves onto the top of the new list. Scrolling up after the sheet
+// had gone stacked a third movement on the sheet and the grid.
+test("phone: choosing a cinema goes back to the top of the list behind the sheet", async ({ page }) => {
   await page.clock.setFixedTime(FIXTURE_MORNING);
   await page.goto("/");
   await expect(page.locator('a[href^="/movie/"]').first()).toBeVisible();
@@ -342,8 +319,39 @@ test("phone: choosing a cinema goes back to the top of the list", async ({ page 
   await expect(page.locator("#select-cinemas")).toHaveCSS("opacity", "1");
   await page.locator("#select-cinemas").tap();
   await page.getByRole("dialog").getByRole("radio", { name: "Bíó Paradís", exact: true }).tap();
+  // Back at the top while the sheet is still on its way down.
+  await expect.poll(() => page.evaluate(() => [scrollY, document.querySelectorAll("[role=dialog]").length])).toEqual([0, 1]);
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+  expect(await page.evaluate(() => scrollY)).toBe(0);
+});
+
+// While the sheet is up the page behind it is stepped back, scaled: the
+// grid cannot glide there (its moves are measured on screen, where the
+// scale threw them off and the posters jumped). It changes at once, behind
+// the sheet.
+test("phone: a day chosen in the sheet changes the grid without gliding", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.locator('a[href^="/movie/"]').first()).toBeVisible();
+  await page.locator("#select-cinemas").tap();
+  const sheet = page.getByRole("dialog");
+  await expect.poll(() => sheet.evaluate((el) => el.getAnimations().length)).toBe(0);
+  await page.evaluate(() => {
+    const record = window as unknown as { moved: number };
+    record.moved = 0;
+    const watch = () => {
+      for (const animation of document.getAnimations()) {
+        const target = (animation.effect as KeyframeEffect | null)?.target;
+        if (target instanceof Element && target.querySelectorAll("a[data-movie-id]").length === 1) record.moved++;
+      }
+      requestAnimationFrame(watch);
+    };
+    watch();
+  });
+  await sheet.getByRole("radio", { name: "Þriðjudag", exact: true }).tap();
+  await expect(sheet.getByRole("radio", { name: "Þriðjudag", exact: true })).toBeChecked();
+  await page.waitForTimeout(500);
+  expect(await page.evaluate(() => (window as unknown as { moved: number }).moved)).toBe(0);
 });
 
 // Let go past the point of closing, the sheet keeps moving: every frame

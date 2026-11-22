@@ -18,13 +18,42 @@ const RADIUS = 12;
 
 let stage: { el: HTMLElement } | null = null;
 let generation = 0;
-let settled: (() => void)[] = [];
 
-/** Run `then` once the page is itself again: at once, unless a sheet holds it stepped back. */
-export function after_stage(then: () => void) {
-  if (stage) settled.push(then);
-  else then();
+// Clip and scale the stepped-back page about the top of the screen, with the
+// page scrolled `top` down.
+const frame_at = (el: HTMLElement, top: number) => {
+  el.style.transformOrigin = `50% ${top}px`;
+  // A day chosen in the sheet changes the page underneath it. Held at
+  // least down to the bottom of the screen, the page cannot shrink out
+  // from under the card (or pull the scroll position with it), and the
+  // clip measured from that point keeps the card's shape.
+  el.style.minHeight = `${top + innerHeight}px`;
+  el.style.clipPath = `inset(${top}px 0 calc(100% - ${top + innerHeight}px) 0 round ${RADIUS}px)`;
+};
+
+/**
+ * Bring the page to its top. Behind a sheet it goes at once, the card
+ * framing the new top in the same frame, so the sheet leaves onto it;
+ * otherwise it scrolls there.
+ */
+export function to_top() {
+  if (!stage) {
+    scroll_when_free();
+    return;
+  }
+  scrollTo({ top: 0, behavior: "instant" });
+  frame_at(stage.el, Math.max(0, scrollY - stage.el.offsetTop));
 }
+
+// bits-ui hands the page its scrolling back a moment after a sheet, and that
+// hand-over stops a smooth scroll already under way.
+const scroll_when_free = (frames = 60) => {
+  if (document.body.style.overflow === "hidden" && frames > 0) {
+    requestAnimationFrame(() => scroll_when_free(frames - 1));
+    return;
+  }
+  scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+};
 
 // Only scale and translate move, which the phone hands to its GPU. The
 // rounded clip lands at once: Safari repaints a clip on every frame it
@@ -46,15 +75,8 @@ export function push_stage(ms = 500) {
   if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   generation++;
   if (!stage) {
-    const top = Math.max(0, scrollY - el.offsetTop);
     stage = { el };
-    el.style.transformOrigin = `50% ${top}px`;
-    // A day chosen in the sheet changes the page underneath it. Held at
-    // least down to the bottom of the screen, the page cannot shrink out
-    // from under the card (or pull the scroll position with it), and the
-    // clip measured from that point keeps the card's shape.
-    el.style.minHeight = `${top + innerHeight}px`;
-    el.style.clipPath = `inset(${top}px 0 calc(100% - ${top + innerHeight}px) 0 round ${RADIUS}px)`;
+    frame_at(el, Math.max(0, scrollY - el.offsetTop));
     document.documentElement.dataset.sheetPushed = "";
     el.style.transition = "none";
     set(0);
@@ -87,9 +109,6 @@ export function release_stage(ms = 300) {
       el.style.removeProperty(property);
     delete document.documentElement.dataset.sheetPushed;
     stage = null;
-    const waiting = settled;
-    settled = [];
-    for (const then of waiting) then();
   };
   const on_end = (event: TransitionEvent) => {
     if (event.target === el && event.propertyName === "scale") done();
