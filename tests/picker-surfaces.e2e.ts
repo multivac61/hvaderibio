@@ -108,6 +108,24 @@ test("desktop: opening the panel puts focus where it helps", async ({ browser, b
   await context.close();
 });
 
+// The panel's frost must reach every engine. The build's minifier took the
+// standard backdrop-filter and Safari's -webkit- copy for one property and
+// kept only the last written, the prefixed one, which Chromium ignores: no
+// blur there at all. WebKit, which runs these tests, reads either name, so
+// check what the built stylesheets hold.
+test("the built styles frost the panel in every engine", async ({ page }) => {
+  await open_home(page);
+  const rules = await page.evaluate(async () => {
+    const sheets = [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')].map((link) => link.href);
+    const text = (await Promise.all(sheets.map((href) => fetch(href).then((response) => response.text())))).join("\n");
+    return [
+      ...text.matchAll(/[^{}]*(?:programme-panel-clip|view-transition-group\(programme-panel\))[^{}]*\{[^}]*backdrop-filter[^}]*\}/g),
+    ].map((match) => match[0]);
+  });
+  expect(rules.length).toBeGreaterThan(0);
+  for (const rule of rules) expect(rule).toMatch(/(^|[;{])backdrop-filter:/);
+});
+
 // The days share the row. A label wider than its share pushes the last day
 // past the track's edge, which cuts off the highlight's rounded corner. A
 // Sunday lists the longest run of names, up to Miðvikudag.
