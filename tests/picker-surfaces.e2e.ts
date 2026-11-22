@@ -72,6 +72,42 @@ test("desktop: the panel stays frosted while the day changes", async ({ browser,
   await context.close();
 });
 
+// Open, the panel carries the pill's phrase where the pill was. The pill
+// itself makes way, or it showed through the glass as a second pill.
+test("desktop: the pill makes way for the panel that grew from it", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  const pill = page.locator("#select-cinemas-desktop");
+  await expect(pill).toHaveCSS("opacity", "1");
+  await pill.click();
+  await expect(page.locator(".programme-panel-clip")).toBeVisible();
+  await expect(pill).toHaveCSS("opacity", "0");
+  await page.keyboard.press("Escape");
+  await expect(pill).toHaveCSS("opacity", "1");
+  await context.close();
+});
+
+// Opened with the mouse, nothing in the panel wears a focus ring: Safari
+// drew one around the phrase row that bits-ui focused on opening. Opened
+// from the keyboard, focus lands on the chosen day, ready for the arrows.
+test("desktop: opening the panel puts focus where it helps", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  const pill = page.locator("#select-cinemas-desktop");
+  await pill.click();
+  await expect(page.locator(".programme-panel-clip")).toBeVisible();
+  expect(await page.evaluate(() => document.querySelector(".programme-panel :focus-visible")?.outerHTML.slice(0, 80) ?? null)).toBeNull();
+  await page.keyboard.press("Escape");
+  await expect(pill).toBeFocused();
+
+  await page.keyboard.press("Enter");
+  const today = page.getByRole("radiogroup", { name: "Veldu dag" }).getByRole("radio", { checked: true });
+  await expect(today).toBeFocused();
+  await context.close();
+});
+
 // The days share the row. A label wider than its share pushes the last day
 // past the track's edge, which cuts off the highlight's rounded corner. A
 // Sunday lists the longest run of names, up to Miðvikudag.
