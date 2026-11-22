@@ -33,10 +33,10 @@ test("desktop: the panel blurs the posters behind it", async ({ browser, baseURL
   await context.close();
 });
 
-// Choosing a day keeps the panel open over the posters. It stays part of
-// the page while the grid changes behind it: lifted onto a layer of its
-// own, it can no longer see the posters to frost them, and Safari leaves
-// them sharp under the list.
+// Choosing a day keeps the panel open over the posters, and the day lands
+// at once, with no view transition: lifted onto a transition's layer, the
+// panel could not see the posters to frost them, and Safari left them sharp
+// under the list.
 test("desktop: the panel stays frosted while the day changes", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
   const page = await context.newPage();
@@ -45,30 +45,20 @@ test("desktop: the panel stays frosted while the day changes", async ({ browser,
   // A click lands only once the panel has grown out of the pill: until then
   // its rows lie outside the growing clip, and a click there misses them.
   await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
-  await expect(page.locator(".programme-panel-clip")).toBeVisible();
   await page.evaluate(() => {
-    const record = window as unknown as { during?: { name: string; blur: string; layers: string[] } };
+    const record = window as unknown as { transitioned: boolean };
+    record.transitioned = false;
     const look = () => {
-      if (!document.documentElement.matches(":active-view-transition")) return requestAnimationFrame(look);
-      const panel = document.querySelector(".programme-panel")!;
-      record.during = {
-        name: getComputedStyle(panel).viewTransitionName,
-        blur: getComputedStyle(panel.firstElementChild!).backdropFilter,
-        layers: document
-          .getAnimations()
-          .map((animation) => (animation.effect as KeyframeEffect | null)?.pseudoElement ?? "")
-          .filter((pseudo) => pseudo.includes("poster-")),
-      };
+      if (document.documentElement.matches(":active-view-transition")) record.transitioned = true;
+      requestAnimationFrame(look);
     };
     look();
   });
   await page.getByRole("radio", { name: "Á morgun", exact: true }).click();
-  await expect.poll(() => page.evaluate(() => (window as unknown as { during?: object }).during)).toBeDefined();
-  const during = await page.evaluate(() => (window as unknown as { during: { name: string; blur: string; layers: string[] } }).during);
-  expect(during.name).toBe("none");
-  expect(during.blur).toContain("blur(");
-  // Posters lifted out of the page would be drawn over it.
-  expect(during.layers).toEqual([]);
+  await expect(page.getByRole("radio", { name: "Á morgun", exact: true })).toBeChecked();
+  await page.waitForTimeout(400);
+  expect(await page.evaluate(() => (window as unknown as { transitioned: boolean }).transitioned)).toBe(false);
+  expect(await page.locator(".programme-panel-clip").evaluate((el) => getComputedStyle(el).backdropFilter)).toContain("blur(");
   await context.close();
 });
 
