@@ -42,6 +42,22 @@ test.describe("desktop header", () => {
     await expect(days.last()).toBeFocused();
   });
 
+  // Each choice runs as a view transition. Pressed faster than they play,
+  // the last press must win: an older choice landing after a newer one left
+  // the wrong day chosen.
+  test("the last of quick presses is the day chosen", async ({ page }) => {
+    await open_home(page);
+    await open_picker(page, "#select-cinemas-desktop");
+    const days = page.getByRole("radiogroup", { name: "Veldu dag" }).filter({ visible: true }).getByRole("radio");
+    await days.first().focus();
+    for (let i = 0; i < 5; i++) await page.keyboard.press("ArrowRight");
+    // Five steps right from the first of four days, wrapping: the second.
+    await expect(days.nth(1)).toBeChecked();
+    await expect(days.nth(1)).toBeFocused();
+    await page.waitForTimeout(600);
+    await expect(days.nth(1)).toBeChecked();
+  });
+
   test("the days are one tab stop, entered on the chosen day", async ({ page }) => {
     await open_home(page);
     await open_picker(page, "#select-cinemas-desktop");
