@@ -188,3 +188,13 @@ test("phone: coming back from a movie shows its posters at once", async ({ page 
   await page.waitForTimeout(600);
   expect((await lowest_opacity(page)).posters ?? 1).toBe(1);
 });
+
+test("phone: pressing the trailer sinks its play button", async ({ page }) => {
+  await page.route("https://www.youtube.com/**", (route) => route.fulfill({ body: "" }));
+  await page.goto("/movie/verity");
+  const play = page.locator("a[aria-label='Spila stiklu'] .rounded-full").filter({ visible: true });
+  const box = (await play.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await expect(play).toHaveCSS("scale", "0.97");
+});
