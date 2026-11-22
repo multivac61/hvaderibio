@@ -6,6 +6,42 @@
 
 @theme {
   --container-9xl: 128rem;
+
+  /* The built-in curves are too gentle to read as a response to a tap:
+     "snappy" starts at full speed for things that appear or press, "glide"
+     eases both ends for things that move from one place to another. */
+  --ease-snappy: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-glide: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* The programme picker's palette, in one place: smoked glass. "ink" is
+     its text and, at low opacity, its tints and hairlines; the chosen day is
+     white. iOS Safari tints its toolbar from what touches the bottom edge,
+     and can only match a solid colour: a see-through sheet alone left a
+     black band under it. The solid sheet grey holds that edge, still, under
+     the glass sheet; it is what the glass looks like over the sheet's
+     dimmed backdrop. */
+  --color-pick-surface: rgb(38 38 38 / 0.55);
+  --color-pick-sheet: rgb(30 30 30);
+  /* The picker's glass, the desktop panel and the phone sheet alike. */
+  --color-pick-panel: rgb(24 24 24 / 0.6);
+  --color-pick-ink: #fff;
+  --color-pick-accent: rgb(255 255 255 / 0.92);
+  --color-pick-on-accent: #000;
+  --color-pick-highlight: #fff;
+}
+
+/* The picker's depth: a bright hairline where light catches the top edge,
+   a faint outline, and a soft shadow beneath. */
+:root {
+  --pick-shadow-pill: inset 0 0.5px 0 rgb(255 255 255 / 0.28), 0 0 0 0.5px rgb(255 255 255 / 0.14), 0 12px 32px rgb(0 0 0 / 0.35);
+  /* The desktop panel's edge is drawn inside its shape, which a clip grows,
+     and its shadow outside, on a layer the clip does not cut. "none" is the
+     same shadow, transparent, so the two can blend. */
+  --pick-edge-panel: inset 0 0.5px 0 rgb(255 255 255 / 0.28), inset 0 0 0 0.5px rgb(255 255 255 / 0.14);
+  --pick-panel-blur: blur(40px) saturate(180%);
+  --pick-shadow-panel: 0 24px 60px rgb(0 0 0 / 0.45);
+  --pick-shadow-panel-none: 0 24px 60px rgb(0 0 0 / 0);
+  --pick-shadow-sheet: inset 0 0.5px 0 rgb(255 255 255 / 0.24), 0 -12px 40px rgb(0 0 0 / 0.35);
 }
 
 /* Motion curves, also behind Tailwind's ease-out and ease-in-out. The
@@ -68,7 +104,23 @@ html {
   }
 }
 
+/* While a phone's sheet is up, the page steps back like a card (see
+   BottomSheet.svelte): the sky goes with it, and black shows around it. */
+@media (max-width: 767px) {
+  html[data-sheet-pushed] {
+    background-image: none;
+  }
+  html[data-sheet-pushed] [data-sheet-stage] {
+    background: #000 url("./lib/assets/stars-small.webp") 0 0 / 800px repeat;
+  }
+}
+
 @layer base {
+  /* No grey flash on tap: every press here answers with its own state. */
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   html,
   body {
     @apply h-full;
@@ -82,6 +134,23 @@ html {
   ::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* Elements that animate themselves while the programme changes (the day
+   picker's highlight, the picker panel closing) are shown live in the view
+   transition, rather than under a fading snapshot of how they were. */
+::view-transition-old(*.live) {
+  display: none;
+}
+::view-transition-new(*.live) {
+  animation: none;
+}
+
+/* Posters move across the screen to their new places: the strong in-out
+   curve, not the browser's plain ease. */
+::view-transition-group(*) {
+  animation-duration: 250ms;
+  animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 /* Keyboard focus, everywhere: a ring drawn inside the element with a soft

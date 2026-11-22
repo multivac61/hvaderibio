@@ -28,7 +28,7 @@ async function bottom_edge_offenders(page: Page): Promise<string[]> {
 }
 
 // Scroll down in steps the way a reader does, so the floating controls tuck
-// away. Stop midway: they come back at the top and bottom of the page. Mobile
+// away. Stop midway, short of the top of the page, where they come back. Mobile
 // WebKit has no mouse wheel to drive this.
 async function scroll_down(page: Page) {
   const middle = await page.evaluate(() => (document.documentElement.scrollHeight - innerHeight) / 2);

@@ -96,7 +96,7 @@ test("the grid stays sharp while films that have ended drop out", async ({ page 
     Object.assign(window, { frames_seen: frames });
     let first: string | undefined;
     const sample = () => {
-      const grid = document.querySelector("a[data-movie-id]")?.parentElement;
+      const grid = document.querySelector("a[data-movie-id]")?.closest(".grid");
       if (grid) {
         const order = [...grid.querySelectorAll("a[data-movie-id]")].map((a) => a.getAttribute("data-movie-id")).join();
         first ??= order;
@@ -124,7 +124,7 @@ test("coming back from a movie shows the chosen day at once, without a blur", as
     const frames: { opacity: number; posters: string }[] = [];
     Object.assign(window, { grid_frames: frames });
     const sample = () => {
-      const grid = document.querySelector("a[data-movie-id]")?.parentElement;
+      const grid = document.querySelector("a[data-movie-id]")?.closest(".grid");
       if (grid) {
         const posters = [...grid.querySelectorAll("a[data-movie-id]")].map((a) => a.getAttribute("data-movie-id")).join();
         frames.push({ opacity: Number(getComputedStyle(grid).opacity), posters });
@@ -135,7 +135,10 @@ test("coming back from a movie shows the chosen day at once, without a blur", as
   });
   await page.goto("/");
   await app_started(page);
-  await page.getByRole("radio", { name: "þriðjudag" }).filter({ visible: true }).click();
+  await page.locator("#select-cinemas").tap();
+  await page.getByRole("dialog").getByRole("radio", { name: "Þriðjudag" }).tap();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
   const tuesday = await poster_titles(page);
   await page.locator("a[data-movie-id]").first().click();
   await page.waitForURL(/\/movie\//);

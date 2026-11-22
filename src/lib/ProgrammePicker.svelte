@@ -1,0 +1,228 @@
+<script lang="ts">
+  // The chosen day and cinema as one phrase, "Í dag · Höfuðborgarsvæðið",
+  // which opens both choices together. Wide screens open it in place: the
+  // pill grows into the panel. Phones get a bottom sheet, within reach of
+  // the thumb and dismissed with a pull.
+  import { Popover } from "bits-ui";
+  import type { CinemaOption } from "#lib/cinemas.js";
+  import { get_day_label } from "#lib/day-picker.js";
+  import BottomSheet from "#lib/BottomSheet.svelte";
+  import ProgrammeChoices from "#lib/ProgrammeChoices.svelte";
+
+  type Props = {
+    cinemaOptions: readonly CinemaOption[];
+    cinema: string;
+    day: string;
+    onCinema: (cinema: string) => void;
+    onDay: (day: string) => void;
+    presentation: "header" | "floating" | "inline";
+    id: string;
+  };
+
+  const { cinemaOptions, cinema, day, onCinema, onDay, presentation, id }: Props = $props();
+
+  let open = $state(false);
+  const height = $derived(presentation === "header" ? 48 : 40);
+  const text_size = $derived(presentation === "header" ? "text-[17px]" : "text-[15px]");
+  const align = $derived(presentation === "header" ? "center" : "start");
+
+  // A pill low in the window, like the movie page's below its trailer, opens
+  // a panel that runs past the bottom: bring the page up just enough to show
+  // it, as the panel grows.
+  let panel: HTMLElement | null = $state(null);
+  $effect(() => {
+    if (!open || !panel) return;
+    const target = panel;
+    const frame = requestAnimationFrame(() =>
+      target.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" })
+    );
+    return () => cancelAnimationFrame(frame);
+  });
+
+  const pick_cinema = (choice: string, finish: boolean) => {
+    onCinema(choice);
+    if (finish) open = false;
+  };
+</script>
+
+{#snippet phrase()}
+  <span class="sr-only">Breyta vali:</span>
+  <svg
+    class="text-pick-highlight size-4 shrink-0"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.6"
+    aria-hidden="true">
+    <rect x="2.5" y="3.5" width="11" height="10" rx="2" /><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3" stroke-linecap="round" />
+  </svg>
+  <span class="text-pick-ink font-semibold whitespace-nowrap">{get_day_label(day)}</span>
+  <span class="text-pick-ink/30" aria-hidden="true">·</span>
+  <span class="text-pick-ink/80 truncate font-medium">{cinema}</span>
+  <svg
+    class="text-pick-ink/50 size-3.5 shrink-0 in-data-[panel-phrase]:rotate-180"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    aria-hidden="true">
+    <path d="M4.5 6.5 8 10l3.5-3.5" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+{/snippet}
+
+{#snippet choices()}
+  <ProgrammeChoices {cinemaOptions} {cinema} {day} {onDay} onCinema={pick_cinema} />
+{/snippet}
+
+{#if presentation === "floating"}
+  <BottomSheet
+    bind:open
+    title="Hvenær og hvar?"
+    triggerId={id}
+    triggerClass="flex h-11 max-w-full items-center gap-2 rounded-full bg-pick-surface/80 px-4 text-[15px] shadow-(--pick-shadow-pill) backdrop-blur-2xl transition-transform duration-150 ease-snappy select-none active:scale-[0.97] motion-reduce:active:scale-100">
+    {#snippet trigger()}{@render phrase()}{/snippet}
+    {@render choices()}
+  </BottomSheet>
+{:else}
+  <div class={presentation === "header" ? "flex justify-center" : ""}>
+    <Popover.Root bind:open>
+      <Popover.Trigger
+        {id}
+        style="height: {height}px"
+        class="ease-snappy bg-pick-surface/90 flex max-w-full items-center gap-2 rounded-full px-5 shadow-(--pick-shadow-pill) backdrop-blur-2xl transition-transform duration-150 select-none active:scale-[0.97] motion-reduce:active:scale-100 {text_size}">
+        {@render phrase()}
+      </Popover.Trigger>
+      <Popover.Portal>
+        <!-- Pulled back over the trigger by its own height, so the panel's
+             first row is exactly where the pill is. Always below and never
+             shifted: the clip grows from where the pill is, so the panel
+             must not move away from it near a screen edge. -->
+        <Popover.Content
+          bind:ref={panel}
+          side="bottom"
+          sideOffset={-height}
+          {align}
+          avoidCollisions={false}
+          data-align={align}
+          class="programme-panel z-50 w-[22.5rem] max-w-[calc(100vw-2rem)] min-w-(--bits-popover-anchor-width) rounded-[22px] outline-none">
+          <!-- The shape that grows. The drop shadow stays outside it, on the
+               panel, where a clip cannot cut it off. -->
+          <div
+            class="programme-panel-clip bg-pick-panel flex max-h-[max(20rem,var(--bits-popover-content-available-height))] flex-col rounded-[22px] shadow-(--pick-edge-panel)">
+            <!-- The pill's phrase, carried by the panel as it grows; it closes
+               the panel the way the pill opened it. -->
+            <button
+              type="button"
+              data-panel-phrase
+              aria-label="Loka"
+              onclick={() => (open = false)}
+              style="height: {height}px"
+              class="flex shrink-0 items-center gap-2 px-5 select-none {align === 'center' ? 'justify-center' : ''} {text_size}">
+              {@render phrase()}
+            </button>
+            <!-- A long list scrolls inside the panel, under the phrase, rather
+               than running off the screen. -->
+            <div class="programme-panel-body min-h-0 overflow-y-auto overscroll-contain px-3.5 pb-3.5">
+              {@render choices()}
+            </div>
+          </div>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  </div>
+{/if}
+
+<style>
+  /* bits-ui gives the panel the trigger's size as variables. Closed, the
+     shape is clipped to exactly that box at the pill's corner radius; open,
+     to the whole panel. The shape moves on screen, so it takes the in-out
+     curve, within the 250ms a popover gets; it closes faster than it opens. */
+  :global(.programme-panel) {
+    --w: var(--bits-popover-anchor-width);
+    --h: var(--bits-popover-anchor-height);
+    /* The drop shadow arrives as the shape fills out, and leaves over the
+       whole close: bits-ui keeps the panel until the panel's own
+       transitions end, and this is the one that lasts as long as the clip. */
+    box-shadow: var(--pick-shadow-panel);
+    transition: box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
+  }
+  :global(.programme-panel[data-starting-style]),
+  :global(.programme-panel[data-ending-style]) {
+    box-shadow: var(--pick-shadow-panel-none);
+  }
+  :global(.programme-panel[data-ending-style]) {
+    transition: box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  :global(.programme-panel-clip) {
+    clip-path: inset(0 round 22px);
+    transition: clip-path 250ms cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  :global(.programme-panel[data-ending-style] .programme-panel-clip) {
+    transition-duration: 200ms;
+  }
+  :global(.programme-panel[data-align="center"][data-starting-style] .programme-panel-clip),
+  :global(.programme-panel[data-align="center"][data-ending-style] .programme-panel-clip) {
+    clip-path: inset(0 calc(50% - var(--w) / 2) calc(100% - var(--h)) round calc(var(--h) / 2));
+  }
+  :global(.programme-panel[data-align="start"][data-starting-style] .programme-panel-clip),
+  :global(.programme-panel[data-align="start"][data-ending-style] .programme-panel-clip) {
+    clip-path: inset(0 calc(100% - var(--w)) calc(100% - var(--h)) 0 round calc(var(--h) / 2));
+  }
+
+  /* While the panel is open, a change behind it (a day) leaves it part of
+     the page. Lifted onto a layer of its own, an element is a backdrop
+     root: the panel would no longer see the posters to frost them, and
+     Safari leaves them sharp under the list. So the posters, which would be
+     drawn over it on layers of their own, cross-fade with the page instead
+     of sliding. */
+  :global(:root:has(.programme-panel[data-state="open"]) .movie-poster-image) {
+    view-transition-name: none !important;
+  }
+  /* A cinema closes the panel as the posters slide. Closing, it takes a
+     live layer of its own, above them, so the open panel in the old picture
+     of the page does not fade out over the one shrinking back into the
+     pill. One panel is open at a time, so one name. */
+  :global(:root:active-view-transition .programme-panel[data-state="closed"]) {
+    view-transition-name: programme-panel;
+    view-transition-class: live;
+  }
+  /* That layer cannot frost what is behind it either; it frosts the posters
+     itself, at the panel's corners, where the browser allows. */
+  :global(::view-transition-group(programme-panel)) {
+    backdrop-filter: var(--pick-panel-blur);
+    -webkit-backdrop-filter: var(--pick-panel-blur);
+    border-radius: 22px;
+  }
+  :global(.programme-panel-clip) {
+    backdrop-filter: var(--pick-panel-blur);
+    -webkit-backdrop-filter: var(--pick-panel-blur);
+  }
+
+  /* The choices fade in once the shape has mostly grown, and out at once. */
+  :global(.programme-panel-body) {
+    transition: opacity 170ms cubic-bezier(0.23, 1, 0.32, 1) 80ms;
+  }
+  :global(.programme-panel[data-starting-style] .programme-panel-body),
+  :global(.programme-panel[data-ending-style] .programme-panel-body) {
+    opacity: 0;
+    transition-delay: 0ms;
+    transition-duration: 100ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.programme-panel) {
+      transition: opacity 150ms ease;
+    }
+    :global(.programme-panel[data-starting-style]),
+    :global(.programme-panel[data-ending-style]) {
+      opacity: 0;
+    }
+    :global(.programme-panel-clip),
+    :global(.programme-panel[data-starting-style] .programme-panel-clip),
+    :global(.programme-panel[data-ending-style] .programme-panel-clip) {
+      clip-path: inset(0 round 22px) !important;
+      transition: none;
+    }
+  }
+</style>
