@@ -16,6 +16,19 @@
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
+/* Desktop view transitions (src/lib/view-transition.ts): posters glide to
+   where they land, the rest cross-fades. Movement eases in and out; the
+   fade is quick to start. */
+::view-transition-group(*) {
+  animation-duration: 300ms;
+  animation-timing-function: var(--ease-in-out);
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-timing-function: var(--ease-out);
+}
+
 /* A still night sky behind every page, drawn by src/draw-stars.ts. It is the
    page's own background rather than a fixed element: iOS Safari tints its
    toolbar from fixed elements at the bottom edge. iOS also ignores the fixed
