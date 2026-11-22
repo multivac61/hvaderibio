@@ -12,7 +12,7 @@
   // from the handle and title.
   import { Dialog } from "bits-ui";
   import type { Snippet } from "svelte";
-  import { follow_stage, push_stage, release_stage } from "#lib/sheet-stage.js";
+  import { drop_stage, follow_stage, push_stage, release_stage } from "#lib/sheet-stage.js";
 
   type Props = {
     open: boolean;
@@ -60,6 +60,9 @@
     if (sheet && open && !leaving) push_stage();
     else release_stage();
   });
+  // Gone with its page (browser back with the sheet up), it hands the page
+  // back at once.
+  $effect(() => drop_stage);
 
   // Past the resting point the sheet follows less the further it goes.
   const rubberband = (overshoot: number, size: number) => (overshoot * size * 0.55) / (size + 0.55 * Math.abs(overshoot));

@@ -353,6 +353,29 @@ test("phone: a day chosen in the sheet changes the grid without gliding", async 
   expect(await page.evaluate(() => (window as unknown as { moved: number }).moved)).toBe(0);
 });
 
+// Leaving the page with the sheet still up (browser back) must hand the
+// page back as it was. The sheet went with the page it was on and never
+// let go: the page navigated to stayed stepped back, shrunk, clipped to
+// one screen and without its sky.
+test("phone: going back with the sheet open leaves the page as it was", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/um");
+  await page.getByRole("link", { name: "Dagskráin" }).click();
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await expect(page.locator("#select-cinemas")).toHaveCSS("opacity", "1");
+  await page.locator("#select-cinemas").tap();
+  await expect.poll(() => page.locator("[data-sheet-stage]").evaluate((el) => getComputedStyle(el).scale)).not.toBe("none");
+  await page.goBack();
+  await expect(page).toHaveURL(/\/um$/);
+  await expect.poll(() => page.evaluate(() => document.documentElement.hasAttribute("data-sheet-pushed"))).toBe(false);
+  const stage = await page.locator("[data-sheet-stage]").evaluate((el) => ({
+    scale: getComputedStyle(el).scale,
+    clip: getComputedStyle(el).clipPath,
+    style: el.getAttribute("style"),
+  }));
+  expect(stage).toEqual({ scale: "none", clip: "none", style: null });
+});
+
 // Let go past the point of closing, the sheet sets off down at once, in the
 // same task as the release: it used to wait two frames for the dialog's
 // ending style, standing still, and then leap. (Checked by what the release
