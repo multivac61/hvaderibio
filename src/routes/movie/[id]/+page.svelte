@@ -13,7 +13,7 @@
   import { is_keyboard_navigation } from "#lib/input-modality.js";
   import { open_on_space } from "#lib/open-on-space.js";
   import { count_label } from "#lib/accessible-labels.js";
-  import { fade } from "svelte/transition";
+  import { reveal_on_load } from "#lib/motion.js";
 
   const { data } = $props();
   const movie = $derived(data.movie);
@@ -79,8 +79,7 @@
         <!-- Mobile: Show trailer thumbnail if available, otherwise poster -->
         {#if youtube_id}
           <div
-            in:fade={{ duration: 260 }}
-            class="aspect-video overflow-hidden rounded-md bg-neutral-900 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:hidden">
+            class="fade-in aspect-video overflow-hidden rounded-md bg-neutral-900 [--fade-in:260ms] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:hidden">
             <!-- Phones hand the trailer to the YouTube app, which plays it best;
                  in the same tab, so without the app back still returns here. -->
             <a href="https://www.youtube.com/watch?v={youtube_id}" aria-label="Spila stiklu" class="group relative block h-full w-full">
@@ -92,9 +91,12 @@
                 fetchpriority="high"
                 loading="eager"
                 decoding="async"
-                class="h-full w-full object-cover" />
+                {@attach reveal_on_load}
+                class="h-full w-full object-cover transition-opacity duration-200 ease-out data-loading:opacity-0" />
               <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
-                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
+                <!-- Sinks when pressed, showing the tap landed while the YouTube app opens. -->
+                <div
+                  class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 transition-transform duration-150 ease-out group-hover:scale-110 group-active:scale-[0.97]">
                   <svg aria-hidden="true" class="ml-0.5 h-6 w-6 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                   </svg>
@@ -106,9 +108,8 @@
         <!-- Poster: always on desktop, on mobile only when there is no trailer.
              The blank source keeps hidden phones from downloading it. -->
         <div
-          in:fade={{ duration: 260 }}
           {@attach poster_tilt}
-          class="poster-card relative rounded-md {youtube_id ? 'hidden md:block' : 'block'}">
+          class="fade-in poster-card relative rounded-md [--fade-in:260ms] {youtube_id ? 'hidden md:block' : 'block'}">
           <PosterTilt id={movie.id}>
             <picture class="block">
               {#if youtube_id}
@@ -165,8 +166,7 @@
         <!-- Trailer (desktop only - mobile shows in hero position) -->
         {#if youtube_id}
           <div
-            in:fade={{ duration: 260 }}
-            class="hidden aspect-video overflow-hidden rounded-md bg-neutral-900 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:block">
+            class="fade-in hidden aspect-video overflow-hidden rounded-md bg-neutral-900 [--fade-in:260ms] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-white/90 md:block">
             <!-- The trailer plays on its own page, so back and forward step through it. -->
             <a
               href={resolve("/movie/[id]/trailer", { id: data.path })}
@@ -179,9 +179,11 @@
                 height="720"
                 loading="lazy"
                 decoding="async"
-                class="h-full w-full object-cover" />
+                {@attach reveal_on_load}
+                class="h-full w-full object-cover transition-opacity duration-200 ease-out data-loading:opacity-0" />
               <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
-                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
+                <div
+                  class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 transition-transform duration-150 ease-out group-hover:scale-110 group-active:scale-[0.97]">
                   <svg aria-hidden="true" class="ml-0.5 h-5 w-5 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                   </svg>
@@ -210,13 +212,13 @@
           </p>
           {#key `${selection.day}-${selection.cinema}`}
             {#if visible_showtimes.length > 0}
-              <div in:fade={{ duration: 160 }} class="space-y-3">
+              <div data-day-programme class="fade-in space-y-3">
                 {#each visible_showtimes as { cinema, showtimes } (cinema)}
                   <CinemaShowtimeRow {cinema} {showtimes} />
                 {/each}
               </div>
             {:else}
-              <div in:fade={{ duration: 180 }} class="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-4 text-sm text-neutral-400">
+              <div data-day-programme class="fade-in rounded-2xl border border-white/[0.06] bg-white/[0.03] p-4 text-sm text-neutral-400">
                 Engar sýningar fundust fyrir þetta val.
               </div>
             {/if}

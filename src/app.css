@@ -8,6 +8,49 @@
   --container-9xl: 128rem;
 }
 
+/* Motion curves, also behind Tailwind's ease-out and ease-in-out. The
+   built-in ones are too gentle to read as deliberate: these respond at
+   once and land softly. Static, so component styles can use them too. */
+@theme static {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Desktop view transitions (src/lib/view-transition.ts): posters glide to
+   where they land, the rest cross-fades. Movement eases in and out; the
+   fade is quick to start. */
+::view-transition-group(*) {
+  animation-duration: 300ms;
+  animation-timing-function: var(--ease-in-out);
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-timing-function: var(--ease-out);
+}
+
+/* Content the app puts on the page fades in: a movie page opened from the
+   grid, the programme for another day. In CSS rather than Svelte
+   transitions, which cost the bundle their runtime. Only once the app has
+   started (data-started, set in +layout.svelte), so what was prerendered
+   shows at once; elements already there when it starts do not fade. Set
+   the length with --fade-in. */
+html[data-started] .fade-in {
+  transition: opacity var(--fade-in, 160ms) var(--ease-out);
+}
+
+@starting-style {
+  html[data-started] .fade-in {
+    opacity: 0;
+  }
+}
+
+/* A view transition already cross-fades the change; a second fade on top
+   would leave the new content faint as it ends. */
+html:active-view-transition .fade-in {
+  transition: none;
+}
+
 /* A still night sky behind every page, drawn by src/draw-stars.ts. It is the
    page's own background rather than a fixed element: iOS Safari tints its
    toolbar from fixed elements at the bottom edge. iOS also ignores the fixed

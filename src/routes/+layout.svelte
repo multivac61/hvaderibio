@@ -1,5 +1,6 @@
 <script lang="ts">
   import "../app.css";
+  import { onMount } from "svelte";
   import { onNavigate } from "$app/navigation";
   import { track_input_modality } from "#lib/input-modality.js";
   import { can_view_transition } from "#lib/view-transition.js";
@@ -7,6 +8,12 @@
   let { children } = $props();
 
   $effect(track_input_modality);
+
+  // From here on, content the app adds fades in (.fade-in in app.css); what
+  // was prerendered is already showing.
+  onMount(() => {
+    document.documentElement.dataset.started = "";
+  });
 
   onNavigate((navigation) => {
     if (!can_view_transition()) return;

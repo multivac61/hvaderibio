@@ -1,35 +1,9 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { linear } from "svelte/easing";
-  import { Tween } from "svelte/motion";
-  import { onMount } from "svelte";
-
-  const rotation = new Tween(0, { duration: 4000, easing: linear });
-
-  onMount(() => {
-    let active = true;
-
-    const spin = async () => {
-      while (active) {
-        await rotation.set(360);
-        if (active) await rotation.set(0, { duration: 0 });
-      }
-    };
-
-    void spin();
-
-    return () => {
-      active = false;
-    };
-  });
 
   const status = $derived(page.status);
 
-  const title = $derived(status === 404 ? "Síða fannst ekki" : status === 500 ? "Villa kom upp" : "Villa kom upp");
-
-  const description = $derived(
-    status === 404 ? "Þessi síða er ekki til. Kannski viltu fara aftur á forsíðuna?" : "Eitthvað fór úrskeiðis. Vinsamlegast reyndu aftur."
-  );
+  const title = $derived(status === 404 ? "Síða fannst ekki" : "Villa kom upp");
 </script>
 
 <svelte:head>
@@ -41,9 +15,14 @@
      scroll. No background of its own, so the stars show. -->
 <div class="flex min-h-[calc(100dvh-1.5rem)] items-center justify-center text-neutral-100 sm:min-h-[calc(100dvh-2rem)]">
   <div class="max-w-md px-4 text-center">
-    <!-- Film reel -->
+    <!-- Film reel, turning slowly in CSS so it runs off the main thread and
+         keeps turning while scripts are busy. Still for reduced motion. -->
     <div class="mb-6 flex justify-center">
-      <svg class="h-24 w-24 text-neutral-600" style:transform="rotate({rotation.current}deg)" fill="currentColor" viewBox="0 0 24 24">
+      <svg
+        aria-hidden="true"
+        class="h-24 w-24 animate-[spin_4s_linear_infinite] text-neutral-600 motion-reduce:animate-none"
+        fill="currentColor"
+        viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
         <circle cx="12" cy="12" r="3" fill="currentColor" />
         <circle cx="12" cy="5" r="1.5" fill="currentColor" />
@@ -57,13 +36,11 @@
       </svg>
     </div>
     <h1 class="mb-4 text-6xl font-bold text-neutral-400">{status}</h1>
-    <h2 class="mb-2 text-2xl font-bold">{title}</h2>
-    <p class="mb-2 text-neutral-400">{description}</p>
-    <div class="mb-8"></div>
+    <h2 class="mb-8 text-2xl font-bold">{title}</h2>
     <button
       type="button"
       onclick={() => (window.location.href = "/")}
-      class="group relative inline-flex items-center gap-2 rounded-md bg-linear-to-br from-neutral-800 to-neutral-900 px-4 py-2 text-base text-neutral-300 transition-all duration-200 ease-out hover:bg-neutral-700 hover:text-white">
+      class="group relative inline-flex items-center gap-2 rounded-md bg-linear-to-br from-neutral-800 to-neutral-900 px-4 py-2 text-base text-neutral-300 transition-[color,background-color,scale] duration-150 ease-out hover:bg-neutral-700 hover:text-white active:scale-[0.97]">
       <span
         class="absolute inset-0 rounded-md opacity-5 shadow-[inset_0_1px_1px_white] transition-opacity duration-200 group-hover:opacity-10"
       ></span>

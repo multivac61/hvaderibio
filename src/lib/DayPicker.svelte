@@ -15,7 +15,7 @@
   const containerSizeClass = $derived(shrink ? "shrink-0" : "");
 
   let day_buttons: HTMLButtonElement[] = $state([]);
-  let slider_style = $state("width: 0; left: 0; opacity: 0;");
+  let slider_style = $state("width: 0; opacity: 0;");
   let slider_animated = $state(false);
   // Server-rendered pages cannot measure the buttons, so until the slider is
   // placed the chosen button draws the same pill itself; otherwise the first
@@ -28,7 +28,8 @@
     const idx = days.indexOf(selectedDay);
     const btn = day_buttons[idx];
     if (btn) {
-      slider_style = `width: ${btn.offsetWidth}px; left: ${btn.offsetLeft}px; opacity: 1;`;
+      // Slid by transform, which skips layout; only the width change lays out.
+      slider_style = `width: ${btn.offsetWidth}px; transform: translateX(${btn.offsetLeft}px); opacity: 1;`;
       slider_placed = true;
       if (!slider_animated) {
         requestAnimationFrame(() => {
@@ -44,7 +45,9 @@
   aria-label="Veldu dag"
   class="relative flex items-center rounded-full border border-white/10 bg-neutral-950/65 p-0.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_22px_rgba(0,0,0,0.3)] backdrop-blur-xl {containerSizeClass}">
   <div
-    class="absolute h-[calc(100%-6px)] {pill_class} {slider_animated ? 'transition-all duration-300 ease-out' : ''}"
+    class="absolute left-0 h-[calc(100%-6px)] {pill_class} {slider_animated
+      ? 'transition-[transform,width] duration-250 ease-in-out motion-reduce:transition-none'
+      : ''}"
     style={slider_style}>
   </div>
   {#each days as day, i (day)}

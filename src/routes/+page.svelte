@@ -13,7 +13,6 @@
   import { poster_tilt } from "#lib/PosterTilt.svelte";
   import PageMeta from "#lib/PageMeta.svelte";
   import { count_label } from "#lib/accessible-labels.js";
-  import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
 
@@ -117,7 +116,7 @@
 
   {#key `${selection.day}-${selection.cinema}`}
     {#if filtered_cinemas_showtimes.length === 0}
-      <div in:fade={{ duration: 180 }} class="flex flex-col items-center justify-center py-16 text-center">
+      <div class="fade-in flex flex-col items-center justify-center py-16 text-center">
         <p class="text-lg text-neutral-400">Engar sýningar fundust</p>
         <p class="mt-1 text-sm text-neutral-400">Prófaðu að velja annan dag eða kvikmyndahús</p>
       </div>

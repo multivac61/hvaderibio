@@ -17,6 +17,9 @@
   // edge, so even a transparent bar nudged down onto it paints a black band
   // behind the URL bar.
   //
+  // Hiding answers a scroll, so it is quicker than coming back. Since it
+  // only fades, visitors who ask for less motion see the same.
+  //
   // It is fixed rather than sticky: a sticky bar cannot leave its parent, so
   // while the posters waited for the clock, or a choice left nothing to list,
   // it sat near the top of a short page and then dropped to the bottom.
@@ -64,9 +67,9 @@
     bind:this={bar}
     data-floating-bar
     onfocusin={() => (hidden = false)}
-    class="flex w-full justify-center px-4 pb-3 transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none {hidden
-      ? 'pointer-events-none invisible opacity-0'
-      : ''}">
+    class="flex w-full justify-center px-4 pb-3 transition-[opacity,visibility] ease-out {hidden
+      ? 'pointer-events-none invisible opacity-0 duration-200'
+      : 'duration-300'}">
     <ProgrammeControls {cinemaOptions} presentation="floating" {id} />
   </div>
 </div>
