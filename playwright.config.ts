@@ -7,8 +7,13 @@ export default defineConfig({
   testDir: "tests",
   testMatch: "*.e2e.ts",
   forbidOnly: !!process.env.CI,
+  // CI's WebKit draws a few frames a second, and a test that times motion can
+  // still lose a race there that it never loses on a laptop. A retry gets it
+  // through; the report still marks it flaky, and its trace is kept.
+  retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? "github" : "list",
-  use: { baseURL: "http://localhost:4173" },
+  // On CI, a failing test keeps its trace, uploaded by the workflow.
+  use: { baseURL: "http://localhost:4173", trace: process.env.CI ? "retain-on-failure" : "off" },
   projects: [{ name: "iphone", use: { ...devices["iPhone 15"] } }],
   webServer: {
     command: "npm run build && npm run preview -- --port 4173 --strictPort",

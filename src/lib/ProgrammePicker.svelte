@@ -8,6 +8,7 @@
   import { get_day_label } from "#lib/day-picker.js";
   import BottomSheet from "#lib/BottomSheet.svelte";
   import ProgrammeChoices from "#lib/ProgrammeChoices.svelte";
+  import { is_keyboard_navigation } from "#lib/input-modality.js";
 
   type Props = {
     cinemaOptions: readonly CinemaOption[];
@@ -38,6 +39,18 @@
     );
     return () => cancelAnimationFrame(frame);
   });
+
+  // Where focus goes as the panel opens. bits-ui would put it on the first
+  // button, the phrase row, and Safari ringed that even after a click. From
+  // the keyboard it goes to the chosen day, ready for the arrow keys; from a
+  // pointer, to the panel itself, which draws no ring.
+  const focus_on_open = (event: Event) => {
+    event.preventDefault();
+    const target = is_keyboard_navigation()
+      ? panel?.querySelector<HTMLElement>('[role="radiogroup"] [role="radio"][aria-checked="true"]')
+      : panel;
+    target?.focus({ preventScroll: true });
+  };
 
   const pick_cinema = (choice: string, finish: boolean) => {
     onCinema(choice);
@@ -86,10 +99,12 @@
 {:else}
   <div class={presentation === "header" ? "flex justify-center" : ""}>
     <Popover.Root bind:open>
+      <!-- Open, the panel carries this phrase where the pill was; the pill
+           makes way, or it showed through the glass as a second pill. -->
       <Popover.Trigger
         {id}
         style="height: {height}px"
-        class="ease-snappy bg-pick-surface/90 flex max-w-full items-center gap-2 rounded-full px-5 shadow-(--pick-shadow-pill) backdrop-blur-2xl transition-transform duration-150 select-none active:scale-[0.97] motion-reduce:active:scale-100 {text_size}">
+        class="ease-snappy bg-pick-surface/90 flex max-w-full items-center gap-2 rounded-full px-5 shadow-(--pick-shadow-pill) backdrop-blur-2xl transition-transform duration-150 select-none active:scale-[0.97] data-[state=open]:opacity-0 motion-reduce:active:scale-100 {text_size}">
         {@render phrase()}
       </Popover.Trigger>
       <Popover.Portal>
@@ -103,6 +118,8 @@
           sideOffset={-height}
           {align}
           avoidCollisions={false}
+          onOpenAutoFocus={focus_on_open}
+          tabindex={-1}
           data-align={align}
           class="programme-panel z-50 w-[22.5rem] max-w-[calc(100vw-2rem)] min-w-(--bits-popover-anchor-width) rounded-[22px] outline-none">
           <!-- The shape that grows. The drop shadow stays outside it, on the
