@@ -56,10 +56,19 @@ jobs:
             -f state="$CHECK_STATE" \
             -f description="Dependency checks: $CHECK_RESULT" \
             -f target_url="$CHECK_URL"
+          # The browser tests are a required check of their own, so they
+          # answer for themselves too.
+          gh api --method POST "repos/$GH_REPO/statuses/$CHECK_SHA" \
+            -f context=browser-check \
+            -f state="$BROWSER_STATE" \
+            -f description="Browser tests: $BROWSER_RESULT" \
+            -f target_url="$CHECK_URL"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           CHECK_SHA: ${{ github.sha }}
           CHECK_RESULT: nix ${{ needs.check.result }}, browser ${{ needs.browser-check.result }}
           CHECK_STATE: ${{ needs.check.result == 'success' && needs.browser-check.result == 'success' && 'success' || 'failure' }}
+          BROWSER_STATE: ${{ needs.browser-check.result == 'success' && 'success' || 'failure' }}
+          BROWSER_RESULT: ${{ needs.browser-check.result }}
           CHECK_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
