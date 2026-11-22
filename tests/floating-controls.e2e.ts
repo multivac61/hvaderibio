@@ -376,6 +376,22 @@ test("phone: going back with the sheet open leaves the page as it was", async ({
   expect(stage).toEqual({ scale: "none", clip: "none", style: null });
 });
 
+// Posters further down wait unseen until their images load, then fade in.
+// A choice that moves one of them up into the first few, before its image
+// had loaded, left it waiting for good: an empty box where the poster
+// should be. (Bíó Paradís lists the 7th, 12th and 11th posters first.)
+test("phone: posters moved up by a new choice still show", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await page.locator("#select-cinemas").tap();
+  await page.getByRole("dialog").getByRole("radio", { name: "Bíó Paradís", exact: true }).tap();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  const images = page.locator("img.movie-poster-image");
+  await expect(images).toHaveCount(3);
+  for (const image of await images.all()) await expect(image).toHaveCSS("opacity", "1");
+});
+
 // Let go past the point of closing, the sheet sets off down at once, in the
 // same task as the release: it used to wait two frames for the dialog's
 // ending style, standing still, and then leap. (Checked by what the release

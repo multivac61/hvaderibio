@@ -15,5 +15,11 @@ export const reveal_on_load: Attachment<HTMLImageElement> = (img) => {
   img.dataset.loading = "";
   const reveal = () => delete img.dataset.loading;
   img.addEventListener("load", reveal, { once: true });
-  return () => img.removeEventListener("load", reveal);
+  // Taken off before its image arrived (a poster moved up into the first
+  // screen by a new choice, which shows its image as it comes), it must not
+  // leave the image hidden with nothing left to reveal it.
+  return () => {
+    img.removeEventListener("load", reveal);
+    reveal();
+  };
 };
