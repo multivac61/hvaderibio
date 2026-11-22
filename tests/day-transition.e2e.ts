@@ -40,3 +40,55 @@ test("desktop: posters slide to their places when the cinema changes", async ({ 
     .toContain(`::view-transition-group(poster-${poster})`);
   await context.close();
 });
+
+// While a change plays as a view transition, the next click still counts:
+// the transition's snapshot lay over the page and took every click for a
+// quarter of a second, so a second day clicked just after the first was
+// lost.
+test("desktop: a click during the slide still chooses", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await page.locator("#select-cinemas-desktop").click();
+  await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  // Raw clicks, 80ms apart: Playwright's own click waits for the page to
+  // settle, which hid the loss.
+  const centre = async (name: string) => {
+    const box = (await page.getByRole("radio", { name, exact: true }).boundingBox())!;
+    return [box.x + box.width / 2, box.y + box.height / 2] as const;
+  };
+  const tomorrow = await centre("Á morgun");
+  const tuesday = await centre("Þriðjudag");
+  await page.mouse.click(...tomorrow);
+  await page.waitForTimeout(80);
+  await page.mouse.click(...tuesday);
+  await expect(page.getByRole("radio", { name: "Þriðjudag", exact: true })).toBeChecked();
+  await context.close();
+});
+
+// Choosing what is already chosen changes nothing, so nothing plays: it
+// still started a transition, which held up the clicks that followed.
+test("desktop: choosing the chosen day plays no transition", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await page.evaluate(() => {
+    const record = window as unknown as { transitions: number };
+    record.transitions = 0;
+    const start = document.startViewTransition.bind(document);
+    document.startViewTransition = ((...args: Parameters<typeof start>) => {
+      record.transitions++;
+      return start(...args);
+    }) as typeof document.startViewTransition;
+  });
+  await page.locator("#select-cinemas-desktop").click();
+  await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.getByRole("radio", { name: "Í dag", exact: true }).click();
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => (window as unknown as { transitions: number }).transitions)).toBe(0);
+  await context.close();
+});

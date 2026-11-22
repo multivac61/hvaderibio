@@ -90,9 +90,10 @@ test("phone: changing the day fades the showtimes in", async ({ page }) => {
   await expect(page.locator("[data-day-programme]")).toHaveCSS("opacity", "1");
 });
 
-// Desktops already cross-fade the change as a view transition; a fade of
-// its own on top would leave the new showtimes faint as it ends.
-test("desktop: changing the day leaves the fade to the view transition", async ({ browser, baseURL }) => {
+// On desktop too a day lands at once, chosen in the open picker, and its
+// showtimes fade in by themselves: no view transition, which would take the
+// next click for its quarter second.
+test("desktop: changing the day fades the showtimes in", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ ...devices["Desktop Safari"], baseURL });
   const page = await context.newPage();
   await page.clock.setFixedTime(FIXTURE_MORNING);
@@ -108,7 +109,7 @@ test("desktop: changing the day leaves the fade to the view transition", async (
   await page.waitForTimeout(600);
   const { programme } = await lowest_opacity(page);
   await context.close();
-  expect(programme ?? 1).toBe(1);
+  expect(programme).toBeLessThan(1);
 });
 
 test.describe("asking for less motion", () => {
