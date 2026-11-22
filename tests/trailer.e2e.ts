@@ -1,3 +1,4 @@
+import { readdirSync } from "node:fs";
 import { devices, expect, test } from "@playwright/test";
 
 // On desktop the trailer plays on a page of its own, so the browser's back
@@ -37,6 +38,44 @@ test("phone: the trailer goes to YouTube", async ({ page }) => {
   const trailer = page.getByRole("link", { name: "Spila stiklu" }).filter({ visible: true });
   await expect(trailer).toHaveAttribute("href", /^https:\/\/www\.youtube\.com\/watch\?v=.+/);
   await expect(trailer).not.toHaveAttribute("target", /.*/);
+});
+
+// Opening a movie on a phone shows its trailer thumbnail first, fetched
+// from YouTube after the page itself. Until it has arrived the dark box and
+// play button hold its place; then it fades in whole rather than popping in
+// or drawing in strips as it decodes.
+test("phone: the trailer thumbnail fades in once it has loaded", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-10-03T09:00:00Z"));
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => (release = resolve));
+  const stand_in = readdirSync("static").find((file) => file.endsWith(".webp"))!;
+  await page.route("https://img.youtube.com/**", async (route) => {
+    await held;
+    await route.fulfill({ path: `static/${stand_in}`, contentType: "image/webp" });
+  });
+
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await page
+    .locator("a[data-movie-id]")
+    .filter({ has: page.getByAltText("Verity", { exact: true }) })
+    .tap();
+  await expect(page.getByRole("heading", { name: "Verity" })).toBeVisible();
+
+  const thumbnail = page.getByRole("link", { name: "Spila stiklu" }).filter({ visible: true }).locator("img");
+  await expect(thumbnail).toHaveCSS("opacity", "0");
+  release();
+  await expect(thumbnail).toHaveCSS("opacity", "1");
+});
+
+test.describe("before the app starts", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("phone: the trailer thumbnail shows", async ({ page }) => {
+    await page.goto("/movie/verity");
+    const thumbnail = page.getByRole("link", { name: "Spila stiklu" }).filter({ visible: true }).locator("img");
+    await expect(thumbnail).toHaveCSS("opacity", "1");
+  });
 });
 
 // The player is as large as the window allows below "Til baka", using the

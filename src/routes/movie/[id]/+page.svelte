@@ -14,6 +14,7 @@
   import { open_on_space } from "#lib/open-on-space.js";
   import { count_label } from "#lib/accessible-labels.js";
   import { fade } from "svelte/transition";
+  import { reveal_on_load } from "#lib/motion.js";
 
   const { data } = $props();
   const movie = $derived(data.movie);
@@ -92,7 +93,8 @@
                 fetchpriority="high"
                 loading="eager"
                 decoding="async"
-                class="h-full w-full object-cover" />
+                {@attach reveal_on_load}
+                class="h-full w-full object-cover transition-opacity duration-200 ease-out data-loading:opacity-0" />
               <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
                 <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
                   <svg aria-hidden="true" class="ml-0.5 h-6 w-6 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
@@ -179,7 +181,8 @@
                 height="720"
                 loading="lazy"
                 decoding="async"
-                class="h-full w-full object-cover" />
+                {@attach reveal_on_load}
+                class="h-full w-full object-cover transition-opacity duration-200 ease-out data-loading:opacity-0" />
               <div class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 transition-transform group-hover:scale-110">
                   <svg aria-hidden="true" class="ml-0.5 h-5 w-5 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
