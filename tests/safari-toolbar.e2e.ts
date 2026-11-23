@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { scroll_step } from "./scroll";
 
 // iOS Safari tints its toolbar from fixed and sticky elements at the bottom
 // edge of the viewport, painting a solid band behind the URL bar instead of
@@ -33,11 +34,7 @@ async function bottom_edge_offenders(page: Page): Promise<string[]> {
 async function scroll_down(page: Page) {
   const middle = await page.evaluate(() => (document.documentElement.scrollHeight - innerHeight) / 2);
   for (let y = 60; y <= middle; y += 60) {
-    // Rendered before the next step, so each arrives as a scroll of its own.
-    await page.evaluate(async (y) => {
-      scrollTo(0, y);
-      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    }, y);
+    await scroll_step(page, y);
   }
 }
 
