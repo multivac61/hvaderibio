@@ -67,9 +67,13 @@
   // Past the resting point the sheet follows less the further it goes.
   const rubberband = (overshoot: number, size: number) => (overshoot * size * 0.55) / (size + 0.55 * Math.abs(overshoot));
 
+  // The sheet runs on below the screen (see APRON, in the markup): how much
+  // of it shows is its height less that.
+  const shown_height = (el: HTMLElement) => el.offsetHeight - parseFloat(getComputedStyle(el).paddingBottom);
+
   const place = (offset: number) => {
     if (!sheet || !overlay) return;
-    const height = sheet.offsetHeight;
+    const height = shown_height(sheet);
     const y = offset >= 0 ? offset : rubberband(offset, height);
     sheet.style.transform = `translateY(${y}px)`;
     overlay.style.opacity = String(Math.max(0, 1 - Math.max(0, y) / height));
@@ -123,7 +127,7 @@
     suppress_click = true;
     const first = samples[0];
     const velocity = first ? (event.clientY - first.y) / Math.max(1, event.timeStamp - first.t) : 0;
-    if (offset > sheet.offsetHeight * DISMISS_FRACTION || velocity > DISMISS_VELOCITY) {
+    if (offset > shown_height(sheet) * DISMISS_FRACTION || velocity > DISMISS_VELOCITY) {
       sheet.style.transition = "";
       overlay!.style.transition = "";
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -141,7 +145,7 @@
       leaving = true;
       sheet.style.transition = EXIT;
       overlay!.style.transition = "opacity 300ms cubic-bezier(0.32, 0.72, 0, 1)";
-      sheet.style.transform = "translateY(100%)";
+      sheet.style.transform = `translateY(${shown_height(sheet)}px)`;
       overlay!.style.opacity = "0";
       const target = sheet;
       let done = false;
@@ -211,7 +215,14 @@
       <div data-sheet-floor aria-hidden="true" class="bg-pick-sheet pointer-events-none fixed inset-x-0 bottom-0 z-50 h-px"></div>
     {/if}
     <!-- Rises from the edge it belongs to on the iOS sheet curve; a full-width
-         sheet reads right at 500ms on that curve. It leaves faster. -->
+         sheet reads right at 500ms on that curve. It leaves faster.
+         Pulled up, it gives a little (the rubber band in place()), and its
+         bottom edge rose off the screen's, showing the posters in the gap.
+         So the glass runs on below the screen by an apron, out of sight at
+         rest, padded so nothing sits on it: what comes up under a lifted
+         sheet is more of the sheet. The rubber band lifts it at most about
+         half its shown height, 85dvh at most, so 50dvh covers it. It rises
+         and leaves by its shown height, the apron already below the edge. -->
     <Dialog.Content
       bind:ref={sheet}
       onpointerdown={on_down}
@@ -219,7 +230,8 @@
       onpointerup={on_up}
       onpointercancel={on_up}
       onclickcapture={on_click_capture}
-      class="bg-pick-panel fixed inset-x-0 bottom-0 z-50 flex max-h-[85dvh] touch-none flex-col rounded-t-[28px] shadow-(--pick-shadow-sheet) [backdrop-filter:var(--pick-panel-blur)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] outline-none select-none [-webkit-backdrop-filter:var(--pick-panel-blur)] data-ending-style:translate-y-full data-ending-style:duration-300 data-starting-style:translate-y-full motion-reduce:transition-opacity motion-reduce:data-ending-style:translate-y-0 motion-reduce:data-ending-style:opacity-0 motion-reduce:data-starting-style:translate-y-0 motion-reduce:data-starting-style:opacity-0">
+      style="--apron: 50dvh"
+      class="bg-pick-panel fixed inset-x-0 -bottom-(--apron) z-50 flex max-h-[calc(85dvh+var(--apron))] touch-none flex-col rounded-t-[28px] pb-(--apron) shadow-(--pick-shadow-sheet) [backdrop-filter:var(--pick-panel-blur)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] outline-none select-none [-webkit-backdrop-filter:var(--pick-panel-blur)] data-ending-style:translate-y-[calc(100%-var(--apron))] data-ending-style:duration-300 data-starting-style:translate-y-[calc(100%-var(--apron))] motion-reduce:transition-opacity motion-reduce:data-ending-style:translate-y-0 motion-reduce:data-ending-style:opacity-0 motion-reduce:data-starting-style:translate-y-0 motion-reduce:data-starting-style:opacity-0">
       <!-- The handle and title stay put above the list, part of the same
            glass, so nothing scrolls under them and they need no surface of
            their own. -->
