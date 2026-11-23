@@ -69,8 +69,8 @@
   };
 </script>
 
-{#snippet phrase()}
-  <span class="sr-only">Breyta vali:</span>
+{#snippet phrase(action = "Breyta vali")}
+  <span class="sr-only">{action}:</span>
   <svg
     class="text-pick-highlight size-4 shrink-0"
     viewBox="0 0 16 16"
@@ -131,6 +131,7 @@
           avoidCollisions={false}
           onOpenAutoFocus={focus_on_open}
           tabindex={-1}
+          aria-label="Hvenær og hvar?"
           data-align={align}
           class="programme-panel z-50 w-[22.5rem] max-w-[calc(100vw-2rem)] min-w-(--bits-popover-anchor-width) rounded-[22px] outline-none">
           <!-- The shape that grows. The drop shadow stays outside it, on the
@@ -142,11 +143,10 @@
             <button
               type="button"
               data-panel-phrase
-              aria-label="Loka"
               onclick={() => (open = false)}
               style="height: {height}px"
               class="flex shrink-0 items-center gap-2 px-5 select-none {align === 'center' ? 'justify-center' : ''} {text_size}">
-              {@render phrase()}
+              {@render phrase("Loka vali")}
             </button>
             <!-- A long list scrolls inside the panel, under the phrase, rather
                than running off the screen. -->

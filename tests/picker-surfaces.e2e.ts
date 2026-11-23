@@ -128,6 +128,20 @@ test("phone: the sheet goes when the window widens to a desktop's", async ({ pag
   await expect(page.locator("#select-cinemas-desktop")).toBeVisible();
 });
 
+// A screen reader announces the panel by name, as it does the phone's sheet,
+// and its close button by the phrase it shows (a voice user says what they
+// see), not by a word that appears nowhere on screen.
+test("desktop: the panel and its close button are named for what they show", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  await page.locator("#select-cinemas-desktop").click();
+  const panel = page.getByRole("dialog", { name: "Hvenær og hvar?" });
+  await expect(panel).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Loka vali: Í dag Höfuðborgarsvæðið" })).toBeVisible();
+  await context.close();
+});
+
 test("the built styles frost the panel in every engine", async ({ page }) => {
   await open_home(page);
   const rules = await page.evaluate(async () => {
