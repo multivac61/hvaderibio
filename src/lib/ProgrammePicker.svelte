@@ -27,6 +27,17 @@
   const text_size = $derived(presentation === "header" ? "text-[17px]" : "text-[15px]");
   const align = $derived(presentation === "header" ? "center" : "start");
 
+  // Turned or resized across the phone's width (Tailwind's sm), the open
+  // panel or sheet belongs to a pill that has just been hidden, and would
+  // stand beside nothing. Put it away; the pill now shown opens the other.
+  $effect(() => {
+    if (!open) return;
+    const wide = matchMedia("(min-width: 40rem)");
+    const put_away = () => (open = false);
+    wide.addEventListener("change", put_away);
+    return () => wide.removeEventListener("change", put_away);
+  });
+
   // A pill low in the window, like the movie page's below its trailer, opens
   // a panel that runs past the bottom: bring the page up just enough to show
   // it, as the panel grows.
@@ -52,14 +63,56 @@
     target?.focus({ preventScroll: true });
   };
 
+  // A press outside the panel puts it away, and that is all it does, as with
+  // a menu or the phone's sheet: the click it ends in went on to open the
+  // poster underneath. Armed by the press itself, not by bits-ui's dismissal,
+  // which comes a moment later and can miss a quick click. A touch opens a
+  // poster on touchend (MoviePosterCard), so that stops here too. A press that
+  // never becomes a click (a drag) lets the next one through.
+  $effect(() => {
+    if (!open || presentation === "floating") return;
+    const trigger = document.getElementById(id);
+    let armed = false;
+    const on_press = (event: PointerEvent) => {
+      const target = event.target as Node;
+      armed = !panel?.contains(target) && !trigger?.contains(target);
+    };
+    const on_touchend = (event: TouchEvent) => {
+      if (armed) event.stopPropagation();
+    };
+    const on_click = (event: MouseEvent) => {
+      if (!armed) return;
+      armed = false;
+      event.preventDefault();
+      event.stopPropagation();
+      open = false;
+    };
+    addEventListener("pointerdown", on_press, true);
+    addEventListener("touchend", on_touchend, true);
+    addEventListener("click", on_click, true);
+    return () => {
+      // The panel closes on the press, before its click arrives: keep
+      // listening for that one click.
+      removeEventListener("pointerdown", on_press, true);
+      removeEventListener("touchend", on_touchend, true);
+      if (!armed) return removeEventListener("click", on_click, true);
+      const forget = () => {
+        removeEventListener("click", on_click, true);
+        removeEventListener("pointerdown", forget, true);
+      };
+      addEventListener("pointerdown", forget, true);
+      addEventListener("click", forget);
+    };
+  });
+
   const pick_cinema = (choice: string, finish: boolean) => {
     onCinema(choice);
     if (finish) open = false;
   };
 </script>
 
-{#snippet phrase()}
-  <span class="sr-only">Breyta vali:</span>
+{#snippet phrase(action = "Breyta vali")}
+  <span class="sr-only">{action}:</span>
   <svg
     class="text-pick-highlight size-4 shrink-0"
     viewBox="0 0 16 16"
@@ -120,6 +173,7 @@
           avoidCollisions={false}
           onOpenAutoFocus={focus_on_open}
           tabindex={-1}
+          aria-label="Hvenær og hvar?"
           data-align={align}
           class="programme-panel z-50 w-[22.5rem] max-w-[calc(100vw-2rem)] min-w-(--bits-popover-anchor-width) rounded-[22px] outline-none">
           <!-- The shape that grows. The drop shadow stays outside it, on the
@@ -131,11 +185,10 @@
             <button
               type="button"
               data-panel-phrase
-              aria-label="Loka"
               onclick={() => (open = false)}
               style="height: {height}px"
               class="flex shrink-0 items-center gap-2 px-5 select-none {align === 'center' ? 'justify-center' : ''} {text_size}">
-              {@render phrase()}
+              {@render phrase("Loka vali")}
             </button>
             <!-- A long list scrolls inside the panel, under the phrase, rather
                than running off the screen. -->
