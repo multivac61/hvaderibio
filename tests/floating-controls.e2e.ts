@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { scroll_step } from "./scroll";
 
 // The phone bar must sit at the bottom of the screen from the first frame,
 // whatever the page holds. Anchored to its content instead, it showed at the
@@ -588,13 +589,3 @@ test("home page lets taps beside the bar's pill reach the posters", async ({ pag
   );
   expect(hit).toBe("A");
 });
-
-// Scroll to y and wait until the page has rendered it, so the page sees the
-// step as a scroll of its own. CI's WebKit renders a few frames a second,
-// and steps taken by the clock arrived merged, as one scroll the other way.
-async function scroll_step(page: Page, y: number) {
-  await page.evaluate(async (y) => {
-    scrollTo(0, y);
-    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-  }, y);
-}
