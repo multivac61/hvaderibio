@@ -25,3 +25,15 @@ test("phone: the picker shows the chosen cinema across pages", async ({ page }) 
   await page.goBack();
   await expect(pill).toContainText(other);
 });
+
+// A movie with nothing left for the chosen day and cinema says where it
+// does play, one tap away: arriving from a search on the default (today,
+// the capital) in the evening, it said only "none".
+test("phone: a movie with nothing left today points to its next showing", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-10-03T20:30:00Z"));
+  await page.goto("/movie/hvolpasveitin-risaedlumyndin");
+  await expect(page.getByText("Engar sýningar fundust fyrir þetta val.")).toBeVisible();
+  await page.getByRole("button", { name: "Sýnd: Á morgun Höfuðborgarsvæðið" }).tap();
+  await expect(page.locator("#select-cinemas-movie-mobile")).toContainText("Á morgun");
+  await expect(page.getByRole("link", { name: /^13:00/ }).first()).toBeVisible();
+});
