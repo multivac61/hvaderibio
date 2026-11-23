@@ -169,7 +169,7 @@
 <!-- Phones hide the title, which is the way to the page about the site
      elsewhere, so on phones the way there is here instead. -->
 <footer class="mt-10 mb-24 text-center text-sm sm:hidden">
-  <a href={resolve("/um")} class="text-neutral-500 transition-colors hover:text-white">Um síðuna</a>
+  <a href={resolve("/um")} class="text-neutral-400 transition-colors hover:text-white">Um síðuna</a>
 </footer>
 
 <style>

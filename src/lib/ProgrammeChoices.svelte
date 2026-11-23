@@ -21,9 +21,9 @@
   const cinema_labels = $derived(cinemaOptions.map(([label]) => label));
 </script>
 
-<p class="text-pick-ink/45 mb-2 text-xs font-medium">Dagur</p>
+<p class="text-pick-ink/60 mb-2 text-xs font-medium">Dagur</p>
 <Segmented items={day_items} selected={day} onSelect={onDay} label="Veldu dag" />
-<p class="text-pick-ink/45 mt-5 mb-1.5 text-xs font-medium pointer-fine:mt-4">Kvikmyndahús</p>
+<p class="text-pick-ink/60 mt-5 mb-1.5 text-xs font-medium pointer-fine:mt-4">Kvikmyndahús</p>
 <div role="radiogroup" aria-label="Veldu kvikmyndahús" class="-mx-1.5">
   {#each cinemaOptions as [label] (label)}
     <button
