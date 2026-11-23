@@ -35,3 +35,13 @@ test("phone: the end of the programme leads to the page about the site", async (
   await page.getByRole("link", { name: "Um síðuna" }).tap();
   await expect_about_page(page);
 });
+
+// One main landmark per page, the layout's: a screen reader's "skip to
+// main" has one place to go. The about page had a second inside it.
+for (const path of ["/", "/um", "/movie/verity", "/movie/verity/trailer"]) {
+  test(`${path} has a single main landmark`, async ({ page }) => {
+    await page.clock.setFixedTime(FIXTURE_MORNING);
+    await page.goto(path);
+    await expect(page.locator("main, [role=main]")).toHaveCount(1);
+  });
+}

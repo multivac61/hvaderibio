@@ -59,7 +59,7 @@
   description="Hvað er í bíó? er ástríðuverkefni og opinn hugbúnaður, gert fyrir alla sem vilja sjá góðar bíómyndir."
   path="/um" />
 
-<main class="mx-auto max-w-2xl py-6 sm:py-12">
+<article class="mx-auto max-w-2xl py-6 sm:py-12">
   <a
     href={resolve("/")}
     class="relative -mx-2 mb-8 inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm text-neutral-400 transition-colors before:absolute before:-inset-2 hover:text-white">
@@ -95,7 +95,7 @@
       </li>
     {/each}
   </ol>
-</main>
+</article>
 
 <style>
   /* Subset by Google Fonts to "Hvað er í bíó?"; see static/fonts/OFL.txt. */
