@@ -103,6 +103,31 @@ test("desktop: opening the panel puts focus where it helps", async ({ browser, b
 // kept only the last written, the prefixed one, which Chromium ignores: no
 // blur there at all. WebKit, which runs these tests, reads either name, so
 // check what the built stylesheets hold.
+// Turned or resized across the phone's width, the open picker belongs to a
+// pill that has just been hidden: the panel stood off-screen beside nothing,
+// or the sheet spread across a desktop. It is put away instead; the pill
+// now shown opens the right one.
+test("desktop: the panel goes when the window narrows to a phone's", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  await page.locator("#select-cinemas-desktop").click();
+  await expect(page.locator(".programme-panel")).toBeVisible();
+  await page.setViewportSize({ width: 500, height: 800 });
+  await expect(page.locator(".programme-panel")).toHaveCount(0);
+  await context.close();
+});
+
+test("phone: the sheet goes when the window widens to a desktop's", async ({ page }) => {
+  await open_home(page);
+  await page.locator("#select-cinemas").tap();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => document.documentElement.hasAttribute("data-sheet-pushed"))).toBe(false);
+  await expect(page.locator("#select-cinemas-desktop")).toBeVisible();
+});
+
 test("the built styles frost the panel in every engine", async ({ page }) => {
   await open_home(page);
   const rules = await page.evaluate(async () => {
