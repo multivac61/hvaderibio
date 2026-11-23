@@ -154,7 +154,9 @@ describe("nearest_showing", () => {
       showtimes_by_day: Object.fromEntries(
         Object.entries(days).map(([day, cinemas]) => [
           day,
-          Object.fromEntries(Object.entries(cinemas).map(([cinema, times]) => [cinema, times.map((time) => showtime(time, `https://example.com/${time}`))])),
+          Object.fromEntries(
+            Object.entries(cinemas).map(([cinema, times]) => [cinema, times.map((time) => showtime(time, `https://example.com/${time}`))])
+          ),
         ])
       ),
     });
