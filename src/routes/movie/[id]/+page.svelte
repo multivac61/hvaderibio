@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { get_movie_programme } from "#lib/programme.js";
+  import { get_movie_programme, nearest_showing } from "#lib/programme.js";
+  import { get_day_label } from "#lib/day-picker.js";
   import { get_youtube_id } from "#lib/video.js";
   import { get_cinemas_for_choice, selection } from "#lib/selection.svelte.js";
   import ProgrammeControls from "#lib/ProgrammeControls.svelte";
@@ -56,6 +57,16 @@
   };
 
   const visible_showtimes = $derived(get_movie_programme(movie, selection.day, selected_cinemas, effective_now));
+  // Nothing for this choice: point to where it does play, rather than leave
+  // the visitor (often landing from a search on today's default) guessing.
+  const elsewhere = $derived(
+    visible_showtimes.length === 0 ? nearest_showing(movie, selection.day, selection.cinema, cinema_options, effective_now) : null
+  );
+  const show_elsewhere = () => {
+    if (!elsewhere) return;
+    selection.day = elsewhere.day;
+    selection.cinema = elsewhere.cinema;
+  };
 </script>
 
 <PageMeta
@@ -231,7 +242,18 @@
               </div>
             {:else}
               <div data-day-programme class="fade-in rounded-2xl border border-white/[0.06] bg-white/[0.03] p-4 text-sm text-neutral-400">
-                Engar sýningar fundust fyrir þetta val.
+                <p>Engar sýningar fundust fyrir þetta val.</p>
+                {#if elsewhere}
+                  <button
+                    type="button"
+                    onclick={show_elsewhere}
+                    class="ease-snappy mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/[0.08] px-3.5 py-2 text-white transition-[background-color,scale] duration-150 hover:bg-white/[0.14] active:scale-[0.97] motion-reduce:active:scale-100">
+                    <span class="text-neutral-400">Sýnd:</span>
+                    <span class="font-medium">{get_day_label(elsewhere.day, effective_now)}</span>
+                    <span class="text-neutral-400" aria-hidden="true">·</span>
+                    <span>{elsewhere.cinema}</span>
+                  </button>
+                {/if}
               </div>
             {/if}
           {/key}
