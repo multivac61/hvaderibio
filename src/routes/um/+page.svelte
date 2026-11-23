@@ -12,8 +12,21 @@
   const link_class =
     "text-stone-200 underline decoration-stone-500/60 underline-offset-4 transition-colors hover:text-white hover:decoration-stone-300";
 
-  // Each entry's text is a snippet, below, so a name in it can link.
+  // Newest first: the site as it is now, then back to where it began. Each
+  // entry's text is a snippet, below, so a name in it can link.
   const history = [
+    {
+      year: "Í dag",
+      title: "Opinn hugbúnaður",
+      text: today,
+      links: [{ to: "github.com/multivac61/hvaderibio", label: "Kóðinn á GitHub" }],
+    },
+    {
+      year: "2023",
+      title: "Ný síða",
+      text: new_site,
+      links: [archive("20230316003750", "Síðan árið 2023"), archive("20250120162633", "Síðan árið 2025")],
+    },
     {
       year: "2013",
       title: "Fyrsta útgáfan",
@@ -23,18 +36,6 @@
         archive("20140211164019", "Síðan árið 2014"),
         archive("20210121211204", "Síðan árið 2021"),
       ],
-    },
-    {
-      year: "2023",
-      title: "Ný síða",
-      text: new_site,
-      links: [archive("20230316003750", "Síðan árið 2023"), archive("20250120162633", "Síðan árið 2025")],
-    },
-    {
-      year: "Í dag",
-      title: "Opinn hugbúnaður",
-      text: today,
-      links: [{ to: "github.com/multivac61/hvaderibio", label: "Kóðinn á GitHub" }],
     },
   ];
 </script>

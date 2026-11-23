@@ -45,3 +45,10 @@ for (const path of ["/", "/um", "/movie/verity", "/movie/verity/trailer"]) {
     await expect(page.locator("main, [role=main]")).toHaveCount(1);
   });
 }
+
+// The story starts from where the site is now, then goes back in time.
+test("the about page's history starts with today", async ({ page }) => {
+  await page.goto("/um");
+  const years = page.locator("ol > li > p:first-of-type");
+  await expect(years).toHaveText(["Í dag", "2023", "2013"]);
+});
