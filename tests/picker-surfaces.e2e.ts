@@ -103,6 +103,70 @@ test("desktop: opening the panel puts focus where it helps", async ({ browser, b
 // kept only the last written, the prefixed one, which Chromium ignores: no
 // blur there at all. WebKit, which runs these tests, reads either name, so
 // check what the built stylesheets hold.
+// Turned or resized across the phone's width, the open picker belongs to a
+// pill that has just been hidden: the panel stood off-screen beside nothing,
+// or the sheet spread across a desktop. It is put away instead; the pill
+// now shown opens the right one.
+test("desktop: the panel goes when the window narrows to a phone's", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  await page.locator("#select-cinemas-desktop").click();
+  await expect(page.locator(".programme-panel")).toBeVisible();
+  await page.setViewportSize({ width: 500, height: 800 });
+  await expect(page.locator(".programme-panel")).toHaveCount(0);
+  await context.close();
+});
+
+test("phone: the sheet goes when the window widens to a desktop's", async ({ page }) => {
+  await open_home(page);
+  await page.locator("#select-cinemas").tap();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => document.documentElement.hasAttribute("data-sheet-pushed"))).toBe(false);
+  await expect(page.locator("#select-cinemas-desktop")).toBeVisible();
+});
+
+// A screen reader announces the panel by name, as it does the phone's sheet,
+// and its close button by the phrase it shows (a voice user says what they
+// see), not by a word that appears nowhere on screen.
+test("desktop: the panel and its close button are named for what they show", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  await page.locator("#select-cinemas-desktop").click();
+  const panel = page.getByRole("dialog", { name: "Hvenær og hvar?" });
+  await expect(panel).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Loka vali: Í dag Höfuðborgarsvæðið" })).toBeVisible();
+  await context.close();
+});
+
+// A click outside the panel only puts it away, as a menu does; the phone's
+// sheet swallows the tap the same way. It went on to open the poster under
+// it, a movie the visitor never meant to pick.
+for (const [name, device, press] of [
+  ["desktop", "Desktop Chrome", "click"],
+  ["phone held sideways", "iPhone 15 landscape", "tap"],
+] as const) {
+  test(`${name}: a press beside the open panel only closes it`, async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ ...devices[device], baseURL });
+    const page = await context.newPage();
+    await open_home(page);
+    await page.locator("#select-cinemas-desktop").click();
+    await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+    const poster = page.locator("a[data-movie-id]").last();
+    await poster[press]();
+    await expect(page.locator(".programme-panel")).toHaveCount(0);
+    await page.waitForTimeout(300);
+    expect(new URL(page.url()).pathname).toBe("/");
+    // The next press is the visitor's own again.
+    await poster[press]();
+    await page.waitForURL(/\/movie\//);
+    await context.close();
+  });
+}
+
 test("the built styles frost the panel in every engine", async ({ page }) => {
   await open_home(page);
   const rules = await page.evaluate(async () => {
