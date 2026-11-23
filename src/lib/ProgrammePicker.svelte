@@ -27,6 +27,17 @@
   const text_size = $derived(presentation === "header" ? "text-[17px]" : "text-[15px]");
   const align = $derived(presentation === "header" ? "center" : "start");
 
+  // Turned or resized across the phone's width (Tailwind's sm), the open
+  // panel or sheet belongs to a pill that has just been hidden, and would
+  // stand beside nothing. Put it away; the pill now shown opens the other.
+  $effect(() => {
+    if (!open) return;
+    const wide = matchMedia("(min-width: 40rem)");
+    const put_away = () => (open = false);
+    wide.addEventListener("change", put_away);
+    return () => wide.removeEventListener("change", put_away);
+  });
+
   // A pill low in the window, like the movie page's below its trailer, opens
   // a panel that runs past the bottom: bring the page up just enough to show
   // it, as the panel grows.
