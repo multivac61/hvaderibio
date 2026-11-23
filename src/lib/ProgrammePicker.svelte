@@ -63,6 +63,48 @@
     target?.focus({ preventScroll: true });
   };
 
+  // A press outside the panel puts it away, and that is all it does, as with
+  // a menu or the phone's sheet: the click it ends in went on to open the
+  // poster underneath. Armed by the press itself, not by bits-ui's dismissal,
+  // which comes a moment later and can miss a quick click. A touch opens a
+  // poster on touchend (MoviePosterCard), so that stops here too. A press that
+  // never becomes a click (a drag) lets the next one through.
+  $effect(() => {
+    if (!open || presentation === "floating") return;
+    const trigger = document.getElementById(id);
+    let armed = false;
+    const on_press = (event: PointerEvent) => {
+      const target = event.target as Node;
+      armed = !panel?.contains(target) && !trigger?.contains(target);
+    };
+    const on_touchend = (event: TouchEvent) => {
+      if (armed) event.stopPropagation();
+    };
+    const on_click = (event: MouseEvent) => {
+      if (!armed) return;
+      armed = false;
+      event.preventDefault();
+      event.stopPropagation();
+      open = false;
+    };
+    addEventListener("pointerdown", on_press, true);
+    addEventListener("touchend", on_touchend, true);
+    addEventListener("click", on_click, true);
+    return () => {
+      // The panel closes on the press, before its click arrives: keep
+      // listening for that one click.
+      removeEventListener("pointerdown", on_press, true);
+      removeEventListener("touchend", on_touchend, true);
+      if (!armed) return removeEventListener("click", on_click, true);
+      const forget = () => {
+        removeEventListener("click", on_click, true);
+        removeEventListener("pointerdown", forget, true);
+      };
+      addEventListener("pointerdown", forget, true);
+      addEventListener("click", forget);
+    };
+  });
+
   const pick_cinema = (choice: string, finish: boolean) => {
     onCinema(choice);
     if (finish) open = false;

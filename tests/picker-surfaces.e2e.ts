@@ -142,6 +142,31 @@ test("desktop: the panel and its close button are named for what they show", asy
   await context.close();
 });
 
+// A click outside the panel only puts it away, as a menu does; the phone's
+// sheet swallows the tap the same way. It went on to open the poster under
+// it, a movie the visitor never meant to pick.
+for (const [name, device, press] of [
+  ["desktop", "Desktop Chrome", "click"],
+  ["phone held sideways", "iPhone 15 landscape", "tap"],
+] as const) {
+  test(`${name}: a press beside the open panel only closes it`, async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ ...devices[device], baseURL });
+    const page = await context.newPage();
+    await open_home(page);
+    await page.locator("#select-cinemas-desktop").click();
+    await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+    const poster = page.locator("a[data-movie-id]").last();
+    await poster[press]();
+    await expect(page.locator(".programme-panel")).toHaveCount(0);
+    await page.waitForTimeout(300);
+    expect(new URL(page.url()).pathname).toBe("/");
+    // The next press is the visitor's own again.
+    await poster[press]();
+    await page.waitForURL(/\/movie\//);
+    await context.close();
+  });
+}
+
 test("the built styles frost the panel in every engine", async ({ page }) => {
   await open_home(page);
   const rules = await page.evaluate(async () => {
