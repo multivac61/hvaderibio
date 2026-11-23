@@ -103,6 +103,41 @@ test("home page picks a cinema from the bar's sheet", async ({ page }) => {
 // The sheet goes back the way it came: pulled down far enough, it closes;
 // a short pull springs back. (A mouse drag: WebKit here cannot fake a
 // touch drag, but the sheet takes any pointer.)
+// Pulled up past its resting place, the sheet stretches and gives a little.
+// Lifted, its bottom edge rose off the screen's and the posters showed in
+// the gap down to Safari's toolbar. The glass reaches on below the screen,
+// so what comes up under it is more of the sheet.
+test("a sheet pulled up still reaches the bottom of the screen", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await page.locator("#select-cinemas").tap();
+  const sheet = page.getByRole("dialog");
+  await expect.poll(() => sheet.evaluate((el) => el.getAnimations().length)).toBe(0);
+  const box = (await sheet.boundingBox())!;
+  const x = box.x + box.width / 2;
+  const y = box.y + 20;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  for (let step = 1; step <= 20; step++) {
+    await page.mouse.move(x, y - (400 * step) / 20);
+    await page.waitForTimeout(16);
+  }
+  // How much of it shows, at rest and lifted: the sheet runs on below the
+  // screen, so its own box is no measure of that.
+  const shown = (await page.evaluate(() => innerHeight)) - box.y;
+  const lifted = await sheet.evaluate((el) => innerHeight - el.getBoundingClientRect().top);
+  expect(lifted).toBeGreaterThan(shown + 100);
+  const at_edge = await page.evaluate(() => {
+    const hit = document.elementFromPoint(innerWidth / 2, innerHeight - 2);
+    return !!hit?.closest("[role=dialog]");
+  });
+  await page.mouse.up();
+  expect(at_edge).toBe(true);
+  // Let go, it settles back where it rests, its top where it was.
+  await expect.poll(async () => Math.round((await sheet.boundingBox())!.y)).toBe(Math.round(box.y));
+});
+
 test("pulling the sheet down closes it", async ({ page }) => {
   await page.clock.setFixedTime(FIXTURE_MORNING);
   await page.goto("/");
@@ -454,7 +489,10 @@ test("a sheet let go to close never stands still on its way down", async ({ page
   const on_release = await page.evaluate(
     () => (window as unknown as { on_release?: { transform: string; transition: string } }).on_release
   );
-  expect(on_release?.transform).toBe("translateY(100%)");
+  // All the way off the screen: as far down as the sheet showed above its
+  // bottom edge (the rest of it is already below).
+  const shown = (await page.evaluate(() => innerHeight)) - box.y;
+  expect(Number(on_release?.transform.match(/^translateY\(([\d.]+)px\)$/)?.[1])).toBeGreaterThanOrEqual(shown - 1);
   expect(on_release?.transition).toContain("transform");
   await expect(sheet).toHaveCount(0);
 });
