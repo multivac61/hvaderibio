@@ -1,5 +1,6 @@
 <script lang="ts">
   type Item = { value: string; label: string };
+  import { is_keyboard_navigation } from "#lib/input-modality.js";
   import { on_radio_keydown } from "#lib/radio-group.js";
 
   type Props = {
@@ -29,6 +30,10 @@
   let layout_version = $state(0);
   let clip: string | undefined = $state();
   let animate = $state(false);
+  // The highlight glides to a day pointed at, and follows the arrow keys at
+  // once: a held key retargeted the glide over and over, trailing the
+  // focus ring, and a keyboard action gets no animation.
+  let glide = $state(true);
   let focused = $state(-1);
 
   $effect(() => {
@@ -50,6 +55,7 @@
       return;
     }
     const right = row.offsetWidth - button.offsetLeft - button.offsetWidth;
+    glide = !is_keyboard_navigation();
     clip = `inset(0 ${right}px 0 ${button.offsetLeft}px round 8px)`;
     if (!animate) requestAnimationFrame(() => (animate = true));
   });
@@ -91,7 +97,7 @@
          frame) the chosen button paints its own fill instead. -->
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 flex {active_fill} {animate
+      class="pointer-events-none absolute inset-0 flex {active_fill} {animate && glide
         ? 'ease-glide transition-[clip-path] duration-250 motion-reduce:transition-none'
         : ''}"
       style:clip-path={clip}

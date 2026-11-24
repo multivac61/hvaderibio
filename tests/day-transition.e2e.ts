@@ -130,3 +130,51 @@ test("desktop: choosing the chosen day plays no transition", async ({ browser, b
   expect(await page.evaluate(() => (window as unknown as { transitions: number }).transitions)).toBe(0);
   await context.close();
 });
+
+// Arrow keys through the cinemas change the choice at once, as they do the
+// days: a keyboard action gets no animation, and a view transition takes
+// every input until it ends.
+test("desktop: arrow keys through the cinemas play no transition", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await page.locator("#select-cinemas-desktop").focus();
+  await page.keyboard.press("Enter");
+  await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.evaluate(() => {
+    const record = window as unknown as { transitioned: boolean };
+    record.transitioned = false;
+    const look = () => {
+      if (document.documentElement.matches(":active-view-transition")) record.transitioned = true;
+      requestAnimationFrame(look);
+    };
+    look();
+  });
+  await page.getByRole("radio", { name: "Höfuðborgarsvæðið", exact: true }).focus();
+  await page.keyboard.press("ArrowUp");
+  await expect(page.getByRole("radio", { name: "Öll", exact: true })).toBeChecked();
+  await page.waitForTimeout(400);
+  expect(await page.evaluate(() => (window as unknown as { transitioned: boolean }).transitioned)).toBe(false);
+  await context.close();
+});
+
+// A cinema clicked lands once the panel is away. Opened again before it
+// got there, the panel lands it at once rather than holding it back for
+// some later close, with the list still ticking the old one.
+test("desktop: a cinema clicked lands even if the panel opens again at once", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  const pill = page.locator("#select-cinemas-desktop");
+  await pill.click();
+  await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.getByRole("radio", { name: "Öll", exact: true }).click();
+  await pill.evaluate((el: HTMLElement) => el.click());
+  await expect(page.getByRole("radio", { name: "Öll", exact: true })).toBeChecked();
+  await expect(pill).toContainText("Öll");
+  await context.close();
+});

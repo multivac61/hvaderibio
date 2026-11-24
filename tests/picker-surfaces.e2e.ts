@@ -109,6 +109,67 @@ test("desktop: the panel's caret turns between the pill's and its own", async ({
   await context.close();
 });
 
+// The panel grows out of the pill on a curve that leaves at once, as it
+// closes: an in-out start held it still under the click for its first
+// frames.
+test("desktop: the panel grows out of the pill at once", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  await page.locator("#select-cinemas-desktop").click();
+  const panel = page.locator(".programme-panel");
+  await expect.poll(() => panel.evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  const curves = await panel.evaluate((el) => [
+    getComputedStyle(el.querySelector(".programme-panel-clip")!).transitionTimingFunction,
+    getComputedStyle(el.querySelector(".programme-caret")!).transitionTimingFunction,
+  ]);
+  expect(curves).toEqual(["cubic-bezier(0.23, 1, 0.32, 1)", "cubic-bezier(0.23, 1, 0.32, 1)"]);
+  await context.close();
+});
+
+// The panel's drop shadow comes and goes by opacity, which the compositor
+// runs, rather than as a box-shadow repainted every frame.
+test("desktop: the panel's shadow fades without repainting", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  await page.locator("#select-cinemas-desktop").click();
+  const panel = page.locator(".programme-panel");
+  await expect.poll(() => panel.evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  const style = await panel.evaluate((el) => ({
+    own: getComputedStyle(el).transitionProperty,
+    shadow: getComputedStyle(el, "::before").boxShadow,
+    fades: getComputedStyle(el, "::before").transitionProperty,
+  }));
+  expect(style.own).not.toContain("box-shadow");
+  expect(style.shadow).not.toBe("none");
+  expect(style.fades).toBe("opacity");
+  await context.close();
+});
+
+// The days' highlight glides to a day pointed at, but follows the arrow
+// keys at once: a held key retargeted the glide over and over, trailing
+// the focus ring.
+test("desktop: arrow keys move the day highlight at once", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  await page.locator("#select-cinemas-desktop").focus();
+  await page.keyboard.press("Enter");
+  const panel = page.locator(".programme-panel");
+  await expect.poll(() => panel.evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  const days = panel.getByRole("radiogroup", { name: "Veldu dag" });
+  await days.getByRole("radio", { checked: true }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(days.getByRole("radio", { name: "Á morgun", exact: true })).toBeChecked();
+  const glides = await days.evaluate(
+    (el) =>
+      el.getAnimations({ subtree: true }).filter((animation) => (animation as CSSTransition).transitionProperty === "clip-path").length
+  );
+  expect(glides).toBe(0);
+  await context.close();
+});
+
 // Open, the panel carries the pill's phrase where the pill was. The pill
 // itself makes way, or it showed through the glass as a second pill.
 test("desktop: the pill makes way for the panel that grew from it", async ({ browser, baseURL }) => {
