@@ -78,13 +78,12 @@
     njóta þess að upplifa bíó.
   </p>
 
-  <h2 class="mt-14 text-sm font-medium text-neutral-400">Sagan</h2>
-  <ol class="mt-5 border-l border-white/10">
+  <ol class="mt-14 border-l border-white/10">
     {#each history as entry (entry.year)}
       <li class="relative pb-10 pl-6 last:pb-0">
         <span aria-hidden="true" class="absolute top-2 -left-[4.5px] size-2 rounded-full bg-white"></span>
         <p class="text-sm text-neutral-400">{entry.year}</p>
-        <h3 class="mt-1 text-lg font-semibold text-white">{entry.title}</h3>
+        <h2 class="mt-1 text-lg font-semibold text-white">{entry.title}</h2>
         <p class="mt-2 text-pretty text-neutral-300">{@render entry.text()}</p>
         <ul class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
           {#each entry.links as link (link.to)}

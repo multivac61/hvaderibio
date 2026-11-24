@@ -52,3 +52,11 @@ test("the about page's history starts with today", async ({ page }) => {
   const years = page.locator("ol > li > p:first-of-type");
   await expect(years).toHaveText(["Í dag", "2023", "2013"]);
 });
+
+// The history runs on from the introduction with no "Sagan" label over
+// it; each entry is a heading of its own, right under the page's title.
+test("the about page's history has no label over it", async ({ page }) => {
+  await page.goto("/um");
+  await expect(page.getByText("Sagan", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Opinn hugbúnaður", /.+/, /.+/]);
+});
