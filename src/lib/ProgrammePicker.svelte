@@ -14,7 +14,7 @@
     cinemaOptions: readonly CinemaOption[];
     cinema: string;
     day: string;
-    onCinema: (cinema: string) => void;
+    onCinema: (cinema: string, slide: boolean) => void;
     onDay: (day: string) => void;
     presentation: "header" | "floating" | "inline";
     id: string;
@@ -108,19 +108,22 @@
   // A cinema clicked puts the panel away first, and lands once it is gone:
   // the posters then slide with nothing over them. Landing at once, the
   // panel shrank inside the page's transition, and looked to close and open
-  // again. The sheet goes at once either way: phones play no transition.
+  // again. Opened again before it got there, the panel lands it at once,
+  // with no slide under the open panel. The sheet goes at once either way:
+  // phones play no transition. A cinema reached by the arrow keys lands at
+  // once, with the panel open.
   let landing: string | null = null;
   const pick_cinema = (choice: string, finish: boolean) => {
-    if (!finish) return onCinema(choice);
-    if (presentation === "floating") onCinema(choice);
+    if (!finish) return onCinema(choice, false);
+    if (presentation === "floating") onCinema(choice, true);
     else landing = choice;
     open = false;
   };
   const land = (now_open: boolean) => {
-    if (now_open || landing === null) return;
+    if (landing === null) return;
     const choice = landing;
     landing = null;
-    onCinema(choice);
+    onCinema(choice, !now_open);
   };
 </script>
 
@@ -218,40 +221,54 @@
 <style>
   /* bits-ui gives the panel the trigger's size as variables. Closed, the
      shape is clipped to exactly that box at the pill's corner radius; open,
-     to the whole panel. The shape moves on screen, so it takes the in-out
-     curve, within the 250ms a popover gets. It closes faster, and on a curve
-     that leaves at once: a choice waits for the close (pick_cinema), and an
-     in-out start held the panel still under the click, which read as lag. */
+     to the whole panel. Both ways it leaves at once and lands softly: an
+     in-out start held the shape still under the click, which read as lag.
+     It opens within the 250ms a popover gets, and closes faster, since a
+     cinema clicked waits for the close (pick_cinema). */
   :global(.programme-panel) {
     --w: var(--bits-popover-anchor-width);
     --h: var(--bits-popover-anchor-height);
-    /* The drop shadow arrives as the shape fills out, and leaves over the
-       whole close: bits-ui keeps the panel until the panel's own
-       transitions end, and this is the one that lasts as long as the clip. */
-    box-shadow: var(--pick-shadow-panel);
-    transition: box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
+    position: relative;
+    isolation: isolate;
   }
-  :global(.programme-panel[data-starting-style]),
-  :global(.programme-panel[data-ending-style]) {
-    box-shadow: var(--pick-shadow-panel-none);
+  /* The drop shadow, on a layer of its own beneath the shape, where the clip
+     cannot cut it off. It arrives as the shape fills out and leaves with
+     it, by opacity, which the compositor runs; a box-shadow transition
+     repainted it every frame. */
+  :global(.programme-panel::before) {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 22px;
+    box-shadow: var(--pick-shadow-panel);
+    pointer-events: none;
+    transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
+  }
+  :global(.programme-panel[data-starting-style]::before),
+  :global(.programme-panel[data-ending-style]::before) {
+    opacity: 0;
+  }
+  :global(.programme-panel[data-ending-style]::before) {
+    transition-delay: 0ms;
   }
   /* It also ends see-through, over the pill already shown beneath it. Where
      the compositor runs the clip, Chromium (Dia) drew one frame of the
      panel without it as the clip ended: the whole panel, empty, flashing
-     back after it had closed. See-through, that frame shows nothing. */
+     back after it had closed. See-through, that frame shows nothing. This
+     is also the panel's own transition that bits-ui waits for before it
+     lets the panel go, and it ends with the clip. */
   :global(.programme-panel[data-ending-style]) {
     opacity: 0;
-    transition:
-      box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1),
-      opacity 40ms linear 110ms;
+    transition: opacity 40ms linear 110ms;
   }
 
   :global(.programme-panel-clip) {
     clip-path: inset(0 round 22px);
-    transition: clip-path 250ms cubic-bezier(0.77, 0, 0.175, 1);
+    transition: clip-path 250ms cubic-bezier(0.23, 1, 0.32, 1);
   }
   :global(.programme-panel[data-ending-style] .programme-panel-clip) {
-    transition: clip-path 150ms cubic-bezier(0.23, 1, 0.32, 1);
+    transition-duration: 150ms;
   }
   :global(.programme-panel[data-align="center"][data-starting-style] .programme-panel-clip),
   :global(.programme-panel[data-align="center"][data-ending-style] .programme-panel-clip) {
@@ -262,15 +279,6 @@
     clip-path: inset(0 calc(100% - var(--w)) calc(100% - var(--h)) 0 round calc(var(--h) / 2));
   }
 
-  /* While the panel is open, a change behind it (a day) leaves it part of
-     the page. Lifted onto a layer of its own, an element is a backdrop
-     root: the panel would no longer see the posters to frost them, and
-     Safari leaves them sharp under the list. So the posters, which would be
-     drawn over it on layers of their own, cross-fade with the page instead
-     of sliding. */
-  :global(:root:has(.programme-panel[data-state="open"]) .movie-poster-image) {
-    view-transition-name: none !important;
-  }
   :global(.programme-panel-clip) {
     /* Safari's name first: the minifier takes the two for one property and
        keeps only the last written, and Chromium reads only the standard one. */
@@ -284,14 +292,14 @@
      and on the way out the up caret faded over the pill's down one. */
   :global(.programme-panel .programme-caret) {
     rotate: 180deg;
-    transition: rotate 250ms cubic-bezier(0.77, 0, 0.175, 1);
+    transition: rotate 250ms cubic-bezier(0.23, 1, 0.32, 1);
   }
   :global(.programme-panel[data-starting-style] .programme-caret),
   :global(.programme-panel[data-ending-style] .programme-caret) {
     rotate: 0deg;
   }
   :global(.programme-panel[data-ending-style] .programme-caret) {
-    transition: rotate 150ms cubic-bezier(0.23, 1, 0.32, 1);
+    transition-duration: 150ms;
   }
 
   /* The choices fade in once the shape has mostly grown, and out at once. */

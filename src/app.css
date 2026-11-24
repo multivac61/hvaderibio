@@ -35,12 +35,10 @@
 :root {
   --pick-shadow-pill: inset 0 0.5px 0 rgb(255 255 255 / 0.28), 0 0 0 0.5px rgb(255 255 255 / 0.14), 0 12px 32px rgb(0 0 0 / 0.35);
   /* The desktop panel's edge is drawn inside its shape, which a clip grows,
-     and its shadow outside, on a layer the clip does not cut. "none" is the
-     same shadow, transparent, so the two can blend. */
+     and its shadow outside, on a layer the clip does not cut. */
   --pick-edge-panel: inset 0 0.5px 0 rgb(255 255 255 / 0.28), inset 0 0 0 0.5px rgb(255 255 255 / 0.14);
   --pick-panel-blur: blur(40px) saturate(180%);
   --pick-shadow-panel: 0 24px 60px rgb(0 0 0 / 0.45);
-  --pick-shadow-panel-none: 0 24px 60px rgb(0 0 0 / 0);
   --pick-shadow-sheet: inset 0 0.5px 0 rgb(255 255 255 / 0.24), 0 -12px 40px rgb(0 0 0 / 0.35);
 }
 
@@ -56,7 +54,7 @@
    where they land, the rest cross-fades. Movement eases in and out; the
    fade is quick to start. */
 ::view-transition-group(*) {
-  animation-duration: 300ms;
+  animation-duration: 250ms;
   animation-timing-function: var(--ease-in-out);
 }
 
@@ -134,13 +132,6 @@ html {
   ::-webkit-scrollbar {
     display: none;
   }
-}
-
-/* Posters move across the screen to their new places: the strong in-out
-   curve, not the browser's plain ease. */
-::view-transition-group(*) {
-  animation-duration: 250ms;
-  animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 /* Keyboard focus, everywhere: a ring drawn inside the element with a soft

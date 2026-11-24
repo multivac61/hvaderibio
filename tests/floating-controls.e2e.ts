@@ -627,3 +627,16 @@ test("home page lets taps beside the bar's pill reach the posters", async ({ pag
   );
   expect(hit).toBe("A");
 });
+
+// Asked for less motion, the sheet fades rather than rises, and a bare
+// fade at the rise's 500ms read as slow. It fades in 200ms.
+test("phone: with less motion the sheet fades quickly", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await page.locator("#select-cinemas").tap();
+  const sheet = page.getByRole("dialog");
+  await expect(sheet).toBeVisible();
+  expect(await sheet.evaluate((el) => getComputedStyle(el).transitionDuration)).toBe("0.2s");
+});
