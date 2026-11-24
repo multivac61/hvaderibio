@@ -219,7 +219,9 @@
   /* bits-ui gives the panel the trigger's size as variables. Closed, the
      shape is clipped to exactly that box at the pill's corner radius; open,
      to the whole panel. The shape moves on screen, so it takes the in-out
-     curve, within the 250ms a popover gets; it closes faster than it opens. */
+     curve, within the 250ms a popover gets. It closes faster, and on a curve
+     that leaves at once: a choice waits for the close (pick_cinema), and an
+     in-out start held the panel still under the click, which read as lag. */
   :global(.programme-panel) {
     --w: var(--bits-popover-anchor-width);
     --h: var(--bits-popover-anchor-height);
@@ -240,8 +242,8 @@
   :global(.programme-panel[data-ending-style]) {
     opacity: 0;
     transition:
-      box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1),
-      opacity 60ms linear 140ms;
+      box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1),
+      opacity 40ms linear 110ms;
   }
 
   :global(.programme-panel-clip) {
@@ -249,7 +251,7 @@
     transition: clip-path 250ms cubic-bezier(0.77, 0, 0.175, 1);
   }
   :global(.programme-panel[data-ending-style] .programme-panel-clip) {
-    transition-duration: 200ms;
+    transition: clip-path 150ms cubic-bezier(0.23, 1, 0.32, 1);
   }
   :global(.programme-panel[data-align="center"][data-starting-style] .programme-panel-clip),
   :global(.programme-panel[data-align="center"][data-ending-style] .programme-panel-clip) {
@@ -284,7 +286,7 @@
   :global(.programme-panel[data-ending-style] .programme-panel-body) {
     opacity: 0;
     transition-delay: 0ms;
-    transition-duration: 100ms;
+    transition-duration: 70ms;
   }
 
   @media (prefers-reduced-motion: reduce) {
