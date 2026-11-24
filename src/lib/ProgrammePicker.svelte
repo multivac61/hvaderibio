@@ -220,8 +220,15 @@
   :global(.programme-panel[data-ending-style]) {
     box-shadow: var(--pick-shadow-panel-none);
   }
+  /* It also ends see-through, over the pill already shown beneath it. Where
+     the compositor runs the clip, Chromium (Dia) drew one frame of the
+     panel without it as the clip ended: the whole panel, empty, flashing
+     back after it had closed. See-through, that frame shows nothing. */
   :global(.programme-panel[data-ending-style]) {
-    transition: box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+    opacity: 0;
+    transition:
+      box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1),
+      opacity 60ms linear 140ms;
   }
 
   :global(.programme-panel-clip) {
@@ -285,7 +292,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :global(.programme-panel) {
+    :global(.programme-panel),
+    :global(.programme-panel[data-ending-style]) {
       transition: opacity 150ms ease;
     }
     :global(.programme-panel[data-starting-style]),

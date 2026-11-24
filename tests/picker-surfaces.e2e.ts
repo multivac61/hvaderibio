@@ -62,6 +62,29 @@ test("desktop: the panel stays frosted while the day changes", async ({ browser,
   await context.close();
 });
 
+// Closing, the panel shrinks back into the pill by its clip. Where the
+// compositor runs that clip, Chromium (Dia) drew one frame of the panel
+// without it as the clip ended: the whole panel, empty, flashing back after
+// it had closed. So it ends see-through as well, over the pill already
+// shown beneath it, and a frame without its clip shows nothing.
+test("desktop: the panel ends its close see-through", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  await page.locator("#select-cinemas-desktop").click();
+  const panel = page.locator(".programme-panel");
+  await expect.poll(() => panel.evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.keyboard.press("Escape");
+  // Where the close lands, without waiting for it to get there.
+  const end = await panel.evaluate((el: HTMLElement) => {
+    if (!el.hasAttribute("data-ending-style")) return null;
+    el.style.transition = "none";
+    return getComputedStyle(el).opacity;
+  });
+  expect(end).toBe("0");
+  await context.close();
+});
+
 // Open, the panel carries the pill's phrase where the pill was. The pill
 // itself makes way, or it showed through the glass as a second pill.
 test("desktop: the pill makes way for the panel that grew from it", async ({ browser, baseURL }) => {
