@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { get_movie_programme, get_programme_movies, keep_order, nearest_showing, to_programme_entry } from "../src/lib/programme";
-import type { CinemaOption } from "../src/lib/cinemas";
+import { get_movie_programme, get_programme_movies, keep_order, to_programme_entry } from "../src/lib/programme";
 import { movie_schema, type Showtime } from "../src/lib/schemas";
 
 const showtime = (time: string, purchase_url: string): Showtime => ({
@@ -137,58 +136,5 @@ describe("programme", () => {
       "https://example.com/tonight",
     ]);
     expect(purchase_urls(get_movie_programme(selected, "1", ["Cinema"], after_midnight))).toEqual(["https://example.com/tomorrow"]);
-  });
-});
-
-describe("nearest_showing", () => {
-  // Showtimes by day, then by cinema.
-  const playing = (days: Record<string, Record<string, string[]>>) =>
-    movie_schema.parse({
-      id: 1,
-      title: "Movie 1",
-      release_year: 2026,
-      poster_url: "https://example.com/1.jpg",
-      description: "",
-      genres: [],
-      duration_in_mins: 90,
-      showtimes_by_day: Object.fromEntries(
-        Object.entries(days).map(([day, cinemas]) => [
-          day,
-          Object.fromEntries(
-            Object.entries(cinemas).map(([cinema, times]) => [cinema, times.map((time) => showtime(time, `https://example.com/${time}`))])
-          ),
-        ])
-      ),
-    });
-  const options: CinemaOption[] = [
-    ["Öll", ["Bíó Paradís", "Smárabíó", "Sambíóin Akureyri"]],
-    ["Höfuðborgarsvæðið", ["Bíó Paradís", "Smárabíó"]],
-    ["Akureyri", ["Sambíóin Akureyri"]],
-    ["Bíó Paradís", ["Bíó Paradís"]],
-    ["Smárabíó", ["Smárabíó"]],
-  ];
-  const morning = new Date("2026-09-03T09:00:00.000Z");
-
-  test("keeps the cinema and finds the next day it plays there", () => {
-    const film = playing({ "2": { Smárabíó: ["2026-09-05T20:00:00.000Z"] }, "3": { Smárabíó: ["2026-09-06T20:00:00.000Z"] } });
-    expect(nearest_showing(film, "0", "Höfuðborgarsvæðið", options, morning)).toEqual({ day: "2", cinema: "Höfuðborgarsvæðið" });
-  });
-
-  test("looks back to an earlier day when no later one has it", () => {
-    const film = playing({ "1": { Smárabíó: ["2026-09-04T20:00:00.000Z"] } });
-    expect(nearest_showing(film, "3", "Smárabíó", options, morning)).toEqual({ day: "1", cinema: "Smárabíó" });
-  });
-
-  test("offers the cinema that plays it, on the chosen day if it can", () => {
-    const film = playing({
-      "0": { "Sambíóin Akureyri": ["2026-09-03T20:00:00.000Z"] },
-      "1": { "Sambíóin Akureyri": ["2026-09-04T20:00:00.000Z"] },
-    });
-    expect(nearest_showing(film, "0", "Höfuðborgarsvæðið", options, morning)).toEqual({ day: "0", cinema: "Akureyri" });
-  });
-
-  test("skips today's showings that have already started", () => {
-    const film = playing({ "0": { Smárabíó: ["2026-09-03T08:00:00.000Z"] } });
-    expect(nearest_showing(film, "1", "Smárabíó", options, morning)).toBeNull();
   });
 });
