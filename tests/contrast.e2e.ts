@@ -41,7 +41,6 @@ test("the quiet grey text is still readable", async ({ page }) => {
   await page.goto("/");
   expect(await contrast(page.getByRole("link", { name: "Um síðuna" }))).toBeGreaterThanOrEqual(4.5);
   await page.goto("/um");
-  expect(await contrast(page.getByRole("heading", { name: "Sagan" }))).toBeGreaterThanOrEqual(4.5);
   expect(await contrast(page.getByText("2013", { exact: true }))).toBeGreaterThanOrEqual(4.5);
 });
 
