@@ -1,8 +1,6 @@
 import { movie_path_segment } from "#lib/movie-path.js";
 import type { Movie, Showtime } from "#lib/schemas.js";
 import { get_visible_showtimes, is_visible_time, unique_showtimes } from "#lib/showtimes.js";
-import { AVAILABLE_DAYS } from "#lib/day-picker.js";
-import type { CinemaOption } from "#lib/cinemas.js";
 
 export type CinemaProgramme = Readonly<{
   cinema: string;
@@ -66,35 +64,6 @@ export const get_movie_programme = (movie: Movie, selectedDay: string, selectedC
     .filter(([cinema]) => selectedCinemas.includes(cinema))
     .map(([cinema, showtimes]) => ({ cinema, showtimes: get_visible_showtimes(showtimes, selectedDay, now) }))
     .filter(({ showtimes }) => showtimes.length > 0);
-
-/**
- * Where the movie does play, when the chosen day and cinema have nothing:
- * the visitor's cinema on the nearest other day (later days first), and
- * failing that a single cinema that plays it, on the chosen day if one does.
- * Null when it plays nowhere in the days shown.
- */
-export const nearest_showing = (
-  movie: Movie,
-  selectedDay: string,
-  selectedChoice: string,
-  options: readonly CinemaOption[],
-  now: Date
-): { day: string; cinema: string } | null => {
-  const chosen = Number(selectedDay);
-  const days = AVAILABLE_DAYS.filter((day) => day !== selectedDay).toSorted(
-    (a, b) => Number(Number(a) < chosen) - Number(Number(b) < chosen) || Math.abs(Number(a) - chosen) - Math.abs(Number(b) - chosen)
-  );
-  const plays = (day: string, cinemas: readonly string[]) => get_movie_programme(movie, day, cinemas, now).length > 0;
-  const cinemas = options.find(([label]) => label === selectedChoice)?.[1] ?? [];
-  const day = days.find((day) => plays(day, cinemas));
-  if (day !== undefined) return { day, cinema: selectedChoice };
-  const singles = options.filter(([label, cinemas]) => cinemas.length === 1 && label !== selectedChoice);
-  for (const day of [selectedDay, ...days]) {
-    const single = singles.find(([, cinemas]) => plays(day, cinemas));
-    if (single) return { day, cinema: single[0] };
-  }
-  return null;
-};
 
 /**
  * How many posters lead the grid with high fetch priority. Only the first
