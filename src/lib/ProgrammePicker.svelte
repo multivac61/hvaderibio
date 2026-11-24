@@ -139,7 +139,7 @@
   <span class="text-pick-ink/30" aria-hidden="true">·</span>
   <span class="text-pick-ink/80 truncate font-medium">{cinema}</span>
   <svg
-    class="text-pick-ink/50 size-3.5 shrink-0 in-data-[panel-phrase]:rotate-180"
+    class="programme-caret text-pick-ink/50 size-3.5 shrink-0"
     viewBox="0 0 16 16"
     fill="none"
     stroke="currentColor"
@@ -278,6 +278,22 @@
     backdrop-filter: var(--pick-panel-blur);
   }
 
+  /* The panel's caret turns with the shape: down as the pill's, as it grows
+     out of it; up once open; down again by the time it is back in the pill,
+     so the pill takes over the same caret. Jumping, it flipped in one frame,
+     and on the way out the up caret faded over the pill's down one. */
+  :global(.programme-panel .programme-caret) {
+    rotate: 180deg;
+    transition: rotate 250ms cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  :global(.programme-panel[data-starting-style] .programme-caret),
+  :global(.programme-panel[data-ending-style] .programme-caret) {
+    rotate: 0deg;
+  }
+  :global(.programme-panel[data-ending-style] .programme-caret) {
+    transition: rotate 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
   /* The choices fade in once the shape has mostly grown, and out at once. */
   :global(.programme-panel-body) {
     transition: opacity 170ms cubic-bezier(0.23, 1, 0.32, 1) 80ms;
@@ -297,6 +313,9 @@
     :global(.programme-panel[data-starting-style]),
     :global(.programme-panel[data-ending-style]) {
       opacity: 0;
+    }
+    :global(.programme-panel .programme-caret) {
+      transition: none;
     }
     :global(.programme-panel-clip),
     :global(.programme-panel[data-starting-style] .programme-panel-clip),
