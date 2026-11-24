@@ -105,9 +105,22 @@
     };
   });
 
+  // A cinema clicked puts the panel away first, and lands once it is gone:
+  // the posters then slide with nothing over them. Landing at once, the
+  // panel shrank inside the page's transition, and looked to close and open
+  // again. The sheet goes at once either way: phones play no transition.
+  let landing: string | null = null;
   const pick_cinema = (choice: string, finish: boolean) => {
+    if (!finish) return onCinema(choice);
+    if (presentation === "floating") onCinema(choice);
+    else landing = choice;
+    open = false;
+  };
+  const land = (now_open: boolean) => {
+    if (now_open || landing === null) return;
+    const choice = landing;
+    landing = null;
     onCinema(choice);
-    if (finish) open = false;
   };
 </script>
 
@@ -126,7 +139,7 @@
   <span class="text-pick-ink/30" aria-hidden="true">·</span>
   <span class="text-pick-ink/80 truncate font-medium">{cinema}</span>
   <svg
-    class="text-pick-ink/50 size-3.5 shrink-0 in-data-[panel-phrase]:rotate-180"
+    class="programme-caret text-pick-ink/50 size-3.5 shrink-0"
     viewBox="0 0 16 16"
     fill="none"
     stroke="currentColor"
@@ -151,7 +164,7 @@
   </BottomSheet>
 {:else}
   <div class={presentation === "header" ? "flex justify-center" : ""}>
-    <Popover.Root bind:open>
+    <Popover.Root bind:open onOpenChangeComplete={land}>
       <!-- Open, the panel carries this phrase where the pill was; the pill
            makes way, or it showed through the glass as a second pill. -->
       <Popover.Trigger
@@ -206,7 +219,9 @@
   /* bits-ui gives the panel the trigger's size as variables. Closed, the
      shape is clipped to exactly that box at the pill's corner radius; open,
      to the whole panel. The shape moves on screen, so it takes the in-out
-     curve, within the 250ms a popover gets; it closes faster than it opens. */
+     curve, within the 250ms a popover gets. It closes faster, and on a curve
+     that leaves at once: a choice waits for the close (pick_cinema), and an
+     in-out start held the panel still under the click, which read as lag. */
   :global(.programme-panel) {
     --w: var(--bits-popover-anchor-width);
     --h: var(--bits-popover-anchor-height);
@@ -220,8 +235,15 @@
   :global(.programme-panel[data-ending-style]) {
     box-shadow: var(--pick-shadow-panel-none);
   }
+  /* It also ends see-through, over the pill already shown beneath it. Where
+     the compositor runs the clip, Chromium (Dia) drew one frame of the
+     panel without it as the clip ended: the whole panel, empty, flashing
+     back after it had closed. See-through, that frame shows nothing. */
   :global(.programme-panel[data-ending-style]) {
-    transition: box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+    opacity: 0;
+    transition:
+      box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1),
+      opacity 40ms linear 110ms;
   }
 
   :global(.programme-panel-clip) {
@@ -229,7 +251,7 @@
     transition: clip-path 250ms cubic-bezier(0.77, 0, 0.175, 1);
   }
   :global(.programme-panel[data-ending-style] .programme-panel-clip) {
-    transition-duration: 200ms;
+    transition: clip-path 150ms cubic-bezier(0.23, 1, 0.32, 1);
   }
   :global(.programme-panel[data-align="center"][data-starting-style] .programme-panel-clip),
   :global(.programme-panel[data-align="center"][data-ending-style] .programme-panel-clip) {
@@ -249,28 +271,27 @@
   :global(:root:has(.programme-panel[data-state="open"]) .movie-poster-image) {
     view-transition-name: none !important;
   }
-  /* A cinema closes the panel as the posters slide. Closing, it takes a
-     live layer of its own, above them, so the open panel in the old picture
-     of the page does not fade out over the one shrinking back into the
-     pill. One panel is open at a time, so one name. */
-  :global(:root:active-view-transition .programme-panel[data-state="closed"]) {
-    view-transition-name: programme-panel;
-    view-transition-class: live;
-  }
-  /* That layer cannot frost what is behind it either; it frosts the posters
-     itself, at the panel's corners, where the browser allows. */
-  :global(::view-transition-group(programme-panel)) {
-    /* Safari's name first: the minifier takes the two for one property and
-       keeps only the last written, and Chromium reads only the standard one. */
-    -webkit-backdrop-filter: var(--pick-panel-blur);
-    backdrop-filter: var(--pick-panel-blur);
-    border-radius: 22px;
-  }
   :global(.programme-panel-clip) {
     /* Safari's name first: the minifier takes the two for one property and
        keeps only the last written, and Chromium reads only the standard one. */
     -webkit-backdrop-filter: var(--pick-panel-blur);
     backdrop-filter: var(--pick-panel-blur);
+  }
+
+  /* The panel's caret turns with the shape: down as the pill's, as it grows
+     out of it; up once open; down again by the time it is back in the pill,
+     so the pill takes over the same caret. Jumping, it flipped in one frame,
+     and on the way out the up caret faded over the pill's down one. */
+  :global(.programme-panel .programme-caret) {
+    rotate: 180deg;
+    transition: rotate 250ms cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  :global(.programme-panel[data-starting-style] .programme-caret),
+  :global(.programme-panel[data-ending-style] .programme-caret) {
+    rotate: 0deg;
+  }
+  :global(.programme-panel[data-ending-style] .programme-caret) {
+    transition: rotate 150ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   /* The choices fade in once the shape has mostly grown, and out at once. */
@@ -281,16 +302,20 @@
   :global(.programme-panel[data-ending-style] .programme-panel-body) {
     opacity: 0;
     transition-delay: 0ms;
-    transition-duration: 100ms;
+    transition-duration: 70ms;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :global(.programme-panel) {
+    :global(.programme-panel),
+    :global(.programme-panel[data-ending-style]) {
       transition: opacity 150ms ease;
     }
     :global(.programme-panel[data-starting-style]),
     :global(.programme-panel[data-ending-style]) {
       opacity: 0;
+    }
+    :global(.programme-panel .programme-caret) {
+      transition: none;
     }
     :global(.programme-panel-clip),
     :global(.programme-panel[data-starting-style] .programme-panel-clip),

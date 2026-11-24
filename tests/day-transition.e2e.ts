@@ -41,6 +41,44 @@ test("desktop: posters slide to their places when the cinema changes", async ({ 
   await context.close();
 });
 
+// A cinema clicked puts the panel away, and only then do the posters move.
+// Played together, the panel shrank inside the transition: the day row, on
+// a layer of its own, stood outside the shrinking clip, and the panel's
+// frosting stayed the size of the open panel. It looked like the panel
+// closing and opening again.
+test("desktop: the panel is away before the posters move", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await page.locator("#select-cinemas-desktop").click();
+  await expect.poll(() => page.locator(".programme-panel").evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  await page.evaluate(() => {
+    const record = window as unknown as { overlapped: boolean; transitioned: boolean };
+    record.overlapped = false;
+    record.transitioned = false;
+    const look = () => {
+      if (document.documentElement.matches(":active-view-transition")) {
+        record.transitioned = true;
+        if (document.querySelector(".programme-panel")) record.overlapped = true;
+      }
+      requestAnimationFrame(look);
+    };
+    look();
+  });
+  await page.getByRole("radio", { name: "Öll", exact: true }).click();
+  await expect(page.locator("#select-cinemas-desktop")).toContainText("Öll");
+  await page.waitForTimeout(400);
+  const record = await page.evaluate(() => {
+    const { overlapped, transitioned } = window as unknown as { overlapped: boolean; transitioned: boolean };
+    return { overlapped, transitioned };
+  });
+  expect(record.transitioned).toBe(true);
+  expect(record.overlapped).toBe(false);
+  await context.close();
+});
+
 // While a change plays as a view transition, the next click still counts:
 // the transition's snapshot lay over the page and took every click for a
 // quarter of a second, so a second day clicked just after the first was
