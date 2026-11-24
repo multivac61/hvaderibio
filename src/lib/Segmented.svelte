@@ -22,7 +22,6 @@
     "flex-auto rounded-lg px-1.5 py-2 text-center text-sm leading-4 font-medium whitespace-nowrap max-[22.5rem]:px-1 max-[22.5rem]:text-[13px]";
   const active_fill = "bg-pick-accent text-pick-on-accent";
 
-  const uid = $props.id();
   let row: HTMLDivElement | undefined = $state();
   let buttons: HTMLButtonElement[] = $state([]);
   // The row's size changes when the web font arrives or the screen turns, and
@@ -60,11 +59,9 @@
   };
 </script>
 
-<!-- Its own layer in the page's view transition, drawn live: in the shared
-     snapshot the old highlight would fade out on top of the moving one. -->
 <!-- A radio group: one tab stop, on the chosen item, and the arrow keys move
      the choice (radio-group.ts). -->
-<div style:view-transition-name="segmented-{uid}" style:view-transition-class="live" class="bg-pick-ink/[0.06] rounded-[14px] p-1.5">
+<div class="bg-pick-ink/[0.06] rounded-[14px] p-1.5">
   <div bind:this={row} role="radiogroup" aria-label={label} class="relative flex">
     {#each items as item, i (item.value)}
       {@const active = item.value === selected}

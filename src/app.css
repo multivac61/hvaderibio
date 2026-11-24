@@ -136,16 +136,6 @@ html {
   }
 }
 
-/* Elements that animate themselves while the programme changes (the day
-   picker's highlight, the picker panel closing) are shown live in the view
-   transition, rather than under a fading snapshot of how they were. */
-::view-transition-old(*.live) {
-  display: none;
-}
-::view-transition-new(*.live) {
-  animation: none;
-}
-
 /* Posters move across the screen to their new places: the strong in-out
    curve, not the browser's plain ease. */
 ::view-transition-group(*) {

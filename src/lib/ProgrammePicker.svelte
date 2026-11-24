@@ -105,9 +105,22 @@
     };
   });
 
+  // A cinema clicked puts the panel away first, and lands once it is gone:
+  // the posters then slide with nothing over them. Landing at once, the
+  // panel shrank inside the page's transition, and looked to close and open
+  // again. The sheet goes at once either way: phones play no transition.
+  let landing: string | null = null;
   const pick_cinema = (choice: string, finish: boolean) => {
+    if (!finish) return onCinema(choice);
+    if (presentation === "floating") onCinema(choice);
+    else landing = choice;
+    open = false;
+  };
+  const land = (now_open: boolean) => {
+    if (now_open || landing === null) return;
+    const choice = landing;
+    landing = null;
     onCinema(choice);
-    if (finish) open = false;
   };
 </script>
 
@@ -151,7 +164,7 @@
   </BottomSheet>
 {:else}
   <div class={presentation === "header" ? "flex justify-center" : ""}>
-    <Popover.Root bind:open>
+    <Popover.Root bind:open onOpenChangeComplete={land}>
       <!-- Open, the panel carries this phrase where the pill was; the pill
            makes way, or it showed through the glass as a second pill. -->
       <Popover.Trigger
@@ -255,23 +268,6 @@
      of sliding. */
   :global(:root:has(.programme-panel[data-state="open"]) .movie-poster-image) {
     view-transition-name: none !important;
-  }
-  /* A cinema closes the panel as the posters slide. Closing, it takes a
-     live layer of its own, above them, so the open panel in the old picture
-     of the page does not fade out over the one shrinking back into the
-     pill. One panel is open at a time, so one name. */
-  :global(:root:active-view-transition .programme-panel[data-state="closed"]) {
-    view-transition-name: programme-panel;
-    view-transition-class: live;
-  }
-  /* That layer cannot frost what is behind it either; it frosts the posters
-     itself, at the panel's corners, where the browser allows. */
-  :global(::view-transition-group(programme-panel)) {
-    /* Safari's name first: the minifier takes the two for one property and
-       keeps only the last written, and Chromium reads only the standard one. */
-    -webkit-backdrop-filter: var(--pick-panel-blur);
-    backdrop-filter: var(--pick-panel-blur);
-    border-radius: 22px;
   }
   :global(.programme-panel-clip) {
     /* Safari's name first: the minifier takes the two for one property and
