@@ -108,10 +108,12 @@
   // A cinema clicked puts the panel away first, and lands once it is gone:
   // the posters then slide with nothing over them. Landing at once, the
   // panel shrank inside the page's transition, and looked to close and open
-  // again. Opened again before it got there, the panel lands it at once,
-  // with no slide under the open panel. The sheet goes at once either way:
-  // phones play no transition. A cinema reached by the arrow keys lands at
-  // once, with the panel open.
+  // again. Opened again before it got there, the panel lands it as it
+  // opens, with no slide under it: waiting for the opening to finish, it
+  // showed the old cinema ticked meanwhile, and landed over one the arrow
+  // keys had reached since. The sheet goes at once either way: phones play
+  // no transition. A cinema reached by the arrow keys lands at once, with
+  // the panel open.
   let landing: string | null = null;
   const pick_cinema = (choice: string, finish: boolean) => {
     if (!finish) return onCinema(choice, false);
@@ -119,11 +121,11 @@
     else landing = choice;
     open = false;
   };
-  const land = (now_open: boolean) => {
+  const land = (slide: boolean) => {
     if (landing === null) return;
     const choice = landing;
     landing = null;
-    onCinema(choice, !now_open);
+    onCinema(choice, slide);
   };
 </script>
 
@@ -167,7 +169,10 @@
   </BottomSheet>
 {:else}
   <div class={presentation === "header" ? "flex justify-center" : ""}>
-    <Popover.Root bind:open onOpenChangeComplete={land}>
+    <Popover.Root
+      bind:open
+      onOpenChange={(now_open) => now_open && land(false)}
+      onOpenChangeComplete={(now_open) => !now_open && land(true)}>
       <!-- Open, the panel carries this phrase where the pill was; the pill
            makes way, or it showed through the glass as a second pill. -->
       <Popover.Trigger
