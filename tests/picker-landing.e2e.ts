@@ -66,6 +66,27 @@ test("reopened at once, the panel shows the cinema just clicked", async ({ page 
   expect(result.shown).toBe(result.clicked);
 });
 
+// Leaving the page while a cinema is still held must not lose it: the panel
+// went with the page, its close never completed, and the cinema never landed.
+test("a cinema still landing is kept when the page is left", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/");
+  await expect(page.getByRole("status")).toHaveText(/myndir?$/);
+  await open_panel(page, "#select-cinemas-desktop");
+
+  const clicked = await page.evaluate(() => {
+    const radios = [...document.querySelectorAll<HTMLElement>('[aria-label="Veldu kvikmyndahús"] [role="radio"]')];
+    const chosen = radios.findIndex((radio) => radio.getAttribute("aria-checked") === "true");
+    const radio = radios[(chosen + 1) % radios.length]!;
+    radio.click();
+    document.querySelector<HTMLElement>("a[data-movie-id]")!.click();
+    return radio.textContent!.trim();
+  });
+
+  await page.waitForURL(/\/movie\//);
+  await expect(page.locator("#select-cinemas-movie-desktop")).toContainText(clicked);
+});
+
 // "Hreinsa val" pressed while a cinema is still held must stay cleared: the
 // held cinema used to land after it, undoing the clearing.
 test("clearing the choice wins over a cinema still landing", async ({ page }) => {

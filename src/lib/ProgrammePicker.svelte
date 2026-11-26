@@ -128,6 +128,10 @@
     landing = null;
     if (over.cinema === cinema && over.day === day) onCinema(choice, slide);
   };
+  // Left mid-close, as by a poster followed at once, the panel goes with the
+  // page and its close never completes: land the cinema as the picker goes,
+  // or it was lost, and the next page showed the old one.
+  $effect(() => () => land(false));
 </script>
 
 {#snippet phrase(action = "Breyta vali")}
