@@ -1,0 +1,81 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 94 and seed -6994357243319739683 with 1 worker on 16 cores with 14564MB heap and 64MB offheap memory (Mac OS X 27.2.1 aarch64, Azul Systems, Inc. 1.8.0_492 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/olafur/dev/hvaderibio/specs/picker/Picker.tla
+Parsing file /private/var/folders/xy/pr61mzs103dg6j7tz82csq7h0000gn/T/TLC.tla
+Parsing file /private/var/folders/xy/pr61mzs103dg6j7tz82csq7h0000gn/T/Naturals.tla
+Parsing file /private/var/folders/xy/pr61mzs103dg6j7tz82csq7h0000gn/T/Sequences.tla
+Parsing file /private/var/folders/xy/pr61mzs103dg6j7tz82csq7h0000gn/T/FiniteSets.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module Picker
+Starting... (2026-11-26 10:02:33)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2026-11-26 10:02:33.
+Error: Invariant LastChoiceWins is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ run = "idle"
+/\ vtWaiting = "none"
+/\ held = FALSE
+/\ day = "0"
+/\ sel = "A"
+/\ open = FALSE
+/\ landing = [day |-> "0", choice |-> "A", cinema |-> "A"]
+/\ intent = <<"A", "0">>
+
+State 2: <OpenTrigger line 46, col 3 to line 48, col 30 of module Picker>
+/\ run = "opening"
+/\ vtWaiting = "none"
+/\ held = FALSE
+/\ day = "0"
+/\ sel = "A"
+/\ open = TRUE
+/\ landing = [day |-> "0", choice |-> "A", cinema |-> "A"]
+/\ intent = <<"A", "0">>
+
+State 3: <ClickCinema line 56, col 3 to line 59, col 38 of module Picker>
+/\ run = "closing"
+/\ vtWaiting = "none"
+/\ held = TRUE
+/\ day = "0"
+/\ sel = "A"
+/\ open = FALSE
+/\ landing = [day |-> "0", choice |-> "B", cinema |-> "A"]
+/\ intent = <<"B", "0">>
+
+State 4: <ClearChoice line 85, col 16 to line 87, col 67 of module Picker>
+/\ run = "closing"
+/\ vtWaiting = "none"
+/\ held = TRUE
+/\ day = "0"
+/\ sel = "A"
+/\ open = FALSE
+/\ landing = [day |-> "0", choice |-> "B", cinema |-> "A"]
+/\ intent = <<"A", "0">>
+
+State 5: <OpenTrigger line 46, col 3 to line 48, col 30 of module Picker>
+/\ run = "opening"
+/\ vtWaiting = "none"
+/\ held = FALSE
+/\ day = "0"
+/\ sel = "B"
+/\ open = TRUE
+/\ landing = [day |-> "0", choice |-> "A", cinema |-> "A"]
+/\ intent = <<"A", "0">>
+
+State 6: <CompleteOpen line 73, col 18 to line 75, col 51 of module Picker>
+/\ run = "idle"
+/\ vtWaiting = "none"
+/\ held = FALSE
+/\ day = "0"
+/\ sel = "B"
+/\ open = TRUE
+/\ landing = [day |-> "0", choice |-> "A", cinema |-> "A"]
+/\ intent = <<"A", "0">>
+
+185 states generated, 65 distinct states found, 29 states left on queue.
+The depth of the complete state graph search is 6.
+The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 8 and the 95th percentile is 5).
+Finished in 00s at (2026-11-26 10:02:33)

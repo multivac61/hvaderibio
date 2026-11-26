@@ -42,3 +42,7 @@ static/*.json
 /result
 /result-linux
 /result-catalog
+
+# TLC leaves these beside a spec on every run.
+specs/**/states/
+specs/**/*_TTrace_*
