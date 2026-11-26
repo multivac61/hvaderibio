@@ -34,7 +34,6 @@
   // once: a held key retargeted the glide over and over, trailing the
   // focus ring, and a keyboard action gets no animation.
   let glide = $state(true);
-  let focused = $state(-1);
 
   $effect(() => {
     if (!row) return;
@@ -59,10 +58,6 @@
     clip = `inset(0 ${right}px 0 ${button.offsetLeft}px round 8px)`;
     if (!animate) requestAnimationFrame(() => (animate = true));
   });
-
-  const note_focus = (i: number) => (event: FocusEvent) => {
-    focused = (event.currentTarget as HTMLElement).matches(":focus-visible") ? i : -1;
-  };
 </script>
 
 <!-- A radio group: one tab stop, on the chosen item, and the arrow keys move
@@ -81,8 +76,6 @@
         tabindex={active ? 0 : -1}
         onkeydown={(event) => on_radio_keydown(event, values, onSelect)}
         onclick={() => onSelect(item.value)}
-        onfocus={note_focus(i)}
-        onblur={() => (focused = -1)}
         class="relative select-none [transition:color_150ms_ease,transform_150ms_cubic-bezier(0.23,1,0.32,1)] before:absolute before:inset-x-0 before:-inset-y-2 active:scale-[0.97] motion-reduce:active:scale-100 {label_class} {active &&
         !clip
           ? active_fill
@@ -102,14 +95,19 @@
         : ''}"
       style:clip-path={clip}
       hidden={!clip}>
-      {#each items as item, i (item.value)}
-        <!-- The focus ring the global style draws on the chosen button sits
-             under this copy, so the copy draws it again. -->
-        <span
-          class="{label_class} {focused === i ? 'shadow-[inset_0_0_0_1px_rgb(255_255_255/0.85),inset_0_0_8px_rgb(255_255_255/0.16)]' : ''}">
-          {item.label}
-        </span>
+      {#each items as item (item.value)}
+        <span class={label_class}>{item.label}</span>
       {/each}
     </div>
   </div>
 </div>
+
+<style>
+  /* Focus only ever rests on the chosen item, under the copy's white fill,
+     where the global ring, white too, could not be seen. It goes around the
+     fill instead, in the track's padding. */
+  button[aria-checked="true"]:focus-visible {
+    outline: 1.5px solid rgb(255 255 255 / 0.85);
+    outline-offset: 2px;
+  }
+</style>

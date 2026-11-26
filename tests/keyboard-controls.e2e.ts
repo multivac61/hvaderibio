@@ -101,6 +101,39 @@ test.describe("desktop header", () => {
     await expect(cinemas.nth(2)).toBeFocused();
     await expect(page.getByRole("status")).not.toHaveText(before!);
   });
+
+  // Focus only rests on the chosen day, under its white fill, where a white
+  // ring drawn inside it could not be seen. It is ringed around the fill.
+  test("the focused day's ring shows around its fill", async ({ page }) => {
+    await open_home(page);
+    await open_picker(page, "#select-cinemas-desktop");
+    const day = page.getByRole("radiogroup", { name: "Veldu dag" }).filter({ visible: true }).getByRole("radio", { checked: true });
+    await expect(day).toBeFocused();
+    const ring = await day.evaluate((el) => {
+      const { outlineStyle, outlineOffset } = getComputedStyle(el);
+      return { outlineStyle, outlineOffset };
+    });
+    expect(ring.outlineStyle).toBe("solid");
+    expect(Number.parseFloat(ring.outlineOffset)).toBeGreaterThan(0);
+  });
+
+  // The panel's phrase row has no corners of its own, the panel's clip
+  // gives them, so a ring drawn inside it was a full-width box, round at
+  // the top and square below. It is ringed as the pill is.
+  test("the panel's phrase row is ringed as the pill is", async ({ page }) => {
+    await open_home(page);
+    await open_picker(page, "#select-cinemas-desktop");
+    await page.keyboard.press("Shift+Tab");
+    const phrase = page.locator("[data-panel-phrase]");
+    await expect(phrase).toBeFocused();
+    const ring = await phrase.evaluate((el) => {
+      const after = getComputedStyle(el, "::after");
+      return { radius: after.borderTopLeftRadius, shadow: after.boxShadow, own: getComputedStyle(el).boxShadow };
+    });
+    expect(ring.own).toBe("none");
+    expect(ring.shadow).toContain("inset");
+    expect(Number.parseFloat(ring.radius)).toBeGreaterThan(20);
+  });
 });
 
 test.describe("phone sheet", () => {

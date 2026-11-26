@@ -53,3 +53,22 @@ test("phone: nothing left on the default choice offers no clearing", async ({ pa
   await expect(page.getByRole("button", { name: "Hreinsa val" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: /^Sýnd/ })).toHaveCount(0);
 });
+
+// A movie's showtimes sit on solid cards: on 3% white the stars showed
+// through them, and under the picker they read as see-through.
+test("phone: a movie's showtime cards are solid", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/movie/hvolpasveitin-risaedlumyndin");
+  const opaque = (color: string) => !/\/\s*0?\.\d+\)$|rgba\([^)]*,\s*0?\.\d+\)$/.test(color);
+  const row = page.locator("[data-day-programme] > *").first();
+  await expect(row).toBeVisible();
+  expect(opaque(await row.evaluate((el) => getComputedStyle(el).backgroundColor))).toBe(true);
+
+  const pill = page.locator("#select-cinemas-movie-mobile");
+  await expect(pill).toHaveCSS("opacity", "1");
+  await pill.tap();
+  await page.getByRole("dialog").getByRole("radio", { name: "Bíó Paradís", exact: true }).tap();
+  const empty = page.locator("[data-day-programme]", { hasText: "Engar sýningar fundust fyrir þetta val." });
+  await expect(empty).toBeVisible();
+  expect(opaque(await empty.evaluate((el) => getComputedStyle(el).backgroundColor))).toBe(true);
+});

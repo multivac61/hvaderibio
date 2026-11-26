@@ -16,7 +16,7 @@
 </script>
 
 <div
-  class="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_6px_20px_rgba(0,0,0,0.2)] backdrop-blur-xl transition-colors duration-200 hover:border-white/10 hover:bg-white/[0.045] md:p-4">
+  class="bg-programme-card hover:bg-programme-card-hover rounded-2xl border border-white/[0.06] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_6px_20px_rgba(0,0,0,0.2)] transition-colors duration-200 hover:border-white/10 md:p-4">
   <div class="mb-2 min-w-0 md:mb-3">
     {#if cinemaUrl}
       <a

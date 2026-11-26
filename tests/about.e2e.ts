@@ -60,3 +60,25 @@ test("the about page's history has no label over it", async ({ page }) => {
   await expect(page.getByText("Sagan", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Opinn hugbúnaður", /.+/, /.+/]);
 });
+
+// A link inside running text has no box of its own: a ring drawn inside it
+// sat square on the letters. It is ringed outside, rounded, clear of them.
+test("desktop: a link in the text is ringed clear of its letters", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await page.goto("/um");
+  const link = page.locator('a[href="https://hugihlynsson.com/"]');
+  await page.keyboard.press("Tab");
+  await link.focus();
+  const ring = await link.evaluate((el) => ({
+    visible: el.matches(":focus-visible"),
+    ...(({ outlineStyle, outlineOffset, borderTopLeftRadius }) => ({ outlineStyle, outlineOffset, borderTopLeftRadius }))(
+      getComputedStyle(el)
+    ),
+  }));
+  expect(ring.visible).toBe(true);
+  expect(ring.outlineStyle).toBe("solid");
+  expect(Number.parseFloat(ring.outlineOffset)).toBeGreaterThan(0);
+  expect(Number.parseFloat(ring.borderTopLeftRadius)).toBeGreaterThan(0);
+  await context.close();
+});

@@ -238,7 +238,7 @@
                 {/each}
               </div>
             {:else}
-              <div data-day-programme class="fade-in rounded-2xl border border-white/[0.06] bg-white/[0.03] p-4 text-sm text-neutral-400">
+              <div data-day-programme class="fade-in bg-programme-card rounded-2xl border border-white/[0.06] p-4 text-sm text-neutral-400">
                 <p>Engar sýningar fundust fyrir þetta val.</p>
                 {#if chose_otherwise}
                   <button

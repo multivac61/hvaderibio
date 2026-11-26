@@ -22,9 +22,18 @@
      dimmed backdrop. */
   --color-pick-surface: rgb(38 38 38 / 0.55);
   --color-pick-sheet: rgb(30 30 30);
-  /* The picker's glass, the desktop panel and the phone sheet alike. */
+  /* The phone sheet's glass. */
   --color-pick-panel: rgb(24 24 24 / 0.6);
+  /* The desktop panel is solid: it opens over the showtimes it changes, and
+     through glass they were seen swapping and blanking under the choices,
+     their edges showing beside them. */
+  --color-pick-panel-solid: rgb(24 24 24);
   --color-pick-ink: #fff;
+  /* A movie's showtimes, each cinema on a card: solid, the grey that 3%
+     white made over the black page, so the stars no longer show through
+     and the cards stay solid while they change under the picker. */
+  --color-programme-card: rgb(8 8 8);
+  --color-programme-card-hover: rgb(12 12 12);
   --color-pick-accent: rgb(255 255 255 / 0.92);
   --color-pick-on-accent: #000;
   --color-pick-highlight: #fff;
@@ -148,4 +157,13 @@ html {
   box-shadow:
     inset 0 0 0 1px rgb(255 255 255 / 0.85),
     inset 0 0 8px rgb(255 255 255 / 0.16) !important;
+}
+/* A link inside running text has no box of its own: the ring drawn inside
+   it sat square on the letters. It goes outside instead, rounded, with room
+   around the words. */
+.text-link:focus-visible {
+  border-radius: 4px;
+  outline: 1.5px solid rgb(255 255 255 / 0.85);
+  outline-offset: 3px;
+  box-shadow: none !important;
 }

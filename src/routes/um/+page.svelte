@@ -10,7 +10,7 @@
   // Links in a warm grey rather than white, which read cold against the
   // body text; they brighten under the pointer.
   const link_class =
-    "text-stone-200 underline decoration-stone-500/60 underline-offset-4 transition-colors hover:text-white hover:decoration-stone-300";
+    "text-link text-stone-200 underline decoration-stone-500/60 underline-offset-4 transition-colors hover:text-white hover:decoration-stone-300";
 
   // Newest first: the site as it is now, then back to where it began. Each
   // entry's text is a snippet, below, so a name in it can link.
