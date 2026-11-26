@@ -111,21 +111,22 @@
   // again. Opened again before it got there, the panel lands it as it
   // opens, with no slide under it: waiting for the opening to finish, it
   // showed the old cinema ticked meanwhile, and landed over one the arrow
-  // keys had reached since. The sheet goes at once either way: phones play
-  // no transition. A cinema reached by the arrow keys lands at once, with
-  // the panel open.
-  let landing: string | null = null;
+  // keys had reached since. Whatever changed the choice while it was held,
+  // like "Hreinsa val" on a movie's page, is newer: it is dropped. The sheet
+  // goes at once either way: phones play no transition. A cinema reached by
+  // the arrow keys lands at once, with the panel open.
+  let landing: { choice: string; over: { cinema: string; day: string } } | null = null;
   const pick_cinema = (choice: string, finish: boolean) => {
     if (!finish) return onCinema(choice, false);
     if (presentation === "floating") onCinema(choice, true);
-    else landing = choice;
+    else landing = { choice, over: { cinema, day } };
     open = false;
   };
   const land = (slide: boolean) => {
     if (landing === null) return;
-    const choice = landing;
+    const { choice, over } = landing;
     landing = null;
-    onCinema(choice, slide);
+    if (over.cinema === cinema && over.day === day) onCinema(choice, slide);
   };
 </script>
 

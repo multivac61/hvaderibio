@@ -65,3 +65,27 @@ test("reopened at once, the panel shows the cinema just clicked", async ({ page 
 
   expect(result.shown).toBe(result.clicked);
 });
+
+// "Hreinsa val" pressed while a cinema is still held must stay cleared: the
+// held cinema used to land after it, undoing the clearing.
+test("clearing the choice wins over a cinema still landing", async ({ page }) => {
+  await page.clock.setFixedTime(FIXTURE_MORNING);
+  await page.goto("/movie/hvolpasveitin-risaedlumyndin");
+  const pill = page.locator("#select-cinemas-movie-desktop");
+  await open_panel(page, "#select-cinemas-movie-desktop");
+  await page.getByRole("radio", { name: "Bíó Paradís", exact: true }).filter({ visible: true }).click();
+  await expect(page.getByRole("button", { name: "Hreinsa val" })).toBeVisible();
+  await open_panel(page, "#select-cinemas-movie-desktop");
+
+  await page.evaluate(async () => {
+    const radios = [...document.querySelectorAll<HTMLElement>('[aria-label="Veldu kvikmyndahús"] [role="radio"]')];
+    const chosen = radios.findIndex((radio) => radio.getAttribute("aria-checked") === "true");
+    radios[(chosen + 1) % radios.length]!.click();
+    await Promise.resolve();
+    [...document.querySelectorAll<HTMLElement>("button")].find((button) => button.textContent?.trim() === "Hreinsa val")!.click();
+    await new Promise((resolve) => setTimeout(resolve, 800));
+  });
+
+  await expect(pill).toContainText("Höfuðborgarsvæðið");
+  await expect(page.getByRole("button", { name: "Hreinsa val" })).toHaveCount(0);
+});
