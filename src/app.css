@@ -22,8 +22,12 @@
      dimmed backdrop. */
   --color-pick-surface: rgb(38 38 38 / 0.55);
   --color-pick-sheet: rgb(30 30 30);
-  /* The picker's glass, the desktop panel and the phone sheet alike. */
+  /* The phone sheet's glass. */
   --color-pick-panel: rgb(24 24 24 / 0.6);
+  /* The desktop panel is solid: it opens over the showtimes it changes, and
+     through glass they were seen swapping and blanking under the choices,
+     their edges showing beside them. */
+  --color-pick-panel-solid: rgb(24 24 24);
   --color-pick-ink: #fff;
   --color-pick-accent: rgb(255 255 255 / 0.92);
   --color-pick-on-accent: #000;

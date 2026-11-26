@@ -13,11 +13,10 @@ const open_home = async (page: Page, now = FIXTURE_MORNING) => {
   await expect(page.getByRole("status")).toHaveText(/myndir?$/);
 };
 
-// The panel opens over the posters as frosted glass. Its blur has to see
-// them: a view-transition name on the panel would make it a backdrop root
-// and leave the posters sharp under the list, so it only has one while a
-// transition runs.
-test("desktop: the panel blurs the posters behind it", async ({ browser, baseURL }) => {
+// The panel is solid. Through glass, the showtimes it opens over were seen
+// blanking and swapping under the choices made in it, their edges showing
+// beside it.
+test("desktop: nothing shows through the panel", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
   const page = await context.newPage();
   await open_home(page);
@@ -25,19 +24,18 @@ test("desktop: the panel blurs the posters behind it", async ({ browser, baseURL
   const panel = page.locator(".programme-panel-clip");
   await expect(panel).toBeVisible();
   const style = await panel.evaluate((element) => ({
+    background: getComputedStyle(element).backgroundColor,
     blur: getComputedStyle(element).backdropFilter,
-    name: getComputedStyle(element.parentElement!).viewTransitionName,
   }));
-  expect(style.blur).toContain("blur(");
-  expect(style.name).toBe("none");
+  expect(alpha(style.background)).toBe(1);
+  expect(style.blur).toBe("none");
   await context.close();
 });
 
-// Choosing a day keeps the panel open over the posters, and the day lands
-// at once, with no view transition: lifted onto a transition's layer, the
-// panel could not see the posters to frost them, and Safari left them sharp
-// under the list.
-test("desktop: the panel stays frosted while the day changes", async ({ browser, baseURL }) => {
+// Choosing a day keeps the panel open, and the day lands at once, with no
+// view transition: a transition takes every input until it ends, so a
+// second day clicked a moment after the first was lost.
+test("desktop: a day lands at once, with the panel open", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
   const page = await context.newPage();
   await open_home(page);
@@ -58,7 +56,6 @@ test("desktop: the panel stays frosted while the day changes", async ({ browser,
   await expect(page.getByRole("radio", { name: "Á morgun", exact: true })).toBeChecked();
   await page.waitForTimeout(400);
   expect(await page.evaluate(() => (window as unknown as { transitioned: boolean }).transitioned)).toBe(false);
-  expect(await page.locator(".programme-panel-clip").evaluate((el) => getComputedStyle(el).backdropFilter)).toContain("blur(");
   await context.close();
 });
 
@@ -274,19 +271,6 @@ for (const [name, device, press] of [
     await context.close();
   });
 }
-
-test("the built styles frost the panel in every engine", async ({ page }) => {
-  await open_home(page);
-  const rules = await page.evaluate(async () => {
-    const sheets = [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')].map((link) => link.href);
-    const text = (await Promise.all(sheets.map((href) => fetch(href).then((response) => response.text())))).join("\n");
-    return [
-      ...text.matchAll(/[^{}]*(?:programme-panel-clip|view-transition-group\(programme-panel\))[^{}]*\{[^}]*backdrop-filter[^}]*\}/g),
-    ].map((match) => match[0]);
-  });
-  expect(rules.length).toBeGreaterThan(0);
-  for (const rule of rules) expect(rule).toMatch(/(^|[;{])backdrop-filter:/);
-});
 
 // The days share the row. A label wider than its share pushes the last day
 // past the track's edge, which cuts off the highlight's rounded corner. A

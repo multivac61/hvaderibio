@@ -205,7 +205,7 @@
           <!-- The shape that grows. The drop shadow stays outside it, on the
                panel, where a clip cannot cut it off. -->
           <div
-            class="programme-panel-clip bg-pick-panel flex max-h-[max(20rem,var(--bits-popover-content-available-height))] flex-col rounded-[22px] shadow-(--pick-edge-panel)">
+            class="programme-panel-clip bg-pick-panel-solid flex max-h-[max(20rem,var(--bits-popover-content-available-height))] flex-col rounded-[22px] shadow-(--pick-edge-panel)">
             <!-- The pill's phrase, carried by the panel as it grows; it closes
                the panel the way the pill opened it. -->
             <button
@@ -287,13 +287,6 @@
   :global(.programme-panel[data-align="start"][data-starting-style] .programme-panel-clip),
   :global(.programme-panel[data-align="start"][data-ending-style] .programme-panel-clip) {
     clip-path: inset(0 calc(100% - var(--w)) calc(100% - var(--h)) 0 round calc(var(--h) / 2));
-  }
-
-  :global(.programme-panel-clip) {
-    /* Safari's name first: the minifier takes the two for one property and
-       keeps only the last written, and Chromium reads only the standard one. */
-    -webkit-backdrop-filter: var(--pick-panel-blur);
-    backdrop-filter: var(--pick-panel-blur);
   }
 
   /* The panel's caret turns with the shape: down as the pill's, as it grows
