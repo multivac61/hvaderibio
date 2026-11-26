@@ -51,6 +51,22 @@
     return () => cancelAnimationFrame(frame);
   });
 
+  // The pill's share of the panel, each way: the drop shadow is scaled by
+  // it, to lie under the shape as it grows. CSS cannot divide one length by
+  // another everywhere yet, and the panel's height is its content's.
+  let pill_share = $state({ x: 1, y: 1 });
+  $effect(() => {
+    if (!panel) return;
+    const target = panel;
+    const pill = document.getElementById(id);
+    if (!pill) return;
+    const measure = () => (pill_share = { x: pill.offsetWidth / target.offsetWidth, y: pill.offsetHeight / target.offsetHeight });
+    const sizes = new ResizeObserver(measure);
+    sizes.observe(target);
+    measure();
+    return () => sizes.disconnect();
+  });
+
   // Where focus goes as the panel opens. bits-ui would put it on the first
   // button, the phrase row, and Safari ringed that even after a click. From
   // the keyboard it goes to the chosen day, ready for the arrow keys; from a
@@ -201,6 +217,7 @@
           tabindex={-1}
           aria-label="Hvenær og hvar?"
           data-align={align}
+          style="--pill-x: {pill_share.x}; --pill-y: {pill_share.y}"
           class="programme-panel z-50 w-[22.5rem] max-w-[calc(100vw-2rem)] min-w-(--bits-popover-anchor-width) rounded-[22px] outline-none">
           <!-- The shape that grows. The drop shadow stays outside it, on the
                panel, where a clip cannot cut it off. -->
@@ -231,20 +248,28 @@
 <style>
   /* bits-ui gives the panel the trigger's size as variables. Closed, the
      shape is clipped to exactly that box at the pill's corner radius; open,
-     to the whole panel. Both ways it leaves at once and lands softly: an
-     in-out start held the shape still under the click, which read as lag.
-     It opens within the 250ms a popover gets, and closes faster, since a
-     cinema clicked waits for the close (pick_cinema). */
+     to the whole panel. Everything that moves, the shape, its shadow, the
+     choices and the caret, moves on the one clock set here, so no frame
+     shows one part ahead of another. The curve leaves at once, as an in-out
+     start held the shape still under the click and read as lag, but it
+     spreads the way over the frames: a steeper one covered half the
+     distance in two frames and spent most of its time on the last few
+     pixels, three stills where a movement was meant. Closing is quicker,
+     since a cinema clicked waits for it (pick_cinema). */
   :global(.programme-panel) {
     --w: var(--bits-popover-anchor-width);
     --h: var(--bits-popover-anchor-height);
+    --time: 280ms;
+    --curve: cubic-bezier(0.3, 0.6, 0.2, 1);
     position: relative;
     isolation: isolate;
   }
   /* The drop shadow, on a layer of its own beneath the shape, where the clip
-     cannot cut it off. It arrives as the shape fills out and leaves with
-     it, by opacity, which the compositor runs; a box-shadow transition
-     repainted it every frame. */
+     cannot cut it off. It is scaled from the pill's box to the panel's, the
+     very box the clip shows, by a transform, which the compositor runs; a
+     box-shadow transition repainted it every frame. Left at the panel's
+     size and faded, it drew the whole panel's outline around a shape that
+     was still small. */
   :global(.programme-panel::before) {
     content: "";
     position: absolute;
@@ -253,14 +278,20 @@
     border-radius: 22px;
     box-shadow: var(--pick-shadow-panel);
     pointer-events: none;
-    transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1) 100ms;
+    transform-origin: top;
+    transition: transform var(--time) var(--curve);
+  }
+  :global(.programme-panel[data-align="start"]::before) {
+    transform-origin: top left;
   }
   :global(.programme-panel[data-starting-style]::before),
   :global(.programme-panel[data-ending-style]::before) {
-    opacity: 0;
+    transform: scale(var(--pill-x), var(--pill-y));
   }
-  :global(.programme-panel[data-ending-style]::before) {
-    transition-delay: 0ms;
+  /* The pill's share is measured once the panel is there, a moment after
+     its first style: it must take hold at once, not as a move of its own. */
+  :global(.programme-panel[data-starting-style]::before) {
+    transition: none;
   }
   /* It also ends see-through, over the pill already shown beneath it. Where
      the compositor runs the clip, Chromium (Dia) drew one frame of the
@@ -269,16 +300,15 @@
      is also the panel's own transition that bits-ui waits for before it
      lets the panel go, and it ends with the clip. */
   :global(.programme-panel[data-ending-style]) {
+    --time: 150ms;
+    --curve: cubic-bezier(0.3, 0.5, 0.3, 1);
     opacity: 0;
     transition: opacity 40ms linear 110ms;
   }
 
   :global(.programme-panel-clip) {
     clip-path: inset(0 round 22px);
-    transition: clip-path 250ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-  :global(.programme-panel[data-ending-style] .programme-panel-clip) {
-    transition-duration: 150ms;
+    transition: clip-path var(--time) var(--curve);
   }
   :global(.programme-panel[data-align="center"][data-starting-style] .programme-panel-clip),
   :global(.programme-panel[data-align="center"][data-ending-style] .programme-panel-clip) {
@@ -295,25 +325,22 @@
      and on the way out the up caret faded over the pill's down one. */
   :global(.programme-panel .programme-caret) {
     rotate: 180deg;
-    transition: rotate 250ms cubic-bezier(0.23, 1, 0.32, 1);
+    transition: rotate var(--time) var(--curve);
   }
   :global(.programme-panel[data-starting-style] .programme-caret),
   :global(.programme-panel[data-ending-style] .programme-caret) {
     rotate: 0deg;
   }
-  :global(.programme-panel[data-ending-style] .programme-caret) {
-    transition-duration: 150ms;
-  }
 
-  /* The choices fade in once the shape has mostly grown, and out at once. */
+  /* The choices come and go with the shape that uncovers them. Fading in
+     after it, they left it to grow empty and then filled it, two events for
+     one click; fading out ahead of it, they left an empty one to shrink. */
   :global(.programme-panel-body) {
-    transition: opacity 170ms cubic-bezier(0.23, 1, 0.32, 1) 80ms;
+    transition: opacity var(--time) var(--curve);
   }
   :global(.programme-panel[data-starting-style] .programme-panel-body),
   :global(.programme-panel[data-ending-style] .programme-panel-body) {
     opacity: 0;
-    transition-delay: 0ms;
-    transition-duration: 70ms;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -325,8 +352,18 @@
     :global(.programme-panel[data-ending-style]) {
       opacity: 0;
     }
-    :global(.programme-panel .programme-caret) {
+    :global(.programme-panel .programme-caret),
+    :global(.programme-panel-body),
+    :global(.programme-panel::before) {
       transition: none;
+    }
+    :global(.programme-panel[data-starting-style] .programme-panel-body),
+    :global(.programme-panel[data-ending-style] .programme-panel-body) {
+      opacity: 1;
+    }
+    :global(.programme-panel[data-starting-style]::before),
+    :global(.programme-panel[data-ending-style]::before) {
+      transform: none;
     }
     :global(.programme-panel-clip),
     :global(.programme-panel[data-starting-style] .programme-panel-clip),

@@ -108,7 +108,8 @@ test("desktop: the panel's caret turns between the pill's and its own", async ({
 
 // The panel grows out of the pill on a curve that leaves at once, as it
 // closes: an in-out start held it still under the click for its first
-// frames.
+// frames. Nor does it jump: the curve before put half the growth into the
+// first two frames, then crept, and the steps read as separate stills.
 test("desktop: the panel grows out of the pill at once", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
   const page = await context.newPage();
@@ -120,13 +121,37 @@ test("desktop: the panel grows out of the pill at once", async ({ browser, baseU
     getComputedStyle(el.querySelector(".programme-panel-clip")!).transitionTimingFunction,
     getComputedStyle(el.querySelector(".programme-caret")!).transitionTimingFunction,
   ]);
-  expect(curves).toEqual(["cubic-bezier(0.23, 1, 0.32, 1)", "cubic-bezier(0.23, 1, 0.32, 1)"]);
+  expect(curves).toEqual(["cubic-bezier(0.3, 0.6, 0.2, 1)", "cubic-bezier(0.3, 0.6, 0.2, 1)"]);
   await context.close();
 });
 
-// The panel's drop shadow comes and goes by opacity, which the compositor
-// runs, rather than as a box-shadow repainted every frame.
-test("desktop: the panel's shadow fades without repainting", async ({ browser, baseURL }) => {
+// The shape, its list, its shadow and its caret move on one clock. Timed
+// apart, the panel opened as an empty slab, then filled, then cast its
+// shadow, three steps where there should be one motion.
+test("desktop: the panel's parts open together", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
+  const page = await context.newPage();
+  await open_home(page);
+  await page.locator("#select-cinemas-desktop").click();
+  const panel = page.locator(".programme-panel");
+  await expect.poll(() => panel.evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+  const timing = await panel.evaluate((el) =>
+    [
+      getComputedStyle(el.querySelector(".programme-panel-clip")!),
+      getComputedStyle(el.querySelector(".programme-panel-body")!),
+      getComputedStyle(el, "::before"),
+      getComputedStyle(el.querySelector(".programme-caret")!),
+    ].map((style) => `${style.transitionDuration} ${style.transitionDelay}`)
+  );
+  expect(new Set(timing)).toEqual(new Set(["0.28s 0s"]));
+  await context.close();
+});
+
+// The panel's drop shadow grows and shrinks with the shape by a transform,
+// which the compositor runs, rather than as a box-shadow repainted every
+// frame. Faded instead, at full size, its outline showed around the
+// smaller shape as a ghost of the whole panel.
+test("desktop: the panel's shadow follows the shape without repainting", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ ...devices["Desktop Chrome"], baseURL });
   const page = await context.newPage();
   await open_home(page);
@@ -140,7 +165,7 @@ test("desktop: the panel's shadow fades without repainting", async ({ browser, b
   }));
   expect(style.own).not.toContain("box-shadow");
   expect(style.shadow).not.toBe("none");
-  expect(style.fades).toBe("opacity");
+  expect(style.fades).toBe("transform");
   await context.close();
 });
 
