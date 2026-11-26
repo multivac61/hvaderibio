@@ -343,6 +343,27 @@
     opacity: 0;
   }
 
+  /* The phrase row has no shape of its own (the clip gives the panel its
+     corners), so the global ring drew a full-width box, cut round at the top
+     and square below. It rings the phrase as the pill's ring does, a little
+     inside the panel's edge. */
+  :global(button[data-panel-phrase]) {
+    position: relative;
+  }
+  :global(button[data-panel-phrase]:focus-visible) {
+    box-shadow: none !important;
+  }
+  :global(button[data-panel-phrase]:focus-visible::after) {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 9999px;
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.85),
+      inset 0 0 8px rgb(255 255 255 / 0.16);
+    pointer-events: none;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     :global(.programme-panel),
     :global(.programme-panel[data-ending-style]) {

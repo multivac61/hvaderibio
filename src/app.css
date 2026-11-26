@@ -158,3 +158,12 @@ html {
     inset 0 0 0 1px rgb(255 255 255 / 0.85),
     inset 0 0 8px rgb(255 255 255 / 0.16) !important;
 }
+/* A link inside running text has no box of its own: the ring drawn inside
+   it sat square on the letters. It goes outside instead, rounded, with room
+   around the words. */
+.text-link:focus-visible {
+  border-radius: 4px;
+  outline: 1.5px solid rgb(255 255 255 / 0.85);
+  outline-offset: 3px;
+  box-shadow: none !important;
+}
