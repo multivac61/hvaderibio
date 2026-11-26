@@ -29,6 +29,11 @@
      their edges showing beside them. */
   --color-pick-panel-solid: rgb(24 24 24);
   --color-pick-ink: #fff;
+  /* A movie's showtimes, each cinema on a card: solid, the grey that 3%
+     white made over the black page, so the stars no longer show through
+     and the cards stay solid while they change under the picker. */
+  --color-programme-card: rgb(8 8 8);
+  --color-programme-card-hover: rgb(12 12 12);
   --color-pick-accent: rgb(255 255 255 / 0.92);
   --color-pick-on-accent: #000;
   --color-pick-highlight: #fff;
