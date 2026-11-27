@@ -135,6 +135,13 @@
     transition: transform 150ms var(--ease-out);
   }
 
+  /* The dark fill stands in for a poster still loading. A view transition
+     lifts the poster out to glide it into place, which would leave the fill
+     behind, cross-fading in as a dark box where the poster is headed. */
+  :global(html:active-view-transition) .poster-tilt {
+    background-color: transparent;
+  }
+
   /* Under the mouse it follows almost at once; only settling back is eased. */
   :global(.poster-card:hover) .poster-tilt {
     transition-duration: 60ms;
